@@ -1,0 +1,15 @@
+.cal-calendar-shared-configuration-item
+  .meta
+    esn-avatar.attendee-avatar(ng-if="$ctrl.item.user.objectType !== 'resource'", user-id="$ctrl.item.user.id")
+    cal-resource-avatar.attendee-avatar(ng-if="$ctrl.item.user.objectType === 'resource'", resource='$ctrl.item.user')
+    .title
+      .name
+        span {{::$ctrl.item.calendar.name}}
+      .owner
+        span.ellipsis(ng-if="$ctrl.item.user.objectType !== 'resource'") {{::$ctrl.item.user.displayName}}
+        span.ellipsis(ng-if="$ctrl.item.user.objectType === 'resource'") {{::$ctrl.item.user.description}}
+  .rights
+    cal-shared-rights-display(ng-if="$ctrl.item.type === 'public'", public="$ctrl.item.calendar.rights.getPublicRight()")
+    cal-shared-rights-display(ng-if="$ctrl.item.type === 'delegation'", delegation="$ctrl.item.calendar.rights.getShareeRight($ctrl.user.id)")
+  .actions
+    toggle-switch(ng-model='$ctrl.item.isSelected')

@@ -1,0 +1,289 @@
+@import './modals/edit-instance-or-series-modal';
+
+body  {
+  .modal.center {
+    .event-form {
+      .modal-dialog {
+        .modal-body {
+          overflow-x: hidden;
+        }
+      }
+    }
+  }
+}
+
+.cal-event-edition-select-dropdown {
+  z-index: 2000;
+
+  md-option {
+    min-height: 36px;
+    height: 36px;
+    line-height: inherit;
+    font-size: 13px;
+  }
+}
+
+.event-form {
+  .calendar-event-form();
+
+  hr {
+    border-top: 1px solid lighten(@m-gray, 20%);
+  }
+
+  .input-group-addon .mdi {
+    font-size: 1.9em;
+    vertical-align: middle;
+  }
+
+  .modal-body {
+    .message {
+      color: @secondaryTextColor;
+      font-size: 16px;
+      margin: 20px;
+      text-align: center;
+
+    }
+
+    .row.cal-event-date-edition {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .cal-user-autocomplete-input {
+      tags-input {
+        z-index: 3;
+      }
+    }
+
+    .mdi.mdi-calendar, .mdi.mdi-arrow-right {
+      .translate(0, 12px);
+    }
+
+    .mdi.mdi-calendar, .mdi.mdi-arrow-right {
+      .translate(0, 19px);
+    }
+
+    .input-group-addon {
+      vertical-align: middle;
+    }
+
+    md-select-value {
+      .cal-event-edition-calendar-item {
+        .info {
+          .flex-row;
+
+          .description {
+            .flex;
+
+            color: inherit;
+            font-size: inherit;
+
+            .separator {
+              display: block;
+              margin-right: 5px;
+              margin-left: 5px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .form-group {
+    margin-bottom: 10px;
+    font-size: 13px;
+
+    .select {
+      z-index: 1;
+    }
+
+    textarea.form-control {
+      z-index: 0;
+    }
+  }
+
+  .cal-attendees-list, .cal-resource-list {
+    .FormMargin();
+  }
+
+  .cal-event-form-organizer {
+    .flex-vertical-centered;
+
+    span.icon {
+      cursor: help;
+      font-size: 1.9em;
+      padding-right: 10px;
+    }
+
+    .meta {
+      padding-left: 10px;
+
+      .separator {
+        display: inline;
+        margin: 0px 3px;
+      }
+
+      .separator:first-child {
+        display: none;
+      }
+    }
+  }
+
+  .status span {
+    font-size: 13px;
+    text-align: center;
+    padding: 6px 12px;
+  }
+
+  .suggestion-container {
+    .suggestion-buttons {
+      .flex-horizontal-centered;
+
+      .btn {
+        .flex-grow;
+
+        margin-bottom: 6px;
+      }
+    }
+  }
+
+  .suggestion {
+    background: @darkenBgColor;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+
+  .partstat {
+    .flex-horizontal-centered;
+
+    margin-top: 10px;
+
+    cal-partstat-buttons {
+      .flex-grow;
+    }
+  }
+
+  .attendee-list-item {
+    .attendee-avatar {
+      .checkbox {
+        top: 25px;
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .event-form {
+    .attendee-list-item {
+      .attendee-avatar {
+        .checkbox {
+          top: 3px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-sm-min) {
+  .event-form {
+    .modal-footer {
+      .form-group {
+        .fg-line {
+          .col-xs-3:first-child {
+            text-align: left;
+          }
+          .col-xs-3:nth-child(2) {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: @screen-xs-max) {
+  .event-form {
+    .btn-default {
+      .PrimaryColor();
+    }
+
+    .datepicker {
+      .btn-default {
+        background-color: inherit;
+        color: inherit;
+      }
+    }
+
+    .modal-dialog {
+      margin: 0;
+    }
+
+    .modal-header {
+
+      .form-group {
+        margin-bottom: 0;
+      }
+    }
+
+    .modal-body {
+      padding-top: 10px;
+    }
+
+    .modal-footer {
+      padding: 5px;
+
+      .status {
+        .PrimaryColor();
+
+        margin-top: 15px;
+        margin-bottom: 0;
+        padding: 5px;
+
+        .btn {
+          padding:6px;
+
+          &.active {
+            .AccentColor();
+          }
+        }
+
+
+      }
+    }
+
+    &.readonly {
+      .form-control, .form-control:focus {
+        cursor: text;
+        background-image: none;
+      }
+
+      .checkbox label {
+        cursor: default;
+        background-image: none;
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-xs-min) {
+  .event-form .partstat {
+    cal-partstat-buttons {
+      .flex-grow(unset);
+    }
+  }
+
+  .event-form .suggestion-container {
+    .suggestion-buttons {
+      .btn {
+        .flex-grow(unset);
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-sm-min) {
+  .event-subelement-flex-container {
+    margin-left: 50px;
+  }
+}

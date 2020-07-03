@@ -1,0 +1,11 @@
+.cal-attendee-avatar
+  a.avatar(
+    href="",
+    profile-popover-card='{ source: "ctrl.attendee", property: "id" }'
+    profile-popover-card-hide-on-element-scroll='.modal-body'
+    profile-popover-card-alternative-title='{{::ctrl.getDisplayName()}}'
+    profile-popover-card-show-mobile
+  )
+    esn-avatar(user-id="ctrl.attendee.id", user-email="ctrl.attendee.email")
+    .partstat
+      cal-partstat-icon(partstat="ctrl.attendee.partstat")

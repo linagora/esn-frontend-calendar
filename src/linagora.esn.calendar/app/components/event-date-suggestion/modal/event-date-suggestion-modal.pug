@@ -1,0 +1,17 @@
+.modal.full-screen.cal-event-date-suggestion-modal(tabindex="-1", role="dialog")
+  form.suggest-form(name="form", role="form", aria-hidden="true", ng-submit='submit()')
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss="modal", aria-label="Close", ng-click="$hide()")
+            span(aria-hidden="true") &times;
+          h4.modal-title {{ 'Propose new time' | translate }}
+
+        .modal-body
+          .col-xs-12
+            cal-event-date-suggestion(event="event")
+
+        .modal-footer.flex
+          .flex-vertical-centered.flex-end
+            button.btn.btn-link.color-default.close-button(type='button', ng-click="$hide()") {{ 'Cancel' | translate }}
+            button.btn.btn-primary.save.save-button(ng-disabled="!form.$dirty", type='submit') {{ 'Send' | translate }}

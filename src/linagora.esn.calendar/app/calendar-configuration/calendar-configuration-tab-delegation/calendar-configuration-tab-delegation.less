@@ -1,0 +1,74 @@
+calendar-configuration-tab-delegation {
+
+  .add-delegation-users {
+    .all-centered;
+    .flex-wrap;
+
+    .user-delegation-form {
+      .flex-row;
+      .flex-wrap;
+      .flex-grow(2);
+
+      .user-autocomplete {
+        .flex-shorthand(1, 0, 30%);
+
+        min-width: 350px;
+      }
+
+      .select-delegation {
+        .flex-grow;
+
+        margin-right: 12px;
+        align-self: center;
+      }
+    }
+
+    @media (max-width: @screen-md-min) {
+      .delegation-actions {
+        .flex-end;
+        .flex-grow;
+
+        padding-right: 12px;
+      }
+    }
+  }
+
+  .delegation-line {
+    .flex-space-between;
+
+    margin-bottom: 12px;
+
+    .user {
+      .flex;
+      .flex-shorthand(1, 0, 30%);
+
+      .user-avatar {
+        margin-right: 15px;
+
+        img {
+          .esn-avatar;
+        }
+      }
+
+      .user-name {
+        align-self: flex-start;
+        font-size: 14px;
+      }
+    }
+
+    .select-delegation {
+      .flex-grow;
+    }
+
+    .delegation-actions {
+      .flex-vertical-centered;
+
+      padding-left: 10px;
+    }
+
+    .mdi-delete {
+      margin-right: 5px;
+      font-size: 1.5em;
+    }
+  }
+}

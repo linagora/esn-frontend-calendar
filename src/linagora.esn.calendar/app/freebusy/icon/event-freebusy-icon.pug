@@ -1,0 +1,11 @@
+.cal-event-freebusy-icon
+  .icon(ng-if="ctrl.status")
+    md-tooltip(md-direction="bottom" md-z-index="10000")
+      span(ng-if="ctrl.status === ctrl.CAL_FREEBUSY.BUSY") {{ 'Attendee is not available' | translate }}
+      span(ng-if="ctrl.status === ctrl.CAL_FREEBUSY.FREE") {{ 'Attendee is available' | translate }}
+      span(ng-if="ctrl.status === ctrl.CAL_FREEBUSY.UNKNOWN") {{ 'Attendee availability is unknown' | translate }}
+      span(ng-if="ctrl.status === ctrl.CAL_FREEBUSY.LOADING") {{ 'Loading attendee availability' | translate }}
+    i.mdi.mdi-clock-alert.is-busy(ng-if="ctrl.status === ctrl.CAL_FREEBUSY.BUSY")
+    i.mdi.mdi-clock.is-free(ng-if="ctrl.status === ctrl.CAL_FREEBUSY.FREE")
+    i.mdi.mdi-clock-alert.is-unknown(ng-if="ctrl.status === ctrl.CAL_FREEBUSY.UNKNOWN")
+    i.mdi.mdi-download.is-loading(ng-if="ctrl.status === ctrl.CAL_FREEBUSY.LOADING")

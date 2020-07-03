@@ -1,0 +1,17 @@
+.cal-attendee-list
+  .cal-attendee-list-toolbar
+    .cal-attendee-list-stats
+      span(ng-if="ctrl.attendees.length > 1") {{ '%s attendees' | translate:ctrl.attendees.length }}
+      span(ng-if="ctrl.attendees.length === 1") {{ '1 attendee' | translate }}
+      span(ng-if="!ctrl.attendees.length") {{ 'No attendees' | translate }}
+    .cal-attendee-list-actions
+
+  .cal-attendee-list-body
+    cal-attendee-item(
+      attendee='attendee',
+      can-modify-attendee='::ctrl.canModifyAttendees',
+      is-organizer='attendee.organizer',
+      remove="ctrl.removeAttendee(attendee)",
+      ng-repeat="attendee in ctrl.attendees | limitTo: ctrl.limit track by $id(attendee)"
+    )
+    a.clickable(ng-if="ctrl.showToggle()", ng-href="", ng-click="ctrl.showAll()") {{ 'Show all...' | translate }}

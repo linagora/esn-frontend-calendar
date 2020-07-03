@@ -1,0 +1,11 @@
+.cal-entities-autocomplete-input-tag
+  .esn-chip(
+    profile-popover-card="{{ data }}"
+    profile-popover-card-hide-on-element-scroll='.modal-body'
+    profile-popover-card-alternative-title='{{ data.email }}'
+    profile-popover-card-show-mobile
+  )
+    .left-tag
+      cal-freebusy-icon(status="data.freeBusy")
+    span {{ ::$getDisplayText() }}
+    i.mdi.mdi-close-circle(ng-click="$removeTag()")

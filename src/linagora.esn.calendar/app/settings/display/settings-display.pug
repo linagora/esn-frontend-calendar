@@ -1,0 +1,15 @@
+mixin settingsSwitch(title, rightLabel, leftLabel)
+  h3 {{ title | translate }}
+  p.cal-setting-switch
+    span.working-days-disabled(ng-class="{'toggle-active': " + attributes.switchValue + "}")
+      | {{ rightLabel | translate }}
+    toggle-switch(ng-model=attributes.switchValue, color='blue', form="form")
+    span.working-days-enabled(ng-class="{'toggle-active': " + attributes.switchValue + "}")
+      | {{ leftLabel | translate }}
+sub-header
+  cal-settings-display-subheader(submit="ctrl.submit()", form="form")
+
+form(name="form")
+  .cal-settings-display-block
+    +settingsSwitch('Non-working days', 'Show', 'Hide')(switchValue="ctrl.configurations.workingDays")
+    +settingsSwitch('Declined events', 'Show', 'Hide')(switchValue="ctrl.configurations.hideDeclinedEvents")

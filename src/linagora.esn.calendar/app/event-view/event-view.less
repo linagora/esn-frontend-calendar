@@ -1,0 +1,143 @@
+@cal-footer-participation-height: 50px;
+
+.cal-event-view-body {
+  .flex-direction(column);
+  .flex-vertical-centered;
+
+  min-height: ~"calc(100vh - @{header-height})";
+  font-size: 1.5rem;
+
+  .event-body {
+    .flex;
+    .flex-direction(column);
+
+    flex:1;
+    padding-bottom: ~"calc(@{cal-footer-participation-height} + 15px)";
+
+    .event-meta, .invitation-block {
+      padding: 0 15px;
+
+      h4 {
+        text-align: center;
+      }
+    }
+
+    .event-meta {
+      h4 {
+        padding-bottom: 10px;
+      }
+
+      .event-view-block {
+        padding: 5px 0;
+      }
+
+      .cal-event-date-consultation {
+        margin-bottom: 0;
+      }
+
+      .description.event-view-block {
+        .flex;
+
+        div {
+          text-align: justify;
+        }
+      }
+
+      i {
+        font-size: 2rem;
+        padding-right: 10px;
+      }
+    }
+
+    .event-view-separator {
+      width: 65%;
+      border-top: 1px solid @inputBorderColor;
+    }
+
+    .invitation-block {
+      .cal-attendees-list {
+        .flex;
+        .flex-direction(column);
+
+        padding-top: 15px;
+      }
+
+      .participation-block {
+        display: none;
+      }
+
+      cal-resource-list, .cal-attendees-list {
+        .flex;
+
+        .attendee-item{
+          .avatar {
+            img {
+              .esn-avatar;
+            }
+          }
+        }
+
+        .name {
+          .flex;
+          .flex-direction(column);
+
+          a {
+            color: @btn-default-color;
+          }
+        }
+      }
+    }
+  }
+
+  .event-participation {
+    .flex-horizontal-centered;
+    .flex-vertical-centered;
+
+    position: fixed;
+    bottom: 0;
+    border-top: 1px solid @inputBorderColor;
+    height: @cal-footer-participation-height;
+    width: 100%;
+    background-color: @app-gray;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .cal-event-view-body {
+    .event-body {
+      padding-top: 15px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+
+      .event-meta, .invitation-block {
+        flex-basis: 50%;
+
+        h4 {
+          text-align: left;
+        }
+      }
+
+      .event-view-separator {
+        display: none;
+      }
+
+      .invitation-block {
+        .participation-block {
+          .flex-vertical-centered;
+          .flex-horizontal-centered;
+
+          padding: 15px 0;
+
+          .mdi-account-check {
+            font-size: 2rem;
+            padding-right: 15px
+          }
+        }
+      }
+    }
+
+    .event-participation {
+      display: none;
+    }
+  }
+}

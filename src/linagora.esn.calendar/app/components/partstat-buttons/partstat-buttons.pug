@@ -1,0 +1,13 @@
+.partstat-buttons
+  button.btn.btn-link.partstat-button.accepted(type='button', ng-click='ctrl.changeParticipation("ACCEPTED")', ng-class='{ "active": ctrl.isCurrentPartstat("ACCEPTED") }')
+    i.mdi.mdi-check
+    | {{ 'Accept' | translate }}
+  button.btn.btn-link.partstat-button.tentative(type='button', ng-click='ctrl.changeParticipation("TENTATIVE")', ng-class='{ "active": ctrl.isCurrentPartstat("TENTATIVE") }')
+    i.mdi.mdi-help
+    | {{ 'Maybe' | translate }}
+  button.btn.btn-link.partstat-button.declined(type='button', ng-click='ctrl.changeParticipation("DECLINED")', ng-class='{ "active": ctrl.isCurrentPartstat("DECLINED") }')
+    i.mdi.mdi-close
+    | {{ 'Decline' | translate }}
+  button.btn.btn-link.partstat-button.suggest(ng-if="ctrl.canSuggestChanges" type='button', ng-click='ctrl.showDateSuggestion()')
+    i.mdi.mdi-clock
+    | {{ 'Propose new time' | translate }}

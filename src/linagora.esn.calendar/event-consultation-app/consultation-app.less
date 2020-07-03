@@ -1,0 +1,35 @@
+body {
+  header#header {
+    &.event-consultation {
+      transform: none;
+    }
+  }
+
+  .consultation-body {
+    .event-consult-form {
+      margin: 0;
+
+      .cal-attendees-list .fg-line.pl-body {
+        .flex-column;
+      }
+    }
+
+    .error-display {
+      .all-centered;
+      .flex-column;
+
+      height: 50vh;
+
+      i {
+        color: @accentColor;
+        font-size: 8em;
+        opacity: 0.7;
+      }
+
+      .message {
+        color: @secondaryTextColor;
+        font-size: 1.6em;
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+.row.event-recurrence-edition
+  .col-xs-12
+    .form-group
+      .input-group
+        span.input-group-addon
+          i.mdi.mdi-repeat
+        .fg-line.select
+          select.form-control(
+            ng-model="vm.freq",
+            ng-options="item.value as (item.label | esnI18n) for item in vm.CAL_RECUR_FREQ",
+            ng-change="vm.setRRULE()",
+            ng-disabled="!vm.canModifyEventRecurrence")
+    .form-group.event-recurrence-flex-container.event-subelement-flex-container(ng-if="vm.freq")
+      .interval
+        span.col-xs-3 {{ 'Interval' | translate }}:
+        .col-xs-9
+          .fg-line.recurrence-interval-input
+            input.input-sm.form-control(type="number", min="1", max="999", ng-model="vm.event.rrule.interval", ng-disabled="!vm.canModifyEventRecurrence")
+          div(ng-switch="vm.event.rrule.freq")
+            span(ng-switch-default) {{ 'days' | translate }}
+            span(ng-switch-when="WEEKLY") {{ 'weeks' | translate }}
+            span(ng-switch-when="MONTHLY") {{ 'months' | translate }}
+            span(ng-switch-when="YEARLY") {{ 'years' | translate }}
+      .on-days(ng-if="vm.event.rrule.freq === 'WEEKLY'")
+        span.col-xs-3 {{ 'On days' | translate }}:
+        div.col-xs-9.labels
+          label.checkbox.checkbox-inline(ng-repeat="day in vm.days", ng-class="{ disabled: !vm.canModifyEventRecurrence }")
+            input.force-position-initial(ng-model="day.selected", ng-change="vm.toggleWeekdays(day.value)", type="checkbox", ng-disabled="!vm.canModifyEventRecurrence")
+            i.input-helper
+              span.force-absolute-center {{day.shortName}}
+      .end
+        span.col-xs-3 {{ 'End' | translate }}:
+        div.radios.col-xs-9
+          label.radio.radio-inline
+            input.force-position-initial.form-control(type="radio", name="inlineRadioEndOptions", ng-click="vm.resetUntil(); vm.resetCount();", checked, ng-disabled="!vm.canModifyEventRecurrence")
+            i.input-helper
+            span.force-absolute-center {{ 'Never' | translate }}
+          label.radio.radio-inline
+            input.force-position-initial.form-control(type="radio", name="inlineRadioEndOptions", ng-click="vm.resetUntil();", ng-checked="vm.event.rrule.count", ng-disabled="!vm.canModifyEventRecurrence")
+            i.input-helper
+            .input-group.force-absolute-center
+              span.input-group-addon {{ 'After' | translate }}
+              .fg-line.end-input-container
+                input.input-sm.form-control(type="number", min="1", max="{{vm.CAL_MAX_RRULE_COUNT}}", ng-model="vm.event.rrule.count", ng-focus="selectEndRadioButton(1)", ng-disabled="!vm.canModifyEventRecurrence")
+              span.input-group-addon.last {{ 'occurrences' | translate }}
+          label.radio.radio-inline
+            input.force-position-initial.form-control(type="radio", name="inlineRadioEndOptions", ng-click="vm.setDefaultUntilDate(vm.event.rrule.freq)", ng-checked="vm.event.rrule.until", ng-disabled="!vm.canModifyEventRecurrence")
+            i.input-helper
+            .input-group.force-absolute-center
+              span.input-group-addon {{ 'On' | translate }}
+              .fg-line.end-input-container
+                esn-date-picker(
+                  ng-disabled="!vm.canModifyEventRecurrence",
+                  ng-model="vm.event.rrule.until",
+                  class-name="end-on-input input-sm",
+                  ng-focus="selectEndRadioButton(2)",
+                  min-date="{{vm.getMinDate()}}",
+                  date-format="yyyy/MM/dd",
+                  autoclose="1",
+                  start-week="1",
+                  ng-click="vm.setDefaultUntilDate(vm.event.rrule.freq)"
+                  custom-attributes="{'cal-date-to-moment': 'cal-date-to-moment'}"
+                )

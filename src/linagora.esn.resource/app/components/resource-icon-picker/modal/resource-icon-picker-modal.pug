@@ -1,0 +1,11 @@
+.modal.resource-icon-picker
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title {{ 'Pick an icon' | translate }}
+      .modal-body
+        .square-box(ng-repeat="icon in iconKeys", ng-class="{selected: isSelected(icon)}", ng-click="select(icon)")
+          i.mdi.icon-box(class="{{RESOURCE_ICONS[icon]}}")
+      .modal-footer
+        button.btn.btn-link(type="button", ng-click="$hide()") {{ 'Cancel' | translate }}
+        button.btn.btn-primary(type="button", ng-click="set(); $hide()") {{ 'Set' | translate }}

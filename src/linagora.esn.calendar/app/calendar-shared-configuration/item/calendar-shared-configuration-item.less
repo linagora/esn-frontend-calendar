@@ -1,0 +1,57 @@
+.cal-calendar-shared-configuration-item {
+  .flex-vertical-centered;
+  .flex-space-between;
+
+  margin: 4px;
+
+  .meta {
+    .flex-row;
+    .flex-shorthand(1, 0, 40%);
+
+    esn-avatar {
+      margin-right: 8px;
+
+      & img {
+        .esn-avatar;
+      }
+    }
+
+    cal-resource-avatar {
+      .all-centered;
+      .avatar(35px);
+
+      font-size: 25px;
+      margin-right: 8px;
+      font-size: 35px;
+      height: 35px;
+      line-height: 35px;
+
+      .avatar i {
+        color: @m-white;
+      }
+    }
+
+    .title {
+      .flex-column;
+
+      .name {
+        font-weight: 600;
+      }
+
+      .owner {
+        .ellipsis;
+
+        color: @secondaryTextColor;
+      }
+    }
+  }
+
+  .rights {
+    .flex-grow;
+    .flex-horizontal-centered;
+  }
+
+  .actions {
+    .flex-grow;
+  }
+}

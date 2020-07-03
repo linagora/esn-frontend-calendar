@@ -1,0 +1,92 @@
+.attendee-item {
+  .flex-row;
+  .flex-space-between;
+  .flex-vertical-centered;
+
+  padding: 2px 0px;
+  position: relative;
+
+  .avatar {
+    .clickable;
+    .flex-row;
+    position: relative;
+
+    img {
+      .esn-avatar;
+    }
+  }
+
+  .attendee-item-meta {
+    .flex-column;
+    .flex-grow(1);
+    .flex-start;
+    .aligner-item-start;
+
+    font-size: 13px;
+    line-height: 15px;
+    padding-left: 8px;
+
+    .name {
+      .flex-vertical-centered;
+      .ellipsis;
+
+      & span {
+        font-weight: 500;
+        cursor: pointer;
+      }
+
+      & cal-freebusy-icon {
+        margin-right: 4px;
+      }
+    }
+
+    .details {
+      color: @secondaryTextColor;
+      font-size: 0.9em;
+
+      .separator {
+        display: none;
+      }
+
+      .separator:nth-child(2):not(:last-child) {
+        display: inline;
+        margin: 0px 3px;
+      }
+    }
+  }
+
+  .attendee-item-right {
+    a.btn {
+      width: 28px;
+      height: 28px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  }
+
+  &.attendee-item-edition {
+    .align-items(baseline);
+    .flex-row;
+
+    width: 50px;
+
+    .checkbox {
+      position: absolute;
+      bottom: 38px;
+      left: 30px;
+      right: 0;
+      margin: 0;
+    }
+
+    .input-helper {
+      &:before{
+        border: none;
+      }
+
+      &:after {
+        border-width: 3px;
+        border-color: black;
+      }
+    }
+  }
+}

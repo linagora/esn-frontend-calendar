@@ -1,0 +1,39 @@
+.calendar-sidebar-title {
+  .flex;
+
+  border-left: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+  max-height: 35px;
+  padding: 8px 0 8px 15px;
+
+  .text {
+    .flex-shorthand(1);
+
+    color: @primaryColor;
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-left: 5px;
+  }
+
+  .actions {
+    margin-right: 15px;
+
+    i.mdi {
+      vertical-align: sub;
+      font-size: 25px;
+      color: lighten(@secondaryTextColor, 10%);
+
+      &:hover {
+        color: darken(@secondaryTextColor, 20%);
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .calendar-sidebar-title {
+    border-left: 5px solid @primaryColor;
+    margin-bottom: 5px;
+  }
+}

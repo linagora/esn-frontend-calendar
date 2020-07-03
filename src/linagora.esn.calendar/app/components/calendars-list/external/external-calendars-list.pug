@@ -1,0 +1,33 @@
+.lv-body
+  .lv-item.calendar-item.calendar-header-title.hidden-md
+    .media
+      .pull-left
+        i.mdi.mdi-calendar
+      .media-body
+        .lv-title {{ 'Shared calendars' | translate }}
+  .lv-item.calendar-item.calendar-header-title-desktop.visible-md.clickable.toggle-submenu.waves-classic(esn-toggle)
+    .media
+      .badge-container
+        .caret-submenu
+          i.mdi.mdi-menu-down
+      .calendar-item-left
+        i.mdi.mdi-calendar
+      .media-body
+        .lv-title {{ 'Shared calendars' | translate }}
+
+  ul.no-padding
+    calendars-list-items(
+      calendars="$ctrl.sharedCalendars",
+      toggle-calendar="$ctrl.toggleCalendar",
+      hidden-calendars="$ctrl.hiddenCalendars",
+      state-to-go="'calendar.external.shared'",
+      show-details="true"
+    )
+
+    calendars-list-items(
+      calendars="$ctrl.publicCalendars",
+      toggle-calendar="$ctrl.toggleCalendar",
+      hidden-calendars="$ctrl.hiddenCalendars",
+      state-to-go="'calendar.external.shared'",
+      show-details="true"
+    )

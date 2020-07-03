@@ -1,0 +1,53 @@
+.cal-attendee-list, .cal-resource-list {
+  .flex-column;
+
+  margin: 0;
+
+  .cal-attendee-list-body {
+    .flex-column;
+    .flex-grow(1);
+  }
+
+  .cal-attendee-list-toolbar {
+    .flex-row;
+    .flex-space-between;
+    .flex-vertical-centered;
+
+    margin: 5px 0px;
+
+    .cal-attendee-list-stats {
+      .flex-grow(1);
+
+      font-weight: 500;
+    }
+
+    .cal-attendee-list-actions {
+      .flex-end;
+
+      a.btn-icon {
+        .all-centered;
+
+        width: 28px;
+        height: 28px;
+        font-size: 22px;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .accepted  {
+    color: @m-green;
+  }
+
+  .undecided {
+    color: @m-blue;
+  }
+
+  .tentative {
+    color: @m-blue;
+  }
+
+  .declined {
+    color: @m-red;
+  }
+}

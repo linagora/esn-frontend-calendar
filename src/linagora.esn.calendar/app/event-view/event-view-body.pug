@@ -1,0 +1,39 @@
+.cal-event-view-body
+  .card.event-body.col-xs-12.col-md-6
+    .event-meta
+      h4 {{ 'Event details' | translate }}
+      .title.event-view-block
+        i.mdi.mdi-calendar-multiple
+        span( ng-bind-html="ctrl.event.summary")
+      .date.event-view-block
+        cal-event-date-consultation(event="ctrl.event")
+      .location.event-view-block(ng-if="ctrl.event.location")
+        i.mdi.mdi-map-marker
+        span.ellipsis
+          | {{ctrl.event.location}}
+      .description.event-view-block(ng-if="ctrl.event.description")
+        i.mdi.mdi-format-align-justify
+        div {{ctrl.event.description}}
+    hr.event-view-separator
+    .invitation-block
+      h4 {{ 'Invitations' | translate }}
+      .participation-block
+        cal-event-participation(change-participation="ctrl.changeParticipation", user-as-attendee="ctrl.userAsAttendee")
+      div
+        cal-attendee-tabs(selected-tab="ctrl.selectedTab")
+        .cal-attendees-list
+          cal-attendee-item-consult(
+            ng-if="ctrl.selectedTab === 'attendees' && ctrl.organizerAttendee",
+            attendee='ctrl.organizerAttendee',
+            is-organizer='ctrl.organizerAttendee',
+            is-external='ctrl.isExternal')
+          cal-attendee-item-consult(
+            ng-if="ctrl.selectedTab === 'attendees' && ctrl.usersAttendeesList.length > 0",
+            attendee='attendee',
+            is-external='ctrl.isExternal',
+            ng-repeat="attendee in ctrl.usersAttendeesList track by $index")
+        cal-resource-list(
+          ng-if="ctrl.selectedTab === 'resources' && ctrl.attendees.resources.length > 0",
+          resources='ctrl.attendees.resources')
+  .event-participation
+    cal-event-participation(change-participation="ctrl.changeParticipation", user-as-attendee="ctrl.userAsAttendee")

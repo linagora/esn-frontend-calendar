@@ -1,0 +1,4 @@
+.row.auto-complete-match
+  img.col-xs-1.col-sm-1(ng-src='{{data.avatarUrl}}', fallback-src="/linagora.esn.resource/images/icon/laptop.svg")
+  .row
+    .col-xs-10.col-sm-11(ng-bind-html="$highlight(data.displayName)")

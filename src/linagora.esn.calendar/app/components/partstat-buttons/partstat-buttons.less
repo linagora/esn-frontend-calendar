@@ -1,0 +1,62 @@
+.partstat-buttons {
+  .flex-column;
+  .flex-wrap;
+  .flex-grow;
+
+  box-shadow: none;
+
+  .partstat-button {
+    .flex-grow;
+
+    i {
+      margin-right: 5px;
+      font-size: 15px;
+    }
+
+    &.btn {
+      text-transform: none;
+      margin-right: 2px;
+    }
+
+    &.active {
+      background-color: @darkenBgColor;
+
+      &.accepted {
+        color: @m-green;
+      }
+
+      &.tentative {
+        color: @m-orange;
+      }
+
+      &.declined {
+        color: @m-red;
+      }
+    }
+
+    &.accepted {
+      i {
+        color: @m-green;
+      }
+    }
+
+    &.tentative {
+      i {
+        color: @m-orange;
+      }
+    }
+
+    &.declined {
+      i {
+        color: @m-red;
+      }
+    }
+  }
+}
+
+@media (min-width: @screen-xs-min) {
+  .partstat-buttons {
+    .flex-row;
+    .flex-grow(unset);
+  }
+}

@@ -1,0 +1,10 @@
+.attendee-item
+  .cal-avatar-block
+    cal-attendee-avatar(ng-if="!ctrl.isExternal", attendee='ctrl.attendee')
+    cal-attendee-avatar-external(ng-if="ctrl.isExternal", attendee='ctrl.attendee')
+    .cal-participation-status
+      i.mdi.mdi(ng-class='ctrl.PARTSTAT_ICONS[ctrl.attendee.partstat]')
+  .name
+    a.send-email(ng-href="mailto:{{::ctrl.attendee.email}}" op-inbox-compose op-inbox-compose-users="[ctrl.attendee]") {{::ctrl.attendee.name}}
+    small(ng-if='ctrl.isOrganizer')
+      | {{ 'Organizer' | translate }}

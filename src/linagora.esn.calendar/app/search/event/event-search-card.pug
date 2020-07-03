@@ -1,0 +1,10 @@
+.flex-start.flex-vertical-centered
+  i.mdi.mdi-clock
+  .date
+    span {{$ctrl.start}}
+  .to
+    | -
+  .date
+    span {{$ctrl.end}}
+  .allday(ng-if='$ctrl.event.allDay && !$ctrl.end')
+    | {{ 'All day' | translate }}

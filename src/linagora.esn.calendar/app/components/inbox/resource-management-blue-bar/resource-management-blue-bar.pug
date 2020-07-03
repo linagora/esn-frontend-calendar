@@ -1,0 +1,30 @@
+.cal-blue-bar
+
+  .cal-blue-bar-minical-container
+    .cal-blue-bar-minical
+      .cal-blue-bar-minical-month {{ ($ctrl.event.start | amDateFormat:'MMM') || '-' }}
+      .cal-blue-bar-minical-date {{ ($ctrl.event.start | amDateFormat:'DD') || '-' }}
+      .cal-blue-bar-minical-day {{ ($ctrl.event.start | amDateFormat:'ddd') || '-' }}
+    .cal-blue-bar-minical-overlay(ng-if="!$ctrl.event")
+      .cal-blue-bar-overlay-loading(ng-if="!$ctrl.meeting.loaded")
+        i.cal-blue-bar-overlay-icon.mdi.mdi-sync.rotate
+      i.cal-blue-bar-overlay-icon.mdi.mdi-alert-circle.text-danger(ng-if="$ctrl.meeting.error")
+      i.cal-blue-bar-overlay-icon.mdi.mdi-help-circle(ng-if="$ctrl.meeting.invalid")
+
+  .cal-blue-bar-message(ng-if="!$ctrl.event")
+    .cal-blue-bar-message-error.text-danger(ng-if="$ctrl.meeting.error") {{ 'An error occured while getting resource reservation contained in this message.' | translate }}
+    .cal-blue-bar-message-error(ng-if="$ctrl.meeting.invalid") {{ 'The resource reservation event can not be retrieved.' | translate }}
+    .cal-blue-bar-message-info(ng-if="!$ctrl.meeting.loaded") {{ 'This message contains some resource reservation information. Please wait while we fetch the event details...' | translate }}
+
+  .cal-blue-bar-info-and-actions.ellipsis(ng-if="$ctrl.resource && $ctrl.event")
+    .cal-blue-bar-info
+      .cal-blue-bar-summary.ellipsis {{ $ctrl.resource.name }} has been requested for event {{ $ctrl.event.summary }}
+    .cal-blue-bar-date.cal-blue-bar-labelled-value.ellipsis
+      i.cal-blue-bar-label.mdi.mdi-clock
+      span.cal-blue-bar-value {{ $ctrl.event.start | amDateFormat:'lll' }} {{ 'to' | translate }} {{ $ctrl.event.end | amDateFormat:'lll' }}
+
+    .cal-blue-bar-actions-container.cal-blue-bar-labelled-value
+      .cal-blue-bar-participation.cal-blue-bar-label.hidden-xs {{ 'As resource manager, you must accept or decline the request' | translate }}
+      .cal-blue-bar-actions.cal-blue-bar-value.btn-group.btn-group-sm
+        .cal-blue-bar-action-button.btn(ng-class="$ctrl.getParticipationButtonClass('btn-success', 'ACCEPTED')", ng-click="$ctrl.acceptResourceReservation()") {{ 'Accept' | translate }}
+        .cal-blue-bar-action-button.btn(ng-class="$ctrl.getParticipationButtonClass('btn-danger', 'DECLINED')", ng-click="$ctrl.declineResourceReservation()") {{ 'Decline' | translate }}

@@ -1,0 +1,11 @@
+md-option.calendar-dropdown-option(
+  ng-repeat='calendar in $ctrl.calendarList', 
+  ng-value='calendar.id',
+  ng-class="{'with-owner-name': !!calendar.ownerDisplayName}"
+)
+  .calendar-dropdown-item
+    .calendar-dropdown-icon
+      i.mdi.mdi-circle(ng-style="::{'color': calendar.color}")
+    .calendar-dropdown-info
+      span.ellipsis {{ ::calendar.name }} 
+      span.ellipsis.owner-display-name(ng-if="calendar.ownerDisplayName") {{ ::calendar.ownerDisplayName }}

@@ -1,0 +1,13 @@
+.calendars-list-item.clickable(ng-mouseenter="$ctrl.isHover = true;" ng-mouseleave="$ctrl.isHover = false;")
+  a.lv-item
+    .media.row
+      .col-md-12
+        .media(ng-click="$ctrl.onShowHideToggle()")
+          calendar-icon.pull-left(is-resource="$ctrl.calendar.isResource()", calendar-icon="$ctrl.resourceIcon", is-hover="$ctrl.isHover", calendar-color="$ctrl.calendar.color", selected="$ctrl.selected")
+          .media-body(title="{{ $ctrl.calendar.name }}")
+            .lv-title
+              span {{ $ctrl.calendar.name }}
+            .details(ng-if="$ctrl.details")
+              span.ellipsis {{ ::$ctrl.details }}
+      settings-overlay.settings(ng-click="$event.stopImmediatePropagation(); hideAside();", ui-sref-active-eq="selected")
+        cal-calendars-list-item-configuration(calendar-id="$ctrl.calendar.uniqueId")

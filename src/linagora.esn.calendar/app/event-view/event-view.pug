@@ -1,0 +1,3 @@
+div
+  cal-event-internal-user-view(ng-if="!ctrl.externalAttendee", event="ctrl.event", attendees="ctrl.attendees")
+  cal-event-external-user-view(ng-if="ctrl.externalAttendee", event="ctrl.event", external-attendee="ctrl.externalAttendee", attendees="ctrl.attendees", links="ctrl.links")

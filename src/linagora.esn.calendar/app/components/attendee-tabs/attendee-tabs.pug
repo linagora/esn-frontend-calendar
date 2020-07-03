@@ -1,0 +1,10 @@
+.cal-attendees-tabs
+  ul.esn-tab
+    li.btn-wave(ng-class="{'active': $ctrl.selectedTab === 'attendees'}")
+      a(href="", ng-click="$ctrl.selectedTab = 'attendees'")
+        | {{ 'Attendees' | translate }}
+    li.btn-wave(ng-class="{'active': $ctrl.selectedTab === 'resources'}")
+      a(href="", ng-click="$ctrl.selectedTab = 'resources'")
+        | {{ 'Resources' | translate }}
+    li.tab-options
+      cal-mail-to-attendees(event="$ctrl.event")

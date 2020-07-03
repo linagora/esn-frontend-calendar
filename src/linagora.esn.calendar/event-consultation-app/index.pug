@@ -1,0 +1,163 @@
+doctype html
+html
+  head
+    meta(charset='utf8')
+    base(href='/')
+    title OpenPaas
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(rel='icon', type='image/png', href='images/logo-tiny.png')
+    link(rel='stylesheet', href='/generated/css/esn/styles.css', media='all')
+    link(rel='stylesheet', href='/components/mdi/css/materialdesignicons.min.css', media='all')
+    link(rel='stylesheet', href='/components/ng-tags-input/ng-tags-input.min.css')
+    link(rel='stylesheet', href='/components/roboto-fontface/css/roboto-fontface.css')
+    link(rel='stylesheet', href='/components/animate.css/animate.css')
+
+    // Local dependencies
+    script(src='/components/jquery/dist/jquery.min.js')
+    script(src='/components/lodash/dist/lodash.min.js')
+    script(src='/components/bootstrap/dist/js/bootstrap.min.js')
+    script(src='/components/angular/angular.min.js')
+    script(src='/components/angular-component/dist/angular-component.min.js')
+    script(src=`/components/angular-i18n/angular-locale_${locale}.js`)
+    script(src='/components/angular-ui-router/release/angular-ui-router.min.js')
+    script(src='/components/angular-translate/angular-translate.min.js')
+    script(src='/components/angular-cookies/angular-cookies.min.js')
+    script(src='/components/moment/min/moment.min.js')
+    script(src='/components/angular-sanitize/angular-sanitize.min.js')
+    script(src='/components/angular-strap/dist/angular-strap.min.js')
+    script(src='/components/angular-strap/dist/angular-strap.tpl.min.js')
+    script(src='/components/angular-moment/angular-moment.min.js')
+    script(src='/components/angular-feature-flags/dist/featureFlags.js')
+    script(src='/calendar/components/fullcalendar/dist/fullcalendar.min.js')
+    script(src='/calendar/components/fullcalendar/dist/locale-all.js')
+    script(src='/components/angular-uuid4/angular-uuid4.min.js')
+    script(src='/components/angular-jstz/angular-jstz.js')
+    script(src='/components/jstzdetect/jstz.min.js')
+    script(src='/components/restangular/dist/restangular.min.js')
+    script(src='/components/dynamic-directive/dist/dynamic-directive.min.js')
+    script(src='/components/ical.js/build/ical.min.js')
+    script(src='/components/angular-promise-extras/angular-promise-extras.js')
+    script(src='/components/remarkable-bootstrap-notify/bootstrap-notify.min.js')
+    script(src='/components/ng-tags-input/ng-tags-input.min.js')
+    script(src='/components/angular-feature-flags/dist/featureFlags.min.js')
+
+    // ESN dependencies
+    script(src='js/material.js')
+    script(src='/components/material-admin/js/modules/form.js') // Because material-admin module is declared above
+    script(src='js/modules/application-menu.js')
+    script(src='js/modules/core.js')
+    script(src='js/modules/cache.js')
+    script(src='js/modules/email-addresses-wrapper.js')
+    script(src='js/modules/escape-html.js')
+    script(src='js/modules/http.js')
+    script(src='js/modules/i18n/i18n.module.js')
+    script(src='js/modules/i18n/i18n.config.js')
+    script(src='js/modules/i18n/i18n.constants.js')
+    script(src='js/modules/i18n/i18n.service.js')
+    script(src='js/modules/i18n/i18n-string.service.js')
+    script(src='js/modules/i18n/i18n-interpolator.service.js')
+    script(src='js/modules/i18n/i18n-loader.service.js')
+    script(src='js/modules/lodash-wrapper.js')
+    script(src='js/modules/notification.js')
+    script(src='js/modules/object-type.js')
+    script(src='js/modules/url.js')
+    script(src='js/modules/user/user.module.js')
+    script(src='js/modules/user/user-api.service.js')
+    script(src='js/modules/user/user-utils.service.js')
+    script(src='js/modules/people/people.module.js')
+    script(src='js/modules/session.js')
+    script(src='js/modules/domain.js')
+    script(src='js/modules/registry.js')
+    script(src='js/modules/template/template.module.js')
+    script(src='js/modules/template/template.provider.js')
+    script(src='js/modules/feature-registry/feature-registry.module.js')
+    script(src='js/modules/feature-registry/feature-registry.service.js')
+    script(src='js/modules/attendee/attendee.module.js')
+    script(src='js/modules/attendee/attendee.service.js')
+    script(src='js/modules/attendee/attendee.constants.js')
+    script(src='js/modules/config/config.module.js')
+    script(src='js/modules/config/config.service.js')
+    script(src='js/modules/config/config.constants.js')
+    script(src='js/modules/config/config-api.service.js')
+
+    // esn.calendar.event-consultation module
+    script(src='calendar/event-consultation-app/app.js')
+
+    // esn.calendar dependencies
+    script(src='calendar/app/components/avatar/resource-avatar/resource-avatar.component.js')
+    script(src='calendar/app/components/avatar/resource-avatar/resource-avatar.controller.js')
+    script(src='calendar/app/calendar/calendar-header/calendar-sub-header.directive.js')
+    script(src='calendar/app/calendar/calendar-view/calendar-view.directive.js')
+    script(src='calendar/app/components/attendee-tabs/attendee-tabs.component.js')
+    script(src='calendar/app/components/attendee/attendee-item-consult/attendee-item-consult.component.js')
+    script(src='calendar/app/components/attendee/attendee-item-consult/attendee-item-consult.controller.js')
+    script(src='calendar/app/components/avatar/attendee-avatar/attendee-avatar.controller.js')
+    script(src='calendar/app/components/avatar/attendee-avatar/external/attendee-avatar-external.component.js')
+    script(src='calendar/app/components/avatar/attendee-avatar/external/attendee-avatar-external.controller.js')
+    script(src='calendar/app/components/event-date-consultation/event-date-consultation.component.js')
+    script(src='calendar/app/components/event-date-consultation/event-date-consultation.controller.js')
+    script(src='calendar/app/components/event-participation/event-participation.component.js')
+    script(src='calendar/app/constants.js')
+    script(src='calendar/app/core/application-menu-calendar.directive.js')
+    script(src='calendar/app/core/auto-size-and-update.directive.js')
+    script(src='calendar/app/core/calendar-date-indicator.directive.js')
+    script(src='calendar/app/core/calendar-view-translation.directive.js')
+    script(src='calendar/app/core/partstat.filter.js')
+    script(src='calendar/app/core/toggle-calendar-today.directive.js')
+    script(src='calendar/app/core/toggle-calendar-view.directive.js')
+    script(src='calendar/app/core/toggle-mini-calendar.directive.js')
+    script(src='calendar/app/event-view/event-view.component.js')
+    script(src='calendar/app/event-view/event-view.controller.js')
+    script(src='calendar/app/event-view/external-user/event-view-external-user.component.js')
+    script(src='calendar/app/event-view/external-user/event-view-external-user.controller.js')
+    script(src='calendar/app/event-view/internal-user/event-view-internal-user.component.js')
+    script(src='calendar/app/event-view/internal-user/event-view-internal-user.controller.js')
+    script(src='calendar/app/resource/resource-item/resource-item.component.js')
+    script(src='calendar/app/resource/resource-item/resource-item.controller.js')
+    script(src='calendar/app/resource/resource-list/resource-list.component.js')
+    script(src='calendar/app/resource/resource-list/resource-list.controller.js')
+    script(src='calendar/app/search/event/event-search-card.component.js')
+    script(src='calendar/app/services/attendee.service.js')
+    script(src='calendar/app/services/attendees-cache.service.js')
+    script(src='calendar/app/services/cal-default-value.service.js')
+    script(src='calendar/app/services/calendar-utils.js')
+    script(src='calendar/app/services/event-utils.js')
+    script(src='calendar/app/services/fc-moment.js')
+    script(src='calendar/app/services/ical.js')
+    script(src='calendar/app/services/path-builder.js')
+    script(src='calendar/app/services/path-parser.service.js')
+    script(src='calendar/app/services/shells/calendar-shell.js')
+    script(src='calendar/app/services/shells/rrule-shell.js')
+    script(src='calendar/app/services/shells/valarm-shell.js')
+    script(src='calendar/app/services/shells/vfreebusy-shell.js')
+    script(src='calendar/app/sidebar/sidebar.directive.js')
+
+    // esn.calendar.event-consultation dependencies
+    script(src='calendar/event-consultation-app/event-view-external/event-view-external.component.js')
+    script(src='calendar/event-consultation-app/event-view-external/event-view-external.controller.js')
+
+    // RSE dependencies with mocked module
+    script(src='js/constants.js')
+    script(src='js/modules/avatar/avatar-url.service.js')
+
+
+    script.
+      angular.module('esn.calendar.event-consultation')
+        .controller('CalEventExternalRootController', function($scope) {
+          this.eventJcal = !{JSON.stringify(eventJSON)};
+          this.attendeeEmail = "#{attendeeEmail}";
+          this.links = !{JSON.stringify(links)};
+        });
+
+  body(ng-app='esn.calendar.event-consultation')
+    header#header.event-consultation
+      div.header-inner.flex-vertical-centered.flex-space-between
+        ul.list-inline.all-centered
+          li.logo
+            a(href='#')
+              img.openpaas-logo(src="/images/white-logo.svg", alt=__("OpenPaas Logo"))
+    .consultation-body(ng-view, ng-cloak)
+      div(ng-controller="CalEventExternalRootController as ctrl")
+        cal-event-view-external(event-jcal="{{ctrl.eventJcal}}",
+                                attendee-email="{{ctrl.attendeeEmail}}",
+                                links="{{ctrl.links}}")

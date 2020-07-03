@@ -1,0 +1,10 @@
+.resource-list.card.fadeIn200ms
+  infinite-list(load-more-elements='ctrl.loadMoreElements()', scroll-inside-container="ctrl.scrollInsideContainer")
+    .listview.lv-bordered.lv-lg(ng-if="ctrl.elements.length > 0")
+      .lv-body
+        esn-resource-list-item.lv-item.p-0.clickable(resource='resource', ng-repeat="resource in ctrl.elements")
+  .empty-message(ng-if="!ctrl.elements.length && ctrl.infiniteScrollCompleted")
+    .message
+      | {{ 'No resources' | translate }}
+  div(ng-if='ctrl.infiniteScrollDisabled')
+    .text-center(openpaas-logo-spinner, spinner-start-active='1', spinner-size='0.5')

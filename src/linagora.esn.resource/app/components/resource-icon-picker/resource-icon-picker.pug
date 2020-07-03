@@ -1,0 +1,6 @@
+.icon-picker-container
+  // .select > .form-control is mandatory here for the select-like behavior
+  // of material-admin
+  .select(ng-click="ctrl.openModal()")
+    .form-control
+  i.mdi.icon-picker-value(class="{{ctrl.RESOURCE_ICONS[ctrl.icon]}}", ng-model="ctrl.icon", name="resourceIcon")

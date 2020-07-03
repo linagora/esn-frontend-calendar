@@ -1,0 +1,78 @@
+doctype html
+html
+  head
+    meta(charset='utf8')
+    base(href='/')
+    title OpenPaas
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(rel='icon', type='image/png', href='images/logo-tiny.png')
+    link(rel='stylesheet', href='/generated/css/esn/styles.css', media='all')
+    link(rel='stylesheet', href='/components/mdi/css/materialdesignicons.min.css', media='all')
+    link(rel='stylesheet', href='/components/ng-tags-input/ng-tags-input.min.css')
+    link(rel='stylesheet', href='/components/roboto-fontface/css/roboto-fontface.css')
+    link(rel='stylesheet', href='/components/animate.css/animate.css')
+
+    // Local dependencies
+    script(src='/components/jquery/dist/jquery.min.js')
+    script(src='/components/lodash/dist/lodash.min.js')
+    script(src='/components/bootstrap/dist/js/bootstrap.min.js')
+    script(src='/components/angular/angular.min.js')
+    script(src='/components/angular-component/dist/angular-component.min.js')
+    script(src=`/components/angular-i18n/angular-locale_${locale}.js`)
+    script(src='/components/angular-ui-router/release/angular-ui-router.min.js')
+    script(src='/components/angular-translate/angular-translate.min.js')
+    script(src='/components/moment/min/moment.min.js')
+    script(src='/components/angular-sanitize/angular-sanitize.min.js')
+    script(src='/components/angular-strap/dist/angular-strap.min.js')
+    script(src='/components/angular-strap/dist/angular-strap.tpl.min.js')
+    script(src='/components/angular-moment/angular-moment.min.js')
+    script(src='/components/angular-feature-flags/dist/featureFlags.js')
+    script(src='/components/angular-uuid4/angular-uuid4.min.js')
+    script(src='/components/angular-jstz/angular-jstz.js')
+    script(src='/components/angular-cookies/angular-cookies.min.js')
+    script(src='/components/jstzdetect/jstz.min.js')
+    script(src='/components/restangular/dist/restangular.min.js')
+    script(src='/components/dynamic-directive/dist/dynamic-directive.min.js')
+    script(src='/components/remarkable-bootstrap-notify/bootstrap-notify.min.js')
+
+    // RSE dependencies
+    script(src='js/material.js')
+    script(src='/components/material-admin/js/modules/form.js') // Because material-admin module is declared above
+    script(src='js/modules/application-menu.js')
+    script(src='js/modules/email-addresses-wrapper.js')
+    script(src='js/modules/escape-html.js')
+    script(src='js/modules/http.js')
+    script(src='js/modules/i18n/i18n.module.js')
+    script(src='js/modules/i18n/i18n.config.js')
+    script(src='js/modules/i18n/i18n.constants.js')
+    script(src='js/modules/i18n/i18n.service.js')
+    script(src='js/modules/i18n/i18n-string.service.js')
+    script(src='js/modules/i18n/i18n-interpolator.service.js')
+    script(src='js/modules/i18n/i18n-loader.service.js')
+    script(src='js/modules/lodash-wrapper.js')
+
+    // esn.calendar.event-consultation module
+    script(src='calendar/event-consultation-app/error.js')
+
+    script(src='calendar/event-consultation-app/error-display/error-display.component.js')
+
+    // RSE dependencies with mocked module
+    script(src='js/constants.js')
+    script(src='js/modules/avatar/avatar-url.service.js')
+
+    script.
+      angular.module('esn.calendar.event-error-display')
+        .controller('CalEventExternalErrorRootController', function($scope) {
+          $scope.error = !{JSON.stringify(error)};
+        });
+
+  body(ng-app='esn.calendar.event-error-display')
+    header#header.event-consultation
+      div.header-inner.flex-vertical-centered.flex-space-between
+        ul.list-inline.all-centered
+          li.logo
+            a(href='#')
+              img.openpaas-logo(src="/images/white-logo.svg", alt=__("OpenPaas Logo"))
+    .consultation-body(ng-view, ng-cloak)
+      div(ng-controller="CalEventExternalErrorRootController")
+        cal-event-external-error-display(error="error")

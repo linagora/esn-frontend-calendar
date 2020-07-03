@@ -1,0 +1,121 @@
+@ui-state-hover: rgba(0,0,0,0.2);
+@allday-background: @body-bg;
+
+.fc-toolbar {
+  background-color: @headerBackground;
+
+  h2 {
+    text-transform: none;
+    color: @headerTextColor;
+  }
+
+  .ui-state-active {
+    background-color: @black-alpha-10;
+  }
+
+  .ui-button {
+    color: @headerTextColor;
+
+    &.ui-state-disabled {
+      .opacity(@opacity-btn-disabled);
+    }
+
+    &:hover {
+      background: inherit;
+      background-color: @darkPrimaryColor;
+      color: @headerTextColor;
+    }
+  }
+
+  .ui-state-hover {
+    border: none;
+  }
+
+  &.fc-header-toolbar {
+    margin-bottom: 0;
+  }
+}
+
+.main-calendar {
+  .fc-day-grid, .fc-week .fc-bg, td.fc-week-number {
+    color: @secondaryTextColor;
+    background-color: @allday-background;
+  }
+  .fc-month-view .fc-day-grid {
+    .fc-week-number {
+      color: lighten(@secondaryTextColor, 40%);
+    }
+    .fc-day:not(.fc-today) {
+      background-color: @m-white;
+    }
+  }
+
+  .fc-week .fc-day:hover .fc-day-number {
+    background-color: @subHeaderBackground;
+    border-radius: 50%;
+    color: @m-white;
+    transition: background-color 0.2s;
+  }
+
+  hr.fc-divider {
+    padding: 0;
+  }
+
+  .fc-toolbar {
+
+    .ui-button {
+      width: 36px;
+      height: 36px;
+      margin-top: 0;
+      color: @headerTextColor;
+
+      & > span {
+        font-size: 23px;
+        width: 36px;
+      }
+    }
+  }
+
+  .fc-today {
+    color: @accentColor !important; /* override material-admin value */
+  }
+}
+
+.fc {
+  margin-bottom: 0;
+  th {
+    background: @m-white;
+  }
+}
+
+.fc thead td, .fc thead th {
+  border-color: @subHeaderBackground;
+  border-right: 0;
+
+  &.fc-axis {
+    text-align: center;
+  }
+}
+
+.fc th {
+  background-color: @subHeaderBackground;
+  color: @subHeaderTextColor;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.fc-head-container {
+  background-color: @subHeaderBackground;
+}
+
+.ui-widget td.fc-axis {
+  font-weight: 500;
+}
+
+.fc .fc-toolbar >* >* {
+  margin-left: .5em;
+
+  &.tooltip {
+    margin-left: 0;
+  }
+}

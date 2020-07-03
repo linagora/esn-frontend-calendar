@@ -1,0 +1,10 @@
+.modal.full-screen(tabindex="-1", role="dialog")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title {{ 'Confirmation' | translate }}
+      .modal-body
+        span {{ 'Remove the resource' | translate }} {{ctrl.resource.name}}
+      .modal-footer
+        button.btn.btn-default(type="button", ng-click="$hide()") {{ 'Cancel' | translate }}
+        button.btn.btn-danger(type="button", ng-click="ctrl.onDelete(); $hide()") {{ 'Remove' | translate }}

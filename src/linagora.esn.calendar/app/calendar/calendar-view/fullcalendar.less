@@ -1,0 +1,161 @@
+@cal-event-border-color: @m-white;
+@cal-event-fade: 0.7;
+@cal-remaining-space-to-allow-dnd: 7px;
+@cal-table-today-cell-color: fade(@accentColor, 10%);
+
+.fc-event {
+  min-height: 1.5em;
+  min-width: 0.5em;
+  border: solid 1px @cal-event-border-color;
+}
+
+.fc-view:not(.fc-month-view) {
+  .fc-event {
+    border-radius: 3px;
+
+    .fc-content {
+      .flex-column();
+
+      cursor: pointer;
+      height: 100%;
+
+      .fc-time {
+        background: none;
+        font-size: 11px;
+        padding: 2px 6px;
+        text-align: left;
+
+        .mdi-sync {
+          font-size: 1.1em;
+        }
+      }
+
+      .fc-time:after {
+        content: "";
+      }
+
+      .fc-title {
+        .ellipsis();
+        font-size: 13px;
+        font-weight: 500;
+        padding: 2px 6px;
+        overflow: hidden;
+      }
+
+      .fc-location {
+        .ellipsis();
+
+        font-size: 11px;
+        margin-top: 2px;
+      }
+    }
+
+    .fc-resizer {
+      color: @m-white;
+      display: none;
+    }
+
+    .fc-bg {
+      opacity: 0;
+    }
+  }
+}
+
+.fc-agendaWeek-view, .fc-agendaThreeDays-view, .fc-agendaDay-view {
+  .fc-event .fc-time{
+    display: none;
+  }
+}
+
+.fc-day-grid-event .fc-content {
+  cursor: pointer;
+}
+
+@media (min-width: @screen-md-min) {
+  .fc-view:not(.fc-month-view) .fc-event .fc-resizer {
+    display: block;
+  }
+
+  .fc-event {
+    margin-right: @cal-remaining-space-to-allow-dnd;
+  }
+
+  .fc-agendaWeek-view, .fc-agendaThreeDays-view, .fc-agendaDay-view {
+    .fc-event .fc-time {
+      display: block;
+    }
+  }
+
+  .mini-calendar .fc-event {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+.event-accepted {
+}
+
+.event-needs-action {
+  opacity: @cal-event-fade;
+  border: dashed 1px @cal-event-border-color;
+}
+
+.event-tentative {
+  i {
+    font-size: 1.4em;
+    margin-right: 3px;
+  }
+}
+
+.event-allDay-tentative {
+  i {
+    font-size: 1.4em;
+    margin-right: 3px;
+  }
+}
+
+.event-allDay-tentative.fc-short {
+  i {
+    .pull-left;
+  }
+}
+.event-tentative.fc-short {
+  i {
+    .pull-left;
+  }
+}
+
+.event-declined {
+  opacity: @cal-event-fade;
+
+  .fc-title {
+    text-decoration: line-through;
+  }
+}
+
+.mini-calendar .fc-event {
+  border: 0;
+  margin-right:0;
+  width: 5px;
+  height: 5px;
+}
+
+.fc-agendaWeek-view, .fc-agendaDay-view {
+  .ui-widget-header {
+    border-bottom: 1px solid @table-border-color;
+  }
+
+  .fc-day-grid {
+    .fc-row.fc-week.ui-widget-content {
+      border-right: 1px solid @table-border-color;
+    }
+  }
+}
+
+.fc .fc-row {
+  border-style: none;
+}
+
+.fc-day.ui-widget-content.fc-today {
+  background: @cal-table-today-cell-color;
+}

@@ -1,0 +1,53 @@
+{
+  "coreModules": [],
+  "dependenceModules": [
+    {
+      "name": "linagora.esn.calendar",
+      "angularModuleName": "esn.calendar",
+      "shortName": "calendar",
+      "frontendRoot": "frontend/app",
+      "cssRoot": "frontend/app/styles.less",
+      "pugGlob": [
+        "/app/**/*.pug"
+      ],
+      "pugOptions": {
+        "basedir": "./node_modules/esn-frontend-common-libs/src/frontend/views"
+      },
+      "fileRoot": "frontend/app",
+      "filesGlob": [
+        "app.js",
+        "**/!(*spec).js",
+        "!event-consultation-app/**/**"
+      ]
+    },
+    {
+      "name": "linagora.esn.resource",
+      "angularModuleName": "linagora.esn.resource",
+      "shortName": "linagora.esn.resource",
+      "frontendRoot": "frontend/app",
+      "cssRoot": "frontend/app/resource.less",
+      "pugGlob": [
+        "**/*.pug"
+      ],
+      "pugOptions": {
+        "basedir": "./node_modules/esn-frontend-common-libs/src/frontend/views"
+      },
+      "fileRoot": "frontend/app",
+      "filesGlob": [
+        "app/app.js",
+        "**/!(*spec).js"
+      ]
+    }
+  ],
+  "EX_BOWER": [
+    {
+      "name": "fullcalendar",
+      "version": "3.9.0",
+      "file": [
+        "dist/fullcalendar.js",
+        "dist/locale-all.js"
+      ],
+      "css": "dist/fullcalendar.css"
+    }
+  ]
+}

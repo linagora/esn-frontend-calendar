@@ -1,0 +1,8 @@
+.cal-attendee-list
+  .cal-attendee-list-body
+    cal-resource-item(
+      resource='resource',
+      can-modify-resource='::ctrl.canModifyResources',
+      remove="ctrl.removeResource(resource)",
+      ng-repeat="resource in ctrl.resources track by $index"
+    )

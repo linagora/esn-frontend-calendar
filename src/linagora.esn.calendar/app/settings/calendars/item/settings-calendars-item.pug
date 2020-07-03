@@ -1,0 +1,12 @@
+.cal-settings-calendars-item
+  .calendar-icon
+    i.mdi.mdi-circle(ng-style="{'color': ctrl.calendar.color}")
+  .calendar-info(ng-click='ctrl.goTo()')
+    .name 
+      span {{:: ctrl.calendar.name }}
+    .description
+      span {{ ::ctrl.ownerDisplayName }}
+      span.separator(ng-if="ctrl.ownerDisplayName && ctrl.calendar.description") -
+      span {{:: ctrl.calendar.description }}
+  .calendar-actions
+    a.clickable(ng-if='ctrl.canDeleteCalendar()', ng-click="ctrl.remove()") {{ 'Remove' | translate }}

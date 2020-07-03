@@ -1,0 +1,7 @@
+ul.esn-tab
+  li.btn-wave(ng-class="{'active': $ctrl.selectedTab === 'main'}")
+    a(href="", ng-click="$ctrl.selectedTab = 'main'")
+      | {{ 'Main' | translate }}
+  li.btn-wave(feature-flag="linagora.esn.calendar.features.isSharingCalendarEnabled", ng-class="{'active': $ctrl.selectedTab === 'delegation'}", ng-show='$ctrl.canShowDelegationTab()')
+    a(href="", ng-click="$ctrl.selectedTab = 'delegation'")
+      | {{ 'Delegation' | translate }}

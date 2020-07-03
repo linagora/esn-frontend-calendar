@@ -1,0 +1,33 @@
+fieldset
+  .form-group.flex-form-group
+    .field-name.field-label {{ 'Search in' | translate }}
+    .fg-line
+      calendar-search-form-dropdown(calendars="$ctrl.calendars", selected-cal="$ctrl.query.advanced.cal")
+
+  .form-group.flex-form-group.full-width
+    .field-name.field-label {{ 'Keywords' | translate }}*
+    .fg-line
+      input.input.form-control(
+        type='text',
+        ng-model="$ctrl.query.advanced.contains",
+        autoclose="1",
+        placeholder="{{ 'Keywords contained in events' | esnI18n }}",
+        auto-focus=true,
+        required
+      )
+
+  .form-group.flex-form-group.full-width
+    .field-name.field-label {{ 'Organizers' | translate }}
+    cal-entities-autocomplete-input(
+      types='::$ctrl.availableAttendeeObjectTypes',
+      mutable-entities='$ctrl.query.advanced.organizers',
+      place-holder="Enter one or more organizers",
+    )
+
+  .form-group.flex-form-group.full-width
+    .field-name.field-label {{ 'Attendees' | translate }}
+    cal-entities-autocomplete-input(
+      types='::$ctrl.availableAttendeeObjectTypes',
+      mutable-entities='$ctrl.query.advanced.attendees',
+      place-holder="Enter one or more attendees",
+    )

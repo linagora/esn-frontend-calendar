@@ -1,0 +1,39 @@
+.cal-settings-calendars-item {
+  .flex-start;
+  .flex-vertical-centered;
+
+  padding: 8px;
+
+  .calendar-icon {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+  .calendar-info {
+    .clickable;
+
+    font-size: 15px;
+
+    .name {
+      color: @secondaryTextColor;
+    }
+
+    .description {
+      font-size: smaller;
+      color: @secondaryTextColor;
+
+      .separator {
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .calendar-actions {
+    .flex-end;
+    .flex-shorthand(1);
+    .underlined-button;
+
+    font-size: 15px;
+  }
+}

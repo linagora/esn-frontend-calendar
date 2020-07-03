@@ -1,0 +1,30 @@
+cal-open-event-form-on-click(event="item", calendar-home-id="item.calendar.calendarHomeId", is-event-from-search='true')
+  .event-search-item
+    .event-search-icon
+      i.mdi.mdi-calendar
+
+    .media-body
+      .event-search-line
+        .lv-title.event-search-line-left
+          i.mdi.mdi-checkbox-blank-circle(ng-style="{'color': item.calendar.color}")
+          span(ng-bind-html="::item.summary | esnHighlight: query")
+
+        .lv-title.event-search-line-right
+          cal-event-date-consultation(event="item")
+
+      .event-search-line
+        .lv-title.event-search-line-left
+          span(ng-if="item.organizer")
+            i.mdi.mdi-account
+            span.event-organizer-displayname {{item.organizer.cn}}
+          span(ng-if="item.location")
+            i.mdi.mdi-map-marker
+            span(ng-bind-html="::item.location | esnHighlight: query")
+
+        .event-search-line-right
+          i.mdi.mdi-account-multiple-plus(ng-if="item.attendees.length > 1")
+          i.mdi.mdi-alarm(ng-if="item.alarm")
+          i.mdi.mdi-refresh(ng-if="item.isRecurrentMaster")
+
+    .event-search-description
+      span {{item.description}}

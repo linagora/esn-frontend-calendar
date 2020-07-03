@@ -1,0 +1,138 @@
+calendar-configuration-tab-main {
+  .field-name {
+    font-size: @calendarConfigurationLabelFontSize;
+  }
+
+  .calendar-link {
+    .flex-column;
+    .flex-wrap;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    hr {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .settings-label {
+      .flex-vertical-centered;
+      font-size: @calendarConfigurationLabelFontSize;
+
+      span {
+        padding-left: 15px;
+      }
+
+      i.mdi {
+        margin-right: 5px;
+        font-size: 1.5em;
+      }
+    }
+
+    .settings-text {
+      padding-top: 5px;
+      font-size: @calendarConfigurationLabelFontSize;
+    }
+
+    .settings-value {
+      .calendar-url {
+        font-size: @calendarConfigurationLabelFontSize;
+      }
+    }
+  }
+
+  .settings-actions {
+    margin-top: 15px;
+  }
+
+  .public-access-line {
+    .flex-vertical-centered;
+
+    margin-bottom: 20px;
+    font-size: 14px;
+
+    .attendee-avatar {
+      margin-right: 15px;
+
+      img {
+        .esn-avatar;
+      }
+    }
+
+    .mdi-account-multiple, .mdi-account-switch, .mdi-account-key {
+      margin-right: 5px;
+      font-size: 1.5em;
+    }
+
+    .margin-right-15 {
+      margin-right: 15px;
+    }
+
+    .public-access-line-visibility-key {
+      .esn-flex-noshrink;
+    }
+
+    .public-access-line-visibility-value {
+      .fg-line;
+
+      margin-bottom: 0;
+      padding-right: 0;
+
+      &.calendar-owner {
+        .flex;
+      }
+    }
+
+    &.public-access-visibility-line {
+      padding-bottom: 10px;
+    }
+
+    .btn {
+      margin-top: 10px;
+    }
+
+    .btn-group {
+      margin-top: 10px;
+
+      .btn {
+        margin-top: 0;
+      }
+
+      .mdi {
+        margin-right: 5px;
+      }
+
+      i {
+        vertical-align: sub;
+      }
+    }
+  }
+
+  .delete-calendar-button {
+    .flex-vertical-centered;
+    .clickable;
+  }
+
+  .color-picker-container {
+    .select {
+      cursor: pointer;
+    }
+
+    &.pointer-events-none {
+      pointer-events: none;
+    }
+
+    margin-top: 10px;
+    width: 50px;
+    position: relative;
+
+    .color-picker-value {
+      cursor: pointer;
+      width: 25px;
+      height: 25px;
+      border-radius: 2px;
+      position: absolute;
+      top: 0px;
+      z-index: 5;
+    }
+  }
+}

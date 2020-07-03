@@ -1,0 +1,44 @@
+.cal-participation-btn-group {
+  .btn {
+    font-size: 13px;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    border-color: @darkenBgColor;
+    text-transform: none;
+    padding: 6px;
+
+    i.mdi {
+      margin-right: 4px;
+      font-size: 18px;
+      bottom: 2px;
+      position: relative;
+      vertical-align: middle;
+
+      &.mdi-help {
+        font-size: 15px;
+        bottom: 1px;
+      }
+    }
+
+    &.undecided {
+      margin: 0 -1px;
+    }
+
+    &.active {
+      background-color: @darkenBgColor;
+      z-index: 0;
+
+      &.accepted  {
+        color: @m-green;
+      }
+
+      &.undecided {
+        color: @m-blue;
+      }
+
+      &.declined {
+        color: @m-red;
+      }
+    }
+  }
+}

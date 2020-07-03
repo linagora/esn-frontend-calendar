@@ -1,0 +1,21 @@
+extends /modules/subheader/responsive-subheader.pug
+
+block left
+  .calendar-sub-header.hidden-md
+    .calendar-controls
+      button.btn.btn-link.btn-icon(href='', contextual-sidebar, data-content-template="/calendar/app/sidebar/mobile/sidebar-mobile")
+        i.mdi.mdi-menu
+      button.btn.btn-link.flex-vertical-centered(cal-toggle-mini-calendar)
+        .date-indicator.flex-vertical-centered(calendar-date-indicator) {{vm.dateIndicator}}
+          i.mdi.mdi-menu-down
+block right
+  .calendar-sub-header.flex-vertical-centered
+    .calendar-controls
+      button.btn.btn-link.btn-icon.hidden-md(calendar-view-translation='prev')
+        i.mdi.mdi-chevron-left
+      a.hidden-md(cal-toggle-today)
+        calendar-today-button(is-current-view-around-today="isCurrentViewAroundToday()")
+      button.btn.btn-link.btn-icon.hidden-md(calendar-view-translation='next')
+        i.mdi.mdi-chevron-right
+      cal-show-planning-sidebar-button
+

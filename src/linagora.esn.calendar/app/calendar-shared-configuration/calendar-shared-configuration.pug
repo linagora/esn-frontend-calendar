@@ -1,0 +1,38 @@
+.modal.full-screen(tabindex="-1", role="dialog")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button", ng-click="$hide()") &times;
+        h4.modal-title {{ 'Add shared calendars' | translate }}
+      .modal-body
+        .cal-calendar-shared-configuration
+          .user-search.form-group
+            .autocomplete
+              cal-entities-autocomplete-input(
+                auto-focus-ngtagsinput,
+                exclude-current-user='true',
+                mutable-entities='$ctrl.users',
+                on-entity-added='$ctrl.onUserAdded',
+                on-adding-entity='$ctrl.onAddingUser',
+                on-entity-removed='$ctrl.onUserRemoved',
+                add-from-autocomplete-only='true',
+                types='[$ctrl.CAL_ATTENDEE_OBJECT_TYPE.user, $ctrl.CAL_ATTENDEE_OBJECT_TYPE.resource]',
+                place-holder="Search for users or resources"
+              )
+
+          .calendar-list
+            .empty(ng-if='!$ctrl.calendarsPerUser.length')
+              span {{ 'Search for users and resources to subscribe to their calendars' | translate }}
+
+            .header(ng-if='$ctrl.calendarsPerUser.length')
+              .name
+                span {{ 'Name' | translate }}
+              .rights
+                span {{ 'Rights' | translate }}
+              .actions
+                span {{ 'Add' | translate }}
+            cal-calendar-shared-configuration-item(item="item", user="$ctrl.sessionUser", ng-repeat="item in $ctrl.calendarsPerUser")
+      .modal-footer
+        button.btn.btn-default(type="button", ng-click="$hide()") {{ 'Cancel' | translate }}
+        button.btn.btn-primary(type='button', ng-disabled='!$ctrl.getSelectedCalendars($ctrl.calendarsPerUser).length', ng-click='$ctrl.addSharedCalendars(); $hide()') {{ 'Save' | translate }}
+

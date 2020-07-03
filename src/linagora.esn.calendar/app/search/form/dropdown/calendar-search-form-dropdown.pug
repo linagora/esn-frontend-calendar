@@ -1,0 +1,11 @@
+md-select.calendar-dropdown(ng-model='$ctrl.selectedCal', aria-label="Select calendar")
+  md-option.calendar-dropdown-option(ng-value='$ctrl.calendarTypes.ALL_CALENDARS') {{ 'All calendars' | translate }}
+  .calendar-dropdown-option-divider
+
+  md-option.calendar-dropdown-option(ng-value='$ctrl.calendarTypes.MY_CALENDARS') {{ 'My calendars' | translate }}
+  calendar-search-form-dropdown-calendar-options(calendar-list='$ctrl.calendars.myCalendars')
+
+  div(ng-if='$ctrl.calendars.sharedCalendars.length')
+    .calendar-dropdown-option-divider
+    md-option.calendar-dropdown-option(ng-value='$ctrl.calendarTypes.SHARED_CALENDARS') {{ 'Shared calendars' | translate }}
+    calendar-search-form-dropdown-calendar-options(calendar-list='$ctrl.calendars.sharedCalendars')

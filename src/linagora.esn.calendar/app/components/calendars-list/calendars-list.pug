@@ -1,0 +1,14 @@
+.listview.calendars-list
+  cal-user-calendars-list(
+    user-calendars="$ctrl.userCalendars",
+    toggle-calendar="$ctrl.toggleCalendar",
+    hidden-calendars="$ctrl.hiddenCalendars"
+  )
+
+  cal-external-calendars-list(
+    feature-flag="linagora.esn.calendar.features.isSharingCalendarEnabled",
+    shared-calendars="$ctrl.sharedCalendars",
+    public-calendars="$ctrl.publicCalendars",
+    toggle-calendar="$ctrl.toggleCalendar",
+    hidden-calendars="$ctrl.hiddenCalendars"
+  )

@@ -1,0 +1,32 @@
+.cal-event-date-suggestion {
+  .form-group {
+    margin-bottom: 20px;
+    font-size: 13px;
+    min-width: 85px;
+
+    input {
+      &.date {
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  .checkbox.allday {
+    margin-left: 10px;
+  }
+
+  button.btn-today {
+    background: white !important; /*to override default color of datepicker*/
+    color: black;
+    border-radius: 5px;
+    border: solid 2px @m-lightblue;
+  }
+}
+
+@media (min-width: @screen-sm-min) {
+  .cal-event-date-suggestion {
+    .checkbox.allday {
+      margin-left: 0;
+    }
+  }
+}

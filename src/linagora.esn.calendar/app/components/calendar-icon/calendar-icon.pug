@@ -1,0 +1,4 @@
+div(ng-if="$ctrl.selected", title="{{ 'Hide calendar' | translate }}")
+  i.mdi(ng-style="{'color': $ctrl.calendarColor}", ng-class="$ctrl.isResource ? $ctrl.calendarIcon : 'mdi-checkbox-blank-circle'") 
+div(ng-if="!$ctrl.selected", title="{{ 'Show calendar' | translate }}")
+  i.mdi(ng-style="{'color': ($ctrl.isHover ? $ctrl.calendarColor : ''), 'opacity': ($ctrl.isResource ? '0.5' : '1')}", ng-class="$ctrl.isResource ? $ctrl.calendarIcon : 'mdi-checkbox-blank-circle-outline'")

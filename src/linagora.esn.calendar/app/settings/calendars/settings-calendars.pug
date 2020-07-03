@@ -1,0 +1,18 @@
+sub-header
+  cal-settings-subheader
+
+.cal-settings-calendars
+  .calendar-list
+    .title
+      h3 {{ 'My calendars' | translate }}
+    .list
+      cal-settings-calendars-item(ng-repeat="calendar in ctrl.userCalendars", calendar="calendar", on-remove="ctrl.remove", display-owner="false", state-to-go="'calendar.edit'")
+
+  .calendar-list(feature-flag="linagora.esn.calendar.features.isSharingCalendarEnabled")
+    .title
+      h3 {{ 'Shared calendars' | translate }}
+    .list
+      cal-settings-calendars-item(ng-repeat="calendar in ctrl.sharedCalendars", calendar="calendar", on-remove="ctrl.remove", display-owner="true", state-to-go="'calendar.external.shared'")
+      cal-settings-calendars-item(ng-repeat="calendar in ctrl.publicCalendars", calendar="calendar", on-remove="ctrl.remove", display-owner="true", state-to-go="'calendar.external.shared'")
+
+dynamic-fab-dropup(anchor='cal-add-calendar')

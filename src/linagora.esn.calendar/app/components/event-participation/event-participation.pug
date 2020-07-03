@@ -1,0 +1,8 @@
+.text-center.cal-participation-btn-group
+  .btn-group(role="group")
+    button.btn.btn-link.accepted(type='button', ng-click='ctrl.changeParticipation("ACCEPTED")', ng-class='{ "active": ctrl.userAsAttendee.partstat === "ACCEPTED" }')
+      i.mdi.mdi-check
+    button.btn.btn-link.undecided(type='button', ng-click='ctrl.changeParticipation("TENTATIVE")', ng-class='{ "active": ctrl.userAsAttendee.partstat === "TENTATIVE" }')
+      i.mdi.mdi-help
+    button.btn.btn-link.declined(type='button', ng-click='ctrl.changeParticipation("DECLINED")', ng-class='{ "active": ctrl.userAsAttendee.partstat === "DECLINED" }')
+      i.mdi.mdi-close

@@ -1,0 +1,6 @@
+.listview.lv-bordered.lv-lg(ng-if="ctrl.administrators.length > 0")
+  .lv-body
+    .lv-item.p-0(ng-repeat="administrator in ctrl.administrators")
+      esn-resource-administrator-list-item(administrator='administrator', on-remove='ctrl.onRemove')
+.empty-message(ng-if="!ctrl.administrators.length")
+  | {{ 'No administrator' | translate }}

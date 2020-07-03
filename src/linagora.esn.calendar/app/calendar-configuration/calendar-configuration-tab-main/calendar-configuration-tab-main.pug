@@ -1,0 +1,66 @@
+.settings-general
+  .calendar-name
+    .form-group.fg-line(ng-class='{"has-error": !$ctrl.calendar.name}')
+      .field-name {{ 'Name' | translate }}
+      input.form-control(type="text", placeholder="{{ 'Enter a name' | translate }}", ng-model="$ctrl.calendar.name", maxlength="255")
+
+  .calendar-color
+    .form-group
+      .field-name {{ 'Color' | translate }}
+      .color-picker-container(calendar-color-picker-toggler, color="$ctrl.calendar.color")
+        // .select > .form-control is mandatory here for the select-like behavior
+        // of material-admin
+        .select
+          .form-control
+        i.color-picker-value(ng-style="{'background-color': $ctrl.calendar.color}")
+
+.settings-access(feature-flag="linagora.esn.calendar.features.isSharingCalendarEnabled")
+  .calendar-public-access
+    .public-access-line.public-access-visibility-line
+      i.mdi.mdi-account-multiple.big
+      .public-access-line-visibility-key.col-xs-4
+        | {{ 'Public right' | translate }}
+      .public-access-line-visibility-value.form-group.col-xs-8
+        .select
+          select.form-control(ng-model='$ctrl.publicSelection', ng-disabled="!$ctrl.canModifyPublicSelection")
+            option(ng-repeat="publicRight in ::$ctrl.publicRights" value="{{publicRight.value}}" ng-selected="publicRight.value === $ctrl.publicSelection") {{ publicRight.name | esnI18n}}
+
+  .calendar-shared-by(ng-if="$ctrl.sharedCalendarOwner && !$ctrl.isResource")
+    .public-access-line.public-access-visibility-line
+      i.mdi.mdi-account-switch.big
+      .public-access-line-visibility-key.col-xs-4
+        | {{ 'Shared by' | translate }}
+      .public-access-line-visibility-value.calendar-owner.form-group.col-xs-8
+        a.attendee-avatar(href="", ng-attr-title="$ctrl.user.displayName")
+          esn-avatar(user-id="$ctrl.sharedCalendarOwner.id", user-email="$ctrl.sharedCalendarOwner.preferredEmail")
+        .user-name
+          a(ng-href="mailto:{{$ctrl.sharedCalendarOwner.preferredEmail}}" op-inbox-compose op-inbox-compose-display-name="{{::$ctrl.displayNameOfSharedCalendarOwner}}") {{ $ctrl.displayNameOfSharedCalendarOwner }}
+
+  .calendar-shared-rights
+    .public-access-line.public-access-visibility-line(ng-if="$ctrl.shareeRight")
+      i.mdi.mdi-account-key.big
+      .public-access-line-visibility-key.col-xs-4
+        | {{ 'Your permission' | translate }}
+      .public-access-line-visibility-value.form-group.col-xs-8
+        | {{ $ctrl.shareeRight }}
+
+.calendar-links
+  .calendar-link(ng-if="$ctrl.caldavurl")
+    hr
+    .settings-label
+      i.mdi.mdi-link
+      span {{ 'CalDAV URL' | translate }}
+    .settings-value
+      esn-clipboard-url(url="$ctrl.caldavurl")
+  .calendar-link(ng-if="$ctrl.canExportIcs")
+    hr
+    .settings-label
+      i.mdi.mdi-download
+      span {{ 'Export calendar' | translate }}
+    .settings-text
+      span {{ 'Export your calendar to iCalendar format file (.ics) which you can import to other applications.' | translate }}
+    .settings-actions
+      a.btn.btn-primary.btn-sm(ng-href="{{::$ctrl.calendarIcsUrl}}") {{ 'Export' | translate }}
+.settings-actions(ng-if="$ctrl.canDeleteCalendar")
+  hr
+  span.delete-calendar-button(type="button", ng-click="$ctrl.openDeleteConfirmationDialog()") {{ 'Remove this calendar' | translate }}

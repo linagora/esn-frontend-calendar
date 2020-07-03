@@ -1,0 +1,13 @@
+.cal-event-date-suggestion-summary
+  .suggestion-user
+    span {{ '%s suggested some changes' | translate:$ctrl.user.displayName }}
+
+  .suggestion-event
+    .date.ellipsis
+      i.mdi.mdi-clock
+      span(ng-if="!$ctrl.event.allDay") {{ $ctrl.event.start | amDateFormat:'lll' }} - {{ $ctrl.event.end | amDateFormat:'lll' }}  ({{ $ctrl.event.end | amDifference:$ctrl.event.start:'hours':true }}h)
+      span(ng-if="$ctrl.event.allDay && $ctrl.event.end === $ctrl.event.start") {{ $ctrl.event.start | amDateFormat:'ll' }} ({{ 'All day' | translate }})
+      span(ng-if="$ctrl.event.allDay && $ctrl.event.end !== $ctrl.event.start") {{ $ctrl.event.start | amDateFormat:'ll' }} - {{ $ctrl.event.end | amDateFormat:'ll' }} ({{ 'All day' | translate }})
+    .recurrence.ellipsis(ng-if="$ctrl.event.isRecurring()")
+      i.mdi.mdi-sync
+      span {{ 'Recurs %s' | translate:$ctrl.event.getRecurrenceType() | lowercase }}

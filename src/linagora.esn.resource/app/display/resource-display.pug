@@ -1,0 +1,15 @@
+.resource-display.modal.full-screen(tabindex="-1", role="dialog")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button", ng-click="$hide()") &times;
+        .avatar-title
+          esn-resource-avatar(resource="ctrl.resource")
+          h4.modal-title {{ctrl.resource.name}}
+      .modal-body
+        .block
+          .title {{ 'Description' | translate }}
+          span {{ctrl.resource.description}}
+        .block
+          .title {{ 'Administrators' | translate }}
+          esn-resource-administrator-list(administrators="ctrl.resource.administrators")

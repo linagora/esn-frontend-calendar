@@ -1,0 +1,119 @@
+.listview.calendars-list {
+  padding-right: 10px;
+
+  &:not(.lv-lg):not(.lv-message) .lv-item:not(.calendar-header-title-desktop) {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  .no-padding {
+    padding: 0;
+  }
+
+  i {
+    font-size: 1.5em;
+  }
+
+  .settings {
+    & i {
+      font-size: 1em;
+    }
+  }
+
+  .calendar-item {
+
+    &:not(.calendar-header-title-desktop){
+      padding: 8px 20px 8px 30px;
+    }
+
+    & .lv-title {
+      color: @secondaryTextColor;
+    }
+
+    &.calendar-header-title {
+      margin-bottom: 5px;
+      border-left: 3px solid @primaryColor;
+
+      .media {
+        margin-left: -12px;
+        min-width: 240px;
+
+        .pull-left .mdi {
+          font-size: 20px;
+          margin-top: 3px;
+          margin-left: 8px;
+          color: @primaryColor;
+        }
+
+        .pull-left {
+          padding-right: 0;
+        }
+
+        .media-body .lv-title {
+          margin-left: 15px;
+          font-size: 13px;
+          font-weight: 500;
+          color: @secondaryTextColor;
+        }
+      }
+    }
+
+    &.calendar-header-title-desktop {
+      background-color: darken(@body-bg, 2%);
+      margin-top: 10px;
+      margin-bottom: 10px;
+      padding: 5px 5px 5px 0;
+
+      &.toggle-submenu:first-child {
+        margin-top: 15px;
+      }
+
+      .media {
+        .flex-vertical-centered;
+
+        min-width: 240px;
+
+        .calendar-item-left {
+          padding-right: 5px;
+          margin-left: -6px;
+
+          .mdi {
+            font-size: 24px;
+            color: @primaryColor;
+          }
+        }
+
+        .media-body {
+          .flex-grow;
+
+          .lv-title {
+            margin-left: 7px;
+            font-size: 13px;
+            font-weight: 500;
+            color: @secondaryTextColor;
+          }
+        }
+      }
+    }
+  }
+
+  .configuration-container {
+
+    .configuration-button {
+      margin-bottom: 5px;
+    }
+
+    hr {
+      padding-bottom: 10px;
+    }
+  }
+
+  .lv-body.toggled {
+    .caret-submenu {
+      i.mdi-menu-down {
+        .rotateZ3d(-90deg);
+      }
+    }
+  }
+}
+

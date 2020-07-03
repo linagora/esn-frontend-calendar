@@ -1,0 +1,25 @@
+.attendee-item
+  .cal-resource-avatar-block
+    cal-resource-avatar(resource='ctrl.resource')
+    .cal-participation-status
+      i.mdi.mdi(
+        ng-if="!ctrl.resource.deleted",
+        ng-class='ctrl.PARTSTAT_ICONS[ctrl.resource.partstat]'
+      )
+      i.mdi.mdi(
+        ng-if="ctrl.resource.deleted",
+        ng-class='ctrl.DELETED_ICONS'
+      )
+  .attendee-item-meta
+    .name
+      span {{ctrl.resource.name}}
+    .details
+      span.freebusy(ng-if="ctrl.resource.freeBusy === ctrl.CAL_FREEBUSY.FREE") {{ 'Free' | translate }}
+      span.freebusy(ng-if="ctrl.resource.freeBusy === ctrl.CAL_FREEBUSY.BUSY") {{ 'Busy' | translate }}
+  .attendee-item-right
+    a.btn.btn-link.btn-icon(
+      ng-if='ctrl.canModifyResource',
+      ng-click="ctrl.removeResource()"
+    )
+      i.mdi.mdi-close
+

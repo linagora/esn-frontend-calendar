@@ -1,0 +1,9 @@
+.cal-partstat-icon
+  .icon(ng-if="ctrl.partstat")
+    md-tooltip(md-direction="bottom" md-z-index="10000")
+      span(ng-if="ctrl.partstat === ctrl.PARTSTAT.accepted") {{ 'Accepted' | translate }}
+      span(ng-if="ctrl.partstat === ctrl.PARTSTAT.declined") {{ 'Declined' | translate }}
+      span(ng-if="ctrl.partstat === ctrl.PARTSTAT.tentative") {{ 'Tentative' | translate }}
+    i.mdi.mdi-checkbox-marked-circle.accepted(ng-if="ctrl.partstat === ctrl.PARTSTAT.accepted")
+    i.mdi.mdi-close-circle.declined(ng-if="ctrl.partstat === ctrl.PARTSTAT.declined")
+    i.mdi.mdi-help-circle.tentative(ng-if="ctrl.partstat === ctrl.PARTSTAT.tentative")

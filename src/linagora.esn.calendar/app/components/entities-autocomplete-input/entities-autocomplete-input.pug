@@ -1,0 +1,28 @@
+.cal-entities-autocomplete-input
+  .col-xs-12
+    .form-group
+      .input-group
+        span.input-group-addon(ng-show='ctrl.showIcon')
+          i.mdi.mdi-account-multiple-plus(ng-show='!ctrl.showResourceIcon')
+          i.mdi.mdi-monitor-multiple(ng-show='ctrl.showResourceIcon')
+        .fg-line
+          tags-input.form-control(
+            ng-model='ctrl.mutableEntities',
+            display-property='displayName',
+            key-property='id',
+            placeholder='{{ctrl.placeHolder | esnI18n}}',
+            on-tag-adding='ctrl.onAddingEntity($tag)',
+            replace-spaces-with-dashes='false',
+            type='{{::ctrl.inputType}}',
+            on-tag-added='ctrl.onEntityAdded($tag)',
+            on-tag-removed='ctrl.onEntityRemoved($tag)',
+            template='{{ctrl.template || "/calendar/app/components/entities-autocomplete-input/entities-autocomplete-input-tag.html"}}',
+            add-from-autocomplete-only='addFromAutocompleteOnly'
+          )
+            auto-complete(
+              source='ctrl.getInvitableEntities($query)',
+              max-results-to-show= '5',
+              min-length='1',
+              debounce-delay='200',
+              template="/views/modules/auto-complete/attendees.html"
+            )

@@ -1,0 +1,57 @@
+.modal.full-screen(tabindex="-1", role="dialog")
+  .modal-dialog
+    form(name="form")
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss="modal", aria-label="Close", ng-click="$hide()")
+            span(aria-hidden="true") &times;
+          h4.modal-title(ng-if='!ctrl.resource._id') {{ 'Create a new resource' | translate }}
+          h4.modal-title(ng-if='ctrl.resource._id') {{ 'Update resource' | translate }}
+        .modal-body.esn-resource-create
+          .row
+            .col-xs-12
+              .form-group
+                .fg-float
+                  label.fg-label {{ 'Name' | translate }} *
+                  input.form-control(type="text", ng-model="ctrl.resource.name", required)
+          .row
+            .col-xs-12
+              .form-group
+                .fg-float
+                  label.fg-label {{ 'Description' | translate }} *
+                  textarea.form-control(rows="2", ng-model="ctrl.resource.description", required)
+          .row
+            .col-xs-12
+              .form-group.resource-select-fields
+                .fg-float
+                  label.fg-label {{ 'Type' | translate }}
+                  .select
+                    select.form-control(ng-model='ctrl.selectedType', ng-disabled='!!ctrl.type', required)
+                      option(ng-repeat="type in ::ctrl.resourceTypes" value="{{type}}" ng-selected="ctrl.isSelected(type)") {{ type | esnI18n}}
+                .fg-float
+                  label.fg-label {{ 'Icon' | translate }}
+                  esn-resource-icon-picker(icon="ctrl.resource.icon")
+          .row
+            .col-xs-12
+              .form-group.resource-admin-block
+                .fg-float
+                  label.fg-label {{ 'Administrators' | translate }}
+                  .resource-add-me-as-admin
+                    label.checkbox.checkbox-inline
+                      input(type="checkbox", ng-model="ctrl.beAdmin")
+                      i.input-helper
+                        small.admin-checkbox {{ 'Add me as administrator' | translate }}
+                  users-autocomplete-input(
+                    mutable-users="ctrl.resourceAdministrators",
+                    ignored-users="ctrl.initialAdministrators",
+                    add-from-autocomplete-only="true",
+                    on-adding-user="ctrl.onAddingAdmin",
+                    on-user-added="ctrl.onAddedAdmin"
+                  )
+          .row
+            .col-xs-12
+              .form-group.resource-admin-block
+                esn-resource-administrator-list(ng-if="ctrl.resource.administrators", administrators="ctrl.resource.administrators", on-remove="ctrl.onAdminRemove")
+        .modal-footer
+          button.btn.btn-default(type="button", ng-click="$hide()") {{ 'Cancel' | translate }}
+          button.btn.btn-primary(type="button", ng-disabled="form.$invalid", ng-click="ctrl.submit(ctrl.resource); $hide()") {{ 'Save' | translate }}

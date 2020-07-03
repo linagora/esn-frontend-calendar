@@ -1,0 +1,9 @@
+mixin tab(uisref, title)
+  li.btn-wave(ui-sref-active="active")
+    a(href="", ui-sref=uisref, ui-sref-opts="{ location: 'replace' }") {{ title | translate }}
+
+.cal-settings.card
+  ul.esn-tab.configuration-header
+    +tab("calendar.settings.calendars", "Calendars")
+    +tab("calendar.settings.display", "Display")
+  ui-view.configuration-content(name="settings", noanimation)

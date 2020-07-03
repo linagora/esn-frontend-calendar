@@ -1,0 +1,17 @@
+extends /modules/subheader/responsive-subheader.pug
+
+block left
+  .btn-container
+    button.btn.btn-link(ui-sref='{{ $ctrl.previousState }}')
+      .flex-vertical-centered.flex-space-between
+        i.mdi.mdi-close
+        .hidden-xs.vertical-centered {{ 'Cancel' | translate }}
+  .title.ellipsis {{ ::$ctrl.calendar.name }}
+
+block right
+  button.btn.btn-link.hidden-xs(ng-click='$ctrl.submit()')
+    .vertical-centered(ng-if='!$ctrl.newCalendar') {{ 'Save' | translate }}
+    .vertical-centered(ng-if='$ctrl.newCalendar') {{ 'Create' | translate }}
+    i.mdi.mdi-margin-left.mdi-check
+  button.btn.btn-link.btn-icon.visible-xs(ng-click='$ctrl.submit()')
+    i.mdi.mdi-check

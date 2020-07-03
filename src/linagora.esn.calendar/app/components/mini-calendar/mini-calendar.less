@@ -1,0 +1,259 @@
+@mini-calendar-highlight-size-mobile: 35px;
+@mini-calendar-highlight-size-desktop: 28px;
+
+.mini-calendar {
+
+  .dp-inline {
+    box-shadow: none;
+  }
+
+  .fc-toolbar h2 {
+    font-size: 16px;
+    margin-top: 10px;
+  }
+
+  .fc-ltr .fc-basic-view .fc-day-top .fc-day-number {
+    float: none;
+  }
+
+  .fc-basic-view .fc-body .fc-row {
+    min-height: 2.7em;
+  }
+
+  tr:first-child>td>.fc-day-grid-event {
+    margin-top: 0;
+  }
+
+  .fc-head-container .fc-day-header, .fc-head-container .ui-widget-header .fc-week-number {
+    padding: 3px 2px 1px 2px;
+    border-width: 0;
+    color: @textPrimaryColor;
+    font-size: 11px;
+    background-color: @subHeaderBackground;
+  }
+
+  .fc-rigid .fc-content-skeleton {
+    top: 8px;
+  }
+
+  .fc td {
+    cursor: pointer;
+  }
+
+  .fc th {
+    cursor: default;
+  }
+
+  .fc td, .fc th {
+    color: lighten(@text-color, 20%);
+    text-align: center;
+    border-style: none;
+  }
+
+  .fc-row .fc-highlight {
+    background: transparent;
+  }
+
+  .fc-row  td[colspan="1"].fc-highlight {
+    border-radius: 50%;
+    background: @text-color;
+    display: inline-block;
+    opacity: 0.1;
+    width: @mini-calendar-highlight-size-mobile;
+    height: @mini-calendar-highlight-size-mobile;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+  }
+
+  .fc-today {
+    color: @m-white !important; /* override parent !important property */
+  }
+
+  .fc-day.ui-widget-content.fc-today {
+    border-radius: 50%;
+    background-color: @primaryColor;
+    display: list-item;
+    width: @mini-calendar-highlight-size-mobile;
+    height: @mini-calendar-highlight-size-mobile;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3px;
+  }
+
+  .fc-event-color {
+    background-color: @m-white !important; /* override parent !important property */
+  }
+
+  .fc-ltr .fc-basic-view .fc-day-number {
+    text-align: center;
+  }
+
+  .fc-day-grid .fc-week-number {
+    color: lighten(@text-color, 65%);
+  }
+
+  .fc-event {
+    min-height: 0.5em;
+    border-radius: 50%;
+    width: 5px;
+    height: 6px;
+    margin-left: 40%;
+    background-color: @primaryColor;
+  }
+
+  .tr-dpnav {
+    th, button {
+      padding: 0;
+    }
+
+    th {
+      background: @darkPrimaryColor !important; /* override parent !important property */
+    }
+
+    i {
+      font-size: 1.5em;
+    }
+  }
+
+  .tr-dpday {
+    th {
+      background: @primaryColor !important; /* override parent !important property */
+    }
+  }
+
+  .dp-active {
+    background-color: @darkPrimaryColor !important; /* override parent !important property */
+  }
+
+  .dp-table thead > tr th:first-child {
+    padding-left: 0;
+  }
+
+  .dp-table thead > tr th:last-child {
+    padding-right: 0;
+  }
+
+  .tr-dpday th {
+    padding: 0;
+  }
+
+  .dp-table tbody > tr td:first-child {
+    padding: 0;
+  }
+
+  .dp-table tbody > tr:first-child > td {
+    padding: 0;
+  }
+
+  .dp-table tbody > tr:last-child > td {
+    padding-bottom: 0;
+  }
+
+  .dp-table tbody > tr td:last-child {
+    padding-right: 0;
+  }
+
+  tr:first-child > td > .fc-day-grid-event {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .dp-table tbody > tr:last-child > td {
+    padding-bottom: 0;
+  }
+
+  .btn-dpday {
+    border-radius: 50%;
+    width: 38px !important; /* override parent !important property */
+    height: 38px;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .calendar-view {
+    .mini-calendar {
+      padding-right: 10px;
+
+      .fc {
+        background-color: @body-bg;
+        box-shadow: none;
+      }
+
+      .fc-toolbar {
+        background-color: darken(@body-bg, 2%);
+        color: @secondaryTextColor;
+        padding: 2px 4px;
+
+        .ui-button {
+          color: @secondaryTextColor;
+
+          > span {
+            font-size: 25px;
+            margin-top: 0;
+          }
+
+          &:hover {
+            background: inherit;
+            background-color: darken(@body-bg, 10%);
+            color: @secondaryTextColor !important; // override the color set for all the calendar headers...
+          }
+        }
+
+        h2 {
+          color: @secondaryTextColor;
+          font-size: 13px;
+          font-weight: 500;
+          text-transform: none;
+        }
+      }
+
+      .fc thead td, .fc thead th {
+        border-color: darken(@body-bg, 2%);
+      }
+
+      .fc-head-container .fc-day-header, .fc-head-container .ui-widget-header .fc-week-number {
+        background-color: @body-bg;
+        font-weight: 600;
+        color: @secondaryTextColor;
+      }
+
+      .fc-basic-view .fc-body .fc-row {
+        min-height: @mini-calendar-highlight-size-desktop;
+        height: @mini-calendar-highlight-size-desktop !important; /* override parent !important property */
+      }
+
+      .fc-rigid .fc-content-skeleton {
+        top: 4px;
+      }
+
+      tr:first-child > td > .fc-day-grid-event {
+        margin-top: -2px;
+      }
+
+      .fc-day.ui-widget-content.fc-today {
+        width: @mini-calendar-highlight-size-desktop;
+        height: @mini-calendar-highlight-size-desktop;
+        margin-top: 0;
+      }
+
+      .fc-row .fc-highlight {
+        background: @text-color;
+        opacity: 0.05;
+      }
+
+      .fc-event {
+        width: 5px;
+        height: 5px;
+        min-width: 5px;
+        min-height: 5px;
+      }
+
+      .fc-row  td[colspan="1"].fc-highlight {
+        width: @mini-calendar-highlight-size-desktop;
+        height: @mini-calendar-highlight-size-desktop;
+        margin-top: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+.attendee-item
+  cal-attendee-avatar(attendee='ctrl.attendee')
+  .attendee-item-meta
+    .name
+      span(
+        profile-popover-card='{ source: "ctrl.attendee", property: "id" }'
+        profile-popover-card-hide-on-element-scroll='.modal-body'
+        profile-popover-card-alternative-title='{{ ::ctrl.attendee.displayName }}'
+        profile-popover-card-show-mobile
+      )
+        | {{ctrl.attendee.displayName}}
+    .details
+      span.organizer(ng-if="ctrl.isOrganizer") {{ 'Organizer' | translate }}
+      span.separator -
+      span.freebusy(ng-if="ctrl.attendee.freeBusy === ctrl.CAL_FREEBUSY.FREE") {{ 'Free' | translate }}
+      span.freebusy(ng-if="ctrl.attendee.freeBusy === ctrl.CAL_FREEBUSY.BUSY") {{ 'Busy' | translate }}
+  .attendee-item-right
+    a.btn.btn-link.btn-icon(
+      ng-if='ctrl.canModifyAttendee && !ctrl.isOrganizer',
+      ng-click="ctrl.removeAttendee()"
+    )
+      i.mdi.mdi-close

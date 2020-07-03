@@ -1,0 +1,23 @@
+.lv-body
+  .lv-item.calendar-item.calendar-header-title.hidden-md
+    .media
+      .pull-left
+        i.mdi.mdi-calendar
+      .media-body
+        .lv-title {{ 'My calendars' | translate }}
+  .lv-item.calendar-item.calendar-header-title-desktop.visible-md.clickable.toggle-submenu.waves-classic(esn-toggle)
+    .media
+      .badge-container
+        .caret-submenu
+          i.mdi.mdi-menu-down
+      .calendar-item-left
+        i.mdi.mdi-calendar
+      .media-body
+        .lv-title {{ 'My calendars' | translate }}
+
+  ul.no-padding
+    calendars-list-items(
+      calendars="$ctrl.userCalendars",
+      toggle-calendar="$ctrl.toggleCalendar",
+      hidden-calendars="$ctrl.hiddenCalendars"
+    )

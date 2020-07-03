@@ -1,0 +1,44 @@
+.calendar-sidebar-mobile
+  cal-sidebar-title
+  .listview.p-t-10.calendars-list
+    .lv-body(ng-click="$hide()")
+      a.lv-item(href="", cal-toggle-view="basicDay")
+        .media
+          .pull-left
+            i.mdi.mdi-menu
+          .media-body
+            .lv-title
+              span {{ 'Planning' | translate }}
+      a.lv-item(href="", cal-toggle-view="agendaDay")
+        .media
+          .pull-left
+            i.mdi.mdi-view-day
+          .media-body
+            .lv-title
+              span {{ 'Day' | translate }}
+      a.lv-item(href="", cal-toggle-view="agendaThreeDays")
+        .media
+          .pull-left
+            i.mdi.mdi-view-day
+          .media-body
+            .lv-title
+              span {{ '3 Days' | translate }}
+      a.lv-item(href="", cal-toggle-view="agendaWeek")
+        .media
+          .pull-left
+            i.mdi.mdi-view-week
+          .media-body
+            .lv-title
+              span {{ 'Week' | translate }}
+      a.lv-item(href="", cal-toggle-view="month")
+        .media
+          .pull-left
+            i.mdi.mdi-calendar-blank
+          .media-body
+            .lv-title
+              span {{ 'Month' | translate }}
+  .cal-manage-sidebar
+    hr
+    cal-manage-left-menu
+    hr
+  calendars-list(on-edit-click="$hide")

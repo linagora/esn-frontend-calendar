@@ -1,0 +1,50 @@
+@calPastEventOpacity: 0.38;
+
+.cal-calendar-planning {
+  .fc-toolbar {
+    background-color: darken(@body-bg, 2%);
+    color: @secondaryTextColor;
+    padding: 2px 4px;
+
+    .ui-button {
+      color: @secondaryTextColor;
+
+      &:hover {
+        background: inherit;
+        background-color: darken(@body-bg, 10%);
+        color: @secondaryTextColor !important; // override the color set for all the calendar headers...
+      }
+    }
+
+    h2 {
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 10px;
+      color: @secondaryTextColor;
+    }
+  }
+
+  .fc-list-item {
+    &.past-event {
+      color: rgba(0, 0, 0, @calPastEventOpacity);
+
+      .fc-event-dot {
+        .opacity(@calPastEventOpacity);
+      }
+    }
+
+    cursor: pointer;
+  }
+
+  .fc-list-table td {
+    padding: 8px 10px;
+  }
+
+  .fc-list-item-time {
+    font-weight: 400;
+  }
+
+  .fc-list-item-title {
+    font-weight: 500;
+  }
+}

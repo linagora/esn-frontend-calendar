@@ -1,0 +1,9 @@
+.cal-event-edition-calendar-item
+  .icon
+    i.mdi.mdi-circle(ng-style="{'color': ctrl.calendar.color}")
+  .info
+    .name
+      span {{:: ctrl.calendar.name }}
+    .description(ng-if="ctrl.details")
+      span.separator -
+      span {{:: ctrl.details}}

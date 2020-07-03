@@ -1,0 +1,28 @@
+.cal-avatar-block {
+  position: relative;
+
+  .cal-participation-status {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+
+    .mdi {
+      .RoundedShape(50%);
+
+      font-size: 1.2em;
+      background-color: @m-white;
+    }
+
+    .participation-status-accepted  {
+      color: @m-green;
+    }
+
+    .participation-status-needaction, .participation-status-tentative {
+      color: @m-blue;
+    }
+
+    .participation-status-declined {
+      color: @m-red;
+    }
+  }
+}
