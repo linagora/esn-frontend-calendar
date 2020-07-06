@@ -7,6 +7,6 @@
         error: '<'
       },
       controllerAs: 'ctrl',
-      templateUrl: '/calendar/app/error-display/error-display.html'
+      template: require('./error-display.pug')
     });
 })();
