@@ -2,9 +2,15 @@
   'use strict';
 
   angular.module('esn.calendar')
-    .run(runBlock);
+    .run(registerTimezones)
+    .run(addTemplateCache);
 
-  function runBlock(calRegisterTimezones) {
+  function registerTimezones(calRegisterTimezones) {
     calRegisterTimezones();
+  }
+
+  function addTemplateCache($templateCache) {
+    $templateCache.put('/calendar/app/search/event/event-search-item.html', require('./search/event/event-search-item.pug'));
+    $templateCache.put('/calendar/app/search/form/search-form-template.html', require('./search/form/search-form-template.pug'));
   }
 })();
