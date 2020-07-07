@@ -29,6 +29,9 @@
     self.onPartstatChangeSuccess = onPartstatChangeSuccess;
     self.onPartstatChangeError = onPartstatChangeError;
     self.isActionable = isActionable;
+    self.translationData = {
+      recurrenceType: self.event.getRecurrenceType()
+    };
 
     function $onInit() {
       self.meeting = {

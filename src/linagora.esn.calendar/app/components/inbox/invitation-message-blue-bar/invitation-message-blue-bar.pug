@@ -28,7 +28,7 @@
           span.cal-blue-bar-value {{ $ctrl.event.start | amDateFormat:'lll' }} ({{ $ctrl.event.end | amDifference:$ctrl.event.start:'hours':true }}h)
         .cal-blue-bar-recurrence.cal-blue-bar-labelled-value.ellipsis(ng-if="$ctrl.event.isRecurring()")
           i.cal-blue-bar-label.mdi.mdi-sync
-          span.cal-blue-bar-value {{ 'Recurs %s' | translate:$ctrl.event.getRecurrenceType() | lowercase }}
+          span.cal-blue-bar-value {{ 'Recurs %s' | translate:$ctrl.translationData | lowercase }}
 
       .cal-blue-bar-actions-container.cal-blue-bar-labelled-value(ng-if="$ctrl.isActionable()")
         cal-partstat-buttons(event="$ctrl.event", on-participation-change-success="$ctrl.onPartstatChangeSuccess(event)", on-participation-change-error="$ctrl.onPartstatChangeError(err)", show-date-suggestion="$ctrl.showDateSuggestionWindow()")
@@ -40,13 +40,13 @@
         .cal-blue-bar-action-icon.cal-blue-bar-label.replypartstat(ng-switch="$ctrl.replyAttendee.partstat")
           .accepted(ng-switch-when="ACCEPTED")
             i.mdi.mdi-check
-            a(ng-href="mailto:{{ $ctrl.replyAttendee.email }}", op-inbox-compose op-inbox-compose-users="[$ctrl.replyAttendee]") {{ '%s has accepted this event' | translate:$ctrl.replyAttendee.displayName || $ctrl.replyAttendee.email }}
+            a(ng-href="mailto:{{ $ctrl.replyAttendee.email }}", op-inbox-compose op-inbox-compose-users="[$ctrl.replyAttendee]") {{ '%s has accepted this event' | translate:$ctrl }}
           .tentative(ng-switch-when="TENTATIVE")
             i.tentative.mdi.mdi-help
-            a(ng-href="mailto:{{ $ctrl.replyAttendee.email }}", op-inbox-compose op-inbox-compose-users="[$ctrl.replyAttendee]") {{ '%s has tentatively accepted this event' | translate:$ctrl.replyAttendee.displayName || $ctrl.replyAttendee.email }}
+            a(ng-href="mailto:{{ $ctrl.replyAttendee.email }}", op-inbox-compose op-inbox-compose-users="[$ctrl.replyAttendee]") {{ '%s has tentatively accepted this event' | translate:$ctrl }}
           .declined(ng-switch-when="DECLINED")
             i.declined.mdi.mdi-close
-            a(ng-href="mailto:{{ $ctrl.replyAttendee.email }}", op-inbox-compose op-inbox-compose-users="[$ctrl.replyAttendee]") {{ '%s has declined this event' | translate:$ctrl.replyAttendee.displayName || $ctrl.replyAttendee.email }}
+            a(ng-href="mailto:{{ $ctrl.replyAttendee.email }}", op-inbox-compose op-inbox-compose-users="[$ctrl.replyAttendee]") {{ '%s has declined this event' | translate:$ctrl }}
 
       .cal-blue-bar-actions-container.cal-blue-bar-labelled-value(ng-if="$ctrl.meeting.method === $ctrl.CAL_EVENT_METHOD.CANCEL")
         .cal-blue-bar-action-icon.cal-blue-bar-label
