@@ -1,3 +1,6 @@
+const _ = require('lodash');
+require('../services/attendee.service.js');
+
 (function(angular) {
   'use strict';
 
@@ -5,7 +8,6 @@
     .factory('calAttendeesDenormalizerService', calAttendeesDenormalizerService);
 
   function calAttendeesDenormalizerService(
-    _,
     $q,
     userAPI,
     calAttendeeService,

@@ -1,3 +1,5 @@
+require('./resource.restangular.js');
+
 (function(angular) {
   'use strict';
 

@@ -1,4 +1,7 @@
-(function() {
+require('../constants');
+require('../services/fc-moment.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -109,4 +112,4 @@
       return false;
     }
   }
-})();
+})(angular);

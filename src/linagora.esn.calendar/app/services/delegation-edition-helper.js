@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -60,4 +60,4 @@
       return Object.keys(this.removedId);
     }
   }
-})();
+})(angular);

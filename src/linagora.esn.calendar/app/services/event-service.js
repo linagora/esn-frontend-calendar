@@ -1,4 +1,18 @@
-(function() {
+const _ = require('lodash');
+require('../constants.js');
+require('../services/ical.js');
+require('../services/cached-event-source.js');
+require('../services/calendar-api.js');
+require('../services/calendar-event-emitter.js');
+require('../services/shells/calendar-shell.js');
+require('../services/calendar-utils.js');
+require('../services/event-api.js');
+require('../services/event-utils.js');
+require('../services/path-builder.js');
+require('../services/master-event-cache.js');
+require('../freebusy/event-freebusy-hooks.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -8,7 +22,6 @@
     $q,
     $http,
     $rootScope,
-    _,
     ICAL,
     calCachedEventSource,
     calendarAPI,
@@ -542,4 +555,4 @@
         });
       }
   }
-})();
+})(angular);

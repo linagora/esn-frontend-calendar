@@ -1,4 +1,7 @@
-(function() {
+require('../../constants.js');
+require('../../freebusy/freebusy.constants.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -25,4 +28,4 @@
     }
   }
 
-})();
+})(angular);

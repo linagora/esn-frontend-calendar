@@ -1,3 +1,13 @@
+require('../../../constants.js');
+require('../../../components/inbox/inbox.constants.js');
+require('../../../services/event-service.js');
+require('../../../services/calendar-home-service.js');
+require('../../../services/event-utils.js');
+require('../../../services/fc-moment.js');
+require('../../../event/form/open/open-event-form.service.js');
+require('../../../components/event-date-suggestion/modal/event-date-suggestion-modal.service.js');
+require('../../../services/partstat-update-notification.service.js');
+
 (function(angular) {
   'use strict';
 

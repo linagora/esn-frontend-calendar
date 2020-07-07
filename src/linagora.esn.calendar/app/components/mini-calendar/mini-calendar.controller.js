@@ -1,3 +1,14 @@
+require('../../constants.js');
+require('../../services/fc-moment.js');
+require('../../services/calendar-service.js');
+require('../../components/mini-calendar/mini-calendar.service.js');
+require('../../components/mini-calendar/mini-calendar-eventsource-builder.service.js');
+require('../../services/calendar-home-service.js');
+require('../../services/calendar-current-view.js');
+require('../../services/user-and-external-calendars.service.js');
+require('../../services/calendar-visibility-service.js');
+require('../../services/fullcalendar/calendar-configuration.service.js');
+
 (function(angular) {
   'use strict';
 

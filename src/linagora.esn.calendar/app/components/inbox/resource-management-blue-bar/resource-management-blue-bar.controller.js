@@ -1,3 +1,10 @@
+const _ = require('lodash');
+require('../../../constants.js');
+require('../../../components/inbox/inbox.constants.js');
+require('../../../services/event-service.js');
+require('../../../services/path-parser.service.js');
+require('../../../services/calendar-resource.service.js');
+
 (function(angular) {
   'use strict';
 
@@ -5,7 +12,6 @@
     .controller('calInboxResourceManagementBlueBarController', calInboxResourceManagementBlueBarController);
 
   function calInboxResourceManagementBlueBarController(
-    _,
     $q,
     $log,
     calEventService,

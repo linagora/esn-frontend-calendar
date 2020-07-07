@@ -1,3 +1,8 @@
+require('../../constants');
+require('../event-utils.js');
+require('../cal-ui-authorization-service.js');
+require('../fc-moment.js');
+
 (function(angular) {
   'use strict';
 

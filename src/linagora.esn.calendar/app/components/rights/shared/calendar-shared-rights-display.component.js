@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -10,4 +10,4 @@
       controller: 'CalSharedRightsDisplayController',
       template: '<span>{{::$ctrl.humanReadable | esnI18n}}</span>'
     });
-})();
+})(angular);

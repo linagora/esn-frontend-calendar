@@ -1,11 +1,20 @@
-(function() {
+const _ = require('lodash');
+require('../../constants.js');
+require('../../services/calendar-utils.js');
+require('../../services/path-builder.js');
+require('../../services/path-parser.service.js');
+require('../../services/calendar-users-cache.js');
+require('../../services/cal-default-value.service.js');
+require('../../services/shells/calendar-right-shell.js');
+require('../../services/calendar-resource.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .factory('CalendarCollectionShell', CalendarCollectionShellFactory);
 
   function CalendarCollectionShellFactory(
-    _,
     calendarUtils,
     calPathBuilder,
     calPathParser,
@@ -275,4 +284,4 @@
       return this.id === CAL_OLD_DEFAULT_ID;
     }
   }
-})();
+})(angular);

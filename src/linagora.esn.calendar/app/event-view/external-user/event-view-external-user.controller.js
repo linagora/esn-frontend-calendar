@@ -1,10 +1,12 @@
-(function() {
+const _ = require('lodash');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .controller('CalEventViewExternalUserController', CalEventViewExternalUserController);
 
-  function CalEventViewExternalUserController($http, notificationFactory, esnI18nService, _) {
+  function CalEventViewExternalUserController($http, notificationFactory, esnI18nService) {
     var self = this;
 
     self.$onInit = $onInit;
@@ -39,4 +41,4 @@
       });
     }
   }
-})();
+})(angular);

@@ -1,4 +1,12 @@
-(function() {
+const _ = require('lodash');
+require('../constants');
+require('../services/calendar-explored-period-service.js');
+require('../services/fullcalendar/calendar-configuration.service.js');
+require('../services/event-store.js');
+require('../services/event-utils.js');
+require('../services/cal-ui-authorization-service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -6,7 +14,6 @@
 
   function calCachedEventSource(
     $q,
-    _,
     calendarExploredPeriodService,
     calFullUiConfiguration,
     calEventStore,
@@ -209,4 +216,4 @@
       calendarExploredPeriodService.reset();
     }
   }
-})();
+})(angular);

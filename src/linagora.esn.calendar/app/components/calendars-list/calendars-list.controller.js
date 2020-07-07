@@ -1,4 +1,10 @@
-(function() {
+const _ = require('lodash');
+require('../../constants.js');
+require('../../services/calendar-service.js');
+require('../../services/calendar-visibility-service.js');
+require('../../services/user-and-external-calendars.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -12,7 +18,6 @@
     calendarVisibilityService,
     session,
     userAndExternalCalendars,
-    _,
     CAL_EVENTS
   ) {
     var self = this;
@@ -101,4 +106,4 @@
       self.publicCalendars = calendars.publicCalendars;
     }
   }
-})();
+})(angular);

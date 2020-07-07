@@ -1,3 +1,6 @@
+require('../freebusy/freebusy.service.js');
+require('../freebusy/confirmation-modal/event-freebusy-confirmation-modal.service.js');
+
 (function(angular) {
   'use strict';
 

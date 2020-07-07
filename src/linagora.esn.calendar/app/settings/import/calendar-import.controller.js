@@ -1,3 +1,7 @@
+require('../../services/calendar-service.js');
+require('../../services/calendar-home-service.js');
+require('../../services/cal-ui-authorization-service.js');
+
 (function(angular) {
   'use strict';
 

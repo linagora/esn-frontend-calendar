@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -10,4 +10,4 @@
       controller: 'CalEventMessageEditionController',
       template: require("./event-message-edition.pug")
    });
-})();
+})(angular);

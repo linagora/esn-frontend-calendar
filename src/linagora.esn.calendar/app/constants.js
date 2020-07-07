@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -590,4 +590,4 @@
       MY_CALENDARS: 'myCalendars',
       SHARED_CALENDARS: 'sharedCalendars'
     });
-})();
+})(angular);

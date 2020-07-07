@@ -1,4 +1,12 @@
-(function() {
+const _ = require('lodash');
+require('../../constants.js');
+require('../../services/calendar-home-service.js');
+require('../../services/calendar-service.js');
+require('../../services/event-service.js');
+require('../../services/fc-moment.js');
+require('../../services/user-and-external-calendars.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -6,7 +14,6 @@
 
   function calSearchEventProviderService(
     $q,
-    _,
     calendarHomeService,
     calendarService,
     calEventService,
@@ -139,4 +146,4 @@
       });
     }
   }
-})();
+})(angular);

@@ -1,8 +1,10 @@
+const _ = require('lodash');
+
 (function(angular) {
   'use strict';
 
   angular.module('linagora.esn.resource')
-    .run(function(dynamicDirectiveService, DynamicDirective, session, _) {
+    .run(function(dynamicDirectiveService, DynamicDirective, session) {
       function isAdmin(resource, user) {
         return resource && _.find(resource.administrators, { objectType: 'user', id: user._id });
       }

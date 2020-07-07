@@ -1,4 +1,8 @@
-(function() {
+require('../../../services/cal-default-value.service.js');
+require('../../../services/event-utils.js');
+require('../../../event/form/open/event-form.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -12,4 +16,4 @@
       calEventFormService.openEventForm(calendarHomeId, calendarId, event, relatedEvents);
     };
   }
-})();
+})(angular);

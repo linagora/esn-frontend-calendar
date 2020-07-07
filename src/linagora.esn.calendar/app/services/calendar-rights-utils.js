@@ -1,10 +1,13 @@
-(function() {
+const _ = require('lodash');
+require('../constants');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .factory('CalCalendarRightsUtilsService', CalCalendarRightsUtilsService);
 
-  function CalCalendarRightsUtilsService(_, CAL_CALENDAR_PUBLIC_RIGHT, CAL_CALENDAR_SHARED_RIGHT) {
+  function CalCalendarRightsUtilsService(CAL_CALENDAR_PUBLIC_RIGHT, CAL_CALENDAR_SHARED_RIGHT) {
     return {
       publicAsHumanReadable: _rightAsHumanReadable.bind(null, CAL_CALENDAR_PUBLIC_RIGHT),
       delegationAsHumanReadable: _rightAsHumanReadable.bind(null, CAL_CALENDAR_SHARED_RIGHT)
@@ -20,4 +23,4 @@
       return key ? calendarRightCollection[key + '_LABEL'] : calendarRightCollection.unknown;
     }
   }
-})();
+})(angular);

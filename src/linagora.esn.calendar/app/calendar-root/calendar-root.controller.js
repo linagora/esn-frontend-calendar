@@ -1,4 +1,7 @@
-(function() {
+require('../services/calendar-service.js');
+require('../services/cal-default-value.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -23,4 +26,4 @@
           calDefaultValue.set('calendarId', defaultCalId || CAL_DEFAULT_OLD_CALENDAR_ID);
         });
     }
-})();
+})(angular);

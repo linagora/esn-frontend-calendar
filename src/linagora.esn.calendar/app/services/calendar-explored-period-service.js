@@ -1,10 +1,12 @@
-(function() {
+const _ = require('lodash');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .factory('calendarExploredPeriodService', calendarExploredPeriodService);
 
-  function calendarExploredPeriodService(_) {
+  function calendarExploredPeriodService() {
     var exploredCalsPeriods = {};
 
     var service = {
@@ -110,4 +112,4 @@
     }
   }
 
-})();
+})(angular);

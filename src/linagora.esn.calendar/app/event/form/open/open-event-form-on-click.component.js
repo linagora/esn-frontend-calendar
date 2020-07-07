@@ -1,4 +1,8 @@
-(function() {
+const _ = require('lodash');
+require('../../../event/form/open/open-event-form.service.js');
+require('../../../event/form/open/open-event-from-search-form.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -12,7 +16,7 @@
     }
   );
 
-  function CalOpenEventFormOnClickController($element, _, calOpenEventForm, calOpenEventFromSearchForm) {
+  function CalOpenEventFormOnClickController($element, calOpenEventForm, calOpenEventFromSearchForm) {
     var self = this;
 
     $element.on('click', function() {
@@ -23,4 +27,4 @@
       calOpenEventFromSearchForm(self.event);
     });
   }
-})();
+})(angular);

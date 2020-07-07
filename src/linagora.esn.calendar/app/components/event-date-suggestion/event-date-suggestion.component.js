@@ -1,3 +1,4 @@
+(function(angular) {
 'use strict';
 
 angular.module('esn.calendar')
@@ -10,3 +11,4 @@ angular.module('esn.calendar')
       use24hourFormat: '<'
     }
   });
+})(angular);

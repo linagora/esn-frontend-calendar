@@ -1,4 +1,8 @@
-(function() {
+const _ = require('lodash');
+require('../../constants.js');
+require('../../services/fullcalendar/calendar-configuration.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -8,7 +12,6 @@
     asyncAction,
     calFullUiConfiguration,
     esnUserConfigurationService,
-    _,
     session,
     CAL_USER_CONFIGURATION
   ) {
@@ -56,4 +59,4 @@
         });
     }
   }
-})();
+})(angular);

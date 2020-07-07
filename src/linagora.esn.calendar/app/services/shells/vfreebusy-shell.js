@@ -1,10 +1,13 @@
-(function() {
+const _ = require('lodash');
+require('../../services/fc-moment.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .factory('CalVfreebusyShell', CalVfreebusyShellFactory);
 
-  function CalVfreebusyShellFactory(_, calMoment) {
+  function CalVfreebusyShellFactory(calMoment) {
     function CalVfreebusyShell(vfreebusy) {
       this.vfreebusy = vfreebusy;
     }
@@ -47,4 +50,4 @@
       });
     }
   }
-})();
+})(angular);

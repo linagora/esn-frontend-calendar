@@ -1,4 +1,6 @@
-(function() {
+require('../../services/cal-ui-authorization-service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -18,4 +20,4 @@
       return !self.newCalendar && calUIAuthorizationService.canShowDelegationTab(self.calendar, session.user._id);
     }
   }
-})();
+})(angular);

@@ -1,13 +1,15 @@
-(function() {
+const _ = require('lodash');
+const moment = require('moment');
+require('../constants');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .factory('calEventUtils', calEventUtils);
 
   function calEventUtils(
-    _,
     session,
-    moment,
     esnI18nService,
     CAL_DEFAULT_EVENT_COLOR,
     CAL_SIGNIFICANT_CHANGE_KEYS,
@@ -161,4 +163,4 @@
     }
   }
 
-})();
+})(angular);

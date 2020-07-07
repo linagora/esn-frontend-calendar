@@ -1,4 +1,6 @@
-(function() {
+require('../../../services/calendar-rights-utils.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -17,4 +19,4 @@
       }
     }
   }
-})();
+})(angular);

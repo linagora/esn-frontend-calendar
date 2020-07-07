@@ -1,3 +1,5 @@
+require('../../resource.constants.js');
+
 (function(angular) {
   'use strict';
 

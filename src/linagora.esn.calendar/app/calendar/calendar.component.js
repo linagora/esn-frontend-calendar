@@ -1,3 +1,6 @@
+require('./calendar-header/calendar-sub-header.directive.js');
+require('./calendar-view/calendar-view.directive.js');
+
 (function(angular) {
   'use strict';
 

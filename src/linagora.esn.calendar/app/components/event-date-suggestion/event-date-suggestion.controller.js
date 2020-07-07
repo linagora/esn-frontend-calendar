@@ -1,4 +1,6 @@
-(function() {
+require('../../services/fc-moment.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -77,4 +79,4 @@
       self.diff = self.event.end.diff(self.event.start);
     }
   }
-})();
+})(angular);

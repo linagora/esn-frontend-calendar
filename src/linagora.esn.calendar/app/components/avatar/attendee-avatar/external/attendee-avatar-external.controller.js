@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -18,4 +18,4 @@
       return self.attendee.name || self.attendee.displayName;
     }
   }
-})();
+})(angular);

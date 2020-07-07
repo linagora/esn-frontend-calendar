@@ -1,11 +1,14 @@
-(function() {
+const _ = require('lodash');
+require('../../constants.js');
+require('../../services/calendar-attendee-service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .controller('calEntitiesAutocompleteInputController', calEntitiesAutocompleteInputController);
 
   function calEntitiesAutocompleteInputController(
-    _,
     emailService,
     naturalService,
     session,
@@ -98,4 +101,4 @@
     }
   }
 
-})();
+})(angular);

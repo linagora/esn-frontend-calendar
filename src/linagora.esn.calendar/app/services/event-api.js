@@ -1,4 +1,9 @@
-(function() {
+require('../constants.js');
+require('../services/dav-request.js');
+require('../services/http-response-handler.js');
+require('../services/grace-period-response-handler.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -132,4 +137,4 @@
       return calDavRequest('post', eventPath, headers, requestBody).then(calHttpResponseHandler([200, 204]));
     }
   }
-})();
+})(angular);

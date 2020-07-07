@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -19,4 +19,4 @@
       $state.go(self.stateToGo, { calendarUniqueId: calendarUniqueId });
     }
   }
-})();
+})(angular);

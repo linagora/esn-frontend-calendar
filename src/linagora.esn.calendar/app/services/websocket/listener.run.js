@@ -1,4 +1,6 @@
-(function() {
+require('../../services/websocket/listener.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -7,4 +9,4 @@
   function runBlock(calWebsocketListenerService) {
     calWebsocketListenerService.listenEvents();
   }
-})();
+})(angular);

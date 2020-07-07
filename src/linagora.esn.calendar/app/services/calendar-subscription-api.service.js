@@ -1,11 +1,15 @@
-(function() {
+const _ = require('lodash');
+require('../services/dav-request.js');
+require('../services/http-response-handler.js');
+require('../services/path-builder.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .factory('calCalendarSubscriptionApiService', calCalendarSubscriptionApiService);
 
   function calCalendarSubscriptionApiService(
-    _,
     uuid4,
     calDavRequest,
     calHttpResponseHandler,
@@ -74,4 +78,4 @@
         .then(calHttpResponseHandler(204));
     }
   }
-})();
+})(angular);

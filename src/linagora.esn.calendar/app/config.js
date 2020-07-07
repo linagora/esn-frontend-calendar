@@ -1,4 +1,6 @@
-(function() {
+require('../app/core/application-menu-calendar.directive.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -10,4 +12,4 @@
       dynamicDirectiveServiceProvider.addInjection('esn-application-menu', dd);
     }
 
-})();
+})(angular);

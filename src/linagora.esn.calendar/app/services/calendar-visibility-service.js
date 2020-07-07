@@ -1,10 +1,13 @@
-(function() {
+const _ = require('lodash');
+require('../constants.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
          .factory('calendarVisibilityService', calendarVisibilityService);
 
-  function calendarVisibilityService($rootScope, _, CAL_EVENTS, localStorageService) {
+  function calendarVisibilityService($rootScope, CAL_EVENTS, localStorageService) {
     var storage = localStorageService.getOrCreateInstance('calendarStorage');
 
     return {
@@ -48,4 +51,4 @@
       });
     }
   }
-})();
+})(angular);

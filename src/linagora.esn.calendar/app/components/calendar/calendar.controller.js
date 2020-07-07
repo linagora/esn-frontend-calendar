@@ -1,10 +1,12 @@
+const _ = require('lodash');
+
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .controller('esnCalendarController', esnCalendarController);
 
-    function esnCalendarController($element, $log, $tooltip, esnI18nService, _) {
+    function esnCalendarController($element, $log, $tooltip, esnI18nService) {
       var self = this;
 
       self.$onInit = $onInit;

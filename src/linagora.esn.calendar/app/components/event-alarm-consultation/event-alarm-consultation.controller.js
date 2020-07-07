@@ -1,4 +1,6 @@
-(function() {
+require('../../constants.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -11,4 +13,4 @@
     self.CAL_ALARM_TRIGGER = CAL_ALARM_TRIGGER;
   }
 
-})();
+})(angular);

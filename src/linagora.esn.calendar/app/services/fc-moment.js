@@ -1,4 +1,8 @@
-(function() {
+const moment = require('moment');
+require('../constants');
+require('./event-utils.js');
+
+(function(angular) {
   'use strict';
 
   /**
@@ -13,7 +17,7 @@
   angular.module('esn.calMoment', ['angularMoment'])
     .factory('calMoment', calMoment);
 
-  function calMoment($window, ICAL, moment, calEventUtils, esnDatetimeService) {
+  function calMoment($window, ICAL, calEventUtils, esnDatetimeService) {
     function _calMoment(time) {
       if (time && (time instanceof ICAL.Time)) {
         var m = $window.$.fullCalendar.moment(time.toJSDate());
@@ -35,4 +39,4 @@
     return _calMoment;
   }
 
-})();
+})(angular);

@@ -1,10 +1,13 @@
-(function() {
+const _ = require('lodash');
+require('../constants');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .service('calendarsCache', calendarsCache);
 
-  function calendarsCache(_, CAL_OLD_DEFAULT_ID) {
+  function calendarsCache(CAL_OLD_DEFAULT_ID) {
     var calendarsCache = {};
 
     return {
@@ -57,4 +60,4 @@
       }
     }
   }
-})();
+})(angular);

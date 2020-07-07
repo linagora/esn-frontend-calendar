@@ -1,4 +1,18 @@
-(function() {
+const _ = require('lodash');
+require('../../constants.js');
+require('../../freebusy/confirmation-modal/event-freebusy-confirmation-modal.service.js');
+require('../../services/calendar-service.js');
+require('../../services/event-service.js');
+require('../../services/attendee.service.js');
+require('../../services/event-utils.js');
+require('../../event/form/open/open-event-form.service.js');
+require('../../services/cal-ui-authorization-service.js');
+require('../../services/attendees-denormalizer.service.js');
+require('../../services/path-builder.js');
+require('../../freebusy/freebusy.service.js');
+require('../../services/partstat-update-notification.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -11,7 +25,6 @@
     $log,
     $modal,
     $q,
-    _,
     calEventFreeBusyConfirmationModalService,
     calendarService,
     userUtils,
@@ -539,4 +552,4 @@
       });
     }
   }
-})();
+})(angular);

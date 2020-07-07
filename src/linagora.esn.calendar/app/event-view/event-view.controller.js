@@ -1,10 +1,13 @@
-(function() {
+const _ = require('lodash');
+require('../services/attendee.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .controller('CalEventViewController', CalEventViewController);
 
-  function CalEventViewController(_, calAttendeeService, notificationFactory) {
+  function CalEventViewController(calAttendeeService, notificationFactory) {
     var self = this;
 
     self.$onInit = $onInit;
@@ -19,4 +22,4 @@
       });
     }
   }
-})();
+})(angular);

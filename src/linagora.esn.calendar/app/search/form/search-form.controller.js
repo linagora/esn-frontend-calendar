@@ -1,9 +1,14 @@
+const _ = require('lodash');
+require('../../constants.js');
+require('../../services/calendar-service.js');
+require('../../services/user-and-external-calendars.service.js');
+
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar').controller('EventSearchFormController', EventSearchFormController);
 
-  function EventSearchFormController(_, session, calendarService, userAndExternalCalendars, CAL_ADVANCED_SEARCH_CALENDAR_TYPES, CAL_ATTENDEE_OBJECT_TYPE) {
+  function EventSearchFormController(session, calendarService, userAndExternalCalendars, CAL_ADVANCED_SEARCH_CALENDAR_TYPES, CAL_ATTENDEE_OBJECT_TYPE) {
     var self = this;
 
     self.$onInit = $onInit;

@@ -1,4 +1,13 @@
-(function() {
+require('../../constants.js');
+require('../../services/cached-event-source.js');
+require('../../services/cal-ui-authorization-service.js');
+require('../../services/path-parser.service.js');
+require('../../services/calendar-event-emitter.js');
+require('../../services/calendar-service.js');
+require('../../services/master-event-cache.js');
+require('../../services/shells/calendar-shell.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -140,4 +149,4 @@
       }
     }
   }
-})();
+})(angular);

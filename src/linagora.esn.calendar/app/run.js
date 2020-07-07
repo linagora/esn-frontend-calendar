@@ -1,3 +1,5 @@
+require('./services/timezone.js');
+
 (function() {
   'use strict';
 

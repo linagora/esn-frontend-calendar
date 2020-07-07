@@ -1,3 +1,4 @@
+(function(angular) {
 'use strict';
 
 angular.module('esn.calendar')
@@ -9,3 +10,4 @@ angular.module('esn.calendar')
     controller: 'calEventCreateButtonController',
     controllerAs: 'ctrl'
   });
+})(angular);
