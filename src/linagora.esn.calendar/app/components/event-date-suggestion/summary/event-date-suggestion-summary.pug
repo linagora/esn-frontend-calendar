@@ -1,6 +1,6 @@
 .cal-event-date-suggestion-summary
   .suggestion-user
-    span {{ '%s suggested some changes' | translate:$ctrl.user.displayName }}
+    span {{ '%s suggested some changes' | translate:$ctrl }}
 
   .suggestion-event
     .date.ellipsis
@@ -10,4 +10,4 @@
       span(ng-if="$ctrl.event.allDay && $ctrl.event.end !== $ctrl.event.start") {{ $ctrl.event.start | amDateFormat:'ll' }} - {{ $ctrl.event.end | amDateFormat:'ll' }} ({{ 'All day' | translate }})
     .recurrence.ellipsis(ng-if="$ctrl.event.isRecurring()")
       i.mdi.mdi-sync
-      span {{ 'Recurs %s' | translate:$ctrl.event.getRecurrenceType() | lowercase }}
+      span {{ 'Recurs %s' | translate:$ctrl.translationData | lowercase }}

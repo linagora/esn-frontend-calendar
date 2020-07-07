@@ -5,8 +5,8 @@
         h4.modal-title(ng-if="!ctrl.isShared") {{ 'Remove calendar?' | translate }}
         h4.modal-title(ng-if="ctrl.isShared") {{ 'Unsubscribe from calendar?' | translate }}
       .modal-body
-        span(ng-if="!ctrl.isShared") {{ 'This will remove the "%s" calendar and all events it contains.' | translate:ctrl.calendarName }}
-        span(ng-if="ctrl.isShared") {{ 'This will unsubscribe you from the "%s" calendar.' | translate:ctrl.calendarName }}
+        span(ng-if="!ctrl.isShared") {{ 'This will remove the "%s" calendar and all events it contains.' | translate:ctrl }}
+        span(ng-if="ctrl.isShared") {{ 'This will unsubscribe you from the "%s" calendar.' | translate:ctrl }}
       .modal-footer
         button.btn.btn-default(type="button", ng-click="$hide()") {{ 'Cancel' | translate }}
         button.btn.btn-primary(type="button", ng-click="ctrl.delete(); $hide()") {{ 'Accept' | translate }}

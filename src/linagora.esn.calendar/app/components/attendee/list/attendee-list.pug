@@ -1,7 +1,7 @@
 .cal-attendee-list
   .cal-attendee-list-toolbar
     .cal-attendee-list-stats
-      span(ng-if="ctrl.attendees.length > 1") {{ '%s attendees' | translate:ctrl.attendees.length }}
+      span(ng-if="ctrl.attendees.length > 1") {{ '%s attendees' | translate:ctrl }}
       span(ng-if="ctrl.attendees.length === 1") {{ '1 attendee' | translate }}
       span(ng-if="!ctrl.attendees.length") {{ 'No attendees' | translate }}
     .cal-attendee-list-actions
