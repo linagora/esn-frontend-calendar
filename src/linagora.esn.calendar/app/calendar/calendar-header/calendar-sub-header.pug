@@ -3,7 +3,7 @@ extends /modules/subheader/responsive-subheader.pug
 block left
   .calendar-sub-header.hidden-md
     .calendar-controls
-      button.btn.btn-link.btn-icon(href='', contextual-sidebar, data-content-template="/calendar/app/sidebar/mobile/sidebar-mobile")
+      button.btn.btn-link.btn-icon(href='', contextual-sidebar, data-content-template="/calendar/app/sidebar/mobile/sidebar-mobile.html")
         i.mdi.mdi-menu
       button.btn.btn-link.flex-vertical-centered(cal-toggle-mini-calendar)
         .date-indicator.flex-vertical-centered(calendar-date-indicator) {{vm.dateIndicator}}
