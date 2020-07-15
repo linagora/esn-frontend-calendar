@@ -26,6 +26,7 @@ require('../../../services/partstat-update-notification.service.js');
     calEventDateSuggestionModal,
     calPartstatUpdateNotificationService,
     session,
+    watchDynamicTranslatedValue,
     INVITATION_MESSAGE_HEADERS,
     CAL_EVENT_METHOD,
     CAL_RELATED_EVENT_TYPES
@@ -39,9 +40,10 @@ require('../../../services/partstat-update-notification.service.js');
     self.onPartstatChangeSuccess = onPartstatChangeSuccess;
     self.onPartstatChangeError = onPartstatChangeError;
     self.isActionable = isActionable;
-    self.translationData = {
-      recurrenceType: self.event.getRecurrenceType()
-    };
+    self.translationData = {};
+    watchDynamicTranslatedValue(self.translationData, 'recurrenceType', function() {
+      return self.event.getRecurrenceType();
+    });
 
     function $onInit() {
       self.meeting = {

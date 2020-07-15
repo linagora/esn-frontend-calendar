@@ -11,9 +11,10 @@ angular.module('esn.calendar')
     controllerAs: '$ctrl'
   });
 
-  function calEventDateSuggestionSummaryCtrl() {
+  function calEventDateSuggestionSummaryCtrl(watchDynamicTranslatedValue) {
     var self = this;
-    self.translationData = {
-      recurrenceType: self.event.getRecurrenceType()
-    };
+    self.translationData = {};
+    watchDynamicTranslatedValue(self.translationData, 'recurrenceType', function() {
+      return self.event.getRecurrenceType();
+    });
   }
