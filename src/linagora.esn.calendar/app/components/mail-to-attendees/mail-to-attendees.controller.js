@@ -1,10 +1,13 @@
-(function() {
+const _ = require('lodash');
+require('../../constants.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .controller('calMailToAttendeesController', calMailToAttendeesController);
 
-  function calMailToAttendeesController(session, _, CAL_ICAL) {
+  function calMailToAttendeesController(session, CAL_ICAL) {
     var self = this;
 
     self.getEmailAddressesFromUsers = getEmailAddressesFromUsers;
@@ -21,4 +24,4 @@
       return attendee.cutype && attendee.cutype === CAL_ICAL.cutype.resource;
     }
   }
-})();
+})(angular);

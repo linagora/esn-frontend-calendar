@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -9,4 +9,4 @@
       },
       template: require("./settings-display-subheader.pug")
     });
-})();
+})(angular);

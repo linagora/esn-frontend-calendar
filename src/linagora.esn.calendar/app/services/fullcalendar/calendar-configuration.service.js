@@ -1,4 +1,9 @@
-(function() {
+const moment = require('moment');
+const _ = require('lodash');
+require('../../constants');
+require('../calendar-business-hours.service');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -10,8 +15,6 @@
     calBusinessHoursService,
     esnDatetimeService,
     esnUserConfigurationService,
-    moment,
-    _,
     CAL_UI_CONFIG,
     CAL_USER_CONFIGURATION,
     CAL_FULLCALENDAR_LOCALE
@@ -136,4 +139,4 @@
       });
     }
   }
-})();
+})(angular);

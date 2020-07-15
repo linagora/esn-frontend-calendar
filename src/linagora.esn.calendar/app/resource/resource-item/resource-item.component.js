@@ -1,3 +1,4 @@
+(function(angular) {
 'use strict';
 
 angular.module('esn.calendar')
@@ -11,3 +12,4 @@ angular.module('esn.calendar')
     controllerAs: 'ctrl',
     template: require("./resource-item.pug")
   });
+})(angular);

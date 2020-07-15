@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -12,4 +12,4 @@
         showDetails: '<'
       }
     });
-})();
+})(angular);

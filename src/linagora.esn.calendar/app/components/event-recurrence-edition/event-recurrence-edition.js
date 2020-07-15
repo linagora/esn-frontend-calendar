@@ -1,4 +1,9 @@
-(function() {
+const moment = require('moment');
+require('../../constants.js');
+require('../../services/fc-moment.js');
+require('../../core/date-to-moment.directive.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -42,7 +47,7 @@
     }
   }
 
-  function EventRecurrenceEditionController(moment, calMoment, esnI18nService, CAL_RECUR_FREQ, CAL_WEEK_DAYS, CAL_MAX_RRULE_COUNT) {
+  function EventRecurrenceEditionController(calMoment, esnI18nService, CAL_RECUR_FREQ, CAL_WEEK_DAYS, CAL_MAX_RRULE_COUNT) {
     var self = this;
 
     self.event = self._event;
@@ -163,4 +168,4 @@
       }
     }
   }
-})();
+})(angular);

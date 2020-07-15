@@ -1,4 +1,7 @@
-(function() {
+require('../event-message/event-message.service.js');
+require('../services/event-service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -84,4 +87,4 @@
     }
   }
 
-})();
+})(angular);

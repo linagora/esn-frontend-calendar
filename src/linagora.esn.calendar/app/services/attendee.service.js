@@ -1,10 +1,15 @@
+const _ = require('lodash');
+require('../constants');
+require('./calendar-resource.service.js');
+require('./attendees-cache.service.js');
+
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .factory('calAttendeeService', calAttendeeService);
 
-  function calAttendeeService($log, $q, _, userUtils, CAL_ICAL, calResourceService, calAttendeesCache) {
+  function calAttendeeService($log, $q, userUtils, CAL_ICAL, calResourceService, calAttendeesCache) {
     return {
       filterDuplicates: filterDuplicates,
       getAttendeeForUser: getAttendeeForUser,

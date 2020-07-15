@@ -1,4 +1,9 @@
-(function() {
+require('../../components/mini-calendar/mini-calendar.directive.js');
+require('../../components/mini-calendar/mini-calendar-mobile.directive.js');
+require('../../components/calendar/calendar.component.js');
+require('../../components/event-create-button/event-create-button.component.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -38,4 +43,4 @@
       });
     }
   }
-})();
+})(angular);

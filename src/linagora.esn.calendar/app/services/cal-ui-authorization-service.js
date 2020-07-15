@@ -1,4 +1,8 @@
-(function() {
+require('./event-utils.js');
+require('./cal-default-value.service.js');
+require('../constants');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -117,4 +121,4 @@
       return false;
     }
   }
-})();
+})(angular);

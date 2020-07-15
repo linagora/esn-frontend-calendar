@@ -1,10 +1,14 @@
-(function() {
+const _ = require('lodash');
+require('../../../constants.js');
+require('../../../services/attendee.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .controller('CalAttendeeListController', CalAttendeeListController);
 
-  function CalAttendeeListController(_, calAttendeeService, CAL_ATTENDEE_LIST_LIMIT) {
+  function CalAttendeeListController(calAttendeeService, CAL_ATTENDEE_LIST_LIMIT) {
     var self = this;
 
     self.removeAttendee = removeAttendee;
@@ -57,4 +61,4 @@
     }
   }
 
-})();
+})(angular);

@@ -1,3 +1,5 @@
+require('./attendee-provider/attendee-provider.service.js');
+
 (function(angular) {
   'use strict';
 

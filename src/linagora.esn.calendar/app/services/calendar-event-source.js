@@ -1,4 +1,6 @@
-(function() {
+require('../services/event-service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -30,4 +32,4 @@
     };
   }
 
-})();
+})(angular);

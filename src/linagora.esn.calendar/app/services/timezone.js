@@ -1,4 +1,6 @@
-(function() {
+require('../services/ical.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -2548,4 +2550,4 @@
         }
       }
     });
-})();
+})(angular);

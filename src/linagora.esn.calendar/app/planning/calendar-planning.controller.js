@@ -1,10 +1,20 @@
+const _ = require('lodash');
+require('../constants.js');
+require('../event/form/open/open-event-form.service.js');
+require('../services/cached-event-source.js');
+require('../services/calendar-event-source.js');
+require('../services/calendar-visibility-service.js');
+require('../services/calendar-service.js');
+require('../services/fullcalendar/planning-render-event.service.js');
+require('../services/fullcalendar/calendar-configuration.service.js');
+
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .controller('CalCalendarPlanningController', CalCalendarPlanningController);
 
-  function CalCalendarPlanningController(_, $rootScope, $alert, $q, $window, $timeout, session, esnWithPromiseResult, calOpenEventForm, calCachedEventSource, calendarEventSource, calendarVisibilityService, calendarService, calFullCalendarPlanningRenderEventService, CAL_UI_CONFIG, CAL_MAX_CALENDAR_RESIZE_HEIGHT, CAL_EVENTS, calFullUiConfiguration) {
+  function CalCalendarPlanningController($rootScope, $alert, $q, $window, $timeout, session, esnWithPromiseResult, calOpenEventForm, calCachedEventSource, calendarEventSource, calendarVisibilityService, calendarService, calFullCalendarPlanningRenderEventService, CAL_UI_CONFIG, CAL_MAX_CALENDAR_RESIZE_HEIGHT, CAL_EVENTS, calFullUiConfiguration) {
     var self = this;
     var windowJQuery = angular.element($window);
     var calendarDeffered = $q.defer();

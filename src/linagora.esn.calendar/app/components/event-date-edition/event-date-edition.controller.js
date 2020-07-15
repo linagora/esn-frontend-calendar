@@ -1,4 +1,7 @@
-(function() {
+require('../../services/fc-moment.js');
+require('../../services/event-utils.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -163,4 +166,4 @@
       self.minEndDate = getMinEndDate();
     }
   }
-})();
+})(angular);

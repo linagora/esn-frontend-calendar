@@ -1,4 +1,8 @@
-(function() {
+require('../../core/auto-size-and-update.directive.js');
+require('../../components/attendee-tabs/attendee-tabs.component.js');
+require('../../components/attendee/list/attendee-list.component.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -29,4 +33,4 @@
     }
   }
 
-})();
+})(angular);

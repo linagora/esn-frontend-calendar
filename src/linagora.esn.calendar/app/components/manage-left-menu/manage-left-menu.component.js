@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -6,4 +6,4 @@
       controllerAs: 'ctrl',
       template: require("./manage-left-menu.pug")
     });
-})();
+})(angular);

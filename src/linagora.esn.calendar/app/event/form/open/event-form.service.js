@@ -1,4 +1,11 @@
-(function() {
+const _ = require('lodash');
+require('../../../constants.js');
+require('../../../services/calendar-service.js');
+require('../../../services/cal-ui-authorization-service.js');
+require('../../../services/event-utils.js');
+require('../../form/event-form.directive.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -11,7 +18,7 @@
    * Note that mobile devices have only access to the full form and the consult form.
    * This service will open the correct form corresponding to the event and the screen size.
    */
-  function calEventFormService(_, $rootScope, $modal, calendarService, calUIAuthorizationService, notificationFactory, calEventUtils, session, CAL_EVENTS) {
+  function calEventFormService($rootScope, $modal, calendarService, calUIAuthorizationService, notificationFactory, calEventUtils, session, CAL_EVENTS) {
     var modalIsOpen = false;
 
     return {
@@ -121,4 +128,4 @@
       });
     }
   }
-})();
+})(angular);

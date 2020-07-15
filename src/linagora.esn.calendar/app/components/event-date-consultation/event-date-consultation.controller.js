@@ -1,4 +1,6 @@
-(function() {
+require('../../services/fc-moment.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -34,4 +36,4 @@
       self.end = isOverOneDayOnly ? eventEnd.format('HH:mm') : self.end = eventEnd.format('MMM D HH:mm');
     }
   }
-})();
+})(angular);

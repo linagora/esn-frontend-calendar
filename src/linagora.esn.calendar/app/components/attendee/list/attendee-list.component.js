@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -13,4 +13,4 @@
       controllerAs: 'ctrl',
       template: require("./attendee-list.pug")
     });
-})();
+})(angular);

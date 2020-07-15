@@ -1,4 +1,11 @@
-(function() {
+const _ = require('lodash');
+require('../constants');
+require('../services/calendar-restangular.js');
+require('../services/path-builder.js');
+require('../services/dav-request.js');
+require('../services/http-response-handler.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -13,7 +20,6 @@
     calDavRequest,
     calHttpResponseHandler,
     notificationFactory,
-    _,
     CAL_ACCEPT_HEADER,
     CAL_DAV_DATE_FORMAT,
     CALENDAR_PREFER_HEADER,
@@ -296,4 +302,4 @@
       .then(calHttpResponseHandler([200, 204]));
     }
   }
-})();
+})(angular);

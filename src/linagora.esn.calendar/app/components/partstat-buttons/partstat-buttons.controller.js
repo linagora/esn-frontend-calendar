@@ -1,3 +1,7 @@
+require('../../services/event-service.js');
+require('../../services/event-utils.js');
+require('../../services/calendar-service.js');
+
 (function(angular) {
   'use strict';
 

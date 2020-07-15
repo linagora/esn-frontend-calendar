@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular
@@ -10,4 +10,4 @@
       template: require("./calendar-today-button.pug"),
       controller: 'CalendarTodayButtonController'
     });
-})();
+})(angular);

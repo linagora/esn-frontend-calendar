@@ -1,5 +1,6 @@
+const Restangular = require('restangular');
 
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -15,4 +16,4 @@
     return restangularInstance;
   }
 
-})();
+})(angular);

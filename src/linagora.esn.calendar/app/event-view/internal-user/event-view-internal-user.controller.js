@@ -1,4 +1,4 @@
-(function() {
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -7,4 +7,4 @@
   function CalEventViewInternalUserController() {
     // TODO IN EVENT FORM REFACTOR
   }
-})();
+})(angular);

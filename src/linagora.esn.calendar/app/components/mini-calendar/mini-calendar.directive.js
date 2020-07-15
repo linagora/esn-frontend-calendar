@@ -1,4 +1,9 @@
-(function() {
+require('../../constants.js');
+require('../../components/mini-calendar/mini-calendar.service.js');
+require('./mini-calendar.controller');
+require('../calendar/calendar.component.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -34,4 +39,4 @@
     }
   }
 
-})();
+})(angular);

@@ -1,9 +1,12 @@
+const _ = require('lodash');
+require('../services/path-parser.service.js');
+
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar').factory('calCalDAVURLService', calCalDAVURLService);
 
-  function calCalDAVURLService(_, $log, $window, esnUserConfigurationService, calPathParser) {
+  function calCalDAVURLService($log, $window, esnUserConfigurationService, calPathParser) {
     var DAVSERVER_CONFIGURATION = 'davserver';
 
     return {

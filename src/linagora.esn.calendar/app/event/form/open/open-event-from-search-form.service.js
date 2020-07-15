@@ -1,10 +1,16 @@
-(function() {
+const _ = require('lodash');
+require('../../../services/shells/calendar-shell.js');
+require('../../../services/calendar-api.js');
+require('../../../services/ical.js');
+require('../../../event/form/open/event-form.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .factory('calOpenEventFromSearchForm', calOpenEventFromSearchForm);
 
-  function calOpenEventFromSearchForm(_, CalendarShell, calendarAPI, ICAL, calEventFormService) {
+  function calOpenEventFromSearchForm(CalendarShell, calendarAPI, ICAL, calEventFormService) {
     return function(eventFromSearch, relatedEvents) {
       var event = _.assign(eventFromSearch);
       var calendarHomeId = event.userId;
@@ -47,4 +53,4 @@
       };
     }
   }
-})();
+})(angular);

@@ -1,3 +1,5 @@
+require('../../resource.api-client.js');
+
 (function(angular) {
   'use strict';
 

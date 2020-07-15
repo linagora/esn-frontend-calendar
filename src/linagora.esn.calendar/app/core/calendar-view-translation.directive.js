@@ -1,4 +1,6 @@
-(function() {
+require('../constants.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -24,4 +26,4 @@
     }
   }
 
-})();
+})(angular);

@@ -1,4 +1,12 @@
-(function() {
+const _ = require('lodash');
+require('../constants');
+require('../services/calendar-api.js');
+require('../services/calendar-subscription-api.service.js');
+require('../services/shells/calendar-collection-shell.js');
+require('../services/shells/calendar-right-shell.js');
+require('../services/calendar-cache.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -7,7 +15,6 @@
   function calendarService(
     $q,
     $rootScope,
-    _,
     calendarAPI,
     calCalendarSubscriptionApiService,
     CalendarCollectionShell,
@@ -348,4 +355,4 @@
       });
     }
   }
-})();
+})(angular);

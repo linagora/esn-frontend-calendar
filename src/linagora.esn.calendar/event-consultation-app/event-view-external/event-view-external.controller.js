@@ -1,10 +1,13 @@
-(function() {
+const _ = require('lodash');
+require('../../app/services/shells/calendar-shell.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .controller('CalEventViewExternalController', CalEventViewExternalController);
 
-  function CalEventViewExternalController(CalendarShell, _) {
+  function CalEventViewExternalController(CalendarShell) {
     var self = this;
 
     self.$onInit = $onInit;
@@ -14,4 +17,4 @@
       self.externalAttendee = _.find(self.event.attendees, { email: self.attendeeEmail});
     }
   }
-})();
+})(angular);

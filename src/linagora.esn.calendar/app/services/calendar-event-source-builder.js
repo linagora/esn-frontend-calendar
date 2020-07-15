@@ -1,3 +1,6 @@
+require('../services/cached-event-source.js');
+require('../services/calendar-event-source.js');
+
 (function(angular) {
   'use strict';
 

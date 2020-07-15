@@ -1,4 +1,16 @@
-(function() {
+const _ = require('lodash');
+require('../../constants.js');
+require('../../services/ical.js');
+require('../../services/calendar-utils.js');
+require('../../services/event-api.js');
+require('../../services/fc-moment.js');
+require('../../services/master-event-cache.js');
+require('../../services/path-builder.js');
+require('../../services/path-parser.service.js');
+require('../../services/shells/rrule-shell.js');
+require('../../services/shells/valarm-shell.js');
+
+(function(angular) {
   'use strict';
 
   /**
@@ -23,7 +35,6 @@
 
   function CalendarShellFactory(
     $q,
-    _,
     ICAL,
     jstz,
     uuid4,
@@ -965,4 +976,4 @@
       }, this);
     }
   }
-})();
+})(angular);

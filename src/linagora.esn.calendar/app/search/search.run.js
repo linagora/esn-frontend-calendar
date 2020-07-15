@@ -1,4 +1,6 @@
-(function() {
+require('../search/event/event-search-provider.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -13,4 +15,4 @@
         $log.error('Can not build and register the calendar search provider', err);
       });
   }
-})();
+})(angular);

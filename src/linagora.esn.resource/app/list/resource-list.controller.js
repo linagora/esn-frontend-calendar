@@ -1,4 +1,6 @@
-(function() {
+require('../resource.api-client.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('linagora.esn.resource')
@@ -31,4 +33,4 @@
         });
     }
   }
-})();
+})(angular);

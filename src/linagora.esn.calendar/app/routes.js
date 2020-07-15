@@ -1,3 +1,5 @@
+require('./sidebar/sidebar.directive.js');
+
 (function(angular) {
   'use strict';
 

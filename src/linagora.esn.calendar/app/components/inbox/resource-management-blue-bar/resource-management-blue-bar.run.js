@@ -1,9 +1,12 @@
+const _ = require('lodash');
+require('../../../components/inbox/inbox.constants.js');
+
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar').run(runBlock);
 
-  function runBlock(dynamicDirectiveService, DynamicDirective, _, INVITATION_MESSAGE_HEADERS, X_OPENPAAS_CAL_HEADERS, X_OPENPAAS_CAL_VALUES) {
+  function runBlock(dynamicDirectiveService, DynamicDirective, INVITATION_MESSAGE_HEADERS, X_OPENPAAS_CAL_HEADERS, X_OPENPAAS_CAL_VALUES) {
     var shouldInject = function(scope) {
       return scope.email &&
         scope.email.headers &&

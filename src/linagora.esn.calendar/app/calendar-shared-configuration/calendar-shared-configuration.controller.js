@@ -1,4 +1,12 @@
-(function() {
+const _ = require('lodash');
+require('../constants.js');
+require('../services/calendar-right-comparator.js');
+require('../services/calendar-service.js');
+require('../services/calendar-home-service.js');
+require('../services/shells/calendar-collection-shell.js');
+require('../services/user-and-external-calendars.service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -8,7 +16,6 @@
     $log,
     $q,
     $state,
-    _,
     session,
     notificationFactory,
     userUtils,
@@ -249,4 +256,4 @@
       });
     }
   }
-})();
+})(angular);

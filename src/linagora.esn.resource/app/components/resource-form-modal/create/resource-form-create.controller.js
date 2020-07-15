@@ -1,10 +1,14 @@
-(function() {
+const _ = require('lodash');
+require('../../../resource.constants.js');
+require('../../../resource.api-client.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('linagora.esn.resource')
     .controller('ESNResourceFormCreateController', ESNResourceFormCreateController);
 
-  function ESNResourceFormCreateController($state, type, _, esnResourceAPIClient, asyncAction, session, ESN_RESOURCE) {
+  function ESNResourceFormCreateController($state, type, esnResourceAPIClient, asyncAction, session, ESN_RESOURCE) {
     var self = this;
 
     self.type = type;
@@ -48,4 +52,4 @@
       });
     }
   }
-})();
+})(angular);

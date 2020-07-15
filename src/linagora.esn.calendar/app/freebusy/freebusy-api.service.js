@@ -1,3 +1,8 @@
+require('../constants.js');
+require('../services/dav-request.js');
+require('../services/http-response-handler.js');
+require('../services/grace-period-response-handler.js');
+
 (function(angular) {
   'use strict';
 

@@ -1,3 +1,6 @@
+require('../event-utils.js');
+require('../cal-ui-authorization-service.js');
+
 (function(angular) {
   'use strict';
 

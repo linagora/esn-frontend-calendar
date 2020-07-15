@@ -1,4 +1,6 @@
-(function() {
+require('../../../services/cal-ui-authorization-service.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
@@ -36,4 +38,4 @@
       self.onRemove(self.calendar);
     }
   }
-})();
+})(angular);

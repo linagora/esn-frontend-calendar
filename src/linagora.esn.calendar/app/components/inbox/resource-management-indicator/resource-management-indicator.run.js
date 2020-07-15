@@ -1,8 +1,12 @@
+const _ = require('lodash');
+require('../../../components/inbox/inbox.constants.js');
+
+(function(angular) {
 'use strict';
 
 angular.module('esn.calendar')
 
-  .run(function(dynamicDirectiveService, DynamicDirective, _, X_OPENPAAS_CAL_HEADERS) {
+  .run(function(dynamicDirectiveService, DynamicDirective, X_OPENPAAS_CAL_HEADERS) {
     var directive = new DynamicDirective(true, 'cal-inbox-resource-management-indicator', {
       attributes: [
         { name: 'ng-if', value: 'item.headers["' + X_OPENPAAS_CAL_HEADERS.ACTION + '"]' }
@@ -11,3 +15,4 @@ angular.module('esn.calendar')
 
     dynamicDirectiveService.addInjection('inbox-message-indicators', directive);
   });
+})(angular);

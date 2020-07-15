@@ -1,10 +1,13 @@
-(function() {
+const _ = require('lodash');
+require('../services/fc-moment.js');
+
+(function(angular) {
   'use strict';
 
   angular.module('esn.calendar')
     .factory('calEventStore', calEventStore);
 
-  function calEventStore(_, calMoment) {
+  function calEventStore(calMoment) {
     var calStores = {};
 
     var service = {
@@ -88,4 +91,4 @@
       }
     }
   }
-})();
+})(angular);
