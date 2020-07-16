@@ -4,6 +4,7 @@
   angular.module('esn.calendar', [
     'AngularJstz',
     'angularMoment',
+    'esn.mailto-handler',
     'esn.aggregator',
     'esn.authentication',
     'esn.avatar',
