@@ -46,7 +46,11 @@
     'material.components.radioButton',
     'uuid4',
     'esn.onscroll',
-    'esn.datetime'
+    'esn.datetime',
+    'esn.localstorage',
+    'esn.scroll',
+    'ngTagsInput',
+    'esn.member'
   ]);
 })(angular);
 
@@ -54,6 +58,7 @@ require('esn-frontend-common-libs/src/frontend/js/modules/esn.router.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/notification.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/user/user.module.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/media-query.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/highlight.js')
 require('esn-frontend-common-libs/src/frontend/js/modules/i18n/i18n.module.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/session.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/scroll.js');
@@ -83,6 +88,13 @@ require('esn-frontend-common-libs/src/frontend/components/angular-jstz/angular-j
 require('esn-frontend-common-libs/src/frontend/js/modules/websocket.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/touchscreen-detector.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/async-action.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/module-registry/module-registry.module.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/settings-overlay.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/clipboard/clipboard.module.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/widget-helper.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/onscroll/on-scroll.module.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/localstorage.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/scroll.js');
 
 require ('./calendar-configuration/calendar-configuration-header/calendar-configuration-header.directive.js');
 require ('./calendar-configuration/calendar-configuration-tab-delegation/calendar-configuration-tab-delegation.component.js');
