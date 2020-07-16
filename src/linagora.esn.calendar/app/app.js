@@ -165,17 +165,6 @@ require ('./components/event-date-suggestion/modal/event-date-suggestion-modal.s
 require ('./components/event-date-suggestion/summary/event-date-suggestion-summary.component.js');
 require ('./components/event-participation/event-participation.component.js');
 require ('./components/event-recurrence-edition/event-recurrence-edition.js');
-require ('./components/inbox/inbox.constants.js');
-require ('./components/inbox/invitation-message-blue-bar/invitation-message-blue-bar.component.js');
-require ('./components/inbox/invitation-message-blue-bar/invitation-message-blue-bar.controller.js');
-require ('./components/inbox/invitation-message-blue-bar/invitation-message-blue-bar.run.js');
-require ('./components/inbox/invitation-message-indicator/invitation-message-indicator.js');
-require ('./components/inbox/invitation-message-indicator/invitation-message-indicator.run.js');
-require ('./components/inbox/resource-management-blue-bar/resource-management-blue-bar.component.js');
-require ('./components/inbox/resource-management-blue-bar/resource-management-blue-bar.controller.js');
-require ('./components/inbox/resource-management-blue-bar/resource-management-blue-bar.run.js');
-require ('./components/inbox/resource-management-indicator/resource-management-indicator.js');
-require ('./components/inbox/resource-management-indicator/resource-management-indicator.run.js');
 require ('./components/mail-to-attendees/mail-to-attendees.component.js');
 require ('./components/mail-to-attendees/mail-to-attendees.controller.js');
 require ('./components/manage-left-menu/manage-left-menu.component.js');
