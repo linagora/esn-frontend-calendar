@@ -3,6 +3,7 @@ require('fullcalendar/dist/locale-all.js');
 
 require('esn-frontend-common-libs/src/frontend/vendor-libs.js');
 require('esn-frontend-mailto-handler/src/index.js');
+require('esn-frontend-videoconference-calendar/src/index.js');
 
 require('./app/app.js');
 
