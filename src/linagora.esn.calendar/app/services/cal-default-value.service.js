@@ -2,8 +2,8 @@
   'use strict';
 
   angular.module('esn.calendar')
-    .factory('calDefaultValue', calDefaultValue);
-      function calDefaultValue() {
+    .factory('calDefaultValue', calDefaultValueFactory);
+      function calDefaultValueFactory() {
         var defaultVal = {};
 
         var calDefaultValue = {

@@ -48,14 +48,14 @@ require('../../form/event-form.directive.js');
       $modal({
         template: require("../modals/event-form-modal.pug"),
         resolve: {
-          event: function(calEventUtils) {
+          event: function() {
             return calEventUtils.getEditedEvent();
           },
           relatedEvents: function() {
             return relatedEvents;
           }
         },
-        controller: function($scope, event, relatedEvents) {
+        controller: /* @ngInject */ function($scope, event, relatedEvents) {
           var _$hide = $scope.$hide;
 
           var unregister = $rootScope.$on(CAL_EVENTS.MODAL + '.hide', function() {
@@ -96,7 +96,7 @@ require('../../form/event-form.directive.js');
             return _openNormalModal;
           }
         },
-        controller: function($scope, calendar, event, openForm, relatedEvents) {
+        controller: /* @ngInject */ function($scope, calendar, event, openForm, relatedEvents) {
           $scope.event = event;
           $scope.relatedEvents = relatedEvents;
           $scope.calendarHomeId = calendar.calendarHomeId;
