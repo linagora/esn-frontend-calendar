@@ -51,7 +51,8 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                   .fg-line
                     input.input.location.form-control(type="text", ng-model='editedEvent.location', ng-model-options="{getterSetter: true, debounce: 500}", maxlength="{{::CAL_EVENT_FORM.location.maxlength}}", placeholder="{{ 'Location' | translate }}", ng-readonly="!canModifyEvent")
 
-            .col-xs-12(dynamic-directive='calendar-videoconference')
+            .col-xs-12
+              calendar-videoconference-form(event="editedEvent", can-modify-event="canModifyEvent")
 
             .col-xs-12(dynamic-directive='calendar-map')
             cal-entities-autocomplete-input.cal-user-autocomplete-input(

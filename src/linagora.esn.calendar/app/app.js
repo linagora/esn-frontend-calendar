@@ -50,7 +50,9 @@
     'esn.localstorage',
     'esn.scroll',
     'ngTagsInput',
-    'esn.member'
+    'esn.member',
+    'linagora.esn.videoconference',
+    'linagora.esn.videoconference.calendar'
   ]);
 })(angular);
 
