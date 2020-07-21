@@ -17,4 +17,10 @@ angular.module('esnApp')
   })
   .run(function(editableOptions) {
     editableOptions.theme = 'bs3';
-  });
+  })
+  .run(splashScreen);
+
+function splashScreen($templateCache, session) {
+  $templateCache.put('/views/commons/loading.html', require('./app-loading.pug'));
+  session.ready.then(() => $('html').removeClass('loading'));
+}
