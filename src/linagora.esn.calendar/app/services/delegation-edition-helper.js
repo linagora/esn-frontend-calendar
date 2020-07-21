@@ -2,9 +2,9 @@
   'use strict';
 
   angular.module('esn.calendar')
-    .factory('CalDelegationEditionHelper', CalDelegationEditionHelper);
+    .factory('CalDelegationEditionHelper', CalDelegationEditionHelperFactory);
 
-  function CalDelegationEditionHelper() {
+  function CalDelegationEditionHelperFactory() {
 
     CalDelegationEditionHelper.prototype.getAllRemovedUsersId = getAllRemovedUsersId;
     CalDelegationEditionHelper.prototype.addUserGroup = addUserGroup;

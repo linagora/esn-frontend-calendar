@@ -6,9 +6,9 @@ require('../../services/calendar-utils.js');
   'use strict';
 
   angular.module('esn.calendar')
-    .factory('CalendarRightShell', CalendarRightShell);
+    .factory('CalendarRightShell', CalendarRightShellFactory);
 
-  function CalendarRightShell($log, session, calendarUtils, CAL_CALENDAR_PUBLIC_RIGHT, CAL_CALENDAR_SHARED_RIGHT, CAL_CALENDAR_TYPE) {
+  function CalendarRightShellFactory(session, calendarUtils, CAL_CALENDAR_PUBLIC_RIGHT, CAL_CALENDAR_SHARED_RIGHT, CAL_CALENDAR_TYPE) {
 
     //the idea here is that there is a multitude of possible combinaison of webdav right and webdav sharing right
     //I will suppose that right are only settle by OpenPaas and that the only possible combinaison are the following
