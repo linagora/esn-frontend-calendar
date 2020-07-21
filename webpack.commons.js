@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 // default: we are building an SPA
 const commonLibsPath = path.resolve(__dirname, 'node_modules', 'esn-frontend-common-libs');
@@ -50,6 +51,7 @@ module.exports = {
       template: './assets/index.pug',
       filename: './index.html'
     }),
+    new FaviconsWebpackPlugin('./src/linagora.esn.calendar/images/calendar-icon.svg'),
   ],
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
