@@ -1,8 +1,6 @@
 const _ = require('lodash');
-require('../../constants.js');
+
 require('../../components/mini-calendar/mini-calendar.service.js');
-require('../../services/calendar-event-source-builder.js');
-require('../../services/fc-moment.js');
 
 (function(angular) {
   'use strict';

@@ -1,5 +1,3 @@
-require('../../services/shells/calendar-shell.js');
-
 (function(angular) {
   'use strict';
 

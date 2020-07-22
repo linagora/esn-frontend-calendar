@@ -8,31 +8,16 @@
 
 @import './commons';
 
-@import './components/attendee/attendee';
-@import './components/attendee-tabs/attendee-tabs';
-@import './components/avatar/attendee-avatar/attendee-avatar';
-@import './components/avatar/resource-avatar/resource-avatar';
 @import './components/calendar-color-picker/calendar-color-picker';
 @import './components/calendar-today-button/calendar-today-button';
 @import './components/calendars-list/calendars-list';
 @import './components/calendars-list/items/calendars-list-items.less';
 @import './components/calendars-list/items/item/calendars-list-item.less';
-@import './components/entities-autocomplete-input/entities-autocomplete-input-tag.less';
-@import './components/entities-autocomplete-input/entities-autocomplete-input.less';
 @import './components/event-alarm-consultation/event-alarm-consultation';
 @import './components/event-date-consultation/event-date-consultation';
-@import './components/event-date-edition/event-date-edition';
-@import './components/event-date-suggestion/event-date-suggestion';
-@import './components/event-date-suggestion/modal/event-date-suggestion-modal';
-@import './components/event-date-suggestion/summary/event-date-suggestion-summary';
 @import './components/event-participation/event-participation';
-@import './components/event-recurrence-edition/event-recurrence-edition';
-@import './components/mail-to-attendees/mail-to-attendees';
 @import './components/mini-calendar/mini-calendar';
 @import './components/manage-left-menu/manage-left-menu';
-@import './components/partstat-buttons/partstat-buttons';
-@import './components/partstat/icon/partstat-icon';
-@import './components/select-calendar/select-calendar-item';
 @import './components/calendar-config-form/calendar-config-form.less';
 
 @import './calendar/calendar-header/calendar-sub-header';
@@ -51,13 +36,8 @@
 
 @import './freebusy/freebusy';
 
-@import './event/event';
-
 @import './planning/calendar-planning.less';
 @import './planning/aside/calendar-planning-aside.less';
-
-@import './resource/resource-list/resource-list';
-@import './resource/resource-item/resource-item';
 
 @import './search/event/event-search';
 @import './search/form/search-form';
@@ -71,16 +51,6 @@
 @import './sidebar/sidebar';
 @import './sidebar/title/sidebar-title';
 @import './sidebar/mobile/sidebar-mobile';
-
-.calendar-event-form() {
-  .btn:not(.btn-link):not(.btn-float):not(.command-edit):not(.command-delete):not(.selectpicker) {
-    box-shadow: none;
-
-    &:hover, &:focus {
-      box-shadow: 0 5px 11px 0 rgba(0,0,0,0.18),0 4px 15px 0 rgba(0,0,0,0.15);
-    }
-  }
-}
 
 .calendar {
   width: 100%;

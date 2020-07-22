@@ -1,12 +1,4 @@
 const _ = require('lodash');
-require('../constants.js');
-require('../event/form/open/open-event-form.service.js');
-require('../services/cached-event-source.js');
-require('../services/calendar-event-source.js');
-require('../services/calendar-visibility-service.js');
-require('../services/calendar-service.js');
-require('../services/fullcalendar/planning-render-event.service.js');
-require('../services/fullcalendar/calendar-configuration.service.js');
 
 (function(angular) {
   'use strict';

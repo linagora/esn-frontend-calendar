@@ -1,17 +1,4 @@
 const _ = require('lodash');
-require('../../constants.js');
-require('../../services/cached-event-source.js');
-require('../../services/calendar-current-view.js');
-require('../../services/calendar-event-source.js');
-require('../../services/calendar-service.js');
-require('../../services/shells/calendar-shell.js');
-require('../../services/calendar-visibility-service.js');
-require('../../services/event-service.js');
-require('../../services/calendar-utils.js');
-require('../../services/event-utils.js');
-require('../../services/fullcalendar/render-event.service.js');
-require('../../services/cal-default-value.service.js');
-require('../../../app/event/form/open/open-event-form.service.js');
 
 (function() {
   'use strict';

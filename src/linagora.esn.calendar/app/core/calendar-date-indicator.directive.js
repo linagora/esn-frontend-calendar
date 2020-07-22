@@ -1,6 +1,3 @@
-require('../constants.js');
-require('../services/calendar-current-view.js');
-
 (function(angular) {
   'use strict';
 

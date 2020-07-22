@@ -1,13 +1,4 @@
 const _ = require('lodash');
-require('../services/shells/vfreebusy-shell.js');
-require('../freebusy/freebusy-api.service.js');
-require('../services/path-builder.js');
-require('../services/calendar-api.js');
-require('../services/calendar-service.js');
-require('../services/attendee.service.js');
-require('../services/fc-moment.js');
-require('../freebusy/freebusy.constants.js');
-require('../services/ical.js');
 
 (function(angular) {
   'use strict';

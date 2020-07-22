@@ -30,7 +30,6 @@
     'esn.user-configuration',
     'esn.widget.helper',
     'linagora.esn.graceperiod',
-    'linagora.esn.resource',
     'materialAdmin',
     'mgcrea.ngStrap.aside',
     'mgcrea.ngStrap.datepicker',
@@ -52,7 +51,8 @@
     'ngTagsInput',
     'esn.member',
     'linagora.esn.videoconference',
-    'linagora.esn.videoconference.calendar'
+    'linagora.esn.videoconference.calendar',
+    'esn.calendar.libs'
   ]);
 })(angular);
 
@@ -98,6 +98,8 @@ require('esn-frontend-common-libs/src/frontend/js/modules/onscroll/on-scroll.mod
 require('esn-frontend-common-libs/src/frontend/js/modules/localstorage.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/scroll.js');
 
+require('../../esn.calendar.libs/app/app.module.js');
+
 require ('./calendar-configuration/calendar-configuration-header/calendar-configuration-header.directive.js');
 require ('./calendar-configuration/calendar-configuration-tab-delegation/calendar-configuration-tab-delegation.component.js');
 require ('./calendar-configuration/calendar-configuration-tab-delegation/calendar-configuration-tab-delegation.controller.js');
@@ -117,19 +119,6 @@ require ('./calendar/calendar-view/calendar-view.controller.js');
 require ('./calendar/calendar-view/calendar-view.directive.js');
 require ('./calendar/calendar.component.js');
 require ('./calendar/calendar.controller.js');
-require ('./components/attendee-tabs/attendee-tabs.component.js');
-require ('./components/attendee/attendee-item-consult/attendee-item-consult.component.js');
-require ('./components/attendee/attendee-item-consult/attendee-item-consult.controller.js');
-require ('./components/attendee/attendee-item/attendee-item.component.js');
-require ('./components/attendee/attendee-item/attendee-item.controller.js');
-require ('./components/attendee/list/attendee-list.component.js');
-require ('./components/attendee/list/attendee-list.controller.js');
-require ('./components/avatar/attendee-avatar/attendee-avatar.component.js');
-require ('./components/avatar/attendee-avatar/attendee-avatar.controller.js');
-require ('./components/avatar/attendee-avatar/external/attendee-avatar-external.component.js');
-require ('./components/avatar/attendee-avatar/external/attendee-avatar-external.controller.js');
-require ('./components/avatar/resource-avatar/resource-avatar.component.js');
-require ('./components/avatar/resource-avatar/resource-avatar.controller.js');
 require ('./components/calendar-color-picker/calendar-color-picker.js');
 require ('./components/calendar-config-form/calendar-config-form.component.js');
 require ('./components/calendar-icon/calendar-icon.component.js');
@@ -147,26 +136,13 @@ require ('./components/calendars-list/items/item/calendars-list-item.controller.
 require ('./components/calendars-list/items/item/configuration/calendars-list-item-configuration.component.js');
 require ('./components/calendars-list/items/item/configuration/calendars-list-item-configuration.controller.js');
 require ('./components/calendars-list/user/user-calendars-list.component.js');
-require ('./components/entities-autocomplete-input/entities-autocomplete-input.component.js');
-require ('./components/entities-autocomplete-input/entities-autocomplete-input.controller.js');
 require ('./components/event-alarm-consultation/event-alarm-consultation.component.js');
 require ('./components/event-alarm-consultation/event-alarm-consultation.controller.js');
-require ('./components/event-alarm-edition/event-alarm-edition.component.js');
-require ('./components/event-alarm-edition/event-alarm-edition.controller.js');
 require ('./components/event-create-button/event-create-button.component.js');
 require ('./components/event-create-button/event-create-button.controller.js');
 require ('./components/event-date-consultation/event-date-consultation.component.js');
 require ('./components/event-date-consultation/event-date-consultation.controller.js');
-require ('./components/event-date-edition/event-date-edition.component.js');
-require ('./components/event-date-edition/event-date-edition.controller.js');
-require ('./components/event-date-suggestion/event-date-suggestion.component.js');
-require ('./components/event-date-suggestion/event-date-suggestion.controller.js');
-require ('./components/event-date-suggestion/modal/event-date-suggestion-modal.service.js');
-require ('./components/event-date-suggestion/summary/event-date-suggestion-summary.component.js');
 require ('./components/event-participation/event-participation.component.js');
-require ('./components/event-recurrence-edition/event-recurrence-edition.js');
-require ('./components/mail-to-attendees/mail-to-attendees.component.js');
-require ('./components/mail-to-attendees/mail-to-attendees.controller.js');
 require ('./components/manage-left-menu/manage-left-menu.component.js');
 require ('./components/mini-calendar/mini-calendar-eventsource-builder.service.js');
 require ('./components/mini-calendar/mini-calendar-mobile.directive.js');
@@ -174,23 +150,15 @@ require ('./components/mini-calendar/mini-calendar.controller.js');
 require ('./components/mini-calendar/mini-calendar.directive.js');
 require ('./components/mini-calendar/mini-calendar.service.js');
 require ('./components/modals/calendar-delete-confirmation/calendar-delete-confirmation-modal.service.js');
-require ('./components/partstat-buttons/partstat-buttons.component.js');
-require ('./components/partstat-buttons/partstat-buttons.controller.js');
-require ('./components/partstat/icon/partstat-icon.component.js');
-require ('./components/partstat/icon/partstat-icon.controller.js');
 require ('./components/rights/shared/calendar-shared-rights-display.component.js');
 require ('./components/rights/shared/calendar-shared-rights-display.controller.js');
-require ('./components/select-calendar/select-calendar-item.component.js');
-require ('./components/select-calendar/select-calendar-item.controller.js');
 require ('./components/show-planning-sidebar-button/show-planning-sidebar-button.component.js');
 require ('./components/show-planning-sidebar-button/show-planning-sidebar-button.controller.js');
 require ('./config.js');
-require ('./constants.js');
 require ('./core/application-menu-calendar.directive.js');
 require ('./core/auto-size-and-update.directive.js');
 require ('./core/calendar-date-indicator.directive.js');
 require ('./core/calendar-view-translation.directive.js');
-require ('./core/date-to-moment.directive.js');
 require ('./core/friendlify-end-date.directive.js');
 require ('./core/partstat.filter.js');
 require ('./core/toggle-calendar-today.directive.js');
@@ -207,27 +175,10 @@ require ('./event-view/external-user/event-view-external-user.component.js');
 require ('./event-view/external-user/event-view-external-user.controller.js');
 require ('./event-view/internal-user/event-view-internal-user.component.js');
 require ('./event-view/internal-user/event-view-internal-user.controller.js');
-require ('./event/form/event-form.controller.js');
-require ('./event/form/event-form.directive.js');
-require ('./event/form/open/event-form.service.js');
-require ('./event/form/open/open-event-form-on-click.component.js');
-require ('./event/form/open/open-event-form.service.js');
-require ('./event/form/open/open-event-from-search-form.service.js');
-require ('./freebusy/confirmation-modal/event-freebusy-confirmation-modal.service.js');
-require ('./freebusy/event-freebusy-hooks.service.js');
-require ('./freebusy/freebusy-api.service.js');
-require ('./freebusy/freebusy.constants.js');
-require ('./freebusy/freebusy.service.js');
-require ('./freebusy/icon/event-freebusy-icon.component.js');
-require ('./freebusy/icon/event-freebusy-icon.controller.js');
 require ('./module-registry.run.js');
 require ('./planning/aside/calendar-planning-aside.directive.js');
 require ('./planning/calendar-planning.component.js');
 require ('./planning/calendar-planning.controller.js');
-require ('./resource/resource-item/resource-item.component.js');
-require ('./resource/resource-item/resource-item.controller.js');
-require ('./resource/resource-list/resource-list.component.js');
-require ('./resource/resource-list/resource-list.controller.js');
 require ('./routes.js');
 require ('./run.js');
 require ('./search/event/event-search-card.component.js');
@@ -238,59 +189,6 @@ require ('./search/form/dropdown/calendar-search-from-dropdown.controller.js');
 require ('./search/form/search-form.component.js');
 require ('./search/form/search-form.controller.js');
 require ('./search/search.run.js');
-require ('./services/attendee.service.js');
-require ('./services/attendees-cache.service.js');
-require ('./services/attendees-denormalizer.service.js');
-require ('./services/cached-event-source.js');
-require ('./services/cal-default-value.service.js');
-require ('./services/cal-ui-authorization-service.js');
-require ('./services/caldav-url.service.js');
-require ('./services/calendar-api.js');
-require ('./services/calendar-attendee-service.js');
-require ('./services/calendar-business-hours.service.js');
-require ('./services/calendar-cache.js');
-require ('./services/calendar-configuration.service.js');
-require ('./services/calendar-current-view.js');
-require ('./services/calendar-event-emitter.js');
-require ('./services/calendar-event-source-builder.js');
-require ('./services/calendar-event-source.js');
-require ('./services/calendar-explored-period-service.js');
-require ('./services/calendar-home-service.js');
-require ('./services/calendar-resource-restangular.js');
-require ('./services/calendar-resource.service.js');
-require ('./services/calendar-restangular.js');
-require ('./services/calendar-right-comparator.js');
-require ('./services/calendar-rights-utils.js');
-require ('./services/calendar-service.js');
-require ('./services/calendar-subscription-api.service.js');
-require ('./services/calendar-users-cache.js');
-require ('./services/calendar-utils.js');
-require ('./services/calendar-visibility-service.js');
-require ('./services/dav-request.js');
-require ('./services/delegation-edition-helper.js');
-require ('./services/event-api.js');
-require ('./services/event-service.js');
-require ('./services/event-store.js');
-require ('./services/event-utils.js');
-require ('./services/fc-moment.js');
-require ('./services/fullcalendar/calendar-configuration.service.js');
-require ('./services/fullcalendar/planning-render-event.service.js');
-require ('./services/fullcalendar/render-event.service.js');
-require ('./services/grace-period-response-handler.js');
-require ('./services/http-response-handler.js');
-require ('./services/ical.js');
-require ('./services/master-event-cache.js');
-require ('./services/partstat-update-notification.service.js');
-require ('./services/path-builder.js');
-require ('./services/path-parser.service.js');
-require ('./services/shells/calendar-collection-shell.js');
-require ('./services/shells/calendar-right-shell.js');
-require ('./services/shells/calendar-shell.js');
-require ('./services/shells/rrule-shell.js');
-require ('./services/shells/valarm-shell.js');
-require ('./services/shells/vfreebusy-shell.js');
-require ('./services/timezone.js');
-require ('./services/user-and-external-calendars.service.js');
 require ('./services/websocket/listener.run.js');
 require ('./services/websocket/listener.service.js');
 require ('./settings/calendars/fab/create-calendar-menu-item/create-calendar-menu-item.component.js');
