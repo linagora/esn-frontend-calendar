@@ -1,7 +1,7 @@
 (function(angular) {
   'use strict';
 
-  angular.module('linagora.esn.resource')
+  angular.module('esn.resource.libs')
     .constant('ESN_RESOURCE_OBJECT_TYPE', 'resource')
     .constant('ESN_RESOURCE', {
       TYPES: ['admin', 'directory', 'resource', 'calendar'],

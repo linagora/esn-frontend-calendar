@@ -3,7 +3,7 @@ require('./resource.restangular.js');
 (function(angular) {
   'use strict';
 
-  angular.module('linagora.esn.resource')
+  angular.module('esn.resource.libs')
     .factory('esnResourceAPIClient', esnResourceAPIClient);
 
   function esnResourceAPIClient(esnResourceRestangular) {

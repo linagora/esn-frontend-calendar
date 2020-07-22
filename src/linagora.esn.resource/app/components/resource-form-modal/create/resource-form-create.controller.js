@@ -1,6 +1,4 @@
 const _ = require('lodash');
-require('../../../resource.constants.js');
-require('../../../resource.api-client.js');
 
 (function(angular) {
   'use strict';

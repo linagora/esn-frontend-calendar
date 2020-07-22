@@ -1,7 +1,7 @@
 (function(angular) {
   'use strict';
 
-  angular.module('linagora.esn.resource')
+  angular.module('esn.resource.libs')
     .factory('esnResourceService', esnResourceService);
 
   function esnResourceService() {
