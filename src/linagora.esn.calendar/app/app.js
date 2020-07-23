@@ -51,6 +51,7 @@
     'esn.scroll',
     'ngTagsInput',
     'esn.member',
+    'angular-clockpicker',
     'linagora.esn.videoconference',
     'linagora.esn.videoconference.calendar'
   ]);
