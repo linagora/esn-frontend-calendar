@@ -1,5 +1,3 @@
-require('../services/fullcalendar/calendar-configuration.service');
-
 (function(angular) {
   'use strict';
 

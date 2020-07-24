@@ -1,6 +1,3 @@
-require('../services/calendar-service.js');
-require('../services/cal-default-value.service.js');
-
 (function(angular) {
   'use strict';
 

@@ -1,11 +1,3 @@
-require('../../constants.js');
-require('../../services/shells/calendar-shell.js');
-require('../../services/calendar-utils.js');
-require('../../services/calendar-service.js');
-require('../../services/event-service.js');
-require('../../services/calendar-event-emitter.js');
-require('../../services/cal-default-value.service.js');
-
 (function(angular) {
   'use strict';
 

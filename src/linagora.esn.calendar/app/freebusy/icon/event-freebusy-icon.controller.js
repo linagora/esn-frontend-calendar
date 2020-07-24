@@ -1,5 +1,3 @@
-require('../../freebusy/freebusy.constants.js');
-
 (function(angular) {
   'use strict';
 

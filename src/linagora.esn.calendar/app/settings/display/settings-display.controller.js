@@ -1,6 +1,4 @@
 const _ = require('lodash');
-require('../../constants.js');
-require('../../services/fullcalendar/calendar-configuration.service.js');
 
 (function(angular) {
   'use strict';

@@ -1,5 +1,3 @@
-require('../../services/websocket/listener.service.js');
-
 (function(angular) {
   'use strict';
 

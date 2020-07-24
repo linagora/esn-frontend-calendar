@@ -1,5 +1,3 @@
-require('../services/fc-moment.js');
-
 (function(angular) {
   'use strict';
 

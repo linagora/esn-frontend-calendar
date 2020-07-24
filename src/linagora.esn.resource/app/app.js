@@ -9,7 +9,8 @@
     'esn.lodash-wrapper',
     'ui.router',
     'mgcrea.ngStrap.modal',
-    'restangular'
+    'restangular',
+    'esn.resource.libs'
   ]);
 })(angular);
 
@@ -22,6 +23,8 @@ require('esn-frontend-common-libs/src/frontend/js/modules/session.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/lodash-wrapper.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/async-action.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/infinite-list/infinite-list.module.js');
+
+require('../../esn.resource.libs/app/app.module.js');
 
 require ('./attendee-provider/attendee-provider.service.js');
 require ('./avatar/resource-avatar.component.js');
@@ -42,10 +45,6 @@ require ('./list/item/resource-list-item.component.js');
 require ('./list/item/resource-list-item.controller.js');
 require ('./list/resource-list.component.js');
 require ('./list/resource-list.controller.js');
-require ('./resource.api-client.js');
-require ('./resource.constants.js');
-require ('./resource.restangular.js');
 require ('./resource.run.js');
-require ('./resource.service.js');
 require ('./update/resource-update.component.js');
 require ('./update/resource-update.controller.js');

@@ -1,0 +1,33 @@
+.cal-event-freebusy-icon {
+  .esn-spinner {
+    .flex;
+  }
+
+  .icon {
+    .flex;
+
+    & i {
+      cursor: help;
+    }
+
+    .is-busy {
+      color: @m-red;
+    }
+
+    .is-free {
+      color: @m-green;
+    }
+
+    .is-unknown {
+      color: @m-orange;
+    }
+
+    .is-loading {
+      color: @m-bluegray;
+    }
+
+    i.mdi {
+      font-size: 14px;
+    }
+  }
+}
