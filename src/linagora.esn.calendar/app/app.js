@@ -22,6 +22,7 @@
     'esn.module-registry',
     'esn.notification',
     'esn.provider',
+    'esn.previous-page',
     'esn.router',
     'esn.search',
     'esn.session',
@@ -98,6 +99,7 @@ require('esn-frontend-common-libs/src/frontend/js/modules/widget-helper.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/onscroll/on-scroll.module.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/localstorage.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/scroll.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/previous-page.js');
 
 require('../../esn.calendar.libs/app/app.module.js');
 
