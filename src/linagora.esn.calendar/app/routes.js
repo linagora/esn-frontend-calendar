@@ -26,6 +26,7 @@ require('./sidebar/sidebar.directive.js');
       })
       .state('calendar.main', {
         url: '',
+        default: true,
         views: {
           content: {
             template: '<cal-calendar calendar-home-id="calendarHomeId" business-hours="businessHours"/>'
