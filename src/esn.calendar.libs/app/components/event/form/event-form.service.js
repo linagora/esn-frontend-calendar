@@ -1,12 +1,12 @@
-require('../../../../services/calendar-service.js');
-require('../../../../services/cal-ui-authorization-service.js');
-require('../../../../services/event-utils.js');
-require('../../../../app.constants.js');
+require('../../../services/calendar-service.js');
+require('../../../services/cal-ui-authorization-service.js');
+require('../../../services/event-utils.js');
+require('../../../app.constants.js');
 
 'use strict';
 
 angular.module('esn.calendar.libs')
-  .factory('calEventFormService', calEventFormService);
+  .factory('calEventFormService', calEventFormServiceFactory);
 
 /**
  * There are 2 types of form in the module:
@@ -15,7 +15,7 @@ angular.module('esn.calendar.libs')
  * Note that mobile devices have only access to the full form and the consult form.
  * This service will open the correct form corresponding to the event and the screen size.
  */
-function calEventFormService($rootScope, $modal, calendarService, calUIAuthorizationService, notificationFactory, calEventUtils, session, CAL_EVENTS) {
+function calEventFormServiceFactory($rootScope, $modal, calendarService, calUIAuthorizationService, notificationFactory, calEventUtils, session, CAL_EVENTS) {
   var modalIsOpen = false;
 
   return {
@@ -43,7 +43,7 @@ function calEventFormService($rootScope, $modal, calendarService, calUIAuthoriza
 
     modalIsOpen = true;
     $modal({
-      template: require("../modals/event-form-modal.pug"),
+      template: require("./modals/event-form-modal.pug"),
       resolve: {
         event: function() {
           return calEventUtils.getEditedEvent();
@@ -78,7 +78,7 @@ function calEventFormService($rootScope, $modal, calendarService, calUIAuthoriza
 
   function _openRecurringModal(calendar, event, relatedEvents) {
     $modal({
-      template: require("../modals/edit-instance-or-series-modal.pug"),
+      template: require("./modals/edit-instance-or-series-modal.pug"),
       resolve: {
         calendar: function() {
           return calendar;
