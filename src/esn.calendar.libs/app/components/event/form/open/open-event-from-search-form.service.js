@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-require('./event-form.service.js');
+require('../event-form.service.js');
 require('../../../../services/shells/calendar-shell.js');
 require('../../../../services/ical.js');
 require('../../../../services/calendar-api.js');

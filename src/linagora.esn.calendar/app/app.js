@@ -157,7 +157,6 @@ require ('./components/show-planning-sidebar-button/show-planning-sidebar-button
 require ('./components/show-planning-sidebar-button/show-planning-sidebar-button.controller.js');
 require ('./config.js');
 require ('./core/application-menu-calendar.directive.js');
-require ('./core/auto-size-and-update.directive.js');
 require ('./core/calendar-date-indicator.directive.js');
 require ('./core/calendar-view-translation.directive.js');
 require ('./core/friendlify-end-date.directive.js');

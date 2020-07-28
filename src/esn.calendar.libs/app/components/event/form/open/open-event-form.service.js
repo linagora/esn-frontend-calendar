@@ -1,4 +1,4 @@
-require('./event-form.service.js');
+require('../event-form.service.js');
 require('../../../../services/cal-default-value.service.js');
 require('../../../../services/calendar-utils.js');
 
