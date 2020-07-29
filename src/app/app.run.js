@@ -15,9 +15,6 @@ angular.module('esnApp')
         $cookies.locale = ESN_I18N_DEFAULT_LOCALE;
       });
   })
-  .run(function(editableOptions) {
-    editableOptions.theme = 'bs3';
-  })
   .run(splashScreen);
 
 function splashScreen($templateCache, session) {
