@@ -8,7 +8,6 @@ angular.module('esnApp', [
   'esn.websocket',
   'esn.configuration',
   'esn.i18n',
-  'xeditable',
   'openpaas-logo'
 ]);
 
