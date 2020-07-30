@@ -29,6 +29,7 @@
     "command-line-args": "^5.1.1",
     "copy-dir": "^1.3.0",
     "css-loader": "^3.6.0",
+    "dotenv-webpack": "^2.0.0",
     "esn-frontend-login": "github:openpaas-suite/esn-frontend-login#main",
     "exports-loader": "^1.0.0",
     "expose-loader": "^1.0.0",
