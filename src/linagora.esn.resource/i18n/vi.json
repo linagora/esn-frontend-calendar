@@ -1,0 +1,23 @@
+{
+  "Resource": "Tài nguyên",
+  "No resources": "Không có tài nguyên",
+  "Administrators": "Quản trị viên",
+  "No administrator": "Không có quản trị viên",
+  "Details": "Chi tiêt",
+  "Create a new resource": "Tạo tài nguyên mới",
+  "Remove the resource": "Xóa tài nguyên",
+  "Update resource": "Cập nhật tài nguyên",
+  "Name": "Tên",
+  "Description": "Mô tả",
+  "Type": "Loại",
+  "Icon": "Biểu tượng",
+  "Add me as administrator": "Thêm tôi làm quản trị viên",
+  "Cancel": "Hủy",
+  "Save": "Lưu",
+  "Pick an icon": "Chọn một biểu tượng",
+  "Set": "Thiết lập",
+  "Confirmation": "Xác nhận",
+  "Remove": "Xóa",
+  "Update": "Cập nhật",
+  "administrator(s)": "quản trị viên"
+}

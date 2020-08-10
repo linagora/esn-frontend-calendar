@@ -1,0 +1,23 @@
+{
+  "Resource": "Resource",
+  "No resources": "No resources",
+  "Administrators": "Administrators",
+  "No administrator": "No administrator",
+  "Details": "Details",
+  "Create a new resource": "Create a new resource",
+  "Remove the resource": "Remove the resource",
+  "Update resource": "Update resource",
+  "Name": "Name",
+  "Description": "Description",
+  "Type": "Type",
+  "Icon": "Icon",
+  "Add me as administrator": "Add me as administrator",
+  "Cancel": "Cancel",
+  "Save": "Save",
+  "Pick an icon": "Pick an icon",
+  "Set": "Set",
+  "Confirmation": "Confirmation",
+  "Remove": "Remove",
+  "Update": "Update",
+  "administrator(s)": "administrator(s)"
+}

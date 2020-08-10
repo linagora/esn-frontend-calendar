@@ -1,0 +1,23 @@
+{
+  "Resource": "资源",
+  "No resources": "无资源",
+  "Administrators": "管理员",
+  "No administrator": "无管理员",
+  "Details": "详细信息",
+  "Create a new resource": "创建新资源",
+  "Remove the resource": "移除资源",
+  "Update resource": "更新资源",
+  "Name": "名称",
+  "Description": "描述",
+  "Type": "类型",
+  "Icon": "图标",
+  "Add me as administrator": "将我加为管理员",
+  "Cancel": "取消",
+  "Save": "保存",
+  "Pick an icon": "选择一个图标",
+  "Set": "组",
+  "Confirmation": "确认书",
+  "Remove": "去掉",
+  "Update": "更新资料",
+  "administrator(s)": "管理员"
+}
