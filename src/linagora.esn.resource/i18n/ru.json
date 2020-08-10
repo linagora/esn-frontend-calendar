@@ -1,0 +1,23 @@
+{
+  "Resource": "Ресурс",
+  "No resources": "Нет ресурсов",
+  "Administrators": "Администраторы",
+  "No administrator": "Без администратора",
+  "Details": "подробности",
+  "Create a new resource": "Создать новый ресурс",
+  "Remove the resource": "Удалить ресурс",
+  "Update resource": "Обновить ресурс",
+  "Name": "название",
+  "Description": "Описание",
+  "Type": "Тип",
+  "Icon": "Значок",
+  "Add me as administrator": "Добавьте меня как администратора",
+  "Cancel": "Отмена",
+  "Save": "Сохранить",
+  "Pick an icon": "Выберите значок",
+  "Set": "Устанавливать",
+  "Confirmation": "подтверждение",
+  "Remove": "удалять",
+  "Update": "Обновить",
+  "administrator(s)": "aдминистратор(ы)"
+}

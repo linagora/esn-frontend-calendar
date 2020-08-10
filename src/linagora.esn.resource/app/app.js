@@ -1,18 +1,16 @@
-(function(angular) {
-  'use strict';
+'use strict';
 
-  angular.module('linagora.esn.resource', [
-    'esn.attendee',
-    'esn.session',
-    'esn.user',
-    'op.dynamicDirective',
-    'esn.lodash-wrapper',
-    'ui.router',
-    'mgcrea.ngStrap.modal',
-    'restangular',
-    'esn.resource.libs'
-  ]);
-})(angular);
+angular.module('linagora.esn.resource', [
+  'esn.attendee',
+  'esn.session',
+  'esn.user',
+  'op.dynamicDirective',
+  'esn.lodash-wrapper',
+  'ui.router',
+  'mgcrea.ngStrap.modal',
+  'restangular',
+  'esn.resource.libs'
+]);
 
 require('esn-frontend-common-libs/src/frontend/js/modules/notification.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/i18n/i18n.module.js');
