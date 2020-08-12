@@ -1,15 +1,20 @@
-mixin settingsSwitch(title, rightLabel, leftLabel)
-  h3 {{ title | translate }}
-  p.cal-setting-switch
-    span.working-days-disabled(ng-class="{'toggle-active': " + attributes.switchValue + "}")
-      | {{ rightLabel | translate }}
-    toggle-switch(ng-model=attributes.switchValue, color='blue', form="form")
-    span.working-days-enabled(ng-class="{'toggle-active': " + attributes.switchValue + "}")
-      | {{ leftLabel | translate }}
+// TODO: Revert to use the mixin here in case we can fix the translation issue. Refer to https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/42#issuecomment-672757911 for some suggestions.
 sub-header
   cal-settings-display-subheader(submit="ctrl.submit()", form="form")
 
 form(name="form")
   .cal-settings-display-block
-    +settingsSwitch('Non-working days', 'Show', 'Hide')(switchValue="ctrl.configurations.workingDays")
-    +settingsSwitch('Declined events', 'Show', 'Hide')(switchValue="ctrl.configurations.hideDeclinedEvents")
+    h3 {{ "Non-working days" | translate }}
+    p.cal-setting-switch
+      span.working-days-disabled(ng-class="{'toggle-active': ctrl.configurations.workingDays}")
+        | {{ "Show" | translate }}
+      toggle-switch(ng-model="ctrl.configurations.workingDays", color='blue', form="form")
+      span.working-days-enabled(ng-class="{'toggle-active': ctrl.configurations.workingDays}")
+        | {{ "Hide" | translate }}
+    h3 {{ 'Declined events' | translate }}
+    p.cal-setting-switch
+      span.working-days-disabled(ng-class="{'toggle-active': ctrl.configurations.hideDeclinedEvents}")
+        | {{ "Show" | translate }}
+      toggle-switch(ng-model="ctrl.configurations.hideDeclinedEvents", color='blue', form="form")
+      span.working-days-enabled(ng-class="{'toggle-active': ctrl.configurations.hideDeclinedEvents}")
+        | {{ "Hide" | translate }}

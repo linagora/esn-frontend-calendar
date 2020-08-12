@@ -1,9 +1,8 @@
-mixin tab(uisref, title)
-  li.btn-wave(ui-sref-active="active")
-    a(href="", ui-sref=uisref, ui-sref-opts="{ location: 'replace' }") {{ title | translate }}
-
+// TODO: Revert to use the mixin here in case we can fix the translation issue. Refer to https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/42#issuecomment-672757911 for some suggestions.
 .cal-settings.card
   ul.esn-tab.configuration-header
-    +tab("calendar.settings.calendars", "Calendars")
-    +tab("calendar.settings.display", "Display")
+    li.btn-wave(ui-sref-active="active")
+      a(href="", ui-sref="calendar.settings.calendars", ui-sref-opts="{ location: 'replace' }") {{ "Calendars" | translate }}
+    li.btn-wave(ui-sref-active="active")
+      a(href="", ui-sref="calendar.settings.display", ui-sref-opts="{ location: 'replace' }") {{ "Display" | translate }}
   ui-view.configuration-content(name="settings", noanimation)
