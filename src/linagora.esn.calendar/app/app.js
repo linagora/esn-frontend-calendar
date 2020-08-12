@@ -3,6 +3,7 @@
 angular.module('esn.calendar', [
   'AngularJstz',
   'angularMoment',
+  'ct.ui.router.extras.dsr',
   'esn.mailto-handler',
   'esn.aggregator',
   'esn.authentication',
@@ -48,6 +49,7 @@ angular.module('esn.calendar', [
   'esn.datetime',
   'esn.localstorage',
   'esn.scroll',
+  'esn.touchscreen-detector',
   'ngTagsInput',
   'esn.member',
   'angular-clockpicker',

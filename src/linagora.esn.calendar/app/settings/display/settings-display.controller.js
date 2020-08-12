@@ -1,60 +1,57 @@
+'use strict';
+
 const _ = require('lodash');
 
-(function(angular) {
-  'use strict';
+angular.module('esn.calendar')
+  .controller('CalSettingsDisplayController', CalSettingsDisplayController);
 
-  angular.module('esn.calendar')
-    .controller('CalSettingsDisplayController', CalSettingsDisplayController);
+function CalSettingsDisplayController(
+  asyncAction,
+  calFullUiConfiguration,
+  esnUserConfigurationService,
+  CAL_USER_CONFIGURATION
+) {
+  var self = this;
 
-  function CalSettingsDisplayController(
-    asyncAction,
-    calFullUiConfiguration,
-    esnUserConfigurationService,
-    session,
-    CAL_USER_CONFIGURATION
-  ) {
-    var self = this;
+  self.$onInit = $onInit;
+  self.submit = submit;
 
-    self.$onInit = $onInit;
-    self.submit = submit;
-
-    function $onInit() {
-      esnUserConfigurationService.get(CAL_USER_CONFIGURATION.keys, CAL_USER_CONFIGURATION.moduleName)
-        .then(function(configurationsArray) {
-          self.configurations = _arrayToObject(configurationsArray);
-        });
-    }
-
-    function _arrayToObject(configurationsArray) {
-      var output = {};
-
-      configurationsArray.forEach(function(configuration) {
-        output[configuration.name] = configuration.value;
+  function $onInit() {
+    esnUserConfigurationService.get(CAL_USER_CONFIGURATION.keys, CAL_USER_CONFIGURATION.moduleName)
+      .then(function(configurationsArray) {
+        self.configurations = _arrayToObject(configurationsArray);
       });
+  }
 
-      return output;
-    }
+  function _arrayToObject(configurationsArray) {
+    var output = {};
 
-    function submit() {
-      return asyncAction({
+    configurationsArray.forEach(function(configuration) {
+      output[configuration.name] = configuration.value;
+    });
+
+    return output;
+  }
+
+  function submit() {
+    return asyncAction({
         progressing: 'Saving configuration...',
         success: 'Configuration saved',
         failure: 'Failed to save configuration'
       }, _submit);
-    }
-
-    function _submit() {
-      var configurationsArray = _.map(self.configurations, function(value, key) {
-        return {
-          name: key,
-          value: value || false
-        };
-      });
-
-      return esnUserConfigurationService.set(configurationsArray, CAL_USER_CONFIGURATION.moduleName)
-        .then(function() {
-          calFullUiConfiguration.setHiddenDeclinedEvents(self.configurations.hideDeclinedEvents);
-        });
-    }
   }
-})(angular);
+
+  function _submit() {
+    var configurationsArray = _.map(self.configurations, function(value, key) {
+      return {
+        name: key,
+        value: value || false
+      };
+    });
+
+    return esnUserConfigurationService.set(configurationsArray, CAL_USER_CONFIGURATION.moduleName)
+      .then(function() {
+        calFullUiConfiguration.setHiddenDeclinedEvents(self.configurations.hideDeclinedEvents);
+      });
+  }
+}
