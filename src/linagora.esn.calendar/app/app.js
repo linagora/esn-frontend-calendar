@@ -48,6 +48,7 @@ angular.module('esn.calendar', [
   'esn.datetime',
   'esn.localstorage',
   'esn.scroll',
+  'esn.touchscreen-detector',
   'ngTagsInput',
   'esn.member',
   'angular-clockpicker',
