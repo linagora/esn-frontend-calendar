@@ -3,6 +3,7 @@
 angular.module('esn.calendar', [
   'AngularJstz',
   'angularMoment',
+  'ct.ui.router.extras.dsr',
   'esn.mailto-handler',
   'esn.aggregator',
   'esn.authentication',

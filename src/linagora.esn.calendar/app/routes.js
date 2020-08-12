@@ -42,7 +42,7 @@ function routesConfig($stateProvider) {
     })
     .state('calendar.settings', {
       url: '/settings',
-       deepStateRedirect: {
+      deepStateRedirect: {
         default: 'calendar.settings.calendars',
         fn: function() {
           return { state: 'calendar.settings.calendars' };
