@@ -1,10 +1,8 @@
-(function(angular) {
-  'use strict';
+'use strict';
 
-  angular.module('esn.calendar')
-    .controller('CalSettingsIndexController', CalSettingsIndexController);
+angular.module('esn.calendar')
+  .controller('CalSettingsIndexController', CalSettingsIndexController);
 
-  function CalSettingsIndexController($scope, touchscreenDetectorService) {
-    $scope.hasTouchscreen = touchscreenDetectorService.hasTouchscreen();
-  }
-})(angular);
+function CalSettingsIndexController($scope, touchscreenDetectorService) {
+  $scope.hasTouchscreen = touchscreenDetectorService.hasTouchscreen();
+}
