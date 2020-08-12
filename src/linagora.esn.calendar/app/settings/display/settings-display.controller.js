@@ -9,7 +9,6 @@ function CalSettingsDisplayController(
   asyncAction,
   calFullUiConfiguration,
   esnUserConfigurationService,
-  session,
   CAL_USER_CONFIGURATION
 ) {
   var self = this;

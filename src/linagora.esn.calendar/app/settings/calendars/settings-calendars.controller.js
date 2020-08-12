@@ -8,9 +8,7 @@ angular.module('esn.calendar')
 
 function CalSettingsCalendarsController(
   $log,
-  $rootScope,
   $scope,
-  $q,
   session,
   calendarService,
   calCalendarDeleteConfirmationModalService,
