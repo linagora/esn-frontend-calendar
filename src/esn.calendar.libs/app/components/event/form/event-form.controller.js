@@ -354,10 +354,10 @@ function CalEventFormController(
 
       $scope.restActive = true;
       var gracePeriodMessage = {
-        performedAction: esnI18nService.translate('You are about to modify alarm of %s', $scope.event.title),
-        cancelSuccess: esnI18nService.translate('Modification of %s has been cancelled.', $scope.event.title),
-        gracePeriodFail: esnI18nService.translate('Modification of %s failed. Please refresh your calendar', $scope.event.title),
-        successText: esnI18nService.translate('Alarm of %s has been modified.', $scope.event.title)
+        performedAction: esnI18nService.translate('You are about to modify alarm of %s', { title: $scope.event.title }),
+        cancelSuccess: esnI18nService.translate('Modification of %s has been cancelled.', { title: $scope.event.title }),
+        gracePeriodFail: esnI18nService.translate('Modification of %s failed. Please refresh your calendar', { title: $scope.event.title }),
+        successText: esnI18nService.translate('Alarm of %s has been modified.', { title: $scope.event.title })
       };
 
       calEventService.modifyEvent(
