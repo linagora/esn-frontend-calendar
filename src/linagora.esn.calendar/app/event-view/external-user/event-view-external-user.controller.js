@@ -37,7 +37,7 @@ const _ = require('lodash');
       $http({ method: 'GET', url: self.linksMapping[partstat] }).then(function() {
         var participation = partstat.charAt(0).toUpperCase() + partstat.slice(1).toLowerCase();
 
-        notificationFactory.weakInfo('Participation', esnI18nService.translate('Participation updated: %s', participation));
+        notificationFactory.weakInfo('Participation', esnI18nService.translate('Participation updated: %s', { participation }));
       });
     }
   }

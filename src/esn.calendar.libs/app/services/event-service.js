@@ -235,7 +235,7 @@ function calEventService(
           id: taskId,
           delay: CAL_GRACE_DELAY,
           context: {id: event.uid},
-          performedAction: esnI18nService.translate('You are about to create a new event (%s).', calEventUtils.getEventTitle(event)),
+          performedAction: esnI18nService.translate('You are about to create a new event (%s).', { title: calEventUtils.getEventTitle(event) }),
           cancelFailed: 'An error has occured, the creation could not been reverted',
           cancelTooLate: 'It is too late to cancel the creation',
           gracePeriodFail: 'Event creation failed. Please refresh your calendar',
@@ -245,7 +245,7 @@ function calEventService(
         // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/46)
         notificationFactory.weakError(
           'Event creation failed',
-          err.statusText ? esnI18nService.translate('%s. Please refresh your calendar', err.statusText) :
+          err.statusText ? esnI18nService.translate('%s. Please refresh your calendar', { error: err.statusText }) :
           esnI18nService.translate('Event creation failed. Please refresh your calendar'));
 
         return $q.reject(err);
@@ -273,7 +273,7 @@ function calEventService(
       // This is a noop and the event is not created yet in sabre/dav,
       // we then should only remove the event from fullcalendar
       // and cancel the taskid corresponding on the event.
-      notificationFactory.weakInfo('Calendar', esnI18nService.translate('%s has been deleted.', calEventUtils.getEventTitle(event)));
+      notificationFactory.weakInfo('Calendar', esnI18nService.translate('%s has been deleted.', { title: calEventUtils.getEventTitle(event) }));
 
       return gracePeriodService.cancel(event.gracePeriodTaskId).then(function() {
         calCachedEventSource.deleteRegistration(event);
@@ -307,9 +307,9 @@ function calEventService(
             id: taskId,
             delay: CAL_GRACE_DELAY,
             context: {id: event.uid},
-            performedAction: esnI18nService.translate('You are about to delete the event (%s).', calEventUtils.getEventTitle(event)),
+            performedAction: esnI18nService.translate('You are about to delete the event (%s).', { title: calEventUtils.getEventTitle(event) }),
             cancelFailed: 'An error has occurred, can not revert the deletion',
-            cancelSuccess: esnI18nService.translate('Calendar - Deletion of %s has been cancelled', calEventUtils.getEventTitle(event)),
+            cancelSuccess: esnI18nService.translate('Calendar - Deletion of %s has been cancelled', { title: calEventUtils.getEventTitle(event) }),
             cancelTooLate: 'It is too late to cancel the deletion',
             successText: 'Event removed',
             gracePeriodFail: {
@@ -332,7 +332,7 @@ function calEventService(
           // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/46)
           notificationFactory.weakError(
             'Event deletion failed',
-            err.statusText ? esnI18nService.translate('%s. Please refresh your calendar', err.statusText) :
+            err.statusText ? esnI18nService.translate('%s. Please refresh your calendar', { error: err.statusText }) :
             esnI18nService.translate('Event deletion failed. Please refresh your calendar'));
 
           return $q.reject(err);
@@ -433,10 +433,10 @@ function calEventService(
           id: taskId,
           delay: CAL_GRACE_DELAY,
           context: {id: event.uid},
-          performedAction: esnI18nService.translate('You are about to modify an event (%s).', calEventUtils.getEventTitle(event)),
+          performedAction: esnI18nService.translate('You are about to modify an event (%s).', { title: calEventUtils.getEventTitle(event) }),
           cancelFailed: 'An error has occured, the modification can not be reverted',
           cancelTooLate: 'It is too late to cancel the modification',
-          cancelSuccess: esnI18nService.translate('Calendar - Modification of %s has been canceled.', calEventUtils.getEventTitle(event)),
+          cancelSuccess: esnI18nService.translate('Calendar - Modification of %s has been canceled.', { title: calEventUtils.getEventTitle(event) }),
           gracePeriodFail: {
             text: 'Event modification failed, please refresh your calendar',
             delay: -1,
@@ -457,7 +457,7 @@ function calEventService(
         // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/46)
         notificationFactory.weakError(
           'Event modification failed',
-          err.statusText ? esnI18nService.translate('%s, Please refresh your calendar', err.statusText) :
+          err.statusText ? esnI18nService.translate('%s, Please refresh your calendar', { error: err.statusText }) :
           esnI18nService.translate('Event modification failed, Please refresh your calendar'));
 
         return $q.reject(err);

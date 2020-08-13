@@ -72,7 +72,7 @@
         // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/46)
         notificationFactory.weakError(
           'Event creation failed',
-          err.statusText ? esnI18nService.translate('%s, Please refresh your calendar', err.statusText) :
+          err.statusText ? esnI18nService.translate('%s, Please refresh your calendar', { error: err.statusText }) :
           esnI18nService.translate('Event creation failed. Please refresh your calendar'));
       })
       .finally(function() {
