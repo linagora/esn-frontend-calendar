@@ -7,7 +7,6 @@ function CalEventMessageEditionController(
   $scope,
   CalendarShell,
   calendarUtils,
-  calendarService,
   calEventService,
   calendarEventEmitter,
   notificationFactory,
