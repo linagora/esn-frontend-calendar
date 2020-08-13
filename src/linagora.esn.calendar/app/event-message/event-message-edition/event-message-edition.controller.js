@@ -69,7 +69,11 @@
           $scope.$parent.show('whatsup');
         })
       .catch(function(err) {
-        notificationFactory.weakError('Event creation failed', esnI18nService.translate('%s, Please refresh your calendar', err.statusText || err));
+        // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/46)
+        notificationFactory.weakError(
+          'Event creation failed',
+          err.statusText ? esnI18nService.translate('%s, Please refresh your calendar', err.statusText) :
+          esnI18nService.translate('Event creation failed. Please refresh your calendar'));
       })
       .finally(function() {
         self.restActive = false;
