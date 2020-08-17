@@ -79,7 +79,7 @@ describe('The CalSettingsCalendarsController controller', function() {
   }
 
   describe('The $onInit function', function() {
-    it('should get the calendars from the calendarService', function() {
+    it('should get the calendars from the calendarService', function(done) {
       var calendars = [calendar, otherCalendar];
 
       CalSettingsCalendarsController.$onInit().then(function() {
@@ -87,13 +87,14 @@ describe('The CalSettingsCalendarsController controller', function() {
 
         expect(calendarService.listPersonalAndAcceptedDelegationCalendars).to.have.been.calledWith(session.user._id);
         expect(CalSettingsCalendarsController.calendars).to.deep.equal(calendars);
+        done();
       });
     });
   });
 
   describe('Calendar listeners', function() {
     describe('CAL_EVENTS.CALENDARS.ADD listener', function() {
-      it('should add calendar to self.calendars if it does not exist yet', function() {
+      it('should add calendar to self.calendars if it does not exist yet', function(done) {
         var newCalendar = {
           uniqueId: 3,
           calendarHomeId: 'NewId',
@@ -106,10 +107,11 @@ describe('The CalSettingsCalendarsController controller', function() {
           $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
   
           expect(CalSettingsCalendarsController.calendars).to.deep.equal(expectedResult);
+          done();
         });
       });
 
-      it('should not add calendar to self.calendars if it already exists', function() {
+      it('should not add calendar to self.calendars if it already exists', function(done) {
         var newCalendar = {
           uniqueId: 1,
           calendarHomeId: 'MyId',
@@ -121,12 +123,13 @@ describe('The CalSettingsCalendarsController controller', function() {
           $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
   
           expect(CalSettingsCalendarsController.calendars).to.deep.equal(calendars);
+          done();
         });
       });
     });
 
     describe('CAL_EVENTS.CALENDARS.REMOVE listener', function() {
-      it('should remove calendar from self.calendars', function() {
+      it('should remove calendar from self.calendars', function(done) {
         var expectedResult = calendars.slice(1);
 
         CalSettingsCalendarsController.$onInit().then(function() {
@@ -134,10 +137,11 @@ describe('The CalSettingsCalendarsController controller', function() {
           $rootScope.$broadcast(CAL_EVENTS.CALENDARS.REMOVE, calendars[0]);
   
           expect(CalSettingsCalendarsController.calendars).to.deep.equal(expectedResult);
+          done();
         });
       });
 
-      it('should not remove non existing calendar from self.calendars', function() {
+      it('should not remove non existing calendar from self.calendars', function(done) {
         var expectedResult = calendars;
         var newCalendar = {
           uniqueId: 3,
@@ -150,13 +154,14 @@ describe('The CalSettingsCalendarsController controller', function() {
           $rootScope.$broadcast(CAL_EVENTS.CALENDARS.REMOVE, newCalendar);
   
           expect(CalSettingsCalendarsController.calendars).to.deep.equal(expectedResult);
+          done();
         });
       });
 
     });
 
     describe('CAL_EVENTS.CALENDARS.UPDATE listener', function() {
-      it('should update calendar in self.calendars if existed', function() {
+      it('should update calendar in self.calendars if existed', function(done) {
         var newCalendar = {
           uniqueId: 1,
           calendarHomeId: 'UpdatedID',
@@ -171,10 +176,11 @@ describe('The CalSettingsCalendarsController controller', function() {
           expect(CalSettingsCalendarsController.calendars).to.deep.equal(expectedResult);
           expect(CalSettingsCalendarsController.calendars[0].name).to.equal(newCalendar.name);
           expect(CalSettingsCalendarsController.calendars[0].calendarHomeId).to.equal(newCalendar.calendarHomeId);
+          done();
         });
       });
 
-      it('should do nothing if the updated calendar does not exist in self.calendars', function() {
+      it('should do nothing if the updated calendar does not exist in self.calendars', function(done) {
         var newCalendar = {
           uniqueId: 3,
           calendarHomeId: 'NewId',
@@ -187,6 +193,7 @@ describe('The CalSettingsCalendarsController controller', function() {
           $rootScope.$broadcast(CAL_EVENTS.CALENDARS.UPDATE, newCalendar);
   
           expect(CalSettingsCalendarsController.calendars).to.deep.equal(expectedResult);
+          done();
         });
       });
     });

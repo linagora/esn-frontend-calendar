@@ -33,8 +33,8 @@ module.exports = function(config) {
     browsers: ['FirefoxHeadless'/*,'ChromeHeadless'*/],
 
     customLaunchers: {
-      FirefoxHeadless: {base: 'Firefox', flags: ['--headless']},
-      ChromeHeadless: {base: 'Chrome', flags: ['--headless', '--disable-gpu']},
+      FirefoxHeadless: { base: 'Firefox', flags: ['--headless'] },
+      ChromeHeadless: { base: 'Chrome', flags: ['--headless', '--disable-gpu'] },
       Chrome_with_debugging: {
         base: 'Chrome',
         flags: ['--remote-debugging-port=9222'],
@@ -69,16 +69,9 @@ module.exports = function(config) {
       'karma-rawfixtures-preprocessor'
     ],
 
-    coverageReporter: {type: 'text', dir: '/tmp'},
+    coverageReporter: { type: 'text', dir: '/tmp' },
 
     ngJade2ModulePreprocessor: {
-      cacheIdFromPath: function(filepath) {
-        return filepath
-          .replace(/pug$/, 'html')
-          .replace(/^src\/linagora.esn.calendar/, '/calendar')
-          .replace(/^src\/linagora.esn.resource/, '/resource')
-          .replace(/^node_modules\/esn-frontend-common-libs\/src\/frontend/, '');
-      },
       // setting this option will create only a single module that contains templates
       // from all the files, so you can load them all with module('templates')
       jadeRenderOptions: {

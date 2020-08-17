@@ -486,7 +486,16 @@ describe('The calEventUtils service', function() {
       var calMomentDate = this.calMoment('2019-11-05 09:00');
       var utcOffset = -420;
 
-      momentUTCOffsetStub.returns(utcOffset);
+      rewiremock('momentjs').with(function() {
+        return {
+          utcOffset: function() {
+            return utcOffset;
+          }
+        }
+      });
+      rewiremock.overrideEntryPoint(module);
+
+      console.log('moenet', moment().utcOffset());
 
       var timeStrippedCalMoment = this.calEventUtils.stripTimeWithTz(calMomentDate);
 

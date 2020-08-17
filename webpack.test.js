@@ -57,6 +57,9 @@ module.exports = {
       template: './assets/index.pug',
       filename: './index.html'
     }),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new (require("rewiremock/webpack/plugin"))()
   ],
   module: {
     rules: [
