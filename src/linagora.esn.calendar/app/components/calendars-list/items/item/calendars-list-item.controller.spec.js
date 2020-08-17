@@ -47,7 +47,7 @@ describe('The CalendarsListItemController controller', function() {
   }
 
   describe('The $onInit function', function() {
-    it('should set the ctrl.details property when ctrl.showDetails is truthy', function() {
+    it('should set the ctrl.details property when ctrl.showDetails is truthy', function(done) {
       var controller = initController();
 
       calendar.isResource.returns(false);
@@ -57,8 +57,11 @@ describe('The CalendarsListItemController controller', function() {
       controller.$onInit();
       $rootScope.$digest();
 
-      expect(calendarService.getOwnerDisplayName).to.have.been.calledWith(calendar);
-      expect(controller.details).to.equal(displayName);
+      setTimeout(() => {
+        expect(calendarService.getOwnerDisplayName).to.have.been.calledWith(calendar);
+        expect(controller.details).to.equal(displayName);
+        done();
+      }, 0);
     });
 
     it('should not set the ctrl.details property when ctrl.showDetails is falsy', function() {
@@ -74,7 +77,7 @@ describe('The CalendarsListItemController controller', function() {
     });
 
     describe('When calendar is a resource', function() {
-      it('should set details from resource name', function() {
+      it('should set details from resource name', function(done) {
         var controller = initController();
 
         $httpBackend.expectGET('/linagora.esn.resource/api/resources/' + calendar.source.calendarHomeId).respond(resource);
@@ -88,8 +91,11 @@ describe('The CalendarsListItemController controller', function() {
         $httpBackend.flush();
         $rootScope.$digest();
 
-        expect(calendarService.getResourceDescription).to.have.been.called;
-        expect(controller.details).to.equal(resource.description);
+        setTimeout(() => {
+          expect(calendarService.getResourceDescription).to.have.been.called;
+          expect(controller.details).to.equal(resource.description);
+          done();
+        }, 0)
       });
     });
 

@@ -8,7 +8,6 @@ require('../services/attendee.service.js');
     .factory('calAttendeesDenormalizerService', calAttendeesDenormalizerService);
 
   function calAttendeesDenormalizerService(
-    $q,
     userAPI,
     calAttendeeService,
     esnMemberResolverRegistry

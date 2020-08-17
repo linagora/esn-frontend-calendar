@@ -144,6 +144,7 @@ require('../app.constants');
       // we're only using browser timezone here. After we've successfully migrated to FullCalendar v4,
       // it has to be the user's chosen timezone: `var currentUTCOffset = moment().tz(esnDatetimeService.getTimezone()).utcOffset()`.
       var currentUTCOffset = moment().utcOffset();
+      console.log('offset', currentUTCOffset);
 
       // If the user is in a timezone with negative UTC offset, we need to subtract the UTC offset from
       // the moment to ensure that it is still the same day when converting to and from UTC-00.

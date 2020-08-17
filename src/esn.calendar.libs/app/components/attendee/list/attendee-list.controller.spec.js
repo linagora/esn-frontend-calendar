@@ -8,7 +8,6 @@ describe('The CalAttendeeListController controller', function() {
   var calAttendeeService, context, $controller, $q, $scope, $rootScope;
 
   beforeEach(function() {
-    module('jadeTemplates');
     angular.mock.module('esn.calendar.libs');
   });
 

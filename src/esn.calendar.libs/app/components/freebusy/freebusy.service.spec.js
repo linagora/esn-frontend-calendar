@@ -5,10 +5,11 @@
 var expect = chai.expect;
 
 describe('The calFreebusyService service', function() {
-  var vfreebusy, $httpBackend, $rootScope, calFreebusyService, calMoment, CAL_ACCEPT_HEADER, CAL_DAV_DATE_FORMAT, CAL_FREEBUSY;
+  var vfreebusy, $httpBackend, $rootScope, calFreebusyService, calMoment, CAL_ACCEPT_HEADER, CAL_DAV_DATE_FORMAT, CAL_FREEBUSY, $qLite;
   var calAttendeeService, calFreebusyAPI;
 
   beforeEach(function() {
+    angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
 
     calAttendeeService = {
@@ -22,7 +23,7 @@ describe('The calFreebusyService service', function() {
   });
 
   beforeEach(function() {
-    angular.mock.inject(function(_$rootScope_, _$httpBackend_, _calFreebusyAPI_, _calFreebusyService_, _CAL_ACCEPT_HEADER_, _calMoment_, _CAL_DAV_DATE_FORMAT_, _CAL_FREEBUSY_) {
+    angular.mock.inject(function(_$rootScope_, _$httpBackend_, _calFreebusyAPI_, _$q_, _calFreebusyService_, _CAL_ACCEPT_HEADER_, _calMoment_, _CAL_DAV_DATE_FORMAT_, _CAL_FREEBUSY_) {
       $rootScope = _$rootScope_;
       $httpBackend = _$httpBackend_;
       calFreebusyService = _calFreebusyService_;
@@ -31,10 +32,11 @@ describe('The calFreebusyService service', function() {
       CAL_ACCEPT_HEADER = _CAL_ACCEPT_HEADER_;
       CAL_DAV_DATE_FORMAT = _CAL_DAV_DATE_FORMAT_;
       CAL_FREEBUSY = _CAL_FREEBUSY_;
+      $qLite = _$q_;
     });
 
     function getComponentFromFixture(string) {
-      var path = 'frontend/app/fixtures/calendar/vfreebusy_test/' + string;
+      var path = 'src/linagora.esn.calendar/app/fixtures/calendar/vfreebusy_test/' + string;
 
       return __FIXTURES__[path];
     }
@@ -45,6 +47,8 @@ describe('The calFreebusyService service', function() {
   describe('The listFreebusy fn', function() {
 
     it('should list freebusy infos', function(done) {
+      var $qTemp = window.$q;
+      window.$q = $qLite;
       var data = {
         type: 'free-busy-query',
         match: {
@@ -97,8 +101,10 @@ describe('The calFreebusyService service', function() {
         expect(freebusies).to.be.an.array;
         expect(freebusies.length).to.equal(1);
         expect(freebusies[0].vfreebusy.toJSON()).to.deep.equal(vfreebusy);
-      }).finally(done);
+        window.$q = $qTemp;
+      }).catch(done).finally(done);
 
+      $rootScope.$digest();
       $httpBackend.flush();
     });
   });
@@ -152,6 +158,8 @@ describe('The calFreebusyService service', function() {
     });
 
     it('should return false on attendee busy', function(done) {
+      var $qTemp = window.$q;
+      window.$q = $qLite;
       var busyEvent = {
         start: calMoment('2018-03-03T09:00:00Z'),
         end: calMoment('2018-03-03T13:00:00Z')
@@ -160,14 +168,17 @@ describe('The calFreebusyService service', function() {
       handleBackend();
       calFreebusyService.isAttendeeAvailable(attendee.id, busyEvent.start, busyEvent.end).then(function(isAvailable) {
         expect(isAvailable).to.be.false;
-
+        window.$q = $qTemp;
         done();
       });
 
+      $rootScope.$digest();
       $httpBackend.flush();
     });
 
     it('should return true on attendee free', function(done) {
+      var $qTemp = window.$q;
+      window.$q = $qLite;
       var event = {
         start: calMoment('2018-03-03T11:00:00Z'),
         end: calMoment('2018-03-03T12:00:00Z')
@@ -176,10 +187,11 @@ describe('The calFreebusyService service', function() {
       handleBackend();
       calFreebusyService.isAttendeeAvailable(attendee.id, event.start, event.end).then(function(isAvailable) {
         expect(isAvailable).to.be.true;
-
+        window.$q = $qTemp;
         done();
       });
 
+      $rootScope.$digest();
       $httpBackend.flush();
     });
   });
@@ -383,32 +395,41 @@ describe('The calFreebusyService service', function() {
         attendees.push(externalAttendee);
       });
 
-      it('should call the bulk API for internal attendees only', function() {
+      it('should call the bulk API for internal attendees only', function(done) {
         getBulkFreebusyStatusStub.returns($q.when({}));
         calFreebusyService.setBulkFreeBusyStatus(attendees, start, end, [event]);
         $rootScope.$digest();
 
-        expect(getBulkFreebusyStatusStub).to.have.been.calledWith(['1', '2'], start, end, [event.uid]);
+        setTimeout(() => {
+          expect(getBulkFreebusyStatusStub).to.have.been.calledWith(['1', '2'], start, end, [event.uid]);
+          done();
+        }, 0);
       });
 
-      it('should set freebusy to unknow for external attendees', function() {
+      it('should set freebusy to unknow for external attendees', function(done) {
         getBulkFreebusyStatusStub.returns($q.when({}));
         calFreebusyService.setBulkFreeBusyStatus(attendees, start, end, [event]);
         $rootScope.$digest();
 
-        expect(externalAttendee.freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+        setTimeout(() => {
+          expect(externalAttendee.freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          done();
+        }, 0);
       });
 
-      it('should set freebusy to unknow for internal users when freebusy status is not found', function() {
+      it('should set freebusy to unknow for internal users when freebusy status is not found', function(done) {
         getBulkFreebusyStatusStub.returns($q.when({}));
         calFreebusyService.setBulkFreeBusyStatus(attendees, start, end, [event]);
         $rootScope.$digest();
 
-        expect(attendees[0].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
-        expect(attendees[1].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+        setTimeout(() => {
+          expect(attendees[0].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          expect(attendees[1].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          done();
+        }, 0);
       });
 
-      it('should set freebusy to free for internal users when they are free', function() {
+      it('should set freebusy to free for internal users when they are free', function(done) {
         var bulkResponse = {
           users: [
             {
@@ -444,12 +465,15 @@ describe('The calFreebusyService service', function() {
         calFreebusyService.setBulkFreeBusyStatus(attendees, start, end, [event]);
         $rootScope.$digest();
 
-        expect(attendees[0].freeBusy).to.equal(CAL_FREEBUSY.FREE);
-        expect(attendees[1].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
-        expect(attendees[2].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+        setTimeout(() => {
+          expect(attendees[0].freeBusy).to.equal(CAL_FREEBUSY.FREE);
+          expect(attendees[1].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          expect(attendees[2].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          done();
+        }, 0);
       });
 
-      it('should set freebusy to busy for internal users when they are busy', function() {
+      it('should set freebusy to busy for internal users when they are busy', function(done) {
         var bulkResponse = {
           users: [
             {
@@ -485,19 +509,25 @@ describe('The calFreebusyService service', function() {
         calFreebusyService.setBulkFreeBusyStatus(attendees, start, end, [event]);
         $rootScope.$digest();
 
-        expect(attendees[0].freeBusy).to.equal(CAL_FREEBUSY.BUSY);
-        expect(attendees[1].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
-        expect(attendees[2].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+        setTimeout(() => {
+          expect(attendees[0].freeBusy).to.equal(CAL_FREEBUSY.BUSY);
+          expect(attendees[1].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          expect(attendees[2].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          done();
+        }, 0);
       });
 
-      it('should set freebusy to unknow for internal users when an error occurs', function() {
+      it('should set freebusy to unknow for internal users when an error occurs', function(done) {
         getBulkFreebusyStatusStub.returns($q.reject(new Error()));
         calFreebusyService.setBulkFreeBusyStatus(attendees, start, end, [event]);
         $rootScope.$digest();
 
-        expect(attendees[0].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
-        expect(attendees[1].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
-        expect(attendees[2].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+        setTimeout(() => {
+          expect(attendees[0].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          expect(attendees[1].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          expect(attendees[2].freeBusy).to.equal(CAL_FREEBUSY.UNKNOWN);
+          done();
+        }, 0);
       });
     });
   });

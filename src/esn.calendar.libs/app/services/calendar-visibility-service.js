@@ -27,7 +27,7 @@ require('../app.constants.js');
     function toggle(calendar) {
       var calId = calendar.getUniqueId();
 
-      storage.getItem(calId).then(function(hiddenBefore) {
+      return storage.getItem(calId).then(function(hiddenBefore) {
         return storage.setItem(calId, !hiddenBefore);
       }).then(function(hidden) {
         $rootScope.$broadcast(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {

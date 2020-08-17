@@ -7,17 +7,17 @@ var expect = chai.expect;
 
 describe('The CalSettingsDisplayController', function() {
 
-  var $controller, $rootScope, $httpBackend, $scope;
+  var $controller, $rootScope, $httpBackend, $scope, $q;
   var esnUserConfigurationService, moduleName, moduleConfiguration, configResponse;
 
-  beforeEach(module(function($provide) {
+  beforeEach(angular.mock.module(function($provide) {
     $provide.value('asyncAction', sinon.spy(function(message, action) {
       return action();
     }));
   }));
 
   beforeEach(function() {
-    module('esn.calendar');
+    angular.mock.module('esn.calendar');
 
     moduleName = 'linagora.esn.calendar';
     moduleConfiguration = ['workingDays', 'hideDeclinedEvents'];
@@ -29,11 +29,13 @@ describe('The CalSettingsDisplayController', function() {
     inject(function(
       _$controller_,
       _$rootScope_,
+      _$q_,
       _$httpBackend_,
       _esnUserConfigurationService_
     ) {
       $controller = _$controller_;
       $rootScope = _$rootScope_;
+      $q = _$q_;
       $httpBackend = _$httpBackend_;
       esnUserConfigurationService = _esnUserConfigurationService_;
     });

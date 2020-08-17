@@ -9,7 +9,6 @@ describe('The CalCalendarController controller', function() {
   var calFullUiConfiguration, $q, $controller, $rootScope, $scope, context, businessHours;
 
   beforeEach(function() {
-    module('jadeTemplates');
     angular.mock.module('esn.calendar');
   });
 

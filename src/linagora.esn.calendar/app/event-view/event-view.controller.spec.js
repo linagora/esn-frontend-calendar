@@ -6,16 +6,17 @@
   var expect = chai.expect;
 
   describe('The CalEventViewController controller', function() {
-    var $controller, $scope, calAttendeeService, bindings, CAL_ICAL;
+    var $controller, $scope, calAttendeeService, bindings, CAL_ICAL, $q;
     var userAttendee, resourceAttendee, resourceAttendeeWithDetails;
 
     beforeEach(function() {
       angular.mock.module('esn.calendar');
-      angular.mock.inject(function($rootScope, _$controller_, _calAttendeeService_, _CAL_ICAL_) {
+      angular.mock.inject(function($rootScope, _$controller_, _calAttendeeService_, _CAL_ICAL_, _$q_) {
         $controller = _$controller_;
         $scope = $rootScope.$new();
         calAttendeeService = _calAttendeeService_;
         CAL_ICAL = _CAL_ICAL_;
+        $q = _$q_;
       });
 
       userAttendee = { _id: 1, cutype: CAL_ICAL.cutype.individual };

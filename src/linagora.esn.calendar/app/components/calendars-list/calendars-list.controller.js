@@ -31,12 +31,12 @@ const _ = require('lodash');
       self.hiddenCalendars = {};
       self.toggleCalendar = calendarVisibilityService.toggle;
 
-      self.activate();
+      return self.activate();
     }
 
     function activate() {
-      $q
-        .all(listCalendars(), getHiddenCalendars())
+      return Promise
+        .all([listCalendars(), getHiddenCalendars()])
         .then(function() {
           var destroyCalAddEvent = $rootScope.$on(CAL_EVENTS.CALENDARS.ADD, onCalendarAdded);
           var destroyCalRemoveEvent = $rootScope.$on(CAL_EVENTS.CALENDARS.REMOVE, onCalendarRemoved);

@@ -36,6 +36,7 @@ const _ = require('lodash');
     CAL_SPINNER_TIMEOUT_DURATION,
     CAL_REDRAW_MULTI_DAY_EVENT
   ) {
+      $q = window.$q || $q;
       var windowJQuery = angular.element($window);
       var calendarDeffered = $q.defer();
       var calendarPromise = calendarDeffered.promise;

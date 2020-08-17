@@ -38,7 +38,7 @@ function calendarConfigurationController(
   ////////////
 
   function $onInit() {
-    calendarHomeService.getUserCalendarHomeId()
+    return calendarHomeService.getUserCalendarHomeId()
       .then(function(calendarHomeId) {
         self.calendarHomeId = calendarHomeId;
 
@@ -94,18 +94,21 @@ function calendarConfigurationController(
     }
 
     resetDelegationFields();
-    self.publicSelection = self.calendar.isSubscription() ? self.calendar.source.rights.getPublicRight() : self.calendar.rights.getPublicRight();
-    var allShareeRights = self.calendar.rights.getAllShareeRights();
+      self.publicSelection = self.calendar.isSubscription() ? self.calendar.source.rights.getPublicRight() : self.calendar.rights.getPublicRight();
+      var allShareeRights = self.calendar.rights.getAllShareeRights();
+      
+      return Promise.all((allShareeRights || []).map(function(shareeRight){
+        return shareeRight.userId
+      }).map(calendarUsersCache.getUser)).then(function(users) {
+        _.chain(users).zip(allShareeRights).forEach(function(array) {
+          var user = array[0];
+          var right = array[1].right;
 
-    $q.all(_.chain(allShareeRights).map('userId').map(calendarUsersCache.getUser).values()).then(function(users) {
-      _.chain(users).zip(allShareeRights).forEach(function(array) {
-        var user = array[0];
-        var right = array[1].right;
-
-        user.displayName = userUtils.displayNameOf(user);
-        self.delegations = CaldelegationEditionHelperInstance.addUserGroup([user], right);
+          user.displayName = userUtils.displayNameOf(user);
+          self.delegations = CaldelegationEditionHelperInstance.addUserGroup([user], right);
+        });
+        return true;
       });
-    });
   }
 
   function _canSaveCalendar() {
@@ -124,7 +127,7 @@ function calendarConfigurationController(
     }
 
     if (self.newCalendar) {
-      $state.go('calendar.main')
+      return $state.go('calendar.main')
         .then(function() {
           return calendarService.createCalendar(self.calendarHomeId, self.calendar);
         })
@@ -137,11 +140,12 @@ function calendarConfigurationController(
 
               return calendarAPI.modifyPublicRights(self.calendarHomeId, self.calendar.id, { public_right: self.publicSelection });
             default:
-              return $q.when();
+              return;
           }
         })
         .then(function() {
-          notificationFactory.weakInfo('New calendar -', esnI18nService.translate('%s has been created', { name: self.calendar.name }));
+          notificationFactory.weakInfo('New calendar -', esnI18nService.translate('%s has been created', {name: self.calendar.name}));
+          return;
         });
     } else {
       CaldelegationEditionHelperInstance.getAllRemovedUsersId().map(function(removedUserId) {
@@ -181,8 +185,8 @@ function calendarConfigurationController(
         updateActions.push(calendarAPI.modifyPublicRights(self.calendarHomeId, self.calendar.id, { public_right: self.publicSelection }));
       }
 
-      $q.all(updateActions).then(function() {
-        notificationFactory.weakInfo('Calendar -', esnI18nService.translate('%s has been modified.', { name: self.calendar.name }));
+      return Promise.all(updateActions).then(function() {
+        notificationFactory.weakInfo('Calendar -', esnI18nService.translate('%s has been modified.', {name: self.calendar.name}));
         $state.go('calendar.main');
       });
     }

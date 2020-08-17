@@ -12,8 +12,9 @@ describe('The CalPartstatButtonsController', function() {
   }
 
   beforeEach(function() {
-    module('esn.calendar.libs');
-    module(function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module('esn.resource.libs');
+    angular.mock.module(function($provide) {
       $provide.value('$attrs', {});
       $provide.value('calEventService', {
         changeParticipation: sinon.spy(function() {
@@ -38,7 +39,7 @@ describe('The CalPartstatButtonsController', function() {
 
   beforeEach(function() {
     ['event', 'recurringEventWithTwoExceptions'].forEach(function(file) {
-      shells[file] = new CalendarShell(ICAL.Component.fromString(__FIXTURES__[('frontend/app/fixtures/calendar/' + file + '.ics')]), {
+      shells[file] = new CalendarShell(ICAL.Component.fromString(__FIXTURES__[('src/linagora.esn.calendar/app/fixtures/calendar/' + file + '.ics')]), {
         etag: 'etag',
         path: 'path'
       });

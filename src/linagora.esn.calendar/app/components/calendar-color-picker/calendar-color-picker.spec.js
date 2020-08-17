@@ -9,7 +9,6 @@ describe('The calendar color picker component', function() {
 
   beforeEach(function() {
     self = this;
-    module('jadeTemplates');
     angular.mock.module('esn.calendar');
     this.$modalMock = sinon.spy();
   });

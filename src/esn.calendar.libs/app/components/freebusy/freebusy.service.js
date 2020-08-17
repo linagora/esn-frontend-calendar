@@ -24,7 +24,6 @@ function calFreebusyService(
   CAL_FREEBUSY,
   ICAL
 ) {
-
   return {
     listFreebusy: listFreebusy,
     isAttendeeAvailable: isAttendeeAvailable,
@@ -65,11 +64,12 @@ function calFreebusyService(
   }
 
   function setBulkFreeBusyStatus(attendees, start, end, excludedEvents) {
+    var $adaptiveQ = window.$q || $q;
     if (!attendees || attendees.length === 0) {
-      return $q.when();
+      return $adaptiveQ.when();
     }
 
-    return $q.allSettled(attendees.map(populateUserId)).then(setBulkStatus);
+    $adaptiveQ.allSettled(attendees.map(populateUserId)).then(setBulkStatus);
 
     function setBulkStatus() {
       var internalAttendees = attendees.filter(function(attendee) { return !!attendee.id; });
@@ -111,9 +111,10 @@ function calFreebusyService(
     }
 
     function populateUserId(attendee) {
+      var $adaptiveQ = window.$q || $q;
       // attendee can have id equals to email when coming from autocomplete which is bad...
       if (attendee.id && attendee.id !== attendee.email) {
-        return $q.when();
+        return $adaptiveQ.when();
       }
 
       return calAttendeeService.getUserIdForAttendee(attendee)
@@ -124,12 +125,13 @@ function calFreebusyService(
   }
 
   function listFreebusy(userId, start, end) {
+    var $adaptiveQ = window.$q || $q;
     return calendarService.listFreeBusyCalendars(userId).then(function(cals) {
       var calPromises = cals.map(function(cal) {
         return calFreebusyAPI.report(calPathBuilder.forCalendarId(userId, cal.id), start, end);
       });
 
-      return $q.all(calPromises)
+      return $adaptiveQ.all(calPromises)
         .then(function(freebusies) {
           return freebusies.map(function(freebusy) {
             var vcalendar = new ICAL.Component(freebusy);
@@ -138,7 +140,7 @@ function calFreebusyService(
             return new CalVfreebusyShell(vfreebusy);
           });
         });
-    }).catch($q.reject);
+    }).catch($adaptiveQ.reject);
   }
 
   /**
@@ -150,6 +152,7 @@ function calFreebusyService(
    * @return {boolean} true on free, false on busy
    */
   function isAttendeeAvailable(attendeeId, dateStart, dateEnd) {
+    var $adaptiveQ = window.$q || $q;
     var start = calMoment(dateStart);
     var end = calMoment(dateEnd);
 
@@ -159,7 +162,7 @@ function calFreebusyService(
           return freeBusy.isAvailable(start, end);
         });
       })
-      .catch($q.reject);
+      .catch($adaptiveQ.reject);
   }
 
   function areAttendeesAvailable(attendees, start, end, excludedEvents) {

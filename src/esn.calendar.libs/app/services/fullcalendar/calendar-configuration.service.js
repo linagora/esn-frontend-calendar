@@ -38,6 +38,7 @@ function calFullUiConfiguration(
   ////////////
 
   function get() {
+    var $adaptiveQ = window.$q || $q;
     return esnUserConfigurationService.get(CAL_USER_CONFIGURATION.keys, CAL_USER_CONFIGURATION.moduleName)
       .then(function(configurations) {
         var setConfigurations = configurations.map(function(configuration) {
@@ -48,7 +49,7 @@ function calFullUiConfiguration(
           return handler[configuration.name]();
         });
 
-        return $q.all(setConfigurations);
+        return $adaptiveQ.all(setConfigurations);
       })
       .then(function(configurationsSetted) {
         var uiConfig = angular.copy(CAL_UI_CONFIG);

@@ -5,6 +5,7 @@ describe('The calCalendarSubscriptionApiService factory', function() {
   var calendarHomeId, subscriptionId, subscription;
 
    beforeEach(function() {
+    angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.value('Cache', function() {});
     });

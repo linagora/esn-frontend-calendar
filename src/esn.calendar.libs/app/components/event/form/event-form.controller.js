@@ -257,7 +257,7 @@ function CalEventFormController(
         $scope.restActive = true;
         _hideModal();
         $scope.editedEvent.attendees = getAttendees();
-        setOrganizer()
+        return setOrganizer()
           .then(cacheAttendees)
           .then(denormalizeAttendees)
           .then(function() {
@@ -287,7 +287,7 @@ function CalEventFormController(
       var partstat = $scope.calendarOwnerAsAttendee.partstat;
 
       $scope.restActive = true;
-      calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, session.user.emails, partstat).then(function(response) {
+      return calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, session.user.emails, partstat).then(function(response) {
         if (!response) {
           return;
         }
@@ -295,10 +295,11 @@ function CalEventFormController(
         if (!$scope.canModifyEvent) {
           calPartstatUpdateNotificationService(partstat);
         }
-      }, function() {
+      }).catch(function() {
         _displayNotification(notificationFactory.weakError, 'Event participation modification failed', 'Please refresh your calendar');
       }).finally(function() {
         $scope.restActive = false;
+        return true;
       });
     }
 
@@ -374,9 +375,9 @@ function CalEventFormController(
 
     function modifyEvent() {
       if ($scope.canModifyEvent) {
-        _modifyEvent();
+        return _modifyEvent();
       } else {
-        _changeParticipationAsAttendee();
+        return _changeParticipationAsAttendee();
       }
     }
 
@@ -407,11 +408,11 @@ function CalEventFormController(
             $scope.submit = function() {
               $scope.$hide();
 
-              ($scope.editChoice === 'this' ? updateInstance : updateMaster)();
+              return ($scope.editChoice === 'this' ? updateInstance : updateMaster)();
             };
 
             function updateMaster() {
-              event.getModifiedMaster(true).then(function(eventMaster) {
+              return event.getModifiedMaster(true).then(function(eventMaster) {
                 $scope.$broadcast(CAL_EVENTS.EVENT_ATTENDEES_UPDATE);
 
                 _changeParticipationAsAttendee(eventMaster);
@@ -422,7 +423,7 @@ function CalEventFormController(
               event.changeParticipation(status, [attendeeEmail]);
               $scope.$broadcast(CAL_EVENTS.EVENT_ATTENDEES_UPDATE);
 
-              _changeParticipationAsAttendee();
+              return _changeParticipationAsAttendee();
             }
           },
           placement: 'center'
@@ -431,7 +432,7 @@ function CalEventFormController(
         $scope.editedEvent.changeParticipation(status, [$scope.calendarOwnerAsAttendee.email]);
         $scope.$broadcast(CAL_EVENTS.EVENT_ATTENDEES_UPDATE);
 
-        _changeParticipationAsAttendee();
+        return _changeParticipationAsAttendee();
       }
     }
 
@@ -439,13 +440,13 @@ function CalEventFormController(
       var attendees = getAttendees();
 
       if (_.some(attendees, { freeBusy: CAL_FREEBUSY.BUSY })) {
-        calEventFreeBusyConfirmationModalService(createOrUpdate);
+        return calEventFreeBusyConfirmationModalService(createOrUpdate);
       } else {
-        createOrUpdate();
+        return createOrUpdate();
       }
 
       function createOrUpdate() {
-        (calEventUtils.isNew($scope.editedEvent) && !calEventUtils.isInvolvedInATask($scope.editedEvent) ? createEvent : modifyEvent)();
+        return (calEventUtils.isNew($scope.editedEvent) && !calEventUtils.isInvolvedInATask($scope.editedEvent) ? createEvent : modifyEvent)();
       }
     }
 

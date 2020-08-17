@@ -846,8 +846,6 @@ describe('The calendarService service', function() {
           expect(self.$rootScope.$broadcast).to.not.have.been.called;
           done();
         });
-
-        this.$rootScope.$digest();
       });
     });
 
@@ -885,8 +883,6 @@ describe('The calendarService service', function() {
           expect(self.$rootScope.$broadcast).to.not.have.been.called;
           done();
         }, done);
-
-        this.$rootScope.$digest();
       });
     });
 
@@ -927,8 +923,6 @@ describe('The calendarService service', function() {
           expect(self.$rootScope.$broadcast).to.not.have.been.called;
           done();
         }, done);
-
-        this.$rootScope.$digest();
       });
     });
   });
@@ -978,8 +972,6 @@ describe('The calendarService service', function() {
 
           done();
         }, done);
-
-      this.$rootScope.$digest();
     });
   });
 

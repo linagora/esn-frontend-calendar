@@ -26,6 +26,7 @@ require('angular-mocks/angular-mocks.js');
 
 require('./app/app.js');
 
+require('../test/config/rewiremock.js');
 require('../test/config/mocks/injector.js');
 require('../test/config/mocks/modules.js');
 require('../test/config/mocks/ng-mock-component.js');

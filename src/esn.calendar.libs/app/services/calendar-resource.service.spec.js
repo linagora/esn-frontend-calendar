@@ -13,8 +13,8 @@ describe('The calResourceService service', function() {
   });
 
   beforeEach(function() {
-    module('linagora.esn.resource');
-    module('esn.calendar.libs');
+    angular.mock.module('linagora.esn.resource');
+    angular.mock.module('esn.calendar.libs');
   });
 
   beforeEach(function() {

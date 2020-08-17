@@ -21,11 +21,11 @@ const _ = require('lodash');
 
       self.query.advanced = _.assign(defaultAdvancedQuery, self.query.advanced);
 
-      _fetchCalendars();
+      return _fetchCalendars();
     }
 
     function _fetchCalendars() {
-      calendarService.listPersonalAndAcceptedDelegationCalendars(session.user._id).then(function(calendars) {
+      return calendarService.listPersonalAndAcceptedDelegationCalendars(session.user._id).then(function(calendars) {
         var categorizedCalendars = userAndExternalCalendars(calendars);
 
         self.calendars = {
@@ -37,7 +37,7 @@ const _ = require('lodash');
           return;
         }
 
-        calendarService.injectCalendarsWithOwnerName(self.calendars.sharedCalendars).then(function(sharedCalendars) {
+        return calendarService.injectCalendarsWithOwnerName(self.calendars.sharedCalendars).then(function(sharedCalendars) {
           self.calendars = _.assign({}, self.calendars, { sharedCalendars: sharedCalendars });
         });
       });

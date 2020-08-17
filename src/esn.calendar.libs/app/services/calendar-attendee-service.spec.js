@@ -6,7 +6,7 @@
 var expect = chai.expect;
 
 describe('the calendarAttendeeService', function() {
-  var query, limit, CAL_ATTENDEE_OBJECT_TYPE, CAL_ICAL, $rootScope, calendarAttendeeService;
+  var query, limit, CAL_ATTENDEE_OBJECT_TYPE, CAL_ICAL, $rootScope, calendarAttendeeService, $q;
   var attendeeService = {};
   var attendeesAllTypes;
 
@@ -24,16 +24,14 @@ describe('the calendarAttendeeService', function() {
       $provide.value('attendeeService', attendeeService);
     });
 
-    angular.mock.inject(function(_$rootScope_, _CAL_ATTENDEE_OBJECT_TYPE_, _CAL_ICAL_) {
+    angular.mock.inject(function(_$rootScope_, _CAL_ATTENDEE_OBJECT_TYPE_, _CAL_ICAL_, _$q_, _calendarAttendeeService_) {
       $rootScope = _$rootScope_;
       CAL_ATTENDEE_OBJECT_TYPE = _CAL_ATTENDEE_OBJECT_TYPE_;
       CAL_ICAL = _CAL_ICAL_;
+      $q = _$q_;
+      calendarAttendeeService = _calendarAttendeeService_;
     });
   });
-
-  beforeEach(angular.mock.inject(function(_calendarAttendeeService_) {
-    calendarAttendeeService = _calendarAttendeeService_;
-  }));
 
   describe('the getAttendeeCandidates function', function() {
     beforeEach(function() {

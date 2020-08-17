@@ -8,6 +8,7 @@ describe('calMoment factory', function() {
 
   beforeEach(function() {
     this.esnDatetimeServiceMock = {
+      init: sinon.stub().returns(Promise.resolve(true)),
       updateObjectToUserTimeZone: sinon.spy()
     };
 
@@ -21,7 +22,8 @@ describe('calMoment factory', function() {
     };
 
     this.moment = {
-      duration: 'it doesn not matter as long as it is here'
+      duration: 'it doesn not matter as long as it is here',
+      locale: sinon.stub().returns(true)
     };
 
     this.jstz = {
@@ -35,8 +37,8 @@ describe('calMoment factory', function() {
 
     var self = this;
 
-    module('esn.calendar.libs');
-    module(function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module(function($provide) {
       $provide.value('$window', self.window);
       $provide.value('_', function() {});
       $provide.value('jstz', self.jstz);
@@ -97,7 +99,7 @@ describe('calMoment factory', function() {
   });
 
   it('has a duration method which is like moment.duration', function() {
-    expect(this.calMoment.duration).to.equal(this.moment.duration);
+    expect(this.calMoment.duration).to.deep.equal(moment.duration);
   });
 
 });

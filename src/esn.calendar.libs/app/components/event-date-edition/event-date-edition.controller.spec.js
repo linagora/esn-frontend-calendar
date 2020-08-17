@@ -14,23 +14,15 @@ describe('The calEventDateEditionController', function() {
       getLongDateFormat: sinon.stub().returns(longDateFormatMock)
     };
 
-    esnDatetimeService = {
-      setAmbigTime: function(src, ambigTime) {
-        src._ambigTime = !!ambigTime;
-
-        return src;
-      }
-    };
-
-    module('esn.calendar.libs', function($provide) {
+    angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.value('esnI18nDateFormatService', esnI18nDateFormatService);
-      $provide.value('esnDatetimeService', esnDatetimeService);
     });
 
-    inject(function(_$controller_, _calMoment_, _calEventUtils_) {
+    angular.mock.inject(function(_$controller_, _calMoment_, _calEventUtils_, _esnDatetimeService_) {
       $controller = _$controller_;
       calMoment = _calMoment_;
       calEventUtils = _calEventUtils_;
+      esnDatetimeService = _esnDatetimeService_;
     });
 
     startTestMoment = calMoment('2013-02-08 09:30:00Z').utc();

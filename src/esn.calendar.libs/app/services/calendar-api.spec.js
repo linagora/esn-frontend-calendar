@@ -29,9 +29,9 @@ describe('The calendar module apis', function() {
   }
 
   beforeEach(function() {
-    module('esn.calendar.libs');
+    angular.mock.module('esn.calendar.libs');
 
-    module(function($provide) {
+    angular.mock.module(function($provide) {
       $provide.value('notificationFactory', notificationFactoryMock);
     });
 

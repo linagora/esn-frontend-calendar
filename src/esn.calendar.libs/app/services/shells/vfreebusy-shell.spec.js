@@ -15,7 +15,7 @@ describe('CalVfreebusyShell factory', function() {
     });
 
     function getComponentFromFixture(string) {
-      var path = 'frontend/app/fixtures/calendar/vfreebusy_test/' + string;
+      var path = 'src/linagora.esn.calendar/app/fixtures/calendar/vfreebusy_test/' + string;
 
       return new ICAL.Component(JSON.parse(__FIXTURES__[path]));
     }

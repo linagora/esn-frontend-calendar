@@ -55,7 +55,8 @@ angular.module('esn.calendar', [
   'angular-clockpicker',
   'linagora.esn.videoconference',
   'linagora.esn.videoconference.calendar',
-  'esn.calendar.libs'
+  'esn.calendar.libs',
+  'esn.resource.libs'
 ]);
 
 require('esn-frontend-common-libs/src/frontend/js/modules/esn.router.js');

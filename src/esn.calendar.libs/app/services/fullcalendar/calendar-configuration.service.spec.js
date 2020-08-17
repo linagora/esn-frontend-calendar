@@ -5,14 +5,12 @@
 var expect = chai.expect;
 
 describe('The calFullUiConfiguration service', function() {
-  var $q,
-  $httpBackend,
+  var $httpBackend,
   esnI18nService,
   calFullUiConfiguration,
   esnDatetimeServiceMock,
   esnConfig,
   esnUserConfigurationService,
-
   format12,
   format24,
   moduleName,
@@ -20,7 +18,10 @@ describe('The calFullUiConfiguration service', function() {
   businessHours,
   uiConfig,
   CAL_UI_CONFIG,
-  CAL_FULLCALENDAR_LOCALE;
+  CAL_FULLCALENDAR_LOCALE,
+  $qLite;
+
+  var $qTemp = window.$q;
 
   beforeEach(function() {
     angular.mock.module('esn.calendar.libs');
@@ -46,7 +47,8 @@ describe('The calFullUiConfiguration service', function() {
     format24 = 'H:mm';
     esnDatetimeServiceMock = {
       getTimeFormat: sinon.stub().returns(''),
-      getTimeZone: sinon.stub().returns('UTC')
+      getTimeZone: sinon.stub().returns('UTC'),
+      init: sinon.stub().returns(Promise.resolve(true))
     };
 
     angular.mock.module(function($provide) {
@@ -56,27 +58,27 @@ describe('The calFullUiConfiguration service', function() {
   });
 
   beforeEach(angular.mock.inject(function(
-    _$rootScope_,
-    _$q_,
     _$httpBackend_,
     _esnI18nService_,
     _calFullUiConfiguration_,
     _esnUserConfigurationService_,
     _CAL_UI_CONFIG_,
-    _CAL_FULLCALENDAR_LOCALE_
+    _CAL_FULLCALENDAR_LOCALE_,
+    _$q_
   ) {
     calFullUiConfiguration = _calFullUiConfiguration_;
     esnUserConfigurationService = _esnUserConfigurationService_;
-    $q = _$q_;
     $httpBackend = _$httpBackend_;
     esnI18nService = _esnI18nService_;
     CAL_UI_CONFIG = _CAL_UI_CONFIG_;
     CAL_FULLCALENDAR_LOCALE = _CAL_FULLCALENDAR_LOCALE_;
+    $qLite = _$q_;
   }));
 
   describe('The get function', function() {
     it('should return the default configuration if no configuration value', function(done) {
       esnDatetimeServiceMock.getTimeZone = sinon.stub().returns('local');
+      window.$q = $qLite;
       var payload = [
         {
           name: moduleName,
@@ -100,7 +102,7 @@ describe('The calFullUiConfiguration service', function() {
           expect(uiConfiguration).to.shallowDeepEqual(CAL_UI_CONFIG);
           expect(esnUserConfigurationService.get).to.have.been.calledOnce;
           expect(esnUserConfigurationService.get).to.have.been.calledWith(moduleConfiguration, moduleName);
-
+          window.$q = $qTemp;
           done();
         });
 
@@ -109,6 +111,7 @@ describe('The calFullUiConfiguration service', function() {
 
     describe('The configureTimeFormatForCalendar function', function() {
       it('should set timeFormat and slotLabelFormat when user uses 12 hours format', function(done) {
+        window.$q = $qLite;
         esnDatetimeServiceMock.getTimeFormat = sinon.stub().returns(format12);
 
         var payload = [
@@ -136,7 +139,7 @@ describe('The calFullUiConfiguration service', function() {
               slotLabelFormat: format12
             });
             expect(esnDatetimeServiceMock.getTimeFormat).to.have.been.calledOnce;
-
+            window.$q = $qTemp;
             done();
           });
 
@@ -144,6 +147,7 @@ describe('The calFullUiConfiguration service', function() {
       });
 
       it('should set timeFormat and slotLabelFormat when user uses 24 hours format', function(done) {
+        window.$q = $qLite;
         esnDatetimeServiceMock.getTimeFormat = sinon.stub().returns(format24);
 
         var payload = [
@@ -171,7 +175,7 @@ describe('The calFullUiConfiguration service', function() {
               slotLabelFormat: format24
             });
             expect(esnDatetimeServiceMock.getTimeFormat).to.have.been.calledOnce;
-
+            window.$q = $qTemp;
             done();
           });
 
@@ -181,6 +185,7 @@ describe('The calFullUiConfiguration service', function() {
 
     describe('The _setOnlyWorkingDays function', function() {
       it('should get default hiddenDays if business hours is not defined', function(done) {
+        window.$q = $qLite;
         var expectedResult = [0, 6];
         var payload = [
           {
@@ -204,7 +209,7 @@ describe('The calFullUiConfiguration service', function() {
         calFullUiConfiguration.get()
           .then(function(uiConfiguration) {
             expect(uiConfiguration.calendar.hiddenDays).to.deep.equal(expectedResult);
-
+            window.$q = $qTemp;
             done();
           });
 
@@ -212,6 +217,7 @@ describe('The calFullUiConfiguration service', function() {
       });
 
       it('should set hiddenDays from  business hours', function(done) {
+        window.$q = $qLite;
         var expectedResult = [0, 2, 3, 4];
         var payload = [
           {
@@ -234,7 +240,7 @@ describe('The calFullUiConfiguration service', function() {
         calFullUiConfiguration.get()
           .then(function(uiConfiguration) {
             expect(uiConfiguration.calendar.hiddenDays).to.deep.equal(expectedResult);
-
+            window.$q = $qTemp;
             done();
           });
 
@@ -249,6 +255,7 @@ describe('The calFullUiConfiguration service', function() {
     });
 
     it('should be false if configuration return no value', function(done) {
+      window.$q = $qLite;
       var payload = [
           {
             name: moduleName,
@@ -269,7 +276,7 @@ describe('The calFullUiConfiguration service', function() {
         calFullUiConfiguration.get()
           .then(function() {
             expect(calFullUiConfiguration.isDeclinedEventsHidden()).to.be.false;
-
+            window.$q = $qTemp;
             done();
           });
 
@@ -277,6 +284,7 @@ describe('The calFullUiConfiguration service', function() {
     });
 
     it('should be true if configuration return true', function(done) {
+      window.$q = $qLite;
       var payload = [
           {
             name: moduleName,
@@ -298,7 +306,7 @@ describe('The calFullUiConfiguration service', function() {
         calFullUiConfiguration.get()
           .then(function() {
             expect(calFullUiConfiguration.isDeclinedEventsHidden()).to.be.true;
-
+            window.$q = $qTemp;
             done();
           });
 

@@ -5,8 +5,15 @@
 var expect = chai.expect;
 
 describe('The calAttendeesDenormalizerService service', function() {
-  var $q, $rootScope, calAttendeesDenormalizerService, esnMemberResolverRegistry, group, individual, resource;
+  var $rootScope, calAttendeesDenormalizerService, esnMemberResolverRegistry, group, individual, resource;
   var userAPIMock;
+
+  esnMemberResolverRegistry = {
+    getResolver: sinon.stub()
+  };
+  userAPIMock = {
+    user: sinon.stub()
+  };
 
   beforeEach(function() {
     group = {
@@ -23,24 +30,18 @@ describe('The calAttendeesDenormalizerService service', function() {
       email: 'resource@open-paas.org',
       cutype: 'RESOURCE'
     };
-
-    esnMemberResolverRegistry = {
-      getResolver: sinon.stub()
-    };
-
-    userAPIMock = {};
   });
 
   beforeEach(function() {
     angular.mock.module('esn.calendar.libs');
+    angular.mock.module('esn.resource.libs');
 
     angular.mock.module(function($provide) {
       $provide.value('esnMemberResolverRegistry', esnMemberResolverRegistry);
       $provide.value('userAPI', userAPIMock);
     });
 
-    angular.mock.inject(function(_$q_, _$rootScope_, _calAttendeesDenormalizerService_) {
-      $q = _$q_;
+    angular.mock.inject(function(_$rootScope_, _calAttendeesDenormalizerService_) {
       $rootScope = _$rootScope_;
       calAttendeesDenormalizerService = _calAttendeesDenormalizerService_;
     });
@@ -130,8 +131,6 @@ describe('The calAttendeesDenormalizerService service', function() {
         expect(result).to.have.lengthOf(members.length);
         done();
       });
-
-      $rootScope.$digest();
     });
 
     it('should resolve inner groups members', function(done) {

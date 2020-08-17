@@ -15,7 +15,7 @@ describe('The calendarVisibilityService', function() {
       iterate: function(callback) {
         angular.forEach(self.storageData, callback);
 
-        return self.$q.when();
+        return $q.when();
       },
       getItem: function(id) {
         return $q.when(self.storageData[id]);
@@ -48,90 +48,87 @@ describe('The calendarVisibilityService', function() {
   }));
 
   describe('getHiddenCalendars function', function() {
-    it('should return calendars as it was saved in the localstorage', function() {
+    it('should return calendars as it was saved in the localstorage', function(done) {
       var thenSpy = sinon.spy();
+      var self = this;
       this.storageData.hiddenCalendarUniqueId = true;
       this.storageData.visibleCalendarUniqueId = false;
-      this.calendarVisibilityService.getHiddenCalendars().then(thenSpy);
-
-      this.$rootScope.$digest();
-      expect(thenSpy).to.have.been.calledWith(['hiddenCalendarUniqueId']);
-      expect(this.localStorageServiceMock.getOrCreateInstance).to.have.been.calledWith('calendarStorage');
+      this.calendarVisibilityService.getHiddenCalendars().then(thenSpy).then(function() {
+        expect(thenSpy).to.have.been.calledWith(['hiddenCalendarUniqueId']);
+        expect(self.localStorageServiceMock.getOrCreateInstance).to.have.been.calledWith('calendarStorage');
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
-    it('should not return unhidden calendar', function() {
+    it('should not return unhidden calendar', function(done) {
       var id = '2';
       var hiddenCalendars = [this.getCalendar('1'), this.getCalendar(id)];
+      var self = this;
 
-      hiddenCalendars.map(this.calendarVisibilityService.toggle);
-      this.$rootScope.$digest();
+      Promise.all(hiddenCalendars.map(this.calendarVisibilityService.toggle)).then(function() {
+        self.calendarVisibilityService.toggle(hiddenCalendars[0]).then(function() {
+          var thenSpy = sinon.spy();
 
-      this.calendarVisibilityService.toggle(hiddenCalendars[0]);
-      this.$rootScope.$digest();
-
-      var thenSpy = sinon.spy();
-
-      this.calendarVisibilityService.getHiddenCalendars().then(thenSpy);
-      this.$rootScope.$digest();
-      expect(thenSpy).to.have.been.calledWith([id]);
+          self.calendarVisibilityService.getHiddenCalendars().then(thenSpy);
+          expect(thenSpy).to.have.been.calledWith([id]);
+        });
+      }).then(done).catch(done);
     });
   });
 
   describe('the toggle function', function() {
-    it('should broadcast the calendar and it new display status', function() {
+    it('should broadcast the calendar and it new display status', function(done) {
       var cal = this.getCalendar(42);
+      var self = this;
 
       this.$rootScope.$broadcast = sinon.spy(this.$rootScope.$broadcast);
 
-      this.calendarVisibilityService.toggle(cal);
-      this.$rootScope.$digest();
-      expect(this.$rootScope.$broadcast).to.have.been.calledWith(
-        this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW,
-        {calendarUniqueId: cal.uniqueId, hidden: true}
-      );
+      this.calendarVisibilityService.toggle(cal).then(function() {
+        expect(self.$rootScope.$broadcast).to.have.been.calledWith(
+          self.CAL_EVENTS.CALENDARS.TOGGLE_VIEW,
+          {calendarUniqueId: cal.uniqueId, hidden: true}
+        );
+        self.$rootScope.$broadcast.reset();
 
-      this.$rootScope.$broadcast.reset();
-
-      this.calendarVisibilityService.toggle(cal);
-      this.$rootScope.$digest();
-      expect(this.$rootScope.$broadcast).to.have.been.calledWith(
-        this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW,
-        {calendarUniqueId: cal.uniqueId, hidden: false}
-      );
+        self.calendarVisibilityService.toggle(cal).then(function() {
+          expect(self.$rootScope.$broadcast).to.have.been.calledWith(
+            self.CAL_EVENTS.CALENDARS.TOGGLE_VIEW,
+            {calendarUniqueId: cal.uniqueId, hidden: false}
+          );
+        });
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
-    it('should correctly record hidden calendar in localforage', function() {
+    it('should correctly record hidden calendar in localforage', function(done) {
       var id1 = '1';
       var id2 = '2';
       var hiddenCalendars = [this.getCalendar(id1), this.getCalendar(id2)];
-      var thenSpy = sinon.spy();
+      var self = this;
 
-      hiddenCalendars.map(this.calendarVisibilityService.toggle);
-      this.$rootScope.$digest();
-      this.calendarVisibilityService.getHiddenCalendars().then(thenSpy);
-      this.$rootScope.$digest();
-
-      expect(thenSpy).to.have.been.calledWith([id1, id2]);
+      Promise.all(hiddenCalendars.map(this.calendarVisibilityService.toggle)).then(function() {
+        var thenSpy = sinon.spy();
+        self.calendarVisibilityService.getHiddenCalendars().then(function(res) {
+          expect(thenSpy).to.have.been.calledWith([id1, id2]);
+        });
+      }).then(done).catch(done);
     });
   });
 
   describe('The isHidden function', function() {
-    it('should return true if and only if the calendar is hidden', function() {
+    it('should return true if and only if the calendar is hidden', function(done) {
       var cal = this.getCalendar(42);
       var thenSpy = sinon.spy();
+      var self = this;
 
-      this.calendarVisibilityService.isHidden(cal).then(thenSpy);
-      this.$rootScope.$digest();
-      expect(thenSpy).to.have.been.calledWith(false);
+      this.calendarVisibilityService.isHidden(cal).then(thenSpy).then(function() {
+        expect(thenSpy).to.have.been.calledWith(false);
+        thenSpy.reset();
 
-      thenSpy.reset();
-
-      this.calendarVisibilityService.toggle(cal);
-      this.$rootScope.$digest();
-
-      this.calendarVisibilityService.isHidden(cal).then(thenSpy);
-      this.$rootScope.$digest();
-      expect(thenSpy).to.have.been.calledWith(true);
+        self.calendarVisibilityService.toggle(cal).then(function() {
+          self.calendarVisibilityService.isHidden(cal).then(thenSpy).then(function() {
+            expect(thenSpy).to.have.been.calledWith(true);
+          });
+        });
+      }).then(done).catch(done);
     });
   });
 });

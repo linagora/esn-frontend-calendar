@@ -77,7 +77,7 @@ describe('CalendarCollectionShell factory', function() {
       });
   });
 
-  beforeEach(angular.mock.module('esn.calendar.libs', function($provide) {
+  beforeEach(angular.mock.module('esn.calendar.libs', 'esn.resource.libs', function($provide) {
       $provide.value('CalendarRightShell', calendarRightShell);
       $provide.value('Cache', Cache);
     })

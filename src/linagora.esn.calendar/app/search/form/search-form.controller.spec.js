@@ -60,18 +60,16 @@
         user: {
           _id: '123456'
         },
-        ready: {
-          then: angular.noop
-        }
+        ready: $q.when({})
       };
 
-      module('esn.calendar');
+      angular.mock.module('esn.calendar');
 
-      module(function($provide) {
+      angular.mock.module(function($provide) {
         $provide.value('session', session);
       });
 
-      inject(function($rootScope, _$controller_, _session_, _calendarService_, _CAL_ADVANCED_SEARCH_CALENDAR_TYPES_) {
+      angular.mock.inject(function($rootScope, _$controller_, _session_, _calendarService_, _CAL_ADVANCED_SEARCH_CALENDAR_TYPES_) {
         $controller = _$controller_;
         calendarService = _calendarService_;
         $scope = $rootScope.$new();
@@ -133,7 +131,7 @@
         });
       });
 
-      it('should call #calendarService.listPersonalAndAcceptedDelegationCalendars with a good param and set ctrl.calendars correctly', function() {
+      it('should call #calendarService.listPersonalAndAcceptedDelegationCalendars with a good param and set ctrl.calendars correctly', function(done) {
         fullQuery.advanced.cal = CAL_ADVANCED_SEARCH_CALENDAR_TYPES.ALL_CALENDARS;
 
         var bindings = {
@@ -142,19 +140,17 @@
 
         var ctrl = initController(bindings);
 
-        ctrl.$onInit();
-
-        $scope.$digest();
-
-        expect(calendarService.listPersonalAndAcceptedDelegationCalendars).to.have.been.calledOnce;
-        expect(calendarService.listPersonalAndAcceptedDelegationCalendars).to.have.been.calledWith(session.user._id);
-        expect(ctrl.calendars).to.deep.equal({
-          myCalendars: userCalendars,
-          sharedCalendars: subscribedCalendarsWithOwnerName
-        });
+        ctrl.$onInit().then(function() {
+          expect(calendarService.listPersonalAndAcceptedDelegationCalendars).to.have.been.calledOnce;
+          expect(calendarService.listPersonalAndAcceptedDelegationCalendars).to.have.been.calledWith(session.user._id);
+          expect(ctrl.calendars).to.deep.equal({
+            myCalendars: userCalendars,
+            sharedCalendars: subscribedCalendarsWithOwnerName
+          });
+        }).then(done).catch(done);
       });
 
-      it('should call #calendarService.injectCalendarsWithOwnerName with a good param and then set ctrl.calendars correctly when there is at least one shared calendar', function() {
+      it('should call #calendarService.injectCalendarsWithOwnerName with a good param and then set ctrl.calendars correctly when there is at least one shared calendar', function(done) {
         fullQuery.advanced.cal = CAL_ADVANCED_SEARCH_CALENDAR_TYPES.ALL_CALENDARS;
 
         var bindings = {
@@ -163,21 +159,19 @@
 
         var ctrl = initController(bindings);
 
-        ctrl.$onInit();
-
-        $scope.$digest();
-
-        expect(calendarService.injectCalendarsWithOwnerName).to.have.been.calledWith(sinon.match(function(calendarListParam) {
-          expect(calendarListParam).to.have.members(subscribedCalendars);
-
-          return true;
-        }));
-        expect(ctrl.calendars).to.deep.equal({
-          myCalendars: userCalendars,
-          sharedCalendars: subscribedCalendars.map(function(sharedCalendar) {
-            return _.assign({}, sharedCalendar, { ownerDisplayName: ownerDisplayName });
-          })
-        });
+        ctrl.$onInit().then(function() {
+          expect(calendarService.injectCalendarsWithOwnerName).to.have.been.calledWith(sinon.match(function(calendarListParam) {
+            expect(calendarListParam).to.have.members(subscribedCalendars);
+  
+            return true;
+          }));
+          expect(ctrl.calendars).to.deep.equal({
+            myCalendars: userCalendars,
+            sharedCalendars: subscribedCalendars.map(function(sharedCalendar) {
+              return _.assign({}, sharedCalendar, { ownerDisplayName: ownerDisplayName });
+            })
+          });
+        }).then(done).catch(done);
       });
 
       it('should not call #calendarService.injectCalendarsWithOwnerName when there are no shared calendars', function() {

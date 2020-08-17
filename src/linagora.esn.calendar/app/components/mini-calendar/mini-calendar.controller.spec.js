@@ -62,7 +62,7 @@ describe('The miniCalendarController controller', function() {
     calMiniCalendarEventSourceBuilderService = sinon.stub();
 
     calendarHomeService = {
-      getUserCalendarHomeId: sinon.stub()
+      getUserCalendarHomeId: sinon.stub().returns(Promise.resolve(userId))
     };
 
     miniCalendarServiceMock = {
@@ -138,7 +138,7 @@ describe('The miniCalendarController controller', function() {
   }));
 
   afterEach(function() {
-    $scope.$destroy();
+    $scope && typeof $scope.$destroy === 'function' && $scope.$destroy();
   });
 
   it('should $rootScope.broadcast the view on viewRender call', function() {

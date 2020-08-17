@@ -16,6 +16,9 @@ describe('The calendarsList controller', function() {
     calendarServiceMock = {
       listPersonalAndAcceptedDelegationCalendars: sinon.spy(function() {
         return $q.when(calendars);
+      }),
+      getHiddenCalendars: sinon.spy(function() {
+        return $q.when([]);
       })
     };
 
@@ -33,9 +36,7 @@ describe('The calendarsList controller', function() {
       user: {
         _id: 'userId'
       },
-      ready: {
-        then: angular.noop
-      }
+      ready: $q.when({})
     };
 
     calendarHomeServiceMock = {
@@ -123,7 +124,7 @@ describe('The calendarsList controller', function() {
 
   describe('the activate function', function() {
     describe('CAL_EVENTS.CALENDARS.ADD listener', function() {
-      it('should add calendar to self.calendars if it does not exist yet', function() {
+      it('should add calendar to self.calendars if it does not exist yet', function(done) {
         var newCalendar = CalendarCollectionShell.from({
           href: '/calendars/12345/4.json',
           name: 'name4',
@@ -132,14 +133,16 @@ describe('The calendarsList controller', function() {
         });
         var expectedResult = calendars.concat(newCalendar);
 
-        CalendarsListController.$onInit();
-        $rootScope.$digest();
-        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
-
-        expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+        CalendarsListController.$onInit().then(function() {
+          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
+  
+          expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+        })
+        .then(done)
+        .catch(done);
       });
 
-      it('should not add calendar to self.calendars if it already exists', function() {
+      it('should not add calendar to self.calendars if it already exists', function(done) {
         var newCalendar = CalendarCollectionShell.from({
           href: '/calendars/12345/1.json',
           name: 'name',
@@ -147,11 +150,14 @@ describe('The calendarsList controller', function() {
           description: 'description'
         });
 
-        CalendarsListController.$onInit();
-        $rootScope.$digest();
-        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
+        CalendarsListController.$onInit().then(function() {
+          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
 
-        expect(CalendarsListController.calendars).to.deep.equal(calendars);
+          expect(CalendarsListController.calendars).to.deep.equal(calendars);
+        })
+        .then(done)
+        .catch(done);
+        
       });
 
       describe('refreshCalendarList on add', function() {
@@ -214,7 +220,7 @@ describe('The calendarsList controller', function() {
           }];
         });
 
-        it('should refresh calendars list', function() {
+        it('should refresh calendars list', function(done) {
           var id = '4';
           var newCalendar = {
             uniqueId: id,
@@ -231,16 +237,19 @@ describe('The calendarsList controller', function() {
           };
           var expectedResult = calendars.concat(newCalendar);
 
-          CalendarsListController.$onInit();
-          $rootScope.$digest();
-          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
+          CalendarsListController.$onInit().then(function() {
+            $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
 
-          expect(CalendarsListController.userCalendars).to.deep.equal([expectedResult[0], expectedResult[3]]);
-          expect(CalendarsListController.sharedCalendars).to.deep.equal([expectedResult[2]]);
-          expect(CalendarsListController.publicCalendars).to.deep.equal([expectedResult[1]]);
+            expect(CalendarsListController.userCalendars).to.deep.equal([expectedResult[0], expectedResult[3]]);
+            expect(CalendarsListController.sharedCalendars).to.deep.equal([expectedResult[2]]);
+            expect(CalendarsListController.publicCalendars).to.deep.equal([expectedResult[1]]);
+          })
+          .then(done)
+          .catch(done);
+          
         });
 
-        it('should refresh calendars list and not consider the new calendar as shared once it is classified as personal', function() {
+        it('should refresh calendars list and not consider the new calendar as shared once it is classified as personal', function(done) {
           var id = '4';
           var newCalendar = {
             uniqueId: id,
@@ -257,39 +266,45 @@ describe('The calendarsList controller', function() {
           };
           var expectedResult = calendars.concat(newCalendar);
 
-          CalendarsListController.$onInit();
-          $rootScope.$digest();
-          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
+          CalendarsListController.$onInit().then(function() {
+            $rootScope.$broadcast(CAL_EVENTS.CALENDARS.ADD, newCalendar);
 
-          expect(CalendarsListController.userCalendars).to.deep.equal([expectedResult[0], expectedResult[3]]);
-          expect(CalendarsListController.sharedCalendars).to.deep.equal([expectedResult[2]]);
-          expect(CalendarsListController.publicCalendars).to.deep.equal([expectedResult[1]]);
+            expect(CalendarsListController.userCalendars).to.deep.equal([expectedResult[0], expectedResult[3]]);
+            expect(CalendarsListController.sharedCalendars).to.deep.equal([expectedResult[2]]);
+            expect(CalendarsListController.publicCalendars).to.deep.equal([expectedResult[1]]);
+          })
+          .then(done)
+          .catch(done);
         });
       });
     });
 
     describe('CAL_EVENTS.CALENDARS.REMOVE listener', function() {
-      it('remove calendar to self.calendars', function() {
+      it('remove calendar to self.calendars', function(done) {
         var expectedResult = calendars.slice(1);
 
-        CalendarsListController.$onInit();
-        $rootScope.$digest();
-        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.REMOVE, calendars[0]);
+        CalendarsListController.$onInit().then(function() {
+          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.REMOVE, calendars[0]);
 
-        expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+          expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+        })
+        .then(done)
+        .catch(done);
       });
 
-      it('remove calendar subscription', function() {
+      it('remove calendar subscription', function(done) {
         var expectedResult = calendars.slice(0, 2);
 
-        CalendarsListController.$onInit();
-        $rootScope.$digest();
-        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.REMOVE, { uniqueId: '/calendars/12345/3_source.json' });
+        CalendarsListController.$onInit().then(function() {
+          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.REMOVE, { uniqueId: '/calendars/12345/3_source.json' });
 
-        expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+          expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+        })
+        .then(done)
+        .catch(done);
       });
 
-      it('refresh calendars list', function() {
+      it('refresh calendars list', function(done) {
         calendars = [{
           uniqueId: '1',
           href: 'href',
@@ -338,19 +353,21 @@ describe('The calendarsList controller', function() {
 
         var expectedResult = calendars.slice(1);
 
-        CalendarsListController.$onInit();
-        $rootScope.$digest();
-        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.REMOVE, calendars[0]);
+        CalendarsListController.$onInit().then(function() {
+          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.REMOVE, calendars[0]);
 
-        expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
-        expect(CalendarsListController.userCalendars).to.deep.equal([]);
-        expect(CalendarsListController.sharedCalendars).to.deep.equal([]);
-        expect(CalendarsListController.publicCalendars).to.deep.equal(expectedResult);
+          expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+          expect(CalendarsListController.userCalendars).to.deep.equal([]);
+          expect(CalendarsListController.sharedCalendars).to.deep.equal([]);
+          expect(CalendarsListController.publicCalendars).to.deep.equal(expectedResult);
+        })
+        .then(done)
+        .catch(done);
       });
     });
 
-    describe('CAL_EVENTS.CALENDARS.UPDATE listener', function() {
-      it('should update calendar in self.calendars if existed', function() {
+    describe('CAL_EVENTS.CALENDARS.UPDATE listener', function(done) {
+      it('should update calendar in self.calendars if existed', function(done) {
         var updatedCalendar = CalendarCollectionShell.from({
           href: '/calendars/12345/1.json',
           name: 'nameUpdated',
@@ -359,14 +376,15 @@ describe('The calendarsList controller', function() {
         });
         var expectedResult = [updatedCalendar].concat(calendars.slice(1));
 
-        CalendarsListController.$onInit();
-        $rootScope.$digest();
-        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.UPDATE, updatedCalendar);
-
-        expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+        CalendarsListController.$onInit().then(function() {
+          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.UPDATE, updatedCalendar);
+          expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+        })
+        .then(done)
+        .catch(done);
       });
 
-      it('should do nothing if the updated calendar does not exist in self.calendars', function() {
+      it('should do nothing if the updated calendar does not exist in self.calendars', function(done) {
         var updatedCalendar = CalendarCollectionShell.from({
           href: '/calendars/12345/4.json',
           name: 'nameUpdated',
@@ -375,42 +393,48 @@ describe('The calendarsList controller', function() {
         });
         var expectedResult = calendars.slice(0);
 
-        CalendarsListController.$onInit();
-        $rootScope.$digest();
-        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.UPDATE, updatedCalendar);
+        CalendarsListController.$onInit().then(function() {
+          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.UPDATE, updatedCalendar);
 
-        expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+          expect(CalendarsListController.calendars).to.deep.equal(expectedResult);
+        })
+        .then(done)
+        .catch(done);
       });
     });
 
     describe('CAL_EVENTS.CALENDARS.TOGGLE_VIEW listener', function() {
-      it('should set the visibility of the calendar', function() {
-        CalendarsListController.$onInit();
-        $rootScope.$digest();
-        CalendarsListController.arrangeCalendars = sinon.spy();
-        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {
-          calendarUniqueId: calendars[0].uniqueId,
-          hidden: true
-        });
+      it('should set the visibility of the calendar', function(done) {
+        CalendarsListController.$onInit().then(function() {
+          CalendarsListController.arrangeCalendars = sinon.spy();
+          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {
+            calendarUniqueId: calendars[0].uniqueId,
+            hidden: true
+          });
 
-        expect(CalendarsListController.hiddenCalendars[calendars[0].uniqueId]).to.be.true;
+          expect(CalendarsListController.hiddenCalendars[calendars[0].uniqueId]).to.be.true;
 
-        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {
-          calendarUniqueId: calendars[0].uniqueId,
-          hidden: false
-        });
+          $rootScope.$broadcast(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {
+            calendarUniqueId: calendars[0].uniqueId,
+            hidden: false
+          });
 
-        expect(CalendarsListController.hiddenCalendars[calendars[0].uniqueId]).to.be.false;
+          expect(CalendarsListController.hiddenCalendars[calendars[0].uniqueId]).to.be.false;
+        })
+        .then(done)
+        .catch(done);
       });
     });
 
     describe('the listPersonalAndAcceptedDelegationCalendars function', function() {
-      it('should initialize calendars with all the calendars from calendarService.listPersonalAndAcceptedDelegationCalendars', function() {
-        CalendarsListController.$onInit();
-        CalendarsListController.arrangeCalendars = sinon.spy();
-        $rootScope.$digest();
-
-        expect(CalendarsListController.calendars).to.deep.equal(calendars);
+      it('should initialize calendars with all the calendars from calendarService.listPersonalAndAcceptedDelegationCalendars', function(done) {
+        CalendarsListController.$onInit().then(function() {
+          CalendarsListController.arrangeCalendars = sinon.spy();
+  
+          expect(CalendarsListController.calendars).to.deep.equal(calendars);
+        })
+        .then(done)
+        .catch(done);
       });
 
       it('should call calendarService.listPersonalAndAcceptedDelegationCalendars with the two params', function() {
@@ -427,11 +451,12 @@ describe('The calendarsList controller', function() {
         expect(calendarVisibilityServiceMock.getHiddenCalendars).to.have.been.called;
       });
 
-      it('should update hiddenCalendars and add all the hidden calendars returned by calendarVisibilityService.getHiddenCalendars', function() {
-        CalendarsListController.$onInit();
-        $rootScope.$digest();
-
-        expect(CalendarsListController.hiddenCalendars[hiddenCalendar.uniqueId]).to.be.true;
+      it('should update hiddenCalendars and add all the hidden calendars returned by calendarVisibilityService.getHiddenCalendars', function(done) {
+        CalendarsListController.$onInit().then(function() {
+          expect(CalendarsListController.hiddenCalendars[hiddenCalendar.uniqueId]).to.be.true;
+        })
+        .then(done)
+        .catch(done);
       });
     });
   });

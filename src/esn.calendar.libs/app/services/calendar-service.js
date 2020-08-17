@@ -318,7 +318,7 @@ require('../services/calendar-cache.js');
      * @return {Promise<[CalendarCollectionShell]>} a Promise that resolves to the equivalent calendars with their owner names injected
      */
     function injectCalendarsWithOwnerName(calendars) {
-      return $q.all(calendars.map(function(calendar) {
+      return Promise.all(calendars.map(function(calendar) {
         return getOwnerDisplayName(calendar)
           .then(function(ownerDisplayName) {
             return _.assign({}, calendar, { ownerDisplayName: ownerDisplayName });

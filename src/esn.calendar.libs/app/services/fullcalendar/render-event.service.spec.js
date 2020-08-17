@@ -77,7 +77,8 @@ describe('The calFullCalendarRenderEventService service', function() {
     format12 = 'h:mm A';
     format24 = 'H:mm';
     esnDatetimeServiceMock = {
-      getTimeFormat: sinon.stub().returns('')
+      getTimeFormat: sinon.stub().returns(''),
+      init: sinon.stub().returns(Promise.resolve(true))
     };
 
     angular.mock.module('esn.calendar.libs');

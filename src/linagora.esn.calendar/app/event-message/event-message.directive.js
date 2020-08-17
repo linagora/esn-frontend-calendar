@@ -70,7 +70,7 @@ require('../event-message/event-message.service.js');
       var etag = self.event.etag;
       var emails = session.user.emails;
 
-      calEventService.changeParticipation(path, event, emails, partstat, etag, false)
+      return calEventService.changeParticipation(path, event, emails, partstat, etag, false)
         .then(function(shell) {
           self.partstat = partstat;
           if (shell) {

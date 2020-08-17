@@ -11,11 +11,10 @@ describe('The esn-resource-icon-picker component', function() {
 
   beforeEach(function() {
     angular.mock.module('linagora.esn.resource');
-    module('jadeTemplates');
 
     $modal = sinon.spy();
 
-    module(function($provide) {
+    angular.mock.module(function($provide) {
       $provide.value('$modal', $modal);
     });
   });
@@ -34,7 +33,6 @@ describe('The esn-resource-icon-picker component', function() {
 
   it('should call "resource-icon-picker-modal" modal when clicked on select', function() {
     compileComponent('<esn-resource-icon-picker/>');
-
     element.find('.select')[0].click();
 
     expect($modal).to.have.been.called;

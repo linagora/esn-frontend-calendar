@@ -7,7 +7,7 @@ var expect = chai.expect;
 describe('The event-recurrence-edition component', function() {
 
   var esnI18nService, calMoment;
-  var calNow;
+  var calNow, self;
 
   beforeEach(function() {
 
@@ -16,10 +16,15 @@ describe('The event-recurrence-edition component', function() {
       translate: sinon.stub().returns({toString: function() {return '';}})
     };
 
-    module('jadeTemplates');
     angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.value('esnI18nService', esnI18nService);
     });
+
+    angular.mock.module('esn.datetime', function($provide) {
+      $provide.factory('esnDatePickerDirective', function() {
+        return [];
+      });
+    })
 
     angular.mock.inject(function(_calMoment_) {
       calMoment = _calMoment_;
@@ -29,6 +34,7 @@ describe('The event-recurrence-edition component', function() {
   });
 
   beforeEach(inject(['$compile', '$rootScope', function($c, $r) {
+    self = this;
     this.$compile = $c;
     this.$scope = $r.$new();
 
@@ -45,115 +51,125 @@ describe('The event-recurrence-edition component', function() {
 
     this.initDirective = function(scope) {
       var html = '<event-recurrence-edition event="event" can-modify-event-recurrence="canModifyEventRecurrence"/>';
-      var element = this.$compile(html)(scope);
+      var element = self.$compile(html)(scope);
 
-      scope.$digest();
-      this.eleScope = element.isolateScope();
-
-      return element;
+      return new Promise(function(resolve) {
+        setTimeout(function() {
+          scope.$digest();
+          self.eleScope = element.isolateScope();
+          return resolve(element);
+        }, 0);
+      });
     };
   }]));
 
   describe('activate function', function() {
-    it('should set days correctly from input event', function() {
+    it('should set days correctly from input event', function(done) {
       this.$scope.event.rrule = {
         freq: undefined,
         interval: null,
         byday: ['SA', 'SU']
       };
-      this.initDirective(this.$scope);
-
-      expect(this.eleScope.vm.days).to.shallowDeepEqual([
-        {value: 'MO', selected: false},
-        {value: 'TU', selected: false},
-        {value: 'WE', selected: false},
-        {value: 'TH', selected: false},
-        {value: 'FR', selected: false},
-        {value: 'SA', selected: true},
-        {value: 'SU', selected: true}
-      ]);
+      this.initDirective(this.$scope).then(function(){
+        expect(self.eleScope.vm.days).to.shallowDeepEqual([
+          {value: 'MO', selected: false},
+          {value: 'TU', selected: false},
+          {value: 'WE', selected: false},
+          {value: 'TH', selected: false},
+          {value: 'FR', selected: false},
+          {value: 'SA', selected: true},
+          {value: 'SU', selected: true}
+        ]);
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
   });
 
   describe('scope.toggleWeekdays', function() {
-    it('should splice the weekday and sort the array', function() {
+    it('should splice the weekday and sort the array', function(done) {
       this.$scope.event.rrule = {
         freq: undefined,
         interval: null
       };
-      this.initDirective(this.$scope);
-      this.eleScope.vm.event.rrule.byday = ['SU', 'WE', 'TU', 'MO'];
-      this.eleScope.vm.toggleWeekdays('WE');
-      expect(this.eleScope.vm.event.rrule.byday).to.deep.equal(['MO', 'TU', 'SU']);
+      this.initDirective(this.$scope).then(function() {
+        self.eleScope.vm.event.rrule.byday = ['SU', 'WE', 'TU', 'MO'];
+        self.eleScope.vm.toggleWeekdays('WE');
+        expect(self.eleScope.vm.event.rrule.byday).to.deep.equal(['MO', 'TU', 'SU']);
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
-    it('should push the weekday and sort the array', function() {
+    it('should push the weekday and sort the array', function(done) {
       this.$scope.event.rrule = {
         freq: undefined,
         interval: null
       };
-      this.initDirective(this.$scope);
-      this.eleScope.vm.event.rrule.byday = ['SU', 'WE', 'TU', 'MO'];
-      this.eleScope.vm.toggleWeekdays('FR');
-      expect(this.eleScope.vm.event.rrule.byday).to.deep.equal(['MO', 'TU', 'WE', 'FR', 'SU']);
+      this.initDirective(this.$scope).then(function() {
+        self.eleScope.vm.event.rrule.byday = ['SU', 'WE', 'TU', 'MO'];
+        self.eleScope.vm.toggleWeekdays('FR');
+        expect(self.eleScope.vm.event.rrule.byday).to.deep.equal(['MO', 'TU', 'WE', 'FR', 'SU']);
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
   });
 
   describe('at end date min value', function() {
-    it('should be today', function() {
+    it('should be today', function(done) {
       this.$scope.event.start = calMoment('2017-09-11 09:30');
       this.$scope.event.rrule = {
         freq: 'WEEKLY'
       };
-      this.initDirective(this.$scope);
-      var calMinDateAsString = this.eleScope.vm.getMinDate();
+      this.initDirective(this.$scope).then(function() {
+        var calMinDateAsString = self.eleScope.vm.getMinDate();
 
-      expect(calMinDateAsString).to.be.equal(calNow.format('YYYY-MM-DD'));
+        expect(calMinDateAsString).to.be.equal(calNow.format('YYYY-MM-DD'));
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
-    it('should be the event start date', function() {
+    it('should be the event start date', function(done) {
       this.$scope.event.start = calMoment().add(7, 'days');
       this.$scope.event.rrule = {
         freq: 'WEEKLY'
       };
-      this.initDirective(this.$scope);
-      var calMinDateAsString = this.eleScope.vm.getMinDate();
+      this.initDirective(this.$scope).then(function() {
+        var calMinDateAsString = self.eleScope.vm.getMinDate();
 
-      expect(calMinDateAsString).to.be.equal(this.$scope.event.start.format('YYYY-MM-DD'));
+        expect(calMinDateAsString).to.be.equal(self.$scope.event.start.format('YYYY-MM-DD'));
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
   });
 
   describe('scope.selectEndRadioButton', function() {
-    it('should set the correct radio button to checked', function() {
+    it('should set the correct radio button to checked', function(done) {
       this.$scope.event.rrule = {
         freq: 'WEEKLY'
       };
-      var element = this.initDirective(this.$scope);
-
-      this.eleScope.selectEndRadioButton(2);
-      var radio = angular.element(element).find('input[name="inlineRadioEndOptions"]')[2];
-
-      expect(radio.checked).to.be.true;
+      this.initDirective(this.$scope).then(function(element) {
+        self.eleScope.selectEndRadioButton(2);
+        var radio = angular.element(element).find('input[name="inlineRadioEndOptions"]')[2];
+  
+        expect(radio.checked).to.be.true;
+      }).then(done)
+      .catch(done);
     });
 
-    it('should set until to undefined if index is 1', function() {
+    it('should set until to undefined if index is 1', function(done) {
       this.$scope.event.rrule = {
         freq: 'WEEKLY',
         until: 'UNTIL'
       };
-      this.initDirective(this.$scope);
-      this.eleScope.selectEndRadioButton(1);
-      expect(this.eleScope.vm.event.rrule.until).to.be.undefined;
+      this.initDirective(this.$scope).then(function(){
+        self.eleScope.selectEndRadioButton(1);
+        expect(self.eleScope.vm.event.rrule.until).to.be.undefined;
+      }).then(done).catch(done);
     });
 
-    it('should set count to undefined if index is 2', function() {
+    it('should set count to undefined if index is 2', function(done) {
       this.$scope.event.rrule = {
         freq: 'WEEKLY',
         count: 10
       };
-      this.initDirective(this.$scope);
-      this.eleScope.selectEndRadioButton(2);
-      expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
+      this.initDirective(this.$scope).then(function() {
+        self.eleScope.selectEndRadioButton(2);
+        expect(self.eleScope.vm.event.rrule.count).to.be.undefined;
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
   });
 

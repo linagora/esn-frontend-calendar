@@ -26,8 +26,8 @@ describe('The calOpenEventForm service', function() {
 
     calEventUtils = {};
 
-    module('esn.calendar.libs');
-    module(function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module(function($provide) {
       $provide.value('calEventFormService', calEventFormService);
       $provide.value('calEventUtils', calEventUtils);
     });

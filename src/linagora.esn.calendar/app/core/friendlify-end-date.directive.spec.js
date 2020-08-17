@@ -7,7 +7,6 @@ var expect = chai.expect;
 describe('The calFriendlifyEndDate directive', function() {
 
   beforeEach(function() {
-    module('jadeTemplates');
     angular.mock.module('esn.calMoment');
     angular.mock.module('esn.calendar');
   });

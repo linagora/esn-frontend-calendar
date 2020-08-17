@@ -19,10 +19,7 @@ describe('The calEntitiesAutocompleteInputController', function() {
         company_name: 'test',
         _id: 'domainId'
       },
-      ready: {
-        then: function() {
-        }
-      }
+      ready: $q.when({})
     };
 
     attendeeCandidates = [

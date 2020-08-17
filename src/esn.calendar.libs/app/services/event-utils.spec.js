@@ -14,7 +14,8 @@ describe('The calEventUtils service', function() {
     emailMap[userEmail] = true;
 
     esnI18nServiceMock = {
-      translate: sinon.stub()
+      translate: sinon.stub(),
+      getLocale: sinon.stub().returns('en')
     };
 
     var session = {
@@ -30,19 +31,18 @@ describe('The calEventUtils service', function() {
 
     momentUTCOffsetStub = sinon.stub();
 
-    module('esn.calendar.libs');
-    module('esn.ical');
-    module(function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module('esn.ical');
+    angular.mock.module(function($provide) {
       $provide.factory('session', function($q) {
         session.ready = $q.when(session);
 
         return session;
       });
 
-      $provide.constant('moment', function() {
-        return {
-          utcOffset: momentUTCOffsetStub
-        };
+      $provide.constant('moment', {
+        utcOffset: momentUTCOffsetStub,
+        locale: sinon.stub().returns(true)
       });
 
       $provide.constant('esnI18nService', esnI18nServiceMock);

@@ -40,8 +40,8 @@ describe('The calEventFormService', function() {
       isPublic: sinon.stub().returns(true)
     };
 
-    module('linagora.esn.graceperiod', 'esn.calendar.libs');
-    module(function($provide) {
+    angular.mock.module('linagora.esn.graceperiod', 'esn.calendar.libs');
+    angular.mock.module(function($provide) {
       $provide.value('$modal', $modal);
       $provide.value('$state', $state);
       $provide.value('calendarService', calendarService);
@@ -96,7 +96,7 @@ describe('The calEventFormService', function() {
         expect($modal).to.have.been.called;
         expect($state.go).to.not.have.been;
         expect($modal).to.have.been.calledWith(sinon.match({
-          templateUrl: '/calendar/app/event/form/modals/event-form-modal.html',
+          template: require("./modals/event-form-modal.pug"),
           backdrop: 'static',
           placement: 'center'
         }));
@@ -117,7 +117,7 @@ describe('The calEventFormService', function() {
         $rootScope.$digest();
 
         expect($modal).to.have.been.calledWith(sinon.match({
-          controller: sinon.match.func.and(sinon.match(function(controller) {
+          controller: sinon.match(function(controller) {
             var openForm = sinon.spy();
             var $hide = sinon.spy();
             var $scope = {
@@ -129,7 +129,7 @@ describe('The calEventFormService', function() {
             expect($hide).to.have.been.called;
 
             return true;
-          }))
+          })
         }));
 
         calEventFormService.openEventForm(regularEvent.calendarHomeId, regularEvent.calendarId, regularEvent);
@@ -149,7 +149,7 @@ describe('The calEventFormService', function() {
         $rootScope.$digest();
 
         expect($modal).to.have.been.calledWith(sinon.match({
-          controller: sinon.match.func.and(sinon.match(function(controller) {
+          controller: sinon.match(function(controller) {
             var openForm = sinon.spy();
 
             var $scope = {
@@ -167,7 +167,7 @@ describe('The calEventFormService', function() {
             done();
 
             return true;
-          }))
+          })
         }));
       });
 
@@ -181,7 +181,7 @@ describe('The calEventFormService', function() {
         $rootScope.$digest();
 
         expect($modal).to.have.been.calledWith(sinon.match({
-          controller: sinon.match.func.and(sinon.match(function(controller) {
+          controller: sinon.match(function(controller) {
             var openForm = sinon.spy();
 
             var $scope = {
@@ -200,7 +200,7 @@ describe('The calEventFormService', function() {
             done();
 
             return true;
-          }))
+          })
         }));
       });
     });
@@ -217,7 +217,7 @@ describe('The calEventFormService', function() {
           expect($modal).to.have.been.called;
           expect($state.go).to.not.have.been;
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/event-form-modal.html',
+            template: require("./modals/event-form-modal.pug"),
             backdrop: 'static',
             placement: 'center'
           }));
@@ -231,13 +231,13 @@ describe('The calEventFormService', function() {
           $rootScope.$digest();
 
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+            template: require("./modals/edit-instance-or-series-modal.pug"),
             resolve: {
               event: sinon.match.func.and(sinon.match(function(eventGetter) {
                 return eventGetter() === recurrenceInstance;
               }))
             },
-            controller: sinon.match.func.and(sinon.match(function(controller) {
+            controller: sinon.match(function(controller) {
               var openForm = sinon.spy();
               var $scope = {
                 $hide: sinon.spy()
@@ -253,7 +253,7 @@ describe('The calEventFormService', function() {
               expect($scope.$hide).to.have.been.calledOnce;
 
               return true;
-            })),
+            }),
             placement: 'center'
           }));
         });
@@ -265,13 +265,13 @@ describe('The calEventFormService', function() {
             $rootScope.$digest();
 
             expect($modal).to.have.been.calledWith(sinon.match({
-              templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+              template: require("./modals/edit-instance-or-series-modal.pug"),
               resolve: {
                 event: sinon.match.func.and(sinon.match(function(eventGetter) {
                   return eventGetter() === recurrenceInstance;
                 }))
               },
-              controller: sinon.match.func.and(sinon.match(function(controller) {
+              controller: sinon.match(function(controller) {
                 var openForm = sinon.spy();
                 var $scope = {
                   $hide: sinon.spy()
@@ -289,7 +289,7 @@ describe('The calEventFormService', function() {
                 expect($scope.$hide).to.have.been.calledOnce;
 
                 return true;
-              })),
+              }),
               placement: 'center'
             }));
           });
@@ -304,13 +304,13 @@ describe('The calEventFormService', function() {
             $rootScope.$digest();
 
             expect($modal).to.have.been.calledWith(sinon.match({
-              templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+              template: require("./modals/edit-instance-or-series-modal.pug"),
               resolve: {
                 event: sinon.match.func.and(sinon.match(function(eventGetter) {
                   return eventGetter() === recurrenceInstance;
                 }))
               },
-              controller: sinon.match.func.and(sinon.match(function(controller) {
+              controller: sinon.match(function(controller) {
                 var openForm = sinon.spy();
                 var $scope = {
                   $hide: sinon.spy()
@@ -329,7 +329,7 @@ describe('The calEventFormService', function() {
                 expect($scope.$hide).to.have.been.calledOnce;
 
                 return true;
-              })),
+              }),
               placement: 'center'
             }));
           });

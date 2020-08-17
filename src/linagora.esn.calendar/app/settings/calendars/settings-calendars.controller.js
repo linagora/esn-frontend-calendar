@@ -21,7 +21,7 @@ function CalSettingsCalendarsController(
   self.remove = remove;
 
   function $onInit() {
-    listCalendars()
+    return listCalendars()
     .then(function() {
       $scope.$on(CAL_EVENTS.CALENDARS.ADD, onCalendarAdded);
       $scope.$on(CAL_EVENTS.CALENDARS.REMOVE, onCalendarRemoved);
@@ -68,9 +68,9 @@ function CalSettingsCalendarsController(
 
   function _openDeleteConfirmationDialog(calendar) {
     function removeCalendar() {
-      calendarService.removeCalendar(calendar.calendarHomeId, calendar).then(function() {
+      return calendarService.removeCalendar(calendar.calendarHomeId, calendar).then(function() {
           handleCalendarRemove(calendar);
-        }, function(err) {
+        }).catch(function(err) {
           $log.error('Can not delete calendar', calendar, err);
         });
     }

@@ -207,62 +207,50 @@ describe('The calendar configuration controller', function() {
       expect(calendarHomeServiceMock.getUserCalendarHomeId).to.be.called;
     });
 
-    it('should initialize calendarHomeId', function() {
+    it('should initialize calendarHomeId', function(done) {
       delete calendarConfigurationController.calendarHomeId;
 
-      calendarConfigurationController.$onInit();
-
-      $rootScope.$digest();
-
-      expect(calendarConfigurationController.calendarHomeId).to.be.equal(calendarHomeId);
+      calendarConfigurationController.$onInit().then(function() {
+        expect(calendarConfigurationController.calendarHomeId).to.be.equal(calendarHomeId);
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
-    it('should calendarService.getCalendar to get the calendar if calendarUniqueId is not null', function() {
+    it('should calendarService.getCalendar to get the calendar if calendarUniqueId is not null', function(done) {
       sinon.spy(CalendarCollectionShell, 'splitUniqueId');
 
-      calendarConfigurationController.$onInit();
-
-      $rootScope.$digest();
-
-      expect(CalendarCollectionShell.splitUniqueId).to.have.been.calledWith(stateParamsMock.calendarUniqueId);
-      expect(calendarService.getCalendar).to.be.calledWith(calendarHomeId, '123');
+      calendarConfigurationController.$onInit().then(function() {
+        expect(CalendarCollectionShell.splitUniqueId).to.have.been.calledWith(stateParamsMock.calendarUniqueId);
+        expect(calendarService.getCalendar).to.be.calledWith(calendarHomeId, '123');
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
-    it('should not call calendarService.getCalendar if calendarUniqueId is null', function() {
+    it('should not call calendarService.getCalendar if calendarUniqueId is null', function(done) {
       delete stateParamsMock.calendarUniqueId;
 
-      calendarConfigurationController.$onInit();
-
-      $rootScope.$digest();
-
-      expect(calendarService.getCalendar).to.not.be.called;
+      calendarConfigurationController.$onInit().then(function() {
+        expect(calendarService.getCalendar).to.not.be.called;
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
-    it('should calendar.getOwner to get the calendar owner if calendar is not null', function() {
-      calendarConfigurationController.$onInit();
-
-      $rootScope.$digest();
-
-      expect(calendarService.getCalendar).to.be.calledWith(calendarHomeId, '123');
-      expect(calendar.getOwner).to.have.been.calledWith();
+    it('should calendar.getOwner to get the calendar owner if calendar is not null', function(done) {
+      calendarConfigurationController.$onInit().then(function() {
+        expect(calendarService.getCalendar).to.be.calledWith(calendarHomeId, '123');
+        expect(calendar.getOwner).to.have.been.calledWith();
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
-    it('should initialize calendar with the right calendar when we want configure a calendar', function() {
-      calendarConfigurationController.$onInit();
-
-      $rootScope.$digest();
-
-      expect(calendarConfigurationController.calendar).to.be.equal(calendar);
+    it('should initialize calendar with the right calendar when we want configure a calendar', function(done) {
+      calendarConfigurationController.$onInit().then(function() {
+        expect(calendarConfigurationController.calendar).to.be.equal(calendar);
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
-    it('should call the activate function', function() {
+    it('should call the activate function', function(done) {
       calendarConfigurationController.activate = sinon.spy();
 
-      calendarConfigurationController.$onInit();
-
-      $rootScope.$digest();
-
-      expect(calendarConfigurationController.activate).to.be.called;
+      calendarConfigurationController.$onInit().then(function() {
+        expect(calendarConfigurationController.activate).to.be.called;
+      }).then(done).catch(err => done(err || new Error('should resolve')));
     });
 
     describe('if $stateParams.addUsersFromDelegationState not null', function() {
@@ -274,42 +262,34 @@ describe('The calendar configuration controller', function() {
         };
       });
 
-      it('should initialize newUsersGroups', function() {
+      it('should initialize newUsersGroups', function(done) {
         calendarConfigurationController.addUserGroup = sinon.spy();
 
-        calendarConfigurationController.$onInit();
-
-        $rootScope.$digest();
-
-        expect(calendarConfigurationController.newUsersGroups).to.deep.equal(stateParamsMock.addUsersFromDelegationState.newUsersGroups);
+        calendarConfigurationController.$onInit().then(function() {
+          expect(calendarConfigurationController.newUsersGroups).to.deep.equal(stateParamsMock.addUsersFromDelegationState.newUsersGroups);
+        }).then(done).catch(err => done(err || new Error('should resolve')));
       });
 
-      it('should initialize selectedShareeRight', function() {
-        calendarConfigurationController.$onInit();
-
-        $rootScope.$digest();
-
-        expect(calendarConfigurationController.selectedShareeRight).to.deep.equal(stateParamsMock.addUsersFromDelegationState.selectedShareeRight);
+      it('should initialize selectedShareeRight', function(done) {
+        calendarConfigurationController.$onInit().then(function() {
+          expect(calendarConfigurationController.selectedShareeRight).to.deep.equal(stateParamsMock.addUsersFromDelegationState.selectedShareeRight);
+        }).then(done).catch(err => done(err || new Error('should resolve')));
       });
 
-      it('should call addUserGroup', function() {
+      it('should call addUserGroup', function(done) {
         calendarConfigurationController.addUserGroup = sinon.spy();
 
-        calendarConfigurationController.$onInit();
-
-        $rootScope.$digest();
-
-        expect(calendarConfigurationController.addUserGroup).to.be.called;
+        calendarConfigurationController.$onInit().then(function() {
+          expect(calendarConfigurationController.addUserGroup).to.be.called;
+        }).then(done).catch(err => done(err || new Error('should resolve')));
       });
 
-      it('should call set selectedTab to "delegation"', function() {
+      it('should call set selectedTab to "delegation"', function(done) {
         calendarConfigurationController.getDelegationView = sinon.spy();
 
-        calendarConfigurationController.$onInit();
-
-        $rootScope.$digest();
-
-        expect(calendarConfigurationController.selectedTab).to.equal('delegation');
+        calendarConfigurationController.$onInit().then(function() {
+          expect(calendarConfigurationController.selectedTab).to.equal('delegation');
+        }).then(done).catch(err => done(err || new Error('should resolve')));
       });
     });
   });
@@ -383,7 +363,7 @@ describe('The calendar configuration controller', function() {
       expect(calendarConfigurationController.selectedShareeRight).to.equal(CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ);
     });
 
-    it('should correctly initialize delegation', function() {
+    it('should correctly initialize delegation', function(done) {
       calendarRight.getPublicRight = sinon.stub().returns('publicSelection');
       calendarRight.getAllShareeRights = sinon.stub().returns([
         {userId: 'userId', right: 'right'}
@@ -401,18 +381,17 @@ describe('The calendar configuration controller', function() {
         isSubscription: angular.noop
       };
 
-      calendarConfigurationController.activate();
-      $rootScope.$digest();
-
-      expect(Cache.prototype.get).to.have.always.been.calledWith('userId');
-      expect(calendarConfigurationController.publicSelection).to.equal('publicSelection');
-      expect(addUserGroup).to.have.been.calledWith([{
-        firstname: user.firstname,
-        lastname: user.lastname,
-        displayName: 'displayNameOfResult'
-      }], 'right');
-      expect(userUtilsMock.displayNameOf).to.have.been.calledWith(user);
-      expect(calendarConfigurationController.delegations).to.equals(addUserGroupResult);
+      calendarConfigurationController.activate().then(function() {
+        expect(Cache.prototype.get).to.have.always.been.calledWith('userId');
+        expect(calendarConfigurationController.publicSelection).to.equal('publicSelection');
+        expect(addUserGroup).to.have.been.calledWith([{
+          firstname: user.firstname,
+          lastname: user.lastname,
+          displayName: 'displayNameOfResult'
+        }], 'right');
+        expect(userUtilsMock.displayNameOf).to.have.been.calledWith(user);
+        expect(calendarConfigurationController.delegations).to.equals(addUserGroupResult);
+      }).then(done).catch(done);
     });
 
     it('should correctly initialize self.calendar if newCalendar is true', function() {
@@ -510,45 +489,41 @@ describe('The calendar configuration controller', function() {
         };
       });
 
-      it('should call createCalendar', function() {
+      it('should call createCalendar', function(done) {
         calendarConfigurationController.publicSelection = undefined;
 
-        calendarConfigurationController.submit();
-
-        $rootScope.$digest();
-
-        expect(notificationFactoryMock.weakInfo).to.have.been.called;
-        expect(stateMock.go).to.have.been.called;
-        expect(calendarAPI.modifyPublicRights).to.not.have.been.called;
+        calendarConfigurationController.submit().then(function() {
+          expect(notificationFactoryMock.weakInfo).to.have.been.called;
+          expect(stateMock.go).to.have.been.called;
+          expect(calendarAPI.modifyPublicRights).to.not.have.been.called;
+        }).then(done).catch(done);
       });
 
-      it('should call createCalendar and calendarAPI.modifyPublicRights when publicSelection is set to read', function() {
-        createCalendarWithPublicRightSetTo(CAL_CALENDAR_PUBLIC_RIGHT.READ);
+      it('should call createCalendar and calendarAPI.modifyPublicRights when publicSelection is set to read', function(done) {
+        createCalendarWithPublicRightSetTo(CAL_CALENDAR_PUBLIC_RIGHT.READ).then(done).catch(err => done(err || new Error('should resolve')));
       });
 
-      it('should call createCalendar and calendarAPI.modifyPublicRights when publicSelection is set to read_write', function() {
-        createCalendarWithPublicRightSetTo(CAL_CALENDAR_PUBLIC_RIGHT.READ_WRITE);
+      it('should call createCalendar and calendarAPI.modifyPublicRights when publicSelection is set to read_write', function(done) {
+        createCalendarWithPublicRightSetTo(CAL_CALENDAR_PUBLIC_RIGHT.READ_WRITE).then(done).catch(err => done(err || new Error('should resolve')));
       });
 
-      it('should call createCalendar and calendarAPI.modifyPublicRights when publicSelection is set to private', function() {
-        createCalendarWithPublicRightSetTo(CAL_CALENDAR_PUBLIC_RIGHT.PRIVATE);
+      it('should call createCalendar and calendarAPI.modifyPublicRights when publicSelection is set to private', function(done) {
+        createCalendarWithPublicRightSetTo(CAL_CALENDAR_PUBLIC_RIGHT.PRIVATE).then(done).catch(err => done(err || new Error('should resolve')));
       });
 
       function createCalendarWithPublicRightSetTo(publicRight) {
         calendarConfigurationController.publicSelection = publicRight;
 
-        calendarConfigurationController.submit();
-
-        $rootScope.$digest();
-
-        sinon.assert.callOrder(stateMock.go, calendarAPI.modifyPublicRights, notificationFactoryMock.weakInfo);
-        expect(notificationFactoryMock.weakInfo).to.have.been.called;
-        expect(stateMock.go).to.have.been.calledWith('calendar.main');
-        expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
-          calendarConfigurationController.calendarHomeId,
-          calendarConfigurationController.calendar.id,
-          { public_right: publicRight }
+        return calendarConfigurationController.submit().then(function() {
+          sinon.assert.callOrder(stateMock.go, calendarAPI.modifyPublicRights, notificationFactoryMock.weakInfo);
+          expect(notificationFactoryMock.weakInfo).to.have.been.called;
+          expect(stateMock.go).to.have.been.calledWith('calendar.main');
+          expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
+            calendarConfigurationController.calendarHomeId,
+            calendarConfigurationController.calendar.id,
+            { public_right: publicRight }
           );
+        });
       }
     });
 
@@ -615,7 +590,7 @@ describe('The calendar configuration controller', function() {
         expect(calendarAPI.modifyPublicRights).to.have.not.been.called;
       });
 
-      it('should call modifyCalendar if the calendar has been modified (with name having only one char) and directly return to the list if his right and public right have not been changed', function() {
+      it('should call modifyCalendar if the calendar has been modified (with name having only one char) and directly return to the list if his right and public right have not been changed', function(done) {
         var modifiedName = 'A';
 
         calendarRight.getPublicRight = sinon.stub().returns('publicSelection');
@@ -647,27 +622,25 @@ describe('The calendar configuration controller', function() {
         });
         calendarConfigurationController.calendar.name = 'aName';
 
-        calendarConfigurationController.activate();
-        $rootScope.$digest();
-
-        calendarConfigurationController.publicSelection = 'publicSelection';
-        calendarConfigurationController.calendar.name = modifiedName;
-        calendarConfigurationController.newCalendar = false;
-
-        calendarConfigurationController.submit();
-        $rootScope.$digest();
-
-        expect(notificationFactoryMock.weakInfo).to.have.been.called;
-        expect(stateMock.go).to.have.been.called;
-        expect(calendarService.modifyRights).to.not.have.been.called;
-        expect(calendarAPI.modifyPublicRights).to.have.not.been.called;
-        expect(calendarService.modifyCalendar).to.have.been.calledWith('12345', sinon.match({
-          href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json',
-          name: modifiedName
-        }));
+        calendarConfigurationController.activate().then(function() {
+          calendarConfigurationController.publicSelection = 'publicSelection';
+          calendarConfigurationController.calendar.name = modifiedName;
+          calendarConfigurationController.newCalendar = false;
+  
+          calendarConfigurationController.submit().then(function() {
+            expect(notificationFactoryMock.weakInfo).to.have.been.called;
+            expect(stateMock.go).to.have.been.called;
+            expect(calendarService.modifyRights).to.not.have.been.called;
+            expect(calendarAPI.modifyPublicRights).to.have.not.been.called;
+            expect(calendarService.modifyCalendar).to.have.been.calledWith('12345', sinon.match({
+              href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json',
+              name: modifiedName
+            }));
+          });
+        }).then(done).catch(err => done(err || new Error('should resolve')));
       });
 
-      it('should call modifyRight and not modifyCalendar nor modifyPublicRights if only right has been changed', function() {
+      it('should call modifyRight and not modifyCalendar nor modifyPublicRights if only right has been changed', function(done) {
         getAllRemovedUsersIdResult = ['1'];
         calendarRight.getPublicRight = sinon.stub().returns('publicSelection');
         calendarRight.equals = sinon.stub().returns(false);
@@ -684,31 +657,29 @@ describe('The calendar configuration controller', function() {
         };
         calendarConfigurationController.calendar.name = 'aName';
 
-        calendarConfigurationController.activate();
-        $rootScope.$digest();
-
-        calendarConfigurationController.publicSelection = 'publicSelection';
-        calendarConfigurationController.newCalendar = false;
-        calendarConfigurationController.delegations = [{
-          user: { _id: 'id', preferredEmail: 'preferredEmail' },
-          selection: 'selectedShareeRight'
-        }];
-
-        calendarConfigurationController.submit();
-        $rootScope.$digest();
-
-        expect(notificationFactoryMock.weakInfo).to.have.been.called;
-        expect(calendarRight.removeShareeRight).to.have.been.calledWith('1');
-        expect(calendarRight.updateSharee).to.have.been.calledWith('id', 'preferredEmail', 'selectedShareeRight');
-        expect(stateMock.go).to.have.been.called;
-        expect(calendarService.modifyRights).to.have.been.calledWith(
-          calendarConfigurationController.calendarHomeId,
-          sinon.match({href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json'}),
-          sinon.match.same(calendarRight),
-          sinon.match(calendarRight)
-        );
-        expect(calendarService.modifyCalendar).to.not.have.been.calledWith;
-        expect(calendarAPI.modifyPublicRights).to.have.not.been.called;
+        calendarConfigurationController.activate().then(function() {
+          calendarConfigurationController.publicSelection = 'publicSelection';
+          calendarConfigurationController.newCalendar = false;
+          calendarConfigurationController.delegations = [{
+            user: { _id: 'id', preferredEmail: 'preferredEmail' },
+            selection: 'selectedShareeRight'
+          }];
+  
+          calendarConfigurationController.submit().then(function() {
+            expect(notificationFactoryMock.weakInfo).to.have.been.called;
+            expect(calendarRight.removeShareeRight).to.have.been.calledWith('1');
+            expect(calendarRight.updateSharee).to.have.been.calledWith('id', 'preferredEmail', 'selectedShareeRight');
+            expect(stateMock.go).to.have.been.called;
+            expect(calendarService.modifyRights).to.have.been.calledWith(
+              calendarConfigurationController.calendarHomeId,
+              sinon.match({href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json'}),
+              sinon.match.same(calendarRight),
+              sinon.match(calendarRight)
+            );
+            expect(calendarService.modifyCalendar).to.not.have.been.calledWith;
+            expect(calendarAPI.modifyPublicRights).to.have.not.been.called;
+          });
+        }).then(done).catch(err => done(err || new Error('should resolve')));
       });
 
       describe('when only public right have been changed', function() {
@@ -727,59 +698,56 @@ describe('The calendar configuration controller', function() {
           $rootScope.$digest();
         });
 
-        it('should call modifyPublicRights with read argument when public right is changed to read', function() {
+        it('should call modifyPublicRights with read argument when public right is changed to read', function(done) {
           calendarConfigurationController.publicSelection = CAL_CALENDAR_PUBLIC_RIGHT.READ;
 
-          calendarConfigurationController.submit();
-          $rootScope.$digest();
-
-          expect(notificationFactoryMock.weakInfo).to.have.been.called;
-          expect(stateMock.go).to.have.been.called;
-          expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
-            calendarConfigurationController.calendarHomeId,
-            calendarConfigurationController.calendar.id,
-            { public_right: CAL_CALENDAR_PUBLIC_RIGHT.READ }
-          );
-          expect(calendarService.modifyCalendar).to.not.have.been.calledWith;
-          expect(calendarService.modifyRights).to.not.have.been.calledWith;
+          calendarConfigurationController.submit().then(function() {
+            expect(notificationFactoryMock.weakInfo).to.have.been.called;
+            expect(stateMock.go).to.have.been.called;
+            expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
+              calendarConfigurationController.calendarHomeId,
+              calendarConfigurationController.calendar.id,
+              { public_right: CAL_CALENDAR_PUBLIC_RIGHT.READ }
+            );
+            expect(calendarService.modifyCalendar).to.not.have.been.calledWith;
+            expect(calendarService.modifyRights).to.not.have.been.calledWith;
+          }).then(done).catch(err => done(err || new Error('should resolve')));
         });
 
-        it('should call modifyPublicRights with private argument when public right is changed to private', function() {
+        it('should call modifyPublicRights with private argument when public right is changed to private', function(done) {
           calendarConfigurationController.publicSelection = CAL_CALENDAR_PUBLIC_RIGHT.PRIVATE;
 
-          calendarConfigurationController.submit();
-          $rootScope.$digest();
-
-          expect(notificationFactoryMock.weakInfo).to.have.been.called;
-          expect(stateMock.go).to.have.been.called;
-          expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
-            calendarConfigurationController.calendarHomeId,
-            calendarConfigurationController.calendar.id,
-            { public_right: CAL_CALENDAR_PUBLIC_RIGHT.PRIVATE }
-          );
-          expect(calendarService.modifyCalendar).to.not.have.been.calledWith;
-          expect(calendarService.modifyRights).to.not.have.been.calledWith;
+          calendarConfigurationController.submit().then(function() {
+            expect(notificationFactoryMock.weakInfo).to.have.been.called;
+            expect(stateMock.go).to.have.been.called;
+            expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
+              calendarConfigurationController.calendarHomeId,
+              calendarConfigurationController.calendar.id,
+              { public_right: CAL_CALENDAR_PUBLIC_RIGHT.PRIVATE }
+            );
+            expect(calendarService.modifyCalendar).to.not.have.been.calledWith;
+            expect(calendarService.modifyRights).to.not.have.been.calledWith;
+          }).then(done).catch(err => done(err || new Error('should resolve')));
         });
 
-        it('should call modifyPublicRights with free-busy argument when public right is changed to something other than private or read', function() {
+        it('should call modifyPublicRights with free-busy argument when public right is changed to something other than private or read', function(done) {
           calendarConfigurationController.publicSelection = CAL_CALENDAR_PUBLIC_RIGHT.FREE_BUSY;
 
-          calendarConfigurationController.submit();
-          $rootScope.$digest();
-
-          expect(notificationFactoryMock.weakInfo).to.have.been.called;
-          expect(stateMock.go).to.have.been.called;
-          expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
-            calendarConfigurationController.calendarHomeId,
-            calendarConfigurationController.calendar.id,
-            { public_right: CAL_CALENDAR_PUBLIC_RIGHT.FREE_BUSY }
-          );
-          expect(calendarService.modifyCalendar).to.not.have.been.calledWith;
-          expect(calendarService.modifyRights).to.not.have.been.calledWith;
+          calendarConfigurationController.submit().then(function() {
+            expect(notificationFactoryMock.weakInfo).to.have.been.called;
+            expect(stateMock.go).to.have.been.called;
+            expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
+              calendarConfigurationController.calendarHomeId,
+              calendarConfigurationController.calendar.id,
+              { public_right: CAL_CALENDAR_PUBLIC_RIGHT.FREE_BUSY }
+            );
+            expect(calendarService.modifyCalendar).to.not.have.been.calledWith;
+            expect(calendarService.modifyRights).to.not.have.been.calledWith;
+          }).then(done).catch(err => done(err || new Error('should resolve')));
         });
       });
 
-      it('should call modifyRight, modifyCalendar and modifyPublicRights if all right has been changed', function() {
+      it('should call modifyRight, modifyCalendar and modifyPublicRights if all right has been changed', function(done) {
         var modifiedName = 'A';
 
         calendarRight.getPublicRight = sinon.stub().returns('publicSelection');
@@ -798,33 +766,31 @@ describe('The calendar configuration controller', function() {
         };
         calendarConfigurationController.calendar.name = 'aName';
 
-        calendarConfigurationController.activate();
-        $rootScope.$digest();
-
-        calendarConfigurationController.publicSelection = CAL_CALENDAR_PUBLIC_RIGHT.FREE_BUSY;
-        calendarConfigurationController.calendar.name = modifiedName;
-        calendarConfigurationController.newCalendar = false;
-
-        calendarConfigurationController.submit();
-        $rootScope.$digest();
-
-        expect(notificationFactoryMock.weakInfo).to.have.been.called;
-        expect(stateMock.go).to.have.been.called;
-        expect(calendarService.modifyRights).to.have.been.calledWith(
-          calendarConfigurationController.calendarHomeId,
-          sinon.match({ href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json' }),
-          sinon.match.same(calendarRight),
-          sinon.match(calendarRight)
-        );
-        expect(calendarService.modifyCalendar).to.have.been.calledWith('12345', sinon.match({
-          href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json',
-          name: modifiedName
-        }));
-        expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
-          calendarConfigurationController.calendarHomeId,
-          calendarConfigurationController.calendar.id,
-          { public_right: CAL_CALENDAR_PUBLIC_RIGHT.FREE_BUSY }
-        );
+        calendarConfigurationController.activate().then(function() {
+          calendarConfigurationController.publicSelection = CAL_CALENDAR_PUBLIC_RIGHT.FREE_BUSY;
+          calendarConfigurationController.calendar.name = modifiedName;
+          calendarConfigurationController.newCalendar = false;
+  
+          calendarConfigurationController.submit().then(function() {
+            expect(notificationFactoryMock.weakInfo).to.have.been.called;
+            expect(stateMock.go).to.have.been.called;
+            expect(calendarService.modifyRights).to.have.been.calledWith(
+              calendarConfigurationController.calendarHomeId,
+              sinon.match({ href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json' }),
+              sinon.match.same(calendarRight),
+              sinon.match(calendarRight)
+            );
+            expect(calendarService.modifyCalendar).to.have.been.calledWith('12345', sinon.match({
+              href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json',
+              name: modifiedName
+            }));
+            expect(calendarAPI.modifyPublicRights).to.have.been.calledWith(
+              calendarConfigurationController.calendarHomeId,
+              calendarConfigurationController.calendar.id,
+              { public_right: CAL_CALENDAR_PUBLIC_RIGHT.FREE_BUSY }
+            );
+          });
+        }).then(done).catch(err => done(err || new Error('should resolve')));
       });
     });
   });

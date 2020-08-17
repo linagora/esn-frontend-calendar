@@ -6,10 +6,12 @@ var expect = chai.expect;
 
 describe('The miniCalendar component', function() {
   beforeEach(function() {
-    module('jadeTemplates');
     angular.mock.module('esn.calendar', 'linagora.esn.graceperiod');
     angular.mock.module('esn.calendar', function($provide) {
       $provide.value('Cache', function() {});
+      $provide.factory('esnCalendarDirective', function() {
+        return [];
+      });
     });
   });
 
