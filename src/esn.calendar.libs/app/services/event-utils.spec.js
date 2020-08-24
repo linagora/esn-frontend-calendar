@@ -1,5 +1,7 @@
 'use strict';
 
+const { fn: momentProto } = require('moment');
+
 /* global sinon, chai: false */
 
 var expect = chai.expect;
@@ -473,9 +475,19 @@ describe('The calEventUtils service', function() {
   });
 
   describe('The stripTimeWithTz function', function() {
+    let sandbox;
+
+    beforeEach(function() {
+      sandbox = sinon.sandbox.create();
+    });
+
+    afterEach(function() {
+      sandbox.restore();
+    });
+
     it('should not mutate its calMomentDate parameter', function() {
-      var calMomentDate = this.calMoment('2019-11-05 09:00');
-      var calMomentDateClone = calMomentDate.clone();
+      const calMomentDate = this.calMoment('2019-11-05 09:00');
+      const calMomentDateClone = calMomentDate.clone();
 
       this.calEventUtils.stripTimeWithTz(calMomentDate);
 
@@ -483,48 +495,48 @@ describe('The calEventUtils service', function() {
     });
 
     it('should strip time and subtract negative UTC offset', function() {
-      var calMomentDate = this.calMoment('2019-11-05 09:00');
-      var utcOffset = -420;
+      const utcOffset = -420;
 
-      momentUTCOffsetStub.returns(utcOffset);
+      sandbox.stub(momentProto, 'utcOffset').returns(utcOffset);
 
-      var timeStrippedCalMoment = this.calEventUtils.stripTimeWithTz(calMomentDate);
+      const calMomentDate = this.calMoment('2019-11-05 09:00');
+      const timeStrippedCalMoment = this.calEventUtils.stripTimeWithTz(calMomentDate);
 
       expect(timeStrippedCalMoment.isSame(calMomentDate.clone().subtract(utcOffset, 'minutes'))).to.be.true;
       expect(timeStrippedCalMoment.hasTime()).to.be.false;
     });
 
     it('should strip time and not subtract non-negative UTC offset', function() {
-      var calMomentDate = this.calMoment('2019-11-05 09:00');
-      var utcOffset = 420;
+      const utcOffset = 420;
 
-      momentUTCOffsetStub.returns(utcOffset);
+      sandbox.stub(momentProto, 'utcOffset').returns(utcOffset);
 
-      var timeStrippedCalMoment = this.calEventUtils.stripTimeWithTz(calMomentDate);
+      const calMomentDate = this.calMoment('2019-11-05 09:00');
+      const timeStrippedCalMoment = this.calEventUtils.stripTimeWithTz(calMomentDate);
 
       expect(timeStrippedCalMoment.isSame(calMomentDate)).to.be.true;
       expect(timeStrippedCalMoment.hasTime()).to.be.false;
     });
 
     it('should strip time and not subtract negative UTC offset if the subtraction pushes the date to another day', function() {
-      var calMomentDate = this.calMoment('2019-11-05 18:00');
-      var utcOffset = -420;
+      const utcOffset = -420;
 
-      momentUTCOffsetStub.returns(utcOffset);
+      sandbox.stub(momentProto, 'utcOffset').returns(utcOffset);
 
-      var timeStrippedCalMoment = this.calEventUtils.stripTimeWithTz(calMomentDate);
+      const calMomentDate = this.calMoment('2019-11-05 18:00');
+      const timeStrippedCalMoment = this.calEventUtils.stripTimeWithTz(calMomentDate);
 
       expect(timeStrippedCalMoment.isSame(calMomentDate)).to.be.true;
       expect(timeStrippedCalMoment.hasTime()).to.be.false;
     });
 
     it('should strip time and not subtract negative UTC offset if the caller does not want to do so', function() {
-      var calMomentDate = this.calMoment('2019-11-05 09:00');
-      var utcOffset = -420;
+      const utcOffset = -420;
 
-      momentUTCOffsetStub.returns(utcOffset);
+      sandbox.stub(momentProto, 'utcOffset').returns(utcOffset);
 
-      var timeStrippedCalMoment = this.calEventUtils.stripTimeWithTz(calMomentDate, true);
+      const calMomentDate = this.calMoment('2019-11-05 09:00');
+      const timeStrippedCalMoment = this.calEventUtils.stripTimeWithTz(calMomentDate, true);
 
       expect(timeStrippedCalMoment.isSame(calMomentDate)).to.be.true;
       expect(timeStrippedCalMoment.hasTime()).to.be.false;
