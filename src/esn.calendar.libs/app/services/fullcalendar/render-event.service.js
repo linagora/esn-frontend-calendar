@@ -150,25 +150,27 @@ function calFullCalendarRenderEventService(
     });
   }
 
+  // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/54)
   function addMdiIcon(event, titleDiv, eventIconDiv, mdiIcon) {
-    var isMobile = matchmedia.is(ESN_MEDIA_QUERY_SM_XS);
-    var isMobileSmallEvent = false;
-    var icon = '<i class="mdi ' + mdiIcon + '"/>';
+    const isMobile = matchmedia.is(ESN_MEDIA_QUERY_SM_XS);
+    const icon = '<i class="mdi ' + mdiIcon + '"/>';
+    const eventDurationInMinute = event.end.diff(event.start, 'minutes');
 
     if (isMobile) {
-      var eventDurationInMinute = event.end.diff(event.start, 'minutes');
-
-      isMobileSmallEvent = eventDurationInMinute <= CAL_MAX_DURATION_OF_SMALL_EVENT.MOBILE;
-
       titleDiv.append(angular.element('<div class="event-icons-mobile"></div>'));
-      eventIconDiv = titleDiv.find('.event-icons-mobile');
+
+      if (event.allDay || eventDurationInMinute <= CAL_MAX_DURATION_OF_SMALL_EVENT.MOBILE) {
+        return titleDiv.prepend(icon);
+      }
+
+      return titleDiv.append(icon);
     }
 
-    if (event.allDay || (isMobile && isMobileSmallEvent)) {
-      titleDiv.prepend(icon);
-    } else {
-      isMobile ? eventIconDiv.append(icon) : eventIconDiv.prepend(icon);
+    if (event.allDay || eventDurationInMinute <= CAL_MAX_DURATION_OF_SMALL_EVENT.DESKTOP) {
+      return titleDiv.prepend(icon);
     }
+
+    eventIconDiv.prepend(icon);
   }
 
   function addTooltipToEvent(element, toolTip) {
