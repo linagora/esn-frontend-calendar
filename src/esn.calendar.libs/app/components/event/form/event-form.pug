@@ -94,7 +94,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
               .message(ng-show="selectedTab === 'resources'", ng-if="attendees.resources.length === 0") {{ 'No resource' | translate }}
               cal-attendee-list(
                 ng-show="selectedTab === 'attendees'",
-                ng-if="attendees.users.length > 0 || newAttendees.length > 0",
+                ng-if="attendees.users.length > 0",
                 attendees="attendees.users",
                 can-modify-attendees="::canModifyEventAttendees",
                 organizer="::editedEvent.organizer",
