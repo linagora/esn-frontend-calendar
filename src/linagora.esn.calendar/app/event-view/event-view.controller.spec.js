@@ -10,6 +10,8 @@
     var userAttendee, resourceAttendee, resourceAttendeeWithDetails;
 
     beforeEach(function() {
+      angular.mock.module('esn.calendar.libs');
+      angular.mock.module('esn.resource.libs');
       angular.mock.module('esn.calendar');
       angular.mock.inject(function($rootScope, _$controller_, _calAttendeeService_, _CAL_ICAL_) {
         $controller = _$controller_;

@@ -68,6 +68,7 @@ describe('CalendarShell factory', function() {
       }
     };
 
+    angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
       $provide.value('uuid4', self.uuid4);

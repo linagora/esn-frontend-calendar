@@ -13,6 +13,7 @@ describe('The cal-resource-item component', function() {
       getResourceIcon: sinon.stub()
     };
 
+    angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.value('calResourceService', calResourceService);
     });

@@ -69,6 +69,7 @@ describe('The calEventService service', function() {
       emitModifiedEvent: sinon.spy()
     };
 
+    angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.ical');
 

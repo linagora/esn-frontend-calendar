@@ -9,6 +9,7 @@ describe('The calFreebusyService service', function() {
   var calAttendeeService, calFreebusyAPI;
 
   beforeEach(function() {
+    angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
 
     calAttendeeService = {

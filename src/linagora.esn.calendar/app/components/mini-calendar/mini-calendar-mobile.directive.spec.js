@@ -6,6 +6,8 @@ var expect = chai.expect;
 
 describe('The miniCalendar component', function() {
   beforeEach(function() {
+    angular.mock.module('esn.resource.libs');
+    angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.calendar', 'linagora.esn.graceperiod');
     angular.mock.module('esn.calendar', function($provide) {
       $provide.value('Cache', function() {});

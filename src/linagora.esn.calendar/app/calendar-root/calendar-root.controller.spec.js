@@ -9,6 +9,8 @@ describe('The CalCalendarRootController controller', function() {
   var $q, $controller, $rootScope, $scope, calendarService, calDefaultValue, businessHours, calendarHomeId, CAL_DEFAULT_OLD_CALENDAR_ID;
 
   beforeEach(function() {
+    angular.mock.module('esn.resource.libs');
+    angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.calendar');
   });
 

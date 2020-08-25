@@ -23,6 +23,8 @@ describe('The CalCalendarImportController', function() {
 
   beforeEach(function() {
     angular.mock.module('esn.calendar');
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module('esn.resource.libs');
 
     inject(function(
       _$controller_,

@@ -65,6 +65,8 @@
         }
       };
 
+      angular.mock.module('esn.resource.libs');
+      angular.mock.module('esn.calendar.libs');
       angular.mock.module('esn.calendar');
 
       angular.mock.module(function($provide) {

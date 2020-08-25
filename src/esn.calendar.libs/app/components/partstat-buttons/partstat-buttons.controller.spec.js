@@ -12,6 +12,7 @@ describe('The CalPartstatButtonsController', function() {
   }
 
   beforeEach(function() {
+    angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
       $provide.value('$attrs', {});
