@@ -60,9 +60,7 @@
         user: {
           _id: '123456'
         },
-        ready: {
-          then: angular.noop
-        }
+        ready: $q.when()
       };
 
       angular.mock.module('esn.resource.libs');

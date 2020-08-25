@@ -19,9 +19,7 @@ describe('The calEventAlarmEditionController', function() {
         company_name: 'test',
         _id: 'domainId'
       },
-      ready: {
-        then: angular.noop
-      }
+      ready: $q.when()
     };
 
     calendarHomeService = {

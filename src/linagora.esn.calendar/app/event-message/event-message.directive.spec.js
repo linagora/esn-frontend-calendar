@@ -30,9 +30,7 @@ describe('The cal-event-message Angular module directives', function() {
 
       self.sessionMock = {
         user: { _id: '12345', emails: 'emails' },
-        ready: {
-          then: angular.noop
-        }
+        ready: $q.when()
       };
 
       self.calendarHomeServiceMock = {

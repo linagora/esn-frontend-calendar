@@ -10,7 +10,7 @@ describe('The CalSettingsCalendarsController controller', function() {
 
   beforeEach(function() {
     session = {
-      ready: {then: function() {}},
+      ready: $q.when(),
       user: {
         _id: 1
       }

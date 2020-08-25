@@ -33,9 +33,7 @@ describe('The calendarsList controller', function() {
       user: {
         _id: 'userId'
       },
-      ready: {
-        then: angular.noop
-      }
+      ready: $q.when()
     };
 
     calendarHomeServiceMock = {
