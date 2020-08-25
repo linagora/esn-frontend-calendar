@@ -96,7 +96,7 @@ describe('The calEventFormService', function() {
         expect($modal).to.have.been.called;
         expect($state.go).to.not.have.been;
         expect($modal).to.have.been.calledWith(sinon.match({
-          templateUrl: '/calendar/app/event/form/modals/event-form-modal.html',
+          template: require('./modals/event-form-modal.pug'),
           backdrop: 'static',
           placement: 'center'
         }));
@@ -217,7 +217,7 @@ describe('The calEventFormService', function() {
           expect($modal).to.have.been.called;
           expect($state.go).to.not.have.been;
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/event-form-modal.html',
+            template: require('./modals/event-form-modal.pug'),
             backdrop: 'static',
             placement: 'center'
           }));
@@ -231,7 +231,7 @@ describe('The calEventFormService', function() {
           $rootScope.$digest();
 
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+            template: require('./modals/edit-instance-or-series-modal.pug'),
             resolve: {
               event: sinon.match.func.and(sinon.match(function(eventGetter) {
                 return eventGetter() === recurrenceInstance;
@@ -265,7 +265,7 @@ describe('The calEventFormService', function() {
             $rootScope.$digest();
 
             expect($modal).to.have.been.calledWith(sinon.match({
-              templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+              template: require('./modals/edit-instance-or-series-modal.pug'),
               resolve: {
                 event: sinon.match.func.and(sinon.match(function(eventGetter) {
                   return eventGetter() === recurrenceInstance;
@@ -304,7 +304,7 @@ describe('The calEventFormService', function() {
             $rootScope.$digest();
 
             expect($modal).to.have.been.calledWith(sinon.match({
-              templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+              template: require('./modals/edit-instance-or-series-modal.pug'),
               resolve: {
                 event: sinon.match.func.and(sinon.match(function(eventGetter) {
                   return eventGetter() === recurrenceInstance;

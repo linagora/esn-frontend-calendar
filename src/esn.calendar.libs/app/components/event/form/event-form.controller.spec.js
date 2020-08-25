@@ -1586,7 +1586,7 @@ describe('The CalEventFormController controller', function() {
           $rootScope.$digest();
 
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+            template: require('./modals/edit-instance-or-series-modal.pug'),
             placement: 'center'
           }));
         });
@@ -1600,7 +1600,7 @@ describe('The CalEventFormController controller', function() {
           $rootScope.$digest();
 
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+            template: require('./modals/edit-instance-or-series-modal.pug'),
             controller: sinon.match.func.and(sinon.match(function(controller) {
               var $scope = {
                 $hide: sinon.spy(),
@@ -1633,7 +1633,7 @@ describe('The CalEventFormController controller', function() {
           $rootScope.$digest();
 
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+            template: require('./modals/edit-instance-or-series-modal.pug'),
             controller: sinon.match.func.and(sinon.match(function(controller) {
               var $scope = {
                 $hide: sinon.spy(),
