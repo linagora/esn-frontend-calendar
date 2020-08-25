@@ -10,14 +10,14 @@ describe('The CalSettingsDisplayController', function() {
   var $controller, $rootScope, $httpBackend, $scope;
   var esnUserConfigurationService, moduleName, moduleConfiguration, configResponse;
 
-  beforeEach(module(function($provide) {
+  beforeEach(angular.mock.module(function($provide) {
     $provide.value('asyncAction', sinon.spy(function(message, action) {
       return action();
     }));
   }));
 
   beforeEach(function() {
-    module('esn.calendar');
+    angular.mock.module('esn.calendar');
 
     moduleName = 'linagora.esn.calendar';
     moduleConfiguration = ['workingDays', 'hideDeclinedEvents'];

@@ -40,8 +40,8 @@ describe('The calEventFormService', function() {
       isPublic: sinon.stub().returns(true)
     };
 
-    module('linagora.esn.graceperiod', 'esn.calendar.libs');
-    module(function($provide) {
+    angular.mock.module('linagora.esn.graceperiod', 'esn.calendar.libs');
+    angular.mock.module(function($provide) {
       $provide.value('$modal', $modal);
       $provide.value('$state', $state);
       $provide.value('calendarService', calendarService);

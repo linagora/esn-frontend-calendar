@@ -10,7 +10,7 @@ describe('The CalEventMessageEditionController controller', function() {
   var self = this;
 
   beforeEach(function() {
-    angular.mock.module('esn.calendar', 'linagora.esn.graceperiod', 'jadeTemplates');
+    angular.mock.module('esn.calendar', 'linagora.esn.graceperiod');
     self.CalendarShellMock = {
       fromIncompleteShell: sinon.spy(_.identity)
     };

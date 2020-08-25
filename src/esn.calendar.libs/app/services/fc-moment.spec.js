@@ -35,8 +35,8 @@ describe('calMoment factory', function() {
 
     var self = this;
 
-    module('esn.calendar.libs');
-    module(function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module(function($provide) {
       $provide.value('$window', self.window);
       $provide.value('_', function() {});
       $provide.value('jstz', self.jstz);

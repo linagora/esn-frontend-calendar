@@ -15,7 +15,7 @@ describe('The calSidebar directive', function() {
       }
     };
 
-    angular.mock.module('jadeTemplates', 'linagora.esn.graceperiod', 'esn.calendar', function($provide) {
+    angular.mock.module('linagora.esn.graceperiod', 'esn.calendar', function($provide) {
       $provide.value('calendarService', calendarServiceMock);
     });
   });

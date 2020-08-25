@@ -65,9 +65,9 @@
         }
       };
 
-      module('esn.calendar');
+      angular.mock.module('esn.calendar');
 
-      module(function($provide) {
+      angular.mock.module(function($provide) {
         $provide.value('session', session);
       });
 

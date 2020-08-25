@@ -41,8 +41,8 @@ describe('The calOpenEventFromSearchForm service', function() {
       getEventByUID: sinon.stub()
     };
 
-    module('esn.calendar.libs');
-    module(function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module(function($provide) {
       $provide.value('calEventFormService', calEventFormService);
       $provide.value('calendarAPI', calendarAPI);
     });

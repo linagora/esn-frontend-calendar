@@ -27,7 +27,7 @@ describe('The request utility functions', function() {
   }
 
   beforeEach(function() {
-    module('esn.calendar.libs');
+    angular.mock.module('esn.calendar.libs');
   });
 
   describe('The calGracePeriodResponseHandler factory', function() {

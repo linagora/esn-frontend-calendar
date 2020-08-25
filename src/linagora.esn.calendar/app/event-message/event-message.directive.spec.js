@@ -11,7 +11,7 @@ describe('The cal-event-message Angular module directives', function() {
   var self = this;
 
   beforeEach(function() {
-    angular.mock.module('esn.calendar', 'linagora.esn.graceperiod', 'jadeTemplates');
+    angular.mock.module('esn.calendar', 'linagora.esn.graceperiod');
   });
 
   describe('The eventMessage directive', function() {

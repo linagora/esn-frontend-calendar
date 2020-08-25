@@ -16,7 +16,6 @@ describe('The cal-resource-item component', function() {
     angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.value('calResourceService', calResourceService);
     });
-    module('jadeTemplates');
   });
 
   beforeEach(inject(function(_$q_, _$compile_, _$rootScope_, _CAL_ICAL_, _CAL_RESOURCE_) {

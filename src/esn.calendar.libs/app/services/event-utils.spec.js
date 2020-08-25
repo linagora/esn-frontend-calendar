@@ -30,9 +30,9 @@ describe('The calEventUtils service', function() {
 
     momentUTCOffsetStub = sinon.stub();
 
-    module('esn.calendar.libs');
-    module('esn.ical');
-    module(function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module('esn.ical');
+    angular.mock.module(function($provide) {
       $provide.factory('session', function($q) {
         session.ready = $q.when(session);
 
