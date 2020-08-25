@@ -9,7 +9,6 @@ describe('The esnResourceIconPicker controller', function() {
   var ctrl;
 
   beforeEach(function() {
-    module('jadeTemplates');
     angular.mock.module('linagora.esn.resource');
   });
 

@@ -161,6 +161,8 @@ describe('The calendar configuration controller', function() {
   });
 
   beforeEach(function() {
+    angular.mock.module('esn.resource.libs');
+    angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.calendar', function($provide) {
       $provide.value('$state', stateMock);
       $provide.value('$stateParams', stateParamsMock);

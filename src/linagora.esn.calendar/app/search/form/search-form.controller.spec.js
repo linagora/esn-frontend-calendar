@@ -60,14 +60,14 @@
         user: {
           _id: '123456'
         },
-        ready: {
-          then: angular.noop
-        }
+        ready: $q.when()
       };
 
-      module('esn.calendar');
+      angular.mock.module('esn.resource.libs');
+      angular.mock.module('esn.calendar.libs');
+      angular.mock.module('esn.calendar');
 
-      module(function($provide) {
+      angular.mock.module(function($provide) {
         $provide.value('session', session);
       });
 

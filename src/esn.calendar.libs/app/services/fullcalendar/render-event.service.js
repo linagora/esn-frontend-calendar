@@ -150,15 +150,12 @@ function calFullCalendarRenderEventService(
     });
   }
 
-  // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/54)
   function addMdiIcon(event, titleDiv, eventIconDiv, mdiIcon) {
     const isMobile = matchmedia.is(ESN_MEDIA_QUERY_SM_XS);
     const icon = '<i class="mdi ' + mdiIcon + '"/>';
     const eventDurationInMinute = event.end.diff(event.start, 'minutes');
 
     if (isMobile) {
-      titleDiv.append(angular.element('<div class="event-icons-mobile"></div>'));
-
       if (event.allDay || eventDurationInMinute <= CAL_MAX_DURATION_OF_SMALL_EVENT.MOBILE) {
         return titleDiv.prepend(icon);
       }

@@ -10,7 +10,9 @@ describe('The CalCalendarPlanningController', function() {
   var CAL_UI_CONFIG;
 
   beforeEach(function() {
-    module('esn.calendar');
+    angular.mock.module('esn.calendar');
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module('esn.resource.libs');
 
     inject(function(
       _$rootScope_,

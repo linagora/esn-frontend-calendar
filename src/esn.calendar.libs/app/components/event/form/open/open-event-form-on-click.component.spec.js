@@ -10,12 +10,12 @@ describe('The cal-open-event-form-on-click component', function() {
   var $compile, $rootScope, $scope, element, calOpenEventFormSpy, calOpenEventFromSearchFormSpy;
 
   beforeEach(function() {
-    module('esn.calendar.libs');
+    angular.mock.module('esn.calendar.libs');
 
     calOpenEventFormSpy = sinon.stub();
     calOpenEventFromSearchFormSpy = sinon.stub();
 
-    module(function($provide) {
+    angular.mock.module(function($provide) {
       $provide.value('calOpenEventForm', calOpenEventFormSpy);
       $provide.value('calOpenEventFromSearchForm', calOpenEventFromSearchFormSpy);
     });

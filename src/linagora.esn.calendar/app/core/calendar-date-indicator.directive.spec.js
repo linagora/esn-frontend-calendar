@@ -17,7 +17,7 @@ describe('The calendarDateIndicator directive', function() {
       setMiniCalendarView: sinon.spy()
     };
 
-    angular.mock.module('jadeTemplates', 'linagora.esn.graceperiod', 'esn.calendar', function($provide) {
+    angular.mock.module('linagora.esn.graceperiod', 'esn.calendar', function($provide) {
       $provide.value('calendarCurrentView', self.calendarCurrentView);
     });
   });

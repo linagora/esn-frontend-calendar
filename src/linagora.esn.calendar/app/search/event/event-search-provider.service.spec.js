@@ -32,7 +32,9 @@ describe('The calSearchEventProviderService service', function() {
       this.options = options;
     };
 
-    module('esn.calendar', function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module('esn.resource.libs');
+    angular.mock.module('esn.calendar', function($provide) {
       $provide.value('calendarHomeService', {
         getUserCalendarHomeId: function() {
           return $q.when(calendarHomeId);

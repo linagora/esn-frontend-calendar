@@ -178,6 +178,7 @@ describe('The CalEventFormController controller', function() {
 
     calFreebusyService = {};
 
+    angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
       $provide.decorator('calendarUtils', function($delegate) {
@@ -1585,7 +1586,7 @@ describe('The CalEventFormController controller', function() {
           $rootScope.$digest();
 
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+            template: require('./modals/edit-instance-or-series-modal.pug'),
             placement: 'center'
           }));
         });
@@ -1599,7 +1600,7 @@ describe('The CalEventFormController controller', function() {
           $rootScope.$digest();
 
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+            template: require('./modals/edit-instance-or-series-modal.pug'),
             controller: sinon.match.func.and(sinon.match(function(controller) {
               var $scope = {
                 $hide: sinon.spy(),
@@ -1632,7 +1633,7 @@ describe('The CalEventFormController controller', function() {
           $rootScope.$digest();
 
           expect($modal).to.have.been.calledWith(sinon.match({
-            templateUrl: '/calendar/app/event/form/modals/edit-instance-or-series-modal.html',
+            template: require('./modals/edit-instance-or-series-modal.pug'),
             controller: sinon.match.func.and(sinon.match(function(controller) {
               var $scope = {
                 $hide: sinon.spy(),

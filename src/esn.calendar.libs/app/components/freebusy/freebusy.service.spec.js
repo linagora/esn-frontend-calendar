@@ -9,6 +9,7 @@ describe('The calFreebusyService service', function() {
   var calAttendeeService, calFreebusyAPI;
 
   beforeEach(function() {
+    angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
 
     calAttendeeService = {
@@ -34,7 +35,7 @@ describe('The calFreebusyService service', function() {
     });
 
     function getComponentFromFixture(string) {
-      var path = 'frontend/app/fixtures/calendar/vfreebusy_test/' + string;
+      var path = 'src/linagora.esn.calendar/app/fixtures/calendar/vfreebusy_test/' + string;
 
       return __FIXTURES__[path];
     }

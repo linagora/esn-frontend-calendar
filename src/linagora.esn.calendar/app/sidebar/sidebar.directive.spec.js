@@ -15,7 +15,11 @@ describe('The calSidebar directive', function() {
       }
     };
 
-    angular.mock.module('jadeTemplates', 'linagora.esn.graceperiod', 'esn.calendar', function($provide) {
+    angular.mock.module('linagora.esn.graceperiod');
+    angular.mock.module('esn.calendar');
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module('esn.resource.libs');
+    angular.mock.module(function($provide) {
       $provide.value('calendarService', calendarServiceMock);
     });
   });
@@ -29,7 +33,6 @@ describe('The calSidebar directive', function() {
     this.initDirective = function(scope) {
       var element = this.$compile('<cal-sidebar/>')(scope);
 
-      element = this.$compile(element)(scope);
       scope.$digest();
 
       return element;

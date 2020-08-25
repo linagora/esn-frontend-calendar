@@ -8,7 +8,6 @@ describe('The ESNResourceFormUpdateController controller', function() {
   var $q, $state, $controller, $rootScope, resource, resourceUpdated, esnResourceAPIClient, sessionMock, asyncAction, resourceType;
 
   beforeEach(function() {
-    module('jadeTemplates');
     angular.mock.module('linagora.esn.resource');
   });
 
@@ -37,7 +36,7 @@ describe('The ESNResourceFormUpdateController controller', function() {
       }
     };
 
-    module(function($provide) {
+    angular.mock.module(function($provide) {
       $provide.value('asyncAction', asyncAction);
       $provide.value('esnResourceAPIClient', esnResourceAPIClient);
       $provide.value('session', sessionMock);

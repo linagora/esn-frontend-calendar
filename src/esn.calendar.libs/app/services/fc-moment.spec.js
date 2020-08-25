@@ -20,10 +20,6 @@ describe('calMoment factory', function() {
       }
     };
 
-    this.moment = {
-      duration: 'it doesn not matter as long as it is here'
-    };
-
     this.jstz = {
       determine: function() {
         return {
@@ -35,13 +31,11 @@ describe('calMoment factory', function() {
 
     var self = this;
 
-    module('esn.calendar.libs');
-    module(function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module(function($provide) {
       $provide.value('$window', self.window);
-      $provide.value('_', function() {});
       $provide.value('jstz', self.jstz);
       $provide.value('esnDatetimeService', self.esnDatetimeServiceMock);
-      $provide.constant('moment', self.moment);
     });
   });
 
@@ -97,7 +91,7 @@ describe('calMoment factory', function() {
   });
 
   it('has a duration method which is like moment.duration', function() {
-    expect(this.calMoment.duration).to.equal(this.moment.duration);
+    expect(this.calMoment.duration).to.deep.equal(moment.duration);
   });
 
 });

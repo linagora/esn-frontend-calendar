@@ -33,9 +33,7 @@ describe('The calendarsList controller', function() {
       user: {
         _id: 'userId'
       },
-      ready: {
-        then: angular.noop
-      }
+      ready: $q.when()
     };
 
     calendarHomeServiceMock = {
@@ -44,6 +42,8 @@ describe('The calendarsList controller', function() {
       }
     };
 
+    angular.mock.module('esn.resource.libs');
+    angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.calendar');
 
     angular.mock.module(function($provide) {

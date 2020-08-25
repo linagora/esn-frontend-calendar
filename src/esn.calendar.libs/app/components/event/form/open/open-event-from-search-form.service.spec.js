@@ -41,8 +41,8 @@ describe('The calOpenEventFromSearchForm service', function() {
       getEventByUID: sinon.stub()
     };
 
-    module('esn.calendar.libs');
-    module(function($provide) {
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module(function($provide) {
       $provide.value('calEventFormService', calEventFormService);
       $provide.value('calendarAPI', calendarAPI);
     });
@@ -94,7 +94,7 @@ describe('The calOpenEventFromSearchForm service', function() {
     var results = [{
       _links: { self: { href: '/calendar/eventCalendarHomeId/eventCalendarId/recurringEventWithTwoExceptions.ics' } },
       etag: 'etag',
-      data: ICAL.Component.fromString(__FIXTURES__[('frontend/app/fixtures/calendar/recurringEventWithTwoExceptions.ics')]).toJSON()
+      data: ICAL.Component.fromString(__FIXTURES__[('src/linagora.esn.calendar/app/fixtures/calendar/recurringEventWithTwoExceptions.ics')]).toJSON()
     }];
 
     var actualEvent;
@@ -132,7 +132,7 @@ describe('The calOpenEventFromSearchForm service', function() {
     var results = [{
       _links: { self: { href: '/calendar/eventCalendarHomeId/eventCalendarId/recurringEventWithTwoExceptions.ics' } },
       etag: 'etag',
-      data: ICAL.Component.fromString(__FIXTURES__[('frontend/app/fixtures/calendar/recurringEventWithTwoExceptions.ics')]).toJSON()
+      data: ICAL.Component.fromString(__FIXTURES__[('src/linagora.esn.calendar/app/fixtures/calendar/recurringEventWithTwoExceptions.ics')]).toJSON()
     }];
 
     var actualEvent;

@@ -16,7 +16,6 @@ describe('The event-recurrence-edition component', function() {
       translate: sinon.stub().returns({toString: function() {return '';}})
     };
 
-    module('jadeTemplates');
     angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.value('esnI18nService', esnI18nService);
     });

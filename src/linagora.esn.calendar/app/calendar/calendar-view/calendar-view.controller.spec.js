@@ -160,8 +160,8 @@ describe('The calendarViewController', function() {
       updateObjectToBrowserTimeZone: sinon.stub().returnsArg(0)
     };
 
-    module('esn.calendar');
-    module(function($provide) {
+    angular.mock.module('esn.calendar');
+    angular.mock.module(function($provide) {
       $provide.decorator('calendarUtils', function($delegate) {
         return angular.extend($delegate, self.calendarUtilsMock);
       });

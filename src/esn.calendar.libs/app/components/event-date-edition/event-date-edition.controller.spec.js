@@ -22,7 +22,7 @@ describe('The calEventDateEditionController', function() {
       }
     };
 
-    module('esn.calendar.libs', function($provide) {
+    angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.value('esnI18nDateFormatService', esnI18nDateFormatService);
       $provide.value('esnDatetimeService', esnDatetimeService);
     });

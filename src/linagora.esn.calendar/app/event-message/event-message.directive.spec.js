@@ -11,7 +11,7 @@ describe('The cal-event-message Angular module directives', function() {
   var self = this;
 
   beforeEach(function() {
-    angular.mock.module('esn.calendar', 'linagora.esn.graceperiod', 'jadeTemplates');
+    angular.mock.module('esn.calendar', 'linagora.esn.graceperiod');
   });
 
   describe('The eventMessage directive', function() {
@@ -30,9 +30,7 @@ describe('The cal-event-message Angular module directives', function() {
 
       self.sessionMock = {
         user: { _id: '12345', emails: 'emails' },
-        ready: {
-          then: angular.noop
-        }
+        ready: $q.when()
       };
 
       self.calendarHomeServiceMock = {

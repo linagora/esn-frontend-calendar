@@ -7,7 +7,6 @@ var expect = chai.expect;
 
 describe('The cal-event-form Angular module directives', function() {
   beforeEach(function() {
-    module('jadeTemplates');
     angular.mock.module('esn.calendar.libs');
     this.calEventUtilsMock = {};
     this.calEventFormControllerMock = function($scope) {

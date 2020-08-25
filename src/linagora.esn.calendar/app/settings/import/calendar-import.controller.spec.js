@@ -10,7 +10,7 @@ describe('The CalCalendarImportController', function() {
   var $controller, $rootScope, $scope;
   var calendarService, calendarHomeService, davImportService, session;
 
-  beforeEach(module(function($provide) {
+  beforeEach(angular.mock.module(function($provide) {
     $provide.value('asyncAction', sinon.spy(function(message, action) {
       return action();
     }));
@@ -22,7 +22,9 @@ describe('The CalCalendarImportController', function() {
   }));
 
   beforeEach(function() {
-    module('esn.calendar');
+    angular.mock.module('esn.calendar');
+    angular.mock.module('esn.calendar.libs');
+    angular.mock.module('esn.resource.libs');
 
     inject(function(
       _$controller_,
