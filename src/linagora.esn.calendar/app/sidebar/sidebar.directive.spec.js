@@ -33,7 +33,6 @@ describe('The calSidebar directive', function() {
     this.initDirective = function(scope) {
       var element = this.$compile('<cal-sidebar/>')(scope);
 
-      element = this.$compile(element)(scope);
       scope.$digest();
 
       return element;
