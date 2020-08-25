@@ -18,7 +18,7 @@ describe('The ICAL Angular module', function() {
 
       it('should parse the given ICS data', function() {
         var ICAL = this.ICAL;
-        var result = ICAL.parse(__FIXTURES__['frontend/app/fixtures/calendar/event.ics']);
+        var result = ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/event.ics']);
 
         expect(result).to.exist;
 

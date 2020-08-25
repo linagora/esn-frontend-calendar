@@ -34,7 +34,7 @@ describe('The calFreebusyService service', function() {
     });
 
     function getComponentFromFixture(string) {
-      var path = 'frontend/app/fixtures/calendar/vfreebusy_test/' + string;
+      var path = 'src/linagora.esn.calendar/app/fixtures/calendar/vfreebusy_test/' + string;
 
       return __FIXTURES__[path];
     }

@@ -1301,7 +1301,7 @@ describe('The calEventService service', function() {
     });
 
     it('should change the participation status if the event is recurrent', function(done) {
-      var recurrentCalendarShell = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['frontend/app/fixtures/calendar/reventWithTz.ics'])), {path: '/path/to/uid.ics'});
+      var recurrentCalendarShell = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/reventWithTz.ics'])), {path: '/path/to/uid.ics'});
 
       recurrentCalendarShell.attendees = [{email: 'test@example.com'}];
       var copy = new self.CalendarShell(new ICAL.Component(ICAL.helpers.clone(recurrentCalendarShell.vcalendar.toJSON(), true)));
@@ -1670,7 +1670,7 @@ describe('The calEventService service', function() {
     });
 
     it('should return undefined if suggested event is incomplete', function(done) {
-      var fakeEvent = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['frontend/app/fixtures/calendar/event.ics'])), {path: '/path/to/uid.ics'});
+      var fakeEvent = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/event.ics'])), {path: '/path/to/uid.ics'});
 
       delete fakeEvent.vcalendar;
 
@@ -1685,7 +1685,7 @@ describe('The calEventService service', function() {
 
     it('should call calEventAPI with correct event path', function(done) {
       var fakePath = '/path/to/uid.ics';
-      var fakeEvent = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['frontend/app/fixtures/calendar/recurringEventWithTwoExceptions.ics'])), {path: fakePath});
+      var fakeEvent = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/recurringEventWithTwoExceptions.ics'])), {path: fakePath});
 
       this.$httpBackend.expect('POST', '/dav/api' + fakePath).respond(200, 'aResponse');
 
@@ -1700,10 +1700,10 @@ describe('The calEventService service', function() {
 
     it('should call calEventAPI with a correctly formatted request body', function(done) {
       var fakePath = '/path/to/uid.ics';
-      var icalRequestParsed = ICAL.parse(__FIXTURES__['frontend/app/fixtures/calendar/eventRequestRegular.ics']);
+      var icalRequestParsed = ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/eventRequestRegular.ics']);
       var eventRequest = new self.CalendarShell(new ICAL.Component(icalRequestParsed), {path: fakePath});
 
-      var expectedCounter = new self.CalendarShell(new ICAL.Component(JSON.parse(__FIXTURES__['frontend/app/fixtures/calendar/counter_test/counter.json'])));
+      var expectedCounter = new self.CalendarShell(new ICAL.Component(JSON.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/counter_test/counter.json'])));
       var expectedBody = {
             ical: expectedCounter.vcalendar.toString(),
             sender: undefined,

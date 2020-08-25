@@ -15,7 +15,7 @@ describe('VAlarmShell factory', function() {
     });
 
     function getComponentFromFixture(string) {
-      var path = 'frontend/app/fixtures/calendar/valarm_test/' + string;
+      var path = 'src/linagora.esn.calendar/app/fixtures/calendar/valarm_test/' + string;
 
       return new ICAL.Component(JSON.parse(__FIXTURES__[path]));
     }
