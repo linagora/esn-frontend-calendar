@@ -1,76 +1,79 @@
-(function(angular) {
-  'use strict';
+'use strict';
 
-  angular.module('esn.calendar')
-    .controller('CalCalendarImportController', CalCalendarImportController);
+const { ESNDavImportClient } = require('esn-dav-import-client');
 
-  function CalCalendarImportController(
-    $window,
-    asyncAction,
-    davImportService,
-    calendarService,
-    calendarHomeService,
-    calUIAuthorizationService,
-    session
-  ) {
-    var self = this;
+angular.module('esn.calendar')
+  .controller('CalCalendarImportController', CalCalendarImportController);
 
-    self.$onInit = $onInit;
-    self.canModifyCalendar = canModifyCalendar;
-    self.onFileSelect = onFileSelect;
-    self.file = null;
-    self.isValid = null;
-    self.submit = submit;
+function CalCalendarImportController(
+  $window,
+  asyncAction,
+  fileUploadService,
+  calendarService,
+  calendarHomeService,
+  calUIAuthorizationService,
+  session
+) {
+  var self = this;
 
-    $onInit();
+  self.$onInit = $onInit;
+  self.canModifyCalendar = canModifyCalendar;
+  self.onFileSelect = onFileSelect;
+  self.file = null;
+  self.isValid = null;
+  self.submit = submit;
 
-    ///////////
+  $onInit();
 
-    function $onInit() {
-      calendarHomeService.getUserCalendarHomeId()
-        .then(calendarService.listPersonalAndAcceptedDelegationCalendars)
-        .then(function(calendars) {
-          self.calendar = calendars[0];
-          self.calendars = calendars;
-        });
-    }
+  ///////////
 
-    function onFileSelect(file) {
-      if (!file || !(file.length > 0)) {
-        return;
-      }
-
-      self.file = file[0];
-      self.isValid = self.file.type === 'text/calendar';
-    }
-
-    function canModifyCalendar(calendar) {
-      return calUIAuthorizationService.canImportCalendarIcs(calendar, session.user._id);
-    }
-
-    function importFromFile() {
-      return davImportService.importFromFile(self.file, self.calendar.href);
-    }
-
-    function submit() {
-      var notificationMessages = {
-        progressing: 'Submitting importing calendar request...',
-        success: 'Request submitted',
-        failure: 'Failed to submit request'
-      };
-
-      var reloadOption = {
-        onSuccess: {
-          linkText: 'Reload',
-          action: function() { $window.location.reload(); }
-        }
-      };
-
-      asyncAction(
-        notificationMessages,
-        importFromFile,
-        reloadOption
-      );
-    }
+  function $onInit() {
+    calendarHomeService.getUserCalendarHomeId()
+      .then(calendarService.listPersonalAndAcceptedDelegationCalendars)
+      .then(function(calendars) {
+        self.calendar = calendars[0];
+        self.calendars = calendars;
+      });
   }
-})(angular);
+
+  function onFileSelect(file) {
+    if (!file || !(file.length > 0)) {
+      return;
+    }
+
+    self.file = file[0];
+    self.isValid = self.file.type === 'text/calendar';
+  }
+
+  function canModifyCalendar(calendar) {
+    return calUIAuthorizationService.canImportCalendarIcs(calendar, session.user._id);
+  }
+
+  function importFromFile() {
+    const OPENPAAS_URL = process.env.OPENPAAS_URL || 'http://localhost:8080';
+    const esnDavImportClient = new ESNDavImportClient(fileUploadService.uploadFile, OPENPAAS_URL);
+
+    return esnDavImportClient.importFromFile(self.file, self.calendar.href);
+  }
+
+  function submit() {
+    var notificationMessages = {
+      progressing: 'Submitting importing calendar request...',
+      success: 'Request submitted',
+      failure: 'Failed to submit request'
+    };
+
+    var reloadOption = {
+      onSuccess: {
+        linkText: 'Reload',
+        action: function() { $window.location.reload(); }
+      }
+    };
+
+    asyncAction(
+      notificationMessages,
+      importFromFile,
+      reloadOption
+    );
+  }
+}

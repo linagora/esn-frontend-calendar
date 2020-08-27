@@ -12,6 +12,7 @@ angular.module('esn.calendar', [
   'esn.calMoment',
   'esn.configuration',
   'esn.core',
+  'esn.file',
   'esn.form.helper',
   'esn.header',
   'esn.highlight',
@@ -67,6 +68,7 @@ require('esn-frontend-common-libs/src/frontend/js/modules/i18n/i18n.module.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/session.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/scroll.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/core.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/file.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/datetime/datetime.module.js');
 require('esn-frontend-common-libs/src/frontend/components/openpaas-logo/openpaas-logo.js');
 require('esn-frontend-common-libs/src/modules/linagora.esn.graceperiod/frontend/js/app.js');
