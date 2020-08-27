@@ -3,7 +3,8 @@
 /* global chai: false */
 /* global sinon: false */
 
-var expect = chai.expect;
+const { expect } = chai;
+const { ESNDavImportClient } = require('esn-dav-import-client');
 
 describe('The CalCalendarImportController', function() {
 
@@ -182,7 +183,17 @@ describe('The CalCalendarImportController', function() {
   });
 
   describe('The submit function', function() {
-    it('should call davImportService.importFromFile with selected file and selected calendar', function() {
+    let sandbox;
+
+    beforeEach(function() {
+      sandbox = sinon.sandbox.create();
+    });
+
+    afterEach(function() {
+      sandbox.restore();
+    });
+
+    it('should call ESNDavImportClient.importFromFile with selected file and selected calendar', function() {
       session.user._id = '123';
 
       var calendars = [{
@@ -201,6 +212,8 @@ describe('The CalCalendarImportController', function() {
         return $q.when(session.user._id);
       });
 
+      sandbox.stub(ESNDavImportClient.prototype, 'importFromFile').returns($q.when());
+
       calendarService.listPersonalAndAcceptedDelegationCalendars = sinon.stub().returns($q.when(calendars));
 
       var controller = initController();
@@ -209,13 +222,11 @@ describe('The CalCalendarImportController', function() {
         length: 100
       }];
 
-      davImportService.importFromFile = sinon.stub().returns($q.when());
-
       controller.onFileSelect(file);
       controller.submit();
       $rootScope.$digest();
 
-      expect(davImportService.importFromFile).to.have.been.calledWith(controller.file, calendars[0].href);
+      expect(ESNDavImportClient.prototype.importFromFile).to.have.been.calledWith(controller.file, calendars[0].href);
     });
   });
 });

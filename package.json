@@ -14,6 +14,7 @@
   "author": "",
   "license": "AGPLv3",
   "dependencies": {
+    "esn-dav-import-client": "github:openpaas-suite/esn-dav-import-client#main",
     "esn-frontend-common-libs": "github:openpaas-suite/esn-frontend-common-libs#main",
     "esn-frontend-mailto-handler": "github:openpaas-suite/esn-frontend-mailto-handler#main",
     "esn-frontend-videoconference-calendar": "github:openpaas-suite/esn-frontend-videoconference-calendar#main",

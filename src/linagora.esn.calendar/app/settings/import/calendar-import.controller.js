@@ -1,12 +1,14 @@
 'use strict';
 
+const { ESNDavImportClient } = require('esn-dav-import-client');
+
 angular.module('esn.calendar')
   .controller('CalCalendarImportController', CalCalendarImportController);
 
 function CalCalendarImportController(
   $window,
   asyncAction,
-  davImportService,
+  fileUploadService,
   calendarService,
   calendarHomeService,
   calUIAuthorizationService,
@@ -48,7 +50,10 @@ function CalCalendarImportController(
   }
 
   function importFromFile() {
-    return davImportService.importFromFile(self.file, self.calendar.href);
+    const OPENPAAS_URL = process.env.OPENPAAS_URL || 'http://localhost:8080';
+    const esnDavImportClient = new ESNDavImportClient(fileUploadService.uploadFile, OPENPAAS_URL);
+
+    return esnDavImportClient.importFromFile(self.file, self.calendar.href);
   }
 
   function submit() {
