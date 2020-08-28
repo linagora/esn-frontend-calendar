@@ -16,7 +16,6 @@ angular.module('esn.calendar.libs', [
   'esn.highlight',
   'esn.i18n',
   'esn.ical',
-  'esn.lodash-wrapper',
   'esn.media.query',
   'esn.module-registry',
   'esn.notification',
