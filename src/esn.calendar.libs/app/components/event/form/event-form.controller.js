@@ -401,7 +401,7 @@ function CalEventFormController(
               return status;
             }
           },
-          controller: function($scope, attendeeEmail, event, status) {
+          controller: /* @ngInject */ function($scope, attendeeEmail, event, status) {
             $scope.editChoice = 'this';
 
             $scope.submit = function() {
