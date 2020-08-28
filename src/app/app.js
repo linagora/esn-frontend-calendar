@@ -7,6 +7,7 @@ angular.module('esnApp', [
   'esn.session',
   'esn.websocket',
   'esn.configuration',
+  'esn.login',
   'esn.i18n',
   'openpaas-logo'
 ]);
@@ -15,6 +16,7 @@ require('esn-frontend-common-libs/src/frontend/js/modules/session');
 require('esn-frontend-common-libs/src/frontend/js/modules/websocket');
 require('esn-frontend-common-libs/src/frontend/js/modules/config/config.module');
 require('esn-frontend-common-libs/src/frontend/js/modules/i18n/i18n.module');
+require('esn-frontend-common-libs/src/frontend/js/modules/login');
 
 require ('../esn.resource.libs/app/app.module.js');
 require ('../esn.calendar.libs/app/app.module.js');
