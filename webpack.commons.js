@@ -25,6 +25,7 @@ module.exports = {
   output: {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/calendar/'
   },
   resolve: {
     alias: {
@@ -59,6 +60,7 @@ module.exports = {
   devServer: {
     contentBase: [path.join(__dirname, 'dist'), path.resolve(__dirname, 'node_modules', 'esn-frontend-login', 'dist')],
     contentBasePublicPath: [BASE_HREF, '/login'],
+    publicPath: '/calendar/',
     compress: true,
     port: 9900,
     proxy: [{
