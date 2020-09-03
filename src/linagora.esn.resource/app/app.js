@@ -5,7 +5,6 @@ angular.module('linagora.esn.resource', [
   'esn.session',
   'esn.user',
   'op.dynamicDirective',
-  'esn.lodash-wrapper',
   'ui.router',
   'mgcrea.ngStrap.modal',
   'restangular',
@@ -18,7 +17,6 @@ require('esn-frontend-common-libs/src/frontend/js/modules/core.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/attendee/attendee.module.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/user/user.module.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/session.js');
-require('esn-frontend-common-libs/src/frontend/js/modules/lodash-wrapper.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/async-action.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/infinite-list/infinite-list.module.js');
 

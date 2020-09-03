@@ -20,7 +20,7 @@ describe('The calUIAuthorizationService service', function() {
       $provide.value('calEventUtils', calEventUtils);
     });
 
-    angular.mock.inject(function(___, _calUIAuthorizationService_, _calEventUtils_, _calDefaultValue_, _CAL_CALENDAR_PUBLIC_RIGHT_, _CAL_CALENDAR_SHARED_RIGHT_) {
+    angular.mock.inject(function(_calUIAuthorizationService_, _calEventUtils_, _calDefaultValue_, _CAL_CALENDAR_PUBLIC_RIGHT_, _CAL_CALENDAR_SHARED_RIGHT_) {
       calUIAuthorizationService = _calUIAuthorizationService_;
       calEventUtils = _calEventUtils_;
       calDefaultValue = _calDefaultValue_;
