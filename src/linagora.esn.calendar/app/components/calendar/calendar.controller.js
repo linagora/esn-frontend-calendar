@@ -22,7 +22,8 @@ const _ = require('lodash');
         self.calendarReady({
           fullCalendar: function() {
             try {
-              return div.fullCalendar.apply(this, arguments);
+              // eslint-disable-next-line prefer-spread
+              return div.fullCalendar.apply(div, arguments);
             } catch (e) {
               $log.error(e);
             }
