@@ -8,7 +8,7 @@ angular.module('esn.calendar.libs')
 function calEventForm() {
   var directive = {
     restrict: 'E',
-    template: require("./event-form.pug"),
+    template: require('./event-form.pug'),
     link: link,
     replace: true,
     controller: 'CalEventFormController'

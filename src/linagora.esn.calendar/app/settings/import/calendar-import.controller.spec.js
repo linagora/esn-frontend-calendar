@@ -9,7 +9,7 @@ const { ESNDavImportClient } = require('esn-dav-import-client');
 describe('The CalCalendarImportController', function() {
 
   var $controller, $rootScope, $scope;
-  var calendarService, calendarHomeService, davImportService, session;
+  var calendarService, calendarHomeService, session;
 
   beforeEach(angular.mock.module(function($provide) {
     $provide.value('asyncAction', sinon.spy(function(message, action) {
@@ -39,7 +39,6 @@ describe('The CalCalendarImportController', function() {
       $rootScope = _$rootScope_;
       calendarService = _calendarService_;
       calendarHomeService = _calendarHomeService_;
-      davImportService = _davImportService_;
       session = _session_;
     });
   });
@@ -60,11 +59,11 @@ describe('The CalCalendarImportController', function() {
     session.user._id = '123';
 
     var calendars = [{
-        id: 'calendar1'
-      },
-      {
-        id: 'calendar2'
-      }
+      id: 'calendar1'
+    },
+    {
+      id: 'calendar2'
+    }
     ];
 
     sinon.stub(calendarService, 'listPersonalAndAcceptedDelegationCalendars', function() {
@@ -140,6 +139,7 @@ describe('The CalCalendarImportController', function() {
       var controller = initController();
 
       var res = controller.canModifyCalendar(calendar);
+
       $rootScope.$digest();
 
       expect(res).to.be.true;
@@ -158,6 +158,7 @@ describe('The CalCalendarImportController', function() {
       var controller = initController();
 
       var res = controller.canModifyCalendar(calendar);
+
       $rootScope.$digest();
 
       expect(res).to.be.false;
@@ -176,6 +177,7 @@ describe('The CalCalendarImportController', function() {
       var controller = initController();
 
       var res = controller.canModifyCalendar(calendar);
+
       $rootScope.$digest();
 
       expect(res).to.be.false;
@@ -197,11 +199,11 @@ describe('The CalCalendarImportController', function() {
       session.user._id = '123';
 
       var calendars = [{
-          id: 'calendar1'
-        },
-        {
-          id: 'calendar2'
-        }
+        id: 'calendar1'
+      },
+      {
+        id: 'calendar2'
+      }
       ];
 
       sinon.stub(calendarService, 'listPersonalAndAcceptedDelegationCalendars', function() {

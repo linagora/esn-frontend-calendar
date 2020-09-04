@@ -9,6 +9,6 @@
       },
       controller: 'CalCalendarPlanningController',
       controllerAs: 'ctrl',
-      template: require("./calendar-planning.pug")
+      template: require('./calendar-planning.pug')
     });
 })(angular);

@@ -23,6 +23,6 @@ function CalResourceItemController(CAL_RESOURCE, CAL_FREEBUSY) {
   }
 
   function removeResource() {
-    self.remove && self.remove({resource: self.resource});
+    self.remove && self.remove({ resource: self.resource });
   }
 }

@@ -8,7 +8,7 @@ describe('The calendarSubHeaderController', function() {
   var calendarCurrentViewMock, $scope, calMoment;
 
   beforeEach(function() {
-    calendarCurrentViewMock = {isCurrentViewAroundDay: sinon.spy()};
+    calendarCurrentViewMock = { isCurrentViewAroundDay: sinon.spy() };
 
     angular.mock.module('esn.calendar', function($provide) {
       $provide.value('calendarCurrentView', calendarCurrentViewMock);
@@ -17,7 +17,7 @@ describe('The calendarSubHeaderController', function() {
 
   beforeEach(angular.mock.inject(function($rootScope, $controller, _calMoment_) {
     $scope = $rootScope.$new();
-    $controller('calendarSubHeaderController', {$scope: $scope});
+    $controller('calendarSubHeaderController', { $scope: $scope });
     calMoment = _calMoment_;
   }));
 

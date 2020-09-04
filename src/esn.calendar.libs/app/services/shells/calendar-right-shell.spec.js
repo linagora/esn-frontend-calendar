@@ -173,7 +173,7 @@ describe('CalendarRightShell factory', function() {
 
   describe('the equal method', function() {
     it('should not fail for bad object', function() {
-      [null, undefined, {}, [], {users: {}, public: {}}].forEach(function(badData) {
+      [null, undefined, {}, [], { users: {}, public: {} }].forEach(function(badData) {
         expect(calendarRightShell.equals(badData)).to.be.false;
       });
     });
@@ -184,12 +184,14 @@ describe('CalendarRightShell factory', function() {
 
     it('should be false for different user', function() {
       var other = calendarRightShell.clone();
+
       other.updateSharee('other', 'other@open-paas.org', CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ_WRITE);
       expect(other.equals(calendarRightShell)).to.be.false;
     });
 
     it('should be false for different public', function() {
       var other = calendarRightShell.clone();
+
       other.updatePublic(CAL_CALENDAR_PUBLIC_RIGHT.READ);
       expect(other.equals(calendarRightShell)).to.be.false;
     });
@@ -199,7 +201,7 @@ describe('CalendarRightShell factory', function() {
     it('should correctly remove a sharee user right', function() {
       calendarRightShell.removeShareeRight('tom');
       expect(calendarRightShell.getShareeRight('tom')).to.be.undefined;
-      expect(_.find(calendarRightShell.getAllShareeRights(), {userId: 'tom'})).to.be.undefined;
+      expect(_.find(calendarRightShell.getAllShareeRights(), { userId: 'tom' })).to.be.undefined;
     });
 
     it('should not fail if attending to remove an unexisting user', function() {
@@ -225,6 +227,7 @@ describe('CalendarRightShell factory', function() {
 
     it('should correctly deal with update of READ to READ_WRITE and to READ_WRITE to READ', function() {
       var original = calendarRightShell.clone();
+
       calendarRightShell.updateSharee('tom', 'user2@open-paas.org', CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ);
       calendarRightShell.updateSharee('jerry', 'user3@open-paas.org', CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ_WRITE);
 
@@ -244,6 +247,7 @@ describe('CalendarRightShell factory', function() {
 
     it('should correctly remove removed user', function() {
       var original = calendarRightShell.clone();
+
       calendarRightShell.removeShareeRight('jerry');
       expect(calendarRightShell.toDAVShareRightsUpdate(original)).to.deep.equals({
         share: {

@@ -6,7 +6,7 @@ var expect = chai.expect;
 
 describe('the calendarExploredPeriodService service', function() {
 
-  var self;
+  var self = this;
 
   function buildPeriod(start, end) {
     return {

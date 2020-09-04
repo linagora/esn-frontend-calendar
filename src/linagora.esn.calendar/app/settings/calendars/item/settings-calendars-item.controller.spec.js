@@ -9,7 +9,7 @@ describe('The CalSettingsCalendarsItemController controller', function() {
 
   beforeEach(function() {
     calUIAuthorizationService = {};
-    calendar = {id: 1, uniqueId: 123};
+    calendar = { id: 1, uniqueId: 123 };
     session = {
       ready: {
         then: angular.noop
@@ -19,7 +19,7 @@ describe('The CalSettingsCalendarsItemController controller', function() {
       }
     };
     userUtils = {};
-    owner = {id: 2};
+    owner = { id: 2 };
   });
 
   beforeEach(function() {
@@ -48,7 +48,7 @@ describe('The CalSettingsCalendarsItemController controller', function() {
       userUtils.displayNameOf = sinon.spy();
       calendar.getOwner = sinon.spy();
 
-      var controller = initController({calendar: calendar});
+      var controller = initController({ calendar: calendar });
 
       controller.$onInit();
       $rootScope.$digest();
@@ -63,7 +63,7 @@ describe('The CalSettingsCalendarsItemController controller', function() {
         return $q.when(owner);
       });
 
-      var controller = initController({calendar: calendar, displayOwner: true});
+      var controller = initController({ calendar: calendar, displayOwner: true });
 
       controller.$onInit();
       $rootScope.$digest();
@@ -77,7 +77,7 @@ describe('The CalSettingsCalendarsItemController controller', function() {
     it('should call calUIAuthorizationService.canDeleteCalendar correctly', function() {
       calUIAuthorizationService.canDeleteCalendar = sinon.spy();
 
-      var controller = initController({calendar: calendar});
+      var controller = initController({ calendar: calendar });
 
       controller.canDeleteCalendar();
 
@@ -88,7 +88,7 @@ describe('The CalSettingsCalendarsItemController controller', function() {
   describe('The remove function', function() {
     it('should call the  onRemove function with the current calendar', function() {
       var onRemove = sinon.spy();
-      var controller = initController({onRemove: onRemove, calendar: calendar});
+      var controller = initController({ onRemove: onRemove, calendar: calendar });
 
       controller.remove();
 
@@ -99,7 +99,7 @@ describe('The CalSettingsCalendarsItemController controller', function() {
   describe('The goTo function', function() {
     it('should call $state.go with calendarUniqueId', function() {
       var stateSpy = sinon.spy($state, 'go');
-      var controller = initController({calendar: calendar});
+      var controller = initController({ calendar: calendar });
 
       controller.stateToGo = 'calendar.edit';
       controller.goTo();

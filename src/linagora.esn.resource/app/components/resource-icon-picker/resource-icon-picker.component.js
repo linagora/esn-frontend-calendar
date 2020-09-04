@@ -3,7 +3,7 @@
 
   angular.module('linagora.esn.resource')
     .component('esnResourceIconPicker', {
-      template: require("./resource-icon-picker.pug"),
+      template: require('./resource-icon-picker.pug'),
       bindings: {
         icon: '=?'
       },

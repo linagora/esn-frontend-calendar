@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const moment = require('moment');
+
 require('../app.constants');
 
 (function(angular) {
@@ -115,7 +116,7 @@ require('../app.constants');
     }
 
     function setBackgroundColor(event, calendars) {
-      event.backgroundColor = (_.find(calendars, {id: event.calendarId}) || {color: CAL_DEFAULT_EVENT_COLOR}).color;
+      event.backgroundColor = (_.find(calendars, { id: event.calendarId }) || { color: CAL_DEFAULT_EVENT_COLOR }).color;
 
       return event;
     }

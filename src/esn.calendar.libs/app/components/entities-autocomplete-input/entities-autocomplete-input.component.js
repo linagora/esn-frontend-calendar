@@ -2,7 +2,7 @@
 
 angular.module('esn.calendar.libs')
   .component('calEntitiesAutocompleteInput', {
-    template: require("./entities-autocomplete-input.pug"),
+    template: require('./entities-autocomplete-input.pug'),
     bindings: {
       excludeCurrentUser: '=?', // defaults to false
       originalEntities: '=?',

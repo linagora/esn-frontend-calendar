@@ -35,7 +35,7 @@ describe('The calCalDAVURLService service', function() {
 
   describe('The getCalendarURL function', function() {
     beforeEach(function() {
-      esnUserConfigurationService.get.returns($q.when([{name: 'davserver', value: {frontend: {url: url}}}]));
+      esnUserConfigurationService.get.returns($q.when([{ name: 'davserver', value: { frontend: { url: url } } }]));
     });
 
     it('should send right url even when configuration one contains trailing /', function(done) {
@@ -132,7 +132,7 @@ describe('The calCalDAVURLService service', function() {
     });
 
     it('should resolve with window.location.origin when esnUserConfigurationService.get does not send back davserver configuration', function(done) {
-      esnUserConfigurationService.get.returns($q.when([{name: 'notdavserverconfiguration'}]));
+      esnUserConfigurationService.get.returns($q.when([{ name: 'notdavserverconfiguration' }]));
 
       calCalDAVURLService.getFrontendURL().then(function(url) {
         expect(url).to.be.defined;
@@ -145,7 +145,7 @@ describe('The calCalDAVURLService service', function() {
     });
 
     it('should resolve with window.location.origin when davserver configuration value is not defined', function(done) {
-      esnUserConfigurationService.get.returns($q.when([{name: 'davserver'}]));
+      esnUserConfigurationService.get.returns($q.when([{ name: 'davserver' }]));
 
       calCalDAVURLService.getFrontendURL().then(function(url) {
         expect(url).to.be.defined;
@@ -158,7 +158,7 @@ describe('The calCalDAVURLService service', function() {
     });
 
     it('should resolve with window.location.origin when davserver configuration value frontend is not defined', function(done) {
-      esnUserConfigurationService.get.returns($q.when([{name: 'davserver', value: {}}]));
+      esnUserConfigurationService.get.returns($q.when([{ name: 'davserver', value: {} }]));
 
       calCalDAVURLService.getFrontendURL().then(function(url) {
         expect(url).to.be.defined;
@@ -171,7 +171,7 @@ describe('The calCalDAVURLService service', function() {
     });
 
     it('should resolve with window.location.origin when davserver configuration value frontend url is not defined', function(done) {
-      esnUserConfigurationService.get.returns($q.when([{name: 'davserver', value: {frontend: {}}}]));
+      esnUserConfigurationService.get.returns($q.when([{ name: 'davserver', value: { frontend: {} } }]));
 
       calCalDAVURLService.getFrontendURL().then(function(url) {
         expect(url).to.be.defined;
@@ -184,7 +184,7 @@ describe('The calCalDAVURLService service', function() {
     });
 
     it('should resolve with dav url', function(done) {
-      esnUserConfigurationService.get.returns($q.when([{name: 'davserver', value: {frontend: {url: url}}}]));
+      esnUserConfigurationService.get.returns($q.when([{ name: 'davserver', value: { frontend: { url: url } } }]));
 
       calCalDAVURLService.getFrontendURL().then(function(_url) {
         expect(_url).to.equal(url);

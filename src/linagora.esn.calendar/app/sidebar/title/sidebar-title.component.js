@@ -3,6 +3,6 @@
 
   angular.module('esn.calendar')
     .component('calSidebarTitle', {
-      template: require("./sidebar-title.pug")
+      template: require('./sidebar-title.pug')
     });
 })(angular);

@@ -19,7 +19,7 @@ function calEventDateSuggestionModalFactory(
     if (modalIsOpen === false) {
       modalIsOpen = true;
       $modal({
-        template: require("./event-date-suggestion-modal.pug"),
+        template: require('./event-date-suggestion-modal.pug'),
         resolve: {
           event: function() {
             return event.clone();
@@ -39,9 +39,9 @@ function calEventDateSuggestionModalFactory(
               notificationFactory.weakInfo('Calendar', 'Your proposal has been sent');
               hide();
             })
-            .catch(function() {
-              notificationFactory.weakError('Calendar', 'An error occurred, please try again');
-            });
+              .catch(function() {
+                notificationFactory.weakError('Calendar', 'An error occurred, please try again');
+              });
           };
 
           function hide() {

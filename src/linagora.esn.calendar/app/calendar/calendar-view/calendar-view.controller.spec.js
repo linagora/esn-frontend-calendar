@@ -8,10 +8,11 @@ describe('The calendarViewController', function() {
   var event; // eslint-disable-line
   var fullCalendarSpy;
   var createCalendarSpy;
-  var self;
+  var self = this;
 
   function getDateOnlyMoment(date) {
     var dateOnlyMoment = self.calMoment(date);
+
     dateOnlyMoment.hasTime = function() { return false; };
 
     return dateOnlyMoment;
@@ -19,7 +20,6 @@ describe('The calendarViewController', function() {
 
   beforeEach(function() {
     self = this;
-    event = {};
     fullCalendarSpy = sinon.spy();
     createCalendarSpy = sinon.spy();
 
@@ -105,8 +105,6 @@ describe('The calendarViewController', function() {
         return $q.when({});
       },
       modifyEvent: sinon.spy(function(path, e) { // eslint-disable-line
-        event = e;
-
         return $q.when();
       })
     };
@@ -215,7 +213,8 @@ describe('The calendarViewController', function() {
     elementScrollService,
     esnDatetimeService,
     $q,
-    CAL_SPINNER_TIMEOUT_DURATION) {
+    CAL_SPINNER_TIMEOUT_DURATION
+  ) {
     this.rootScope = $rootScope;
     this.scope = $rootScope.$new();
     this.controller = $controller;
@@ -248,7 +247,7 @@ describe('The calendarViewController', function() {
 
   it('should scroll to top when calling calendarViewController)', function() {
     this.gracePeriodService.flushAllTasks = sinon.spy();
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.$destroy();
 
     expect(this.elementScrollService.scrollToTop).to.have.been.called;
@@ -256,7 +255,7 @@ describe('The calendarViewController', function() {
 
   it('should gracePeriodService.flushAllTasks $on(\'$destroy\')', function() {
     this.gracePeriodService.flushAllTasks = sinon.spy();
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.$destroy();
     expect(this.gracePeriodService.flushAllTasks).to.have.been.called;
   });
@@ -270,7 +269,7 @@ describe('The calendarViewController', function() {
       aEvent = evt;
       handler = hdlr;
     };
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     expect(aEvent).to.equal('beforeunload');
     expect(handler).to.equal('aHandler');
   });
@@ -278,13 +277,13 @@ describe('The calendarViewController', function() {
   it('should calCachedEventSource.resetCache $on(\'$destroy\')', function() {
     this.gracePeriodService.flushAllTasks = angular.noop;
     this.calCachedEventSourceMock.resetChange = sinon.spy();
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.$destroy();
     expect(this.calCachedEventSourceMock.resetCache).to.have.been.called;
   });
 
   it('should be created and its scope initialized', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
 
     expect(this.scope.uiConfig.calendar.eventRender).to.be.a.function;
     expect(this.scope.uiConfig.calendar.eventAfterAllRender).to.equal(this.scope.resizeCalendarHeight);
@@ -292,11 +291,11 @@ describe('The calendarViewController', function() {
 
   describe('The uiConfig.calendar.eventRender function', function() {
     it('should call calFullCalendarRenderEventService with the event calendar', function() {
-      var event = {calendarUniqueId: this.calendars[0].getUniqueId()};
+      var event = { calendarUniqueId: this.calendars[0].getUniqueId() };
       var element = {};
       var view = {};
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.$digest();
       this.scope.uiConfig.calendar.eventRender(event, element, view);
 
@@ -314,7 +313,7 @@ describe('The calendarViewController', function() {
       };
 
       this.scope.calendarHomeId = 'calendarHomeId';
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.$digest();
       this.scope.uiConfig.calendar.select(start, end);
 
@@ -331,6 +330,7 @@ describe('The calendarViewController', function() {
       var end = getDateOnlyMoment('2016-01-02');
 
       var firstTimeStrip = true;
+
       this.calEventUtils.stripTimeWithTz = function(calMomentDate) {
         expect(calMomentDate.isSame(firstTimeStrip ? start : end)).to.be.true;
         firstTimeStrip = false;
@@ -343,7 +343,7 @@ describe('The calendarViewController', function() {
       };
 
       this.scope.calendarHomeId = 'calendarHomeId';
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.$digest();
       this.scope.uiConfig.calendar.select(start, end);
 
@@ -358,7 +358,7 @@ describe('The calendarViewController', function() {
 
   function testRefetchEvent(nameOfTheTest, calendar_events, calendarSpyCalledWith) {
     it(nameOfTheTest, function() {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.rootScope.$broadcast(this.CAL_EVENTS[calendar_events]);
 
       this.scope.calendarReady(this.calendar);
@@ -369,7 +369,7 @@ describe('The calendarViewController', function() {
 
   describe('the initialization', function() {
     it('should properly initialize $scope.calendars', function() {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.$digest();
 
       expect(this.scope.calendars).to.deep.equal(this.calendars);
@@ -398,12 +398,12 @@ describe('The calendarViewController', function() {
       var id2 = 2;
       var data = 'data';
 
-      this.controller('calendarViewController', {$scope: this.scope});
-      this.scope.calendars = [{uniqueId: id1, getUniqueId: function() {return id1;}}, {uniqueId: id2, getUniqueId: function() {return id2;}}];
-      var newCal = {uniqueId: id2, data: data, getUniqueId: function() {return id2;}};
+      this.controller('calendarViewController', { $scope: this.scope });
+      this.scope.calendars = [{ uniqueId: id1, getUniqueId: function() {return id1;} }, { uniqueId: id2, getUniqueId: function() {return id2;} }];
+      var newCal = { uniqueId: id2, data: data, getUniqueId: function() {return id2;} };
 
       this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.UPDATE, newCal);
-      expect(this.scope.calendars).to.shallowDeepEqual([{uniqueId: id1}, {uniqueId: id2, data: data}]);
+      expect(this.scope.calendars).to.shallowDeepEqual([{ uniqueId: id1 }, { uniqueId: id2, data: data }]);
     });
 
     it('should force redraw the events if calendar color is defined and changed', function() {
@@ -417,7 +417,7 @@ describe('The calendarViewController', function() {
         }
       };
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.calendarReady(this.calendar);
       this.scope.calendars = this.calendars;
       this.scope.eventSourcesMap = {};
@@ -426,7 +426,7 @@ describe('The calendarViewController', function() {
       this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.UPDATE, updatedCalendar);
       this.scope.$digest();
 
-      expect(this.scope.calendars).to.shallowDeepEqual([this.calendars[0], {uniqueId: updatedCalendar.uniqueId, color: updatedCalendar.color}]);
+      expect(this.scope.calendars).to.shallowDeepEqual([this.calendars[0], { uniqueId: updatedCalendar.uniqueId, color: updatedCalendar.color }]);
       expect(this.scope.eventSourcesMap[updatedCalendar.getUniqueId()].backgroundColor).to.equal(updatedCalendar.color);
       expect(fullCalendarSpy).to.have.been.calledWith('removeEventSource', sinon.match.has('uniqueId', updatedCalendar.uniqueId));
       expect(fullCalendarSpy).to.have.been.calledWith('addEventSource', sinon.match.has('uniqueId', updatedCalendar.uniqueId));
@@ -439,10 +439,10 @@ describe('The calendarViewController', function() {
 
   describe('The CAL_EVENTS.CALENDARS.REMOVE listener', function() {
     it('should remove the calendar on $scope.calendars correctly', function() {
-      this.controller('calendarViewController', {$scope: this.scope});
-      this.scope.calendars = [{uniqueId: 1, getUniqueId: function() {return 1;}}, {uniqueId: 2, getUniqueId: function() {return 2;}}];
-      this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.REMOVE, {uniqueId: 2, getUniqueId: function() {return 2;}});
-      expect(this.scope.calendars).to.shallowDeepEqual([{uniqueId: 1}]);
+      this.controller('calendarViewController', { $scope: this.scope });
+      this.scope.calendars = [{ uniqueId: 1, getUniqueId: function() {return 1;} }, { uniqueId: 2, getUniqueId: function() {return 2;} }];
+      this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.REMOVE, { uniqueId: 2, getUniqueId: function() {return 2;} });
+      expect(this.scope.calendars).to.shallowDeepEqual([{ uniqueId: 1 }]);
     });
 
     it('should remove the corresponding source map correctly', function() {
@@ -454,11 +454,11 @@ describe('The calendarViewController', function() {
         }
       };
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.calendarReady(this.calendar);
       this.scope.$digest();
-      this.scope.eventSourcesMap = {calendarUniqueId: source};
-      this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.REMOVE, {uniqueId: id, getUniqueId: function() {return id;}});
+      this.scope.eventSourcesMap = { calendarUniqueId: source };
+      this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.REMOVE, { uniqueId: id, getUniqueId: function() {return id;} });
       this.scope.calendarReady(this.calendar);
       this.scope.$digest();
 
@@ -555,7 +555,7 @@ describe('The calendarViewController', function() {
 
   describe('The CAL_EVENTS.CALENDARS.TOGGLE_VIEW_MODE listener', function() {
     it('should change the view mode of the calendar', function() {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW_MODE, 'viewType');
 
       this.scope.calendarReady(this.calendar);
@@ -566,7 +566,7 @@ describe('The calendarViewController', function() {
 
   describe('The CAL_EVENTS.CALENDARS.CALENDAR_TODAY listener', function() {
     it('should change the view mode of the calendar', function() {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.TODAY, 'viewType');
 
       this.scope.calendarReady(this.calendar);
@@ -576,7 +576,7 @@ describe('The calendarViewController', function() {
   });
 
   it('should call fullCalendar next on swipeRight', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.calendarReady(this.calendar);
     this.scope.swipeRight();
     this.scope.$digest();
@@ -584,7 +584,7 @@ describe('The calendarViewController', function() {
   });
 
   it('should call fullCalendar next on swipeLeft', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.calendarReady(this.calendar);
     this.scope.swipeLeft();
     this.scope.$digest();
@@ -592,7 +592,7 @@ describe('The calendarViewController', function() {
   });
 
   it('should init list calendars and list of eventsSourceMap', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.calendarReady(this.calendar);
     this.scope.$digest();
     expect(this.scope.calendars.length).to.equal(2);
@@ -607,7 +607,7 @@ describe('The calendarViewController', function() {
   });
 
   it('should add source for each calendar which is not hidden', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.calendarVisibilityServiceMock.isHidden = sinon.stub();
     this.calendarVisibilityServiceMock.isHidden
       .onFirstCall()
@@ -624,7 +624,7 @@ describe('The calendarViewController', function() {
   });
 
   it('should have wrap each calendar with calCachedEventSource.wrapEventSource', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.calendarReady(this.calendar);
     this.scope.$digest();
     expect(this.calCachedEventSourceMock.wrapEventSource).to.have.been.calledTwice;
@@ -634,26 +634,26 @@ describe('The calendarViewController', function() {
   });
 
   it('should emit addEventSource on CAL_EVENTS.CALENDARS.TOGGLE_VIEW and eventData.hidden is false', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.calendarReady(this.calendar);
     this.scope.$digest();
-    this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {hidden: false, calendarUniqueId: 'calendarUniqueId' });
+    this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW, { hidden: false, calendarUniqueId: 'calendarUniqueId' });
     this.scope.$digest();
 
     expect(this.calendar.fullCalendar).to.have.been.calledWith('addEventSource');
   });
 
   it('should emit removeEventSource on CAL_EVENTS.CALENDARS.TOGGLE_VIEW and eventData.hidden is true', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.calendarReady(this.calendar);
-    this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {hidden: true, calendar: {}});
+    this.rootScope.$broadcast(this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW, { hidden: true, calendar: {} });
     this.scope.$digest();
 
     expect(this.calendar.fullCalendar).to.have.been.calledWith('removeEventSource');
   });
 
   it('should change view on VIEW_TRANSLATION only when mobile mini calendar is hidden', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
 
     this.scope.calendarReady(this.calendar);
 
@@ -680,7 +680,7 @@ describe('The calendarViewController', function() {
   });
 
   it('should resize the calendar height once when the window is resized', function() {
-    this.controller('calendarViewController', {$scope: this.scope});
+    this.controller('calendarViewController', { $scope: this.scope });
     this.scope.$digest();
 
     this.scope.calendarReady(this.calendar);
@@ -753,7 +753,7 @@ describe('The calendarViewController', function() {
     it('should spin the throbber when isLoading is true after CAL_SPINNER_TIMEOUT_DURATION', function(done) {
       var isLoading = true;
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
 
       this.scope.uiConfig.calendar.loading(isLoading);
       this.$timeout.flush(this.CAL_SPINNER_TIMEOUT_DURATION - 1);
@@ -771,9 +771,10 @@ describe('The calendarViewController', function() {
 
     it('should stop the throbber loading and cancel any pending timeout when isLoading is false', function(done) {
       var isLoading = false;
+
       sinon.spy(this.$timeout, 'cancel');
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.uiConfig.calendar.loading(isLoading);
       this.$timeout.flush();
 
@@ -822,7 +823,7 @@ describe('The calendarViewController', function() {
         }
       };
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       var delta = this.calMoment.duration(10, 'minutes');
 
       this.scope.eventDropAndResize(false, event, delta);
@@ -864,7 +865,7 @@ describe('The calendarViewController', function() {
 
       var delta = this.calMoment.duration(10, 'minutes');
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.eventDropAndResize(true, event, delta);
 
       expect(newEvent.start.isSame(this.calMoment('2016-01-01 09:10'))).to.be.true;
@@ -905,7 +906,7 @@ describe('The calendarViewController', function() {
         end: event.end.clone().add(delta).add(1, 'day')
       };
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.eventDropAndResize(true, event, delta);
 
       expect(this.calEventUtilsMock.stripTimeWithTz).to.have.been.calledTwice;
@@ -946,7 +947,7 @@ describe('The calendarViewController', function() {
         end: event.end.clone().endOf('day')
       };
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.eventDropAndResize(true, event, delta);
 
       expect(this.calEventUtilsMock.stripTimeWithTz).to.have.not.been.called;
@@ -993,7 +994,7 @@ describe('The calendarViewController', function() {
         end: event.end.clone()
       };
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.eventDropAndResize(true, event, delta);
 
       expect(this.calEventUtilsMock.stripTimeWithTz).to.have.been.calledTwice;
@@ -1029,7 +1030,7 @@ describe('The calendarViewController', function() {
         return $q.when({});
       };
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       var fcRevert = sinon.spy();
 
       this.scope.eventDropAndResize(false, event, this.calMoment.duration(10), fcRevert);
@@ -1054,12 +1055,12 @@ describe('The calendarViewController', function() {
         expect(event.path).to.equal('/calendars/' + calendarHomeId + '/' + self.calDefaultValue.get('calendarId'));
         done();
       };
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       this.scope.eventDropAndResize(false, event, this.calMoment.duration(10, 'seconds'));
     });
 
     it('should broadcast CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE when the view change', function(done) {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
 
       var event = this.CalendarShell.fromIncompleteShell({
         etag: 'anEtag'
@@ -1075,12 +1076,12 @@ describe('The calendarViewController', function() {
     });
 
     it('should receive CAL_EVENTS.MINI_CALENDAR.DATE_CHANGE and change view if needed', function(done) {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
       var date = this.calMoment('2015-01-13');
       var first = true;
 
       self = this;
-      var spy = this.calendar.fullCalendar = sinon.spy(function(name, newDate) {
+      var spy = sinon.spy(function(name, newDate) {
         if (name === 'getView') {
           if (first) {
             first = false;
@@ -1099,6 +1100,8 @@ describe('The calendarViewController', function() {
         }
       });
 
+      this.calendar.fullCalendar = spy;
+
       this.rootScope.$broadcast(this.CAL_EVENTS.MINI_CALENDAR.DATE_CHANGE, this.calMoment('2015-01-13'));
       this.scope.calendarReady(this.calendar);
       this.scope.$digest();
@@ -1114,7 +1117,7 @@ describe('The calendarViewController', function() {
         })
       };
 
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
 
       this.scope.eventClick(event);
 
@@ -1125,7 +1128,7 @@ describe('The calendarViewController', function() {
 
   describe('the mouseScrollEvent', function() {
     it('should call fullCalendar next on scrollUp when currentView is equal to month', function() {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
 
       this.scope.prevented = true;
       this.scope.calendarReady(this.calendar);
@@ -1136,7 +1139,7 @@ describe('The calendarViewController', function() {
     });
 
     it('should call fullCalendar prev on scrollUp when currentView is equal to month', function() {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
 
       this.scope.prevented = true;
       this.scope.calendarReady(this.calendar);
@@ -1147,7 +1150,7 @@ describe('The calendarViewController', function() {
     });
 
     it('should not call fullCalendar next on scrollUp when currentView is not equal to month', function() {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
 
       this.scope.prevented = false;
       this.scope.calendarReady(this.calendar);
@@ -1158,7 +1161,7 @@ describe('The calendarViewController', function() {
     });
 
     it('should not call fullCalendar prev on scrollUp when currentView is not equal to month', function() {
-      this.controller('calendarViewController', {$scope: this.scope});
+      this.controller('calendarViewController', { $scope: this.scope });
 
       this.scope.prevented = false;
       this.scope.calendarReady(this.calendar);

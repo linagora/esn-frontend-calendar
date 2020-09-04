@@ -10,5 +10,5 @@ angular.module('esn.calendar.libs')
     },
     controller: 'CalAttendeeListController',
     controllerAs: 'ctrl',
-    template: require("./attendee-list.pug")
+    template: require('./attendee-list.pug')
   });

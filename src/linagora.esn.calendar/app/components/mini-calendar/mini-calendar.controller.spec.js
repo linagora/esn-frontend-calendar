@@ -66,7 +66,7 @@ describe('The miniCalendarController controller', function() {
     };
 
     miniCalendarServiceMock = {
-      getWeekAroundDay: sinon.stub().returns({firstWeekDay: null, nextFirstWeekDay: null}),
+      getWeekAroundDay: sinon.stub().returns({ firstWeekDay: null, nextFirstWeekDay: null }),
       miniCalendarWrapper: angular.identity
     };
 
@@ -131,7 +131,7 @@ describe('The miniCalendarController controller', function() {
     $scope.calendarHomeId = userId;
     calendarHomeService.getUserCalendarHomeId.returns($q.when(userId));
     initController = function() {
-      $controller('miniCalendarController', {$scope: $scope});
+      $controller('miniCalendarController', { $scope: $scope });
     };
 
     calendarVisibilityService.isHidden.returns($q.when(false));
@@ -258,7 +258,7 @@ describe('The miniCalendarController controller', function() {
         done();
       });
 
-      $scope.miniCalendarConfig.eventClick({start: day});
+      $scope.miniCalendarConfig.eventClick({ start: day });
     });
 
     it('should broadcast CAL_EVENTS.MINI_CALENDAR.TOGGLE, when a event is clicked', function(done) {
@@ -271,7 +271,7 @@ describe('The miniCalendarController controller', function() {
         done();
       });
 
-      $scope.miniCalendarConfig.eventClick({start: day});
+      $scope.miniCalendarConfig.eventClick({ start: day });
     });
 
     it('should select the good period on CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE event with day as viewMode', function(done) {
@@ -287,7 +287,7 @@ describe('The miniCalendarController controller', function() {
         done();
       };
 
-      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, {name: 'agendaDay', start: day});
+      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, { name: 'agendaDay', start: day });
       $scope.$digest();
     });
 
@@ -305,7 +305,7 @@ describe('The miniCalendarController controller', function() {
         done();
       };
 
-      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, {name: 'agendaThreeDays', start: day});
+      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, { name: 'agendaThreeDays', start: day });
       $scope.$digest();
     });
 
@@ -330,7 +330,7 @@ describe('The miniCalendarController controller', function() {
         expect(config).to.equals($scope.miniCalendarConfig);
         expect(day.isSame(dayInWeek, 'day')).to.be.true;
 
-        return {firstWeekDay: firstWeekDay, nextFirstWeekDay: lastWeekDay};
+        return { firstWeekDay: firstWeekDay, nextFirstWeekDay: lastWeekDay };
       });
 
       $scope.miniCalendarConfig.dayClick(dayInWeek);
@@ -344,8 +344,8 @@ describe('The miniCalendarController controller', function() {
       $scope.calendarReady(calendar);
       $scope.$digest();
 
-      miniCalendarServiceMock.getWeekAroundDay = sinon.stub().returns({firstWeekDay: firstWeekDay, nextFirstWeekDay: lastWeekDay});
-      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, {name: 'agendaWeek', start: dayInWeek});
+      miniCalendarServiceMock.getWeekAroundDay = sinon.stub().returns({ firstWeekDay: firstWeekDay, nextFirstWeekDay: lastWeekDay });
+      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, { name: 'agendaWeek', start: dayInWeek });
       $scope.$digest();
 
       expect(fcMethodMock.select).to.have.been.calledWith(sinon.match(sameDayMatcher(firstWeekDay)), sinon.match(sameDayMatcher(lastWeekDay)));
@@ -354,7 +354,7 @@ describe('The miniCalendarController controller', function() {
 
     it('should unselect on CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE with month as view mode', function() {
       $scope.calendarReady(calendar);
-      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, {name: 'month', start: null});
+      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, { name: 'month', start: null });
       $scope.$digest();
 
       expect(fcMethodMock.unselect).to.have.been.called;
@@ -366,7 +366,7 @@ describe('The miniCalendarController controller', function() {
       $scope.calendarReady(calendar);
       $scope.$digest();
       fcMethodMock.select = sinon.spy();
-      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, {name: 'basicDay', start: day});
+      $rootScope.$broadcast(CAL_EVENTS.HOME_CALENDAR_VIEW_CHANGE, { name: 'basicDay', start: day });
       $scope.$digest();
 
       expect(fcMethodMock.select).to.have.been.calledWith(sinon.match(sameDayMatcher(day)), sinon.match(sameDayMatcher(day.clone().add(1, 'day'))));
@@ -412,7 +412,7 @@ describe('The miniCalendarController controller', function() {
 
     function testRerender(nameOfEvent) {
       return function() {
-        var event = {id: 'anId', start: calMoment()};
+        var event = { id: 'anId', start: calMoment() };
 
         $scope.calendarReady(calendar);
         $rootScope.$broadcast(CAL_EVENTS[nameOfEvent], event);

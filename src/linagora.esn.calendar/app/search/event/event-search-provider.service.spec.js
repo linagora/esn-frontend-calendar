@@ -50,8 +50,7 @@ describe('The calSearchEventProviderService service', function() {
     _calSearchEventProviderService_,
     _calendarService_,
     _calEventService_,
-    _CAL_ADVANCED_SEARCH_CALENDAR_TYPES_
-  ) {
+    _CAL_ADVANCED_SEARCH_CALENDAR_TYPES_) {
     $rootScope = _$rootScope_;
     calSearchEventProviderService = _calSearchEventProviderService_;
     calendarService = _calendarService_;

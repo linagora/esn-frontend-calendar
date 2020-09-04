@@ -2,7 +2,7 @@
 
 angular.module('esn.calendar.libs')
   .component('calEventDateSuggestion', {
-    template: require("./event-date-suggestion.pug"),
+    template: require('./event-date-suggestion.pug'),
     controller: 'calEventDateSuggestionController',
     controllerAs: 'ctrl',
     bindings: {

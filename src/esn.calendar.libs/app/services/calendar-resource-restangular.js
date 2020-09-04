@@ -1,5 +1,3 @@
-const Restangular = require('restangular');
-
 (function(angular) {
   'use strict';
 

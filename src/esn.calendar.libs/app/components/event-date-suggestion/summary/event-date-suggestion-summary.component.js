@@ -2,7 +2,7 @@
 
 angular.module('esn.calendar.libs')
   .component('calEventDateSuggestionSummary', {
-    template: require("./event-date-suggestion-summary.pug"),
+    template: require('./event-date-suggestion-summary.pug'),
     bindings: {
       event: '<',
       user: '<'
@@ -11,10 +11,11 @@ angular.module('esn.calendar.libs')
     controllerAs: '$ctrl'
   });
 
-  function calEventDateSuggestionSummaryCtrl(watchDynamicTranslatedValue) {
-    var self = this;
-    self.translationData = {};
-    watchDynamicTranslatedValue(self.translationData, 'recurrenceType', function() {
-      return self.event.getRecurrenceType();
-    });
-  }
+function calEventDateSuggestionSummaryCtrl(watchDynamicTranslatedValue) {
+  var self = this;
+
+  self.translationData = {};
+  watchDynamicTranslatedValue(self.translationData, 'recurrenceType', function() {
+    return self.event.getRecurrenceType();
+  });
+}

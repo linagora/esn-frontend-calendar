@@ -8,6 +8,6 @@
       },
       controllerAs: 'ctrl',
       controller: 'esnResourceListItemController',
-      template: require("./resource-list-item.pug")
+      template: require('./resource-list-item.pug')
     });
 })(angular);

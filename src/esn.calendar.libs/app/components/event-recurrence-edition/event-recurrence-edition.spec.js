@@ -13,7 +13,7 @@ describe('The event-recurrence-edition component', function() {
 
     esnI18nService = {
       getLocale: sinon.stub().returns('en'),
-      translate: sinon.stub().returns({toString: function() {return '';}})
+      translate: sinon.stub().returns({ toString: function() {return '';} })
     };
 
     angular.mock.module('esn.calendar.libs', function($provide) {
@@ -63,13 +63,13 @@ describe('The event-recurrence-edition component', function() {
       this.initDirective(this.$scope);
 
       expect(this.eleScope.vm.days).to.shallowDeepEqual([
-        {value: 'MO', selected: false},
-        {value: 'TU', selected: false},
-        {value: 'WE', selected: false},
-        {value: 'TH', selected: false},
-        {value: 'FR', selected: false},
-        {value: 'SA', selected: true},
-        {value: 'SU', selected: true}
+        { value: 'MO', selected: false },
+        { value: 'TU', selected: false },
+        { value: 'WE', selected: false },
+        { value: 'TH', selected: false },
+        { value: 'FR', selected: false },
+        { value: 'SA', selected: true },
+        { value: 'SU', selected: true }
       ]);
     });
   });
@@ -183,14 +183,14 @@ describe('The event-recurrence-edition component', function() {
     });
 
     it('should keep previous interval if it was defined and more than 0', function() {
-      this.eleScope.vm.event.rrule = {freq: 'WEEKLY', interval: 42};
+      this.eleScope.vm.event.rrule = { freq: 'WEEKLY', interval: 42 };
       this.eleScope.vm.freq = 'YEARLY';
       this.eleScope.vm.setRRULE();
-      expect(this.eleScope.vm.event.rrule).to.be.deep.equals({freq: 'YEARLY', interval: 42});
+      expect(this.eleScope.vm.event.rrule).to.be.deep.equals({ freq: 'YEARLY', interval: 42 });
       this.eleScope.vm.event.rrule.interval = 0;
       this.eleScope.vm.freq = 'WEEKLY';
       this.eleScope.vm.setRRULE();
-      expect(this.eleScope.vm.event.rrule).to.be.deep.equals({freq: 'WEEKLY', interval: 1});
+      expect(this.eleScope.vm.event.rrule).to.be.deep.equals({ freq: 'WEEKLY', interval: 1 });
     });
   });
 

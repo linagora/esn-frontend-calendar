@@ -1,4 +1,5 @@
 const _ = require('lodash');
+
 require('../app.constants.js');
 require('./calendar-resource.service.js');
 require('./attendees-cache.service.js');
@@ -73,7 +74,7 @@ require('./attendees-cache.service.js');
 
       return $q.allSettled(promises)
         .then(function(results) {
-          return _.map(_.filter(results, {state: 'fulfilled'}), 'value');
+          return _.map(_.filter(results, { state: 'fulfilled' }), 'value');
         });
     }
 
@@ -110,11 +111,11 @@ require('./attendees-cache.service.js');
         .then(function(resources) {
           return splitAttendeesFromType(attendees, function(attendee) {
             var resource = attendee.email ?
-                _.find(resources, { _id: attendee.email.split('@')[0]}) :
-                undefined;
+              _.find(resources, { _id: attendee.email.split('@')[0] }) :
+              undefined;
             var result = resource ?
-                _.assign({}, attendee, { deleted: resource.deleted }) :
-                attendee;
+              _.assign({}, attendee, { deleted: resource.deleted }) :
+              attendee;
 
             return result;
           });
@@ -128,11 +129,11 @@ require('./attendees-cache.service.js');
 
     function manageResourceDetailsPromiseResolutions(promises) {
       var fulfilledPromises = _.map(
-        _.filter(promises, {state: 'fulfilled'}),
+        _.filter(promises, { state: 'fulfilled' }),
         'value'
       );
       var rejectedPromises = _.map(
-        _.filter(promises, {state: 'rejected'}),
+        _.filter(promises, { state: 'rejected' }),
         'reason'
       );
 

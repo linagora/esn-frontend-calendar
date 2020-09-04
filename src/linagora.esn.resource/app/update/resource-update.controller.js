@@ -11,7 +11,7 @@
 
     function openResourceUpdateModal() {
       $modal({
-        template: require("../components/resource-form-modal/resource-form-modal.pug"),
+        template: require('../components/resource-form-modal/resource-form-modal.pug'),
         controller: 'ESNResourceFormUpdateController',
         backdrop: 'static',
         placement: 'center',

@@ -69,12 +69,12 @@ describe('CalendarCollectionShell factory', function() {
 
     Cache = function() {};
     Cache.prototype.get = sinon.spy(function(userId) {
-        if (userId === 'ownerId') {
-          return $q.when({ data: calendarOwner });
-        }
+      if (userId === 'ownerId') {
+        return $q.when({ data: calendarOwner });
+      }
 
-        return $q.when({ data: {} });
-      });
+      return $q.when({ data: {} });
+    });
   });
 
   beforeEach(function() {
@@ -82,7 +82,7 @@ describe('CalendarCollectionShell factory', function() {
     angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.value('CalendarRightShell', calendarRightShell);
       $provide.value('Cache', Cache);
-    })
+    });
   });
 
   beforeEach(function() {
@@ -494,6 +494,7 @@ describe('CalendarCollectionShell factory', function() {
         invite: 'invite'
       });
       var expectSource = new CalendarCollectionShell(calendarSource);
+
       expect(calendarCollection.name).to.equal('name');
       expect(calendarCollection.color).to.equal('color');
       expect(calendarCollection.description).to.equal('description');

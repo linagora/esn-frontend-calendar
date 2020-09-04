@@ -7,6 +7,6 @@
         item: '=',
         user: '='
       },
-      template: require("./calendar-shared-configuration-item.pug")
+      template: require('./calendar-shared-configuration-item.pug')
     });
 })();

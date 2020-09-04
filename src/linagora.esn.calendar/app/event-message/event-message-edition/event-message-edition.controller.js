@@ -34,8 +34,9 @@ function CalEventMessageEditionController(
   function emitPostedMessage(response) {
     if (response && self.activitystream) {
       calendarEventEmitter.activitystream.emitPostedMessage(
-          response.headers('ESN-Message-Id'),
-          self.activitystream.activity_stream.uuid);
+        response.headers('ESN-Message-Id'),
+        self.activitystream.activity_stream.uuid
+      );
     }
   }
 
@@ -66,15 +67,17 @@ function CalEventMessageEditionController(
         resetEvent();
         $scope.$parent.show('whatsup');
       })
-    .catch(function(err) {
+      .catch(function(err) {
+      // eslint-disable-next-line no-warning-comments
       // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/46)
-      notificationFactory.weakError(
-        'Event creation failed',
-        err.statusText ? esnI18nService.translate('%s, Please refresh your calendar', { error: err.statusText }) :
-        esnI18nService.translate('Event creation failed. Please refresh your calendar'));
-    })
-    .finally(function() {
-      self.restActive = false;
-    });
+        notificationFactory.weakError(
+          'Event creation failed',
+          err.statusText ? esnI18nService.translate('%s, Please refresh your calendar', { error: err.statusText }) :
+            esnI18nService.translate('Event creation failed. Please refresh your calendar')
+        );
+      })
+      .finally(function() {
+        self.restActive = false;
+      });
   }
 }

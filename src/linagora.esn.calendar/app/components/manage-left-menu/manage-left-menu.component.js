@@ -4,6 +4,6 @@
   angular.module('esn.calendar')
     .component('calManageLeftMenu', {
       controllerAs: 'ctrl',
-      template: require("./manage-left-menu.pug")
+      template: require('./manage-left-menu.pug')
     });
 })(angular);

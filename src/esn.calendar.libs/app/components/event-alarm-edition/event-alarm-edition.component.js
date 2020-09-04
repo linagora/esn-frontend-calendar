@@ -2,7 +2,7 @@
 
 angular.module('esn.calendar.libs')
   .component('calEventAlarmEdition', {
-    template: require("./event-alarm-edition.pug"),
+    template: require('./event-alarm-edition.pug'),
     bindings: {
       event: '=',
       canModifyEvent: '=?'

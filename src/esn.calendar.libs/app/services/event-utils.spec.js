@@ -279,7 +279,7 @@ describe('The calEventUtils service', function() {
         calendarId: 'altamont'
       };
 
-      var calendars = [{id: 'woodstock', color: 'pink'}, {id: 'altamont', color: 'black'}];
+      var calendars = [{ id: 'woodstock', color: 'pink' }, { id: 'altamont', color: 'black' }];
 
       expect(this.calEventUtils.setBackgroundColor(event, calendars)).to.equal(event);
       expect(event.backgroundColor).to.equal('black');

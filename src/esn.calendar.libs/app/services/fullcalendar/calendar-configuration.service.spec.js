@@ -6,21 +6,21 @@ var expect = chai.expect;
 
 describe('The calFullUiConfiguration service', function() {
   var $q,
-  $httpBackend,
-  esnI18nService,
-  calFullUiConfiguration,
-  esnDatetimeServiceMock,
-  esnConfig,
-  esnUserConfigurationService,
+    $httpBackend,
+    esnI18nService,
+    calFullUiConfiguration,
+    esnDatetimeServiceMock,
+    esnConfig,
+    esnUserConfigurationService,
 
-  format12,
-  format24,
-  moduleName,
-  moduleConfiguration,
-  businessHours,
-  uiConfig,
-  CAL_UI_CONFIG,
-  CAL_FULLCALENDAR_LOCALE;
+    format12,
+    format24,
+    moduleName,
+    moduleConfiguration,
+    businessHours,
+    uiConfig,
+    CAL_UI_CONFIG,
+    CAL_FULLCALENDAR_LOCALE;
 
   beforeEach(function() {
     angular.mock.module('esn.calendar.libs');
@@ -250,59 +250,59 @@ describe('The calFullUiConfiguration service', function() {
 
     it('should be false if configuration return no value', function(done) {
       var payload = [
-          {
-            name: moduleName,
-            keys: moduleConfiguration
-          }
-        ];
-        var httpResponse = [
-          {
-            name: moduleName,
-            configurations: [{
-              name: 'hideRefusedEvents'
-            }]
-          }
-        ];
+        {
+          name: moduleName,
+          keys: moduleConfiguration
+        }
+      ];
+      var httpResponse = [
+        {
+          name: moduleName,
+          configurations: [{
+            name: 'hideRefusedEvents'
+          }]
+        }
+      ];
 
-        sinon.spy(esnUserConfigurationService, 'get');
-        $httpBackend.expectPOST('/api/configurations?scope=user', payload).respond(httpResponse);
-        calFullUiConfiguration.get()
-          .then(function() {
-            expect(calFullUiConfiguration.isDeclinedEventsHidden()).to.be.false;
+      sinon.spy(esnUserConfigurationService, 'get');
+      $httpBackend.expectPOST('/api/configurations?scope=user', payload).respond(httpResponse);
+      calFullUiConfiguration.get()
+        .then(function() {
+          expect(calFullUiConfiguration.isDeclinedEventsHidden()).to.be.false;
 
-            done();
-          });
+          done();
+        });
 
-        $httpBackend.flush();
+      $httpBackend.flush();
     });
 
     it('should be true if configuration return true', function(done) {
       var payload = [
-          {
-            name: moduleName,
-            keys: moduleConfiguration
-          }
-        ];
-        var httpResponse = [
-          {
-            name: moduleName,
-            configurations: [{
-              name: 'hideDeclinedEvents',
-              value: true
-            }]
-          }
-        ];
+        {
+          name: moduleName,
+          keys: moduleConfiguration
+        }
+      ];
+      var httpResponse = [
+        {
+          name: moduleName,
+          configurations: [{
+            name: 'hideDeclinedEvents',
+            value: true
+          }]
+        }
+      ];
 
-        sinon.spy(esnUserConfigurationService, 'get');
-        $httpBackend.expectPOST('/api/configurations?scope=user', payload).respond(httpResponse);
-        calFullUiConfiguration.get()
-          .then(function() {
-            expect(calFullUiConfiguration.isDeclinedEventsHidden()).to.be.true;
+      sinon.spy(esnUserConfigurationService, 'get');
+      $httpBackend.expectPOST('/api/configurations?scope=user', payload).respond(httpResponse);
+      calFullUiConfiguration.get()
+        .then(function() {
+          expect(calFullUiConfiguration.isDeclinedEventsHidden()).to.be.true;
 
-            done();
-          });
+          done();
+        });
 
-        $httpBackend.flush();
+      $httpBackend.flush();
     });
   });
 
@@ -319,11 +319,11 @@ describe('The calFullUiConfiguration service', function() {
         'key//local',
         'l.i'
       ].forEach(function(locale) {
-      _setLocale(locale);
+        _setLocale(locale);
 
-      var config = calFullUiConfiguration.configureLocaleForCalendar(uiConfig);
+        var config = calFullUiConfiguration.configureLocaleForCalendar(uiConfig);
 
-      expect(config.calendar.locale).to.be.equal(CAL_FULLCALENDAR_LOCALE.default);
+        expect(config.calendar.locale).to.be.equal(CAL_FULLCALENDAR_LOCALE.default);
       });
     });
 
@@ -335,11 +335,11 @@ describe('The calFullUiConfiguration service', function() {
         'fr_Ca',
         'FR_ca'
       ].forEach(function(locale) {
-      _setLocale(locale);
+        _setLocale(locale);
 
-      var config = calFullUiConfiguration.configureLocaleForCalendar(uiConfig);
+        var config = calFullUiConfiguration.configureLocaleForCalendar(uiConfig);
 
-      expect(config.calendar.locale).to.be.equal('fr-ca');
+        expect(config.calendar.locale).to.be.equal('fr-ca');
       });
     });
 
@@ -352,11 +352,11 @@ describe('The calFullUiConfiguration service', function() {
         'fr_-/ca',
         'fr:./ca'
       ].forEach(function(locale) {
-      _setLocale(locale);
+        _setLocale(locale);
 
-      var config = calFullUiConfiguration.configureLocaleForCalendar(uiConfig);
+        var config = calFullUiConfiguration.configureLocaleForCalendar(uiConfig);
 
-      expect(config.calendar.locale).to.be.equal('fr-ca');
+        expect(config.calendar.locale).to.be.equal('fr-ca');
       });
     });
 
@@ -366,11 +366,11 @@ describe('The calFullUiConfiguration service', function() {
         'fR///local',
         'FR.i'
       ].forEach(function(locale) {
-      _setLocale(locale);
+        _setLocale(locale);
 
-      var config = calFullUiConfiguration.configureLocaleForCalendar(uiConfig);
+        var config = calFullUiConfiguration.configureLocaleForCalendar(uiConfig);
 
-      expect(config.calendar.locale).to.be.equal('fr');
+        expect(config.calendar.locale).to.be.equal('fr');
       });
     });
   });

@@ -13,7 +13,7 @@ describe('The calendarEventSource factory', function() {
       getNewToken: function() {
         var token = this._token;
 
-        return $q.when({data: {token: token}});
+        return $q.when({ data: { token: token } });
       }
     };
 
@@ -48,15 +48,15 @@ describe('The calendarEventSource factory', function() {
       start = calMoment(new Date(2014, 0, 1));
       end = calMoment(new Date(2014, 0, 2));
       data = {
-        match: {start: '20131231T000000', end: '20140103T000000'}
+        match: { start: '20131231T000000', end: '20140103T000000' }
       };
     });
   });
 
   it('should use the correct path', function(done) {
     $httpBackend.expect('REPORT', href, data).respond({
-      _links: {self: {href: '/prepath/path/to/calendar.json'}},
-      _embedded: {'dav:item': []}
+      _links: { self: { href: '/prepath/path/to/calendar.json' } },
+      _embedded: { 'dav:item': [] }
     });
 
     var source = calendarEventSource(calendar, function() {});
@@ -78,8 +78,8 @@ describe('The calendarEventSource factory', function() {
     });
 
     $httpBackend.expect('REPORT', sourceCal, data).respond({
-      _links: {self: {href: '/prepath/path/to/calendar.json'}},
-      _embedded: {'dav:item': []}
+      _links: { self: { href: '/prepath/path/to/calendar.json' } },
+      _embedded: { 'dav:item': [] }
     });
 
     var source = calendarEventSource(calendar, angular.noop);
@@ -96,12 +96,12 @@ describe('The calendarEventSource factory', function() {
   it('should filter cancelled events', function(done) {
     $httpBackend.expect('REPORT', href, data).respond({
       _links: {
-        self: {href: '/prepath/path/to/calendar.json'}
+        self: { href: '/prepath/path/to/calendar.json' }
       },
       _embedded: {
         'dav:item': [{
           _links: {
-            self: {href: '/prepath/path/to/calendar/myuid.ics'}
+            self: { href: '/prepath/path/to/calendar/myuid.ics' }
           },
           etag: '"123123"',
           data: [

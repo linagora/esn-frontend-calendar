@@ -129,7 +129,7 @@ describe('The calUIAuthorizationService service', function() {
     });
 
     it('should return false if calendar.id is the same as calDefaultValue', function() {
-      expect(calUIAuthorizationService.canDeleteCalendar({id: calDefaultValue.get('calendarId')})).to.be.false;
+      expect(calUIAuthorizationService.canDeleteCalendar({ id: calDefaultValue.get('calendarId') })).to.be.false;
     });
 
     it('should return false if the user is not the owner or the calendar is not shared to the user', function() {

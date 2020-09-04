@@ -7,7 +7,7 @@
   function calSidebar(CAL_EVENTS, CAL_LEFT_PANEL_BOTTOM_MARGIN) {
     var directive = {
       restrict: 'E',
-      template: require("./sidebar.pug"),
+      template: require('./sidebar.pug'),
       scope: {
         calendarHomeId: '='
       },

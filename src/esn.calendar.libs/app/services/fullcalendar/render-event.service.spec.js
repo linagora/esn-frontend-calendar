@@ -5,7 +5,8 @@
 var expect = chai.expect;
 
 describe('The calFullCalendarRenderEventService service', function() {
-  var $q, element, session, calendar, fcTitle, fcTime, fcContent, event, calendarService, calUIAuthorizationService, view, self;
+  var $q, element, session, calendar, fcTitle, fcTime, fcContent, event, calendarService, calUIAuthorizationService, view;
+  var self = this;
   var esnDatetimeServiceMock, format12, format24;
 
   function Element() {
@@ -110,7 +111,7 @@ describe('The calFullCalendarRenderEventService service', function() {
     fcContent = new Element();
     fcTitle = new Element();
     fcTime = new Element();
-    view = {name: 'month', type: 'month'};
+    view = { name: 'month', type: 'month' };
     element.innerElements['.fc-content'] = fcContent;
     element.innerElements['.fc-title'] = fcTitle;
     element.innerElements['.fc-time'] = fcTime;

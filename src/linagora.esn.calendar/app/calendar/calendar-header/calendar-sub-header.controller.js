@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('esn.calendar')
-         .controller('calendarSubHeaderController', calendarSubHeaderController);
+    .controller('calendarSubHeaderController', calendarSubHeaderController);
 
   function calendarSubHeaderController($scope, calendarCurrentView, calMoment) {
     $scope.isCurrentViewAroundToday = isCurrentViewAroundToday;

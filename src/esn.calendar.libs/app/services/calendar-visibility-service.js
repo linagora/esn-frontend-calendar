@@ -1,11 +1,10 @@
-const _ = require('lodash');
 require('../app.constants.js');
 
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar.libs')
-         .factory('calendarVisibilityService', calendarVisibilityService);
+    .factory('calendarVisibilityService', calendarVisibilityService);
 
   function calendarVisibilityService($rootScope, CAL_EVENTS, localStorageService) {
     var storage = localStorageService.getOrCreateInstance('calendarStorage');

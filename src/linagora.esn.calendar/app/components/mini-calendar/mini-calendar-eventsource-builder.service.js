@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-require('../../components/mini-calendar/mini-calendar.service.js');
+require('./mini-calendar.service.js');
 
 (function(angular) {
   'use strict';
@@ -60,12 +60,13 @@ require('../../components/mini-calendar/mini-calendar.service.js');
             var dayEvent = fakeEvents[date];
 
             if (!dayEvent) {
-              dayEvent = fakeEvents[date] = {
+              fakeEvents[date] = {
                 start: date,
                 id: date,
                 _num: 0,
                 allDay: true
               };
+              dayEvent = fakeEvents[date];
             }
 
             dayEvent._num = dayEvent._num + (add ? 1 : -1);

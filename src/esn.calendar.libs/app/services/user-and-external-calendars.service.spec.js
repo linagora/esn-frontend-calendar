@@ -204,6 +204,7 @@ describe('the userAndExternalCalendars service', function() {
 
   it('should spread calendars on personal, shared and public calendars without duplicates', function() {
     var result = userAndExternalCalendars.publicCalendars.concat(userAndExternalCalendars.sharedCalendars).concat(userAndExternalCalendars.userCalendars);
+
     expect(result).to.have.same.members(calendars);
   });
 });

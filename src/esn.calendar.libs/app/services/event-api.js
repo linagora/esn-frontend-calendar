@@ -1,15 +1,15 @@
 require('../app.constants.js');
-require('../services/dav-request.js');
-require('../services/http-response-handler.js');
-require('../services/grace-period-response-handler.js');
+require('./dav-request.js');
+require('./http-response-handler.js');
+require('./grace-period-response-handler.js');
 
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar.libs')
-         .constant('CALENDAR_CONTENT_TYPE_HEADER', 'application/calendar+json')
-         .constant('CALENDAR_PREFER_HEADER', 'return=representation')
-         .factory('calEventAPI', calEventAPI);
+    .constant('CALENDAR_CONTENT_TYPE_HEADER', 'application/calendar+json')
+    .constant('CALENDAR_PREFER_HEADER', 'return=representation')
+    .factory('calEventAPI', calEventAPI);
 
   function calEventAPI(
     calDavRequest,
@@ -51,11 +51,11 @@ require('../services/grace-period-response-handler.js');
      * @return {String||Object}           a taskId if with use the graceperiod, the http response otherwise.
      */
     function create(eventPath, vcalendar, options) {
-      var headers = {'Content-Type': CALENDAR_CONTENT_TYPE_HEADER};
+      var headers = { 'Content-Type': CALENDAR_CONTENT_TYPE_HEADER };
       var body = vcalendar.toJSON();
 
       if (CAL_GRACE_DELAY_IS_ACTIVE && options.graceperiod) {
-        return calDavRequest('put', eventPath, headers, body, {graceperiod: CAL_GRACE_DELAY}).then(calGracePeriodResponseHandler);
+        return calDavRequest('put', eventPath, headers, body, { graceperiod: CAL_GRACE_DELAY }).then(calGracePeriodResponseHandler);
       }
 
       return calDavRequest('put', eventPath, headers, body).then(calHttpResponseHandler(201));
@@ -92,7 +92,7 @@ require('../services/grace-period-response-handler.js');
      * @return {String}           the taskId which will be used to create the grace period.
      */
     function remove(eventPath, etag) {
-      var headers = {'If-Match': etag};
+      var headers = { 'If-Match': etag };
 
       var options = CAL_GRACE_DELAY_IS_ACTIVE ? { graceperiod: CAL_GRACE_DELAY } : null;
       var responseHandler = CAL_GRACE_DELAY_IS_ACTIVE ? calGracePeriodResponseHandler : calHttpResponseHandler([200, 204]);
@@ -129,9 +129,9 @@ require('../services/grace-period-response-handler.js');
      */
     function sendCounter(eventPath, requestBody) {
       var headers = {
-          'Content-Type': CALENDAR_CONTENT_TYPE_HEADER,
-          Prefer: CALENDAR_PREFER_HEADER,
-          'X-Http-Method-Override': 'ITIP'
+        'Content-Type': CALENDAR_CONTENT_TYPE_HEADER,
+        Prefer: CALENDAR_PREFER_HEADER,
+        'X-Http-Method-Override': 'ITIP'
       };
 
       return calDavRequest('post', eventPath, headers, requestBody).then(calHttpResponseHandler([200, 204]));

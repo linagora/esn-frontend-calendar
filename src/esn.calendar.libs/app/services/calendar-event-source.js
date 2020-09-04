@@ -1,4 +1,4 @@
-require('../services/event-service.js');
+require('./event-service.js');
 
 (function(angular) {
   'use strict';
@@ -27,7 +27,8 @@ require('../services/event-service.js');
             if (errorCallback) {
               errorCallback(err, 'Can not get calendar events');
             }
-          });
+          }
+        );
       };
     };
   }

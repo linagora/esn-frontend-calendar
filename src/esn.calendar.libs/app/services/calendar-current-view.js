@@ -1,11 +1,11 @@
 require('../app.constants');
-require('../services/fc-moment.js');
+require('./fc-moment.js');
 
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar.libs')
-         .factory('calendarCurrentView', calendarCurrentView);
+    .factory('calendarCurrentView', calendarCurrentView);
 
   function calendarCurrentView($location, $log, calMoment, matchmedia, CAL_AVAILABLE_VIEWS, ESN_MEDIA_QUERY_SM_XS) {
     var currentView = null;
@@ -62,6 +62,7 @@ require('../services/fc-moment.js');
       ['start', 'end'].forEach(function(name) {
         if (getParam[name]) {
           var day = calMoment(getParam[name]);
+
           if (day.isValid()) {
             view[name] = day;
           }

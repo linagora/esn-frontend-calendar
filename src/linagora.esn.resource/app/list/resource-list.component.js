@@ -8,6 +8,6 @@
       },
       controllerAs: 'ctrl',
       controller: 'ESNResourceListController',
-      template: require("./resource-list.pug")
+      template: require('./resource-list.pug')
     });
 })();

@@ -1,11 +1,12 @@
 const _ = require('lodash');
+
 require('../../app.constants');
 require('../calendar-business-hours.service');
 
 'use strict';
 
 angular.module('esn.calendar.libs')
-        .factory('calFullUiConfiguration', calFullUiConfiguration);
+  .factory('calFullUiConfiguration', calFullUiConfiguration);
 
 function calFullUiConfiguration(
   $q,
@@ -113,7 +114,9 @@ function calFullUiConfiguration(
   function configureTimeZoneForCalendar(config) {
     var uiConfig = angular.extend({}, config);
     var timeZone = esnDatetimeService.getTimeZone();
+
     uiConfig.calendar.timezone = timeZone;
+
     return uiConfig;
   }
 

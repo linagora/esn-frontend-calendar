@@ -3,12 +3,12 @@
 
   angular.module('linagora.esn.resource')
     .component('esnResourceAdministratorListItemUser', {
-        bindings: {
+      bindings: {
         administrator: '=',
         onRemove: '<'
-        },
-        controllerAs: 'ctrl',
-        controller: 'ESNResourceAdministratorListItemUserController',
-        template: require("./resource-administrator-list-item-user.pug")
+      },
+      controllerAs: 'ctrl',
+      controller: 'ESNResourceAdministratorListItemUserController',
+      template: require('./resource-administrator-list-item-user.pug')
     });
 })(angular);

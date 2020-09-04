@@ -8,6 +8,6 @@
         calendarHomeId: '<'
       },
       controller: 'CalEventMessageEditionController',
-      template: require("./event-message-edition.pug")
-   });
+      template: require('./event-message-edition.pug')
+    });
 })(angular);

@@ -12,7 +12,7 @@ require('../../components/event-create-button/event-create-button.component.js')
   function calendarView($rootScope, $timeout) {
     var directive = {
       restrict: 'E',
-      template: require("./calendar-view.pug"),
+      template: require('./calendar-view.pug'),
       scope: {
         calendarHomeId: '=',
         uiConfig: '='

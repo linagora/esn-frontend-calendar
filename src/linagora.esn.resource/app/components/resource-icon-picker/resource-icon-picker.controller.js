@@ -34,7 +34,7 @@
       self.selected = self.icon;
 
       $modal({
-        template: require("./modal/resource-icon-picker-modal.pug"),
+        template: require('./modal/resource-icon-picker-modal.pug'),
         controller: function($scope) {
           angular.extend($scope, self);
         },

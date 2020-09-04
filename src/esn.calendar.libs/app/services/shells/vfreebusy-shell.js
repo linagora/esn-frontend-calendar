@@ -1,5 +1,6 @@
 const _ = require('lodash');
-require('../../services/fc-moment.js');
+
+require('../fc-moment.js');
 
 (function(angular) {
   'use strict';

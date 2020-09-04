@@ -3,7 +3,7 @@
 
   angular.module('esn.calendar')
     .component('calExternalCalendarsList', {
-      template: require("./external-calendars-list.pug"),
+      template: require('./external-calendars-list.pug'),
       bindings: {
         sharedCalendars: '=',
         publicCalendars: '=',

@@ -57,6 +57,6 @@ function CalAttendeeListController(calAttendeeService, CAL_ATTENDEE_LIST_LIMIT) 
   }
 
   function removeAttendee(attendee) {
-    self.onAttendeeRemoved && self.onAttendeeRemoved({attendee: attendee});
+    self.onAttendeeRemoved && self.onAttendeeRemoved({ attendee: attendee });
   }
 }

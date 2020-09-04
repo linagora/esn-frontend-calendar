@@ -35,10 +35,10 @@ function CalSettingsDisplayController(
 
   function submit() {
     return asyncAction({
-        progressing: 'Saving configuration...',
-        success: 'Configuration saved',
-        failure: 'Failed to save configuration'
-      }, _submit);
+      progressing: 'Saving configuration...',
+      success: 'Configuration saved',
+      failure: 'Failed to save configuration'
+    }, _submit);
   }
 
   function _submit() {

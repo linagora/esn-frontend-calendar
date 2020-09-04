@@ -1,14 +1,15 @@
 const _ = require('lodash');
+
 require('../../app.constants.js');
-require('../../services/ical.js');
-require('../../services/calendar-utils.js');
-require('../../services/event-api.js');
-require('../../services/fc-moment.js');
-require('../../services/master-event-cache.js');
-require('../../services/path-builder.js');
-require('../../services/path-parser.service.js');
-require('../../services/shells/rrule-shell.js');
-require('../../services/shells/valarm-shell.js');
+require('../ical.js');
+require('../calendar-utils.js');
+require('../event-api.js');
+require('../fc-moment.js');
+require('../master-event-cache.js');
+require('../path-builder.js');
+require('../path-parser.service.js');
+require('./rrule-shell.js');
+require('./valarm-shell.js');
 
 (function(angular) {
   'use strict';
@@ -31,7 +32,7 @@ require('../../services/shells/valarm-shell.js');
    *   }
    */
   angular.module('esn.calendar.libs')
-         .factory('CalendarShell', CalendarShellFactory);
+    .factory('CalendarShell', CalendarShellFactory);
 
   function CalendarShellFactory(
     $q,
@@ -558,6 +559,7 @@ require('../../services/shells/valarm-shell.js');
         especially in this **non-tested** part of our code.
         We tried to document it well in ISSUE.md#ical.js
       */
+
       temporaryShell.vevent.removeProperty('rrule');
 
       var instance = temporaryShell.clone();
@@ -638,13 +640,14 @@ require('../../services/shells/valarm-shell.js');
       function _beforeEndDate(currentDatetime) {
         if (endDate.isAfter(currentDatetime.toJSDate())) {
           return true;
-        } else if (!endDate.hasTime()) {
+        } if (!endDate.hasTime()) {
           return endDate.isSame(currentDatetime.toJSDate(), 'day');
         }
 
         return false;
       }
 
+      // eslint-disable-next-line no-unmodified-loop-condition
       while ((currentDatetime = iterator.next()) && (!endDate || _beforeEndDate(currentDatetime)) && (!maxElement || result.length < maxElement)) { // eslint-disable-line no-cond-assign
 
         if (!startDate || startDate.isBefore(currentDatetime.toJSDate()) || (!startDate.hasTime() && startDate.isSame(currentDatetime.toJSDate(), 'day'))) {
@@ -776,24 +779,24 @@ require('../../services/shells/valarm-shell.js');
 
       return keys.every(function(key) {
         switch (key) {
-          case 'start':
-          case 'end':
-          case 'recurrenceId':
-            if (self[key] === that[key]) { return true; }
+        case 'start':
+        case 'end':
+        case 'recurrenceId':
+          if (self[key] === that[key]) { return true; }
 
-            return self[key]._isAMomentObject && that[key]._isAMomentObject && self[key].isSame(that[key]);
-          case 'rrule':
-            if (!self.rrule) { return !that.rrule; }
-            if (self.rrule === that.rrule) { return true; }
+          return self[key]._isAMomentObject && that[key]._isAMomentObject && self[key].isSame(that[key]);
+        case 'rrule':
+          if (!self.rrule) { return !that.rrule; }
+          if (self.rrule === that.rrule) { return true; }
 
-            return self.rrule.equals(that.rrule);
-          case 'alarm':
-            if (!self.alarm) { return !that.alarm; }
-            if (self.alarm === that.alarm) { return true; }
+          return self.rrule.equals(that.rrule);
+        case 'alarm':
+          if (!self.alarm) { return !that.alarm; }
+          if (self.alarm === that.alarm) { return true; }
 
-            return self.alarm.equals(that.alarm);
-          default:
-            return angular.equals(self[key], that[key]);
+          return self.alarm.equals(that.alarm);
+        default:
+          return angular.equals(self[key], that[key]);
         }
       });
     }
@@ -872,7 +875,7 @@ require('../../services/shells/valarm-shell.js');
     }
 
     function fromJSON(json) {
-      return new CalendarShell(new ICAL.Component(json.vcalendar), {path: json.path, etag: json.etag, gracePeriodTaskId: json.gracePeriodTaskId});
+      return new CalendarShell(new ICAL.Component(json.vcalendar), { path: json.path, etag: json.etag, gracePeriodTaskId: json.gracePeriodTaskId });
     }
 
     /**
@@ -920,10 +923,11 @@ require('../../services/shells/valarm-shell.js');
 
       if (this.full24HoursDay) {
         return this.end.clone().subtract(1, 'day').isSame(this.start, 'day');
-      } else {
-        //for the second condition it is necessary to consider the event that finish at the next day at 12 am is over one day only
-        return this.start.isSame(this.end, 'day') || (((startDay + 1) === endDay) && (endHour === '00:00'));
       }
+      //for the second condition it is necessary to consider the event that finish at the next day at 12 am is over one day only
+
+      return this.start.isSame(this.end, 'day') || (((startDay + 1) === endDay) && (endHour === '00:00'));
+
     }
 
     function getAttendeeByEmail(email) {

@@ -388,7 +388,7 @@ describe('The calendar configuration controller', function() {
     it('should correctly initialize delegation', function() {
       calendarRight.getPublicRight = sinon.stub().returns('publicSelection');
       calendarRight.getAllShareeRights = sinon.stub().returns([
-        {userId: 'userId', right: 'right'}
+        { userId: 'userId', right: 'right' }
       ]);
 
       userUtilsMock.displayNameOf = sinon.stub().returns('displayNameOfResult');
@@ -550,7 +550,7 @@ describe('The calendar configuration controller', function() {
           calendarConfigurationController.calendarHomeId,
           calendarConfigurationController.calendar.id,
           { public_right: publicRight }
-          );
+        );
       }
     });
 
@@ -705,7 +705,7 @@ describe('The calendar configuration controller', function() {
         expect(stateMock.go).to.have.been.called;
         expect(calendarService.modifyRights).to.have.been.calledWith(
           calendarConfigurationController.calendarHomeId,
-          sinon.match({href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json'}),
+          sinon.match({ href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json' }),
           sinon.match.same(calendarRight),
           sinon.match(calendarRight)
         );

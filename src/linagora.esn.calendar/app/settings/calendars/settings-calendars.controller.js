@@ -1,6 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
+
 require('../../components/modals/calendar-delete-confirmation/calendar-delete-confirmation-modal.service.js');
 
 angular.module('esn.calendar')
@@ -22,11 +23,11 @@ function CalSettingsCalendarsController(
 
   function $onInit() {
     listCalendars()
-    .then(function() {
-      $scope.$on(CAL_EVENTS.CALENDARS.ADD, onCalendarAdded);
-      $scope.$on(CAL_EVENTS.CALENDARS.REMOVE, onCalendarRemoved);
-      $scope.$on(CAL_EVENTS.CALENDARS.UPDATE, onCalendarUpdated);
-    });
+      .then(function() {
+        $scope.$on(CAL_EVENTS.CALENDARS.ADD, onCalendarAdded);
+        $scope.$on(CAL_EVENTS.CALENDARS.REMOVE, onCalendarRemoved);
+        $scope.$on(CAL_EVENTS.CALENDARS.UPDATE, onCalendarUpdated);
+      });
   }
 
   function onCalendarAdded(event, calendar) {
@@ -56,10 +57,10 @@ function CalSettingsCalendarsController(
 
   function listCalendars() {
     return calendarService.listPersonalAndAcceptedDelegationCalendars(session.user._id).then(function(calendars) {
-        self.calendars = calendars;
+      self.calendars = calendars;
 
-        refreshCalendarsList();
-      });
+      refreshCalendarsList();
+    });
   }
 
   function remove(calendar) {
@@ -69,10 +70,10 @@ function CalSettingsCalendarsController(
   function _openDeleteConfirmationDialog(calendar) {
     function removeCalendar() {
       calendarService.removeCalendar(calendar.calendarHomeId, calendar).then(function() {
-          handleCalendarRemove(calendar);
-        }, function(err) {
-          $log.error('Can not delete calendar', calendar, err);
-        });
+        handleCalendarRemove(calendar);
+      }, function(err) {
+        $log.error('Can not delete calendar', calendar, err);
+      });
     }
 
     self.modal = calCalendarDeleteConfirmationModalService(calendar, removeCalendar);

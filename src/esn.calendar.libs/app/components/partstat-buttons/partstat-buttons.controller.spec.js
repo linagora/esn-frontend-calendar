@@ -28,7 +28,7 @@ describe('The CalPartstatButtonsController', function() {
   });
 
   beforeEach(inject(function(_$controller_, _$q_, _$rootScope_, _CalendarShell_, _calEventService_, _session_,
-                             _ICAL_) {
+    _ICAL_) {
     $controller = _$controller_;
     $q = _$q_;
     CalendarShell = _CalendarShell_;

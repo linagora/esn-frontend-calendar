@@ -39,7 +39,7 @@ describe('The CalAttendeeListController controller', function() {
   }));
 
   function initController() {
-    return $controller('CalAttendeeListController', {$scope: $scope}, context);
+    return $controller('CalAttendeeListController', { $scope: $scope }, context);
   }
 
   describe('The $onInit function', function() {

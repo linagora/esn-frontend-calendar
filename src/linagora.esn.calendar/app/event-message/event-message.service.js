@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('esn.calendar')
-         .factory('calEventMessageService', calEventMessageService);
+    .factory('calEventMessageService', calEventMessageService);
 
   function calEventMessageService() {
     var service = {

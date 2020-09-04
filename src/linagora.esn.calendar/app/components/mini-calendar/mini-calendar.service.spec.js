@@ -42,7 +42,7 @@ describe('The miniCalendarService service', function() {
       //we check that for every fullCalendar.firstDay possible
       //and for each day possible in the week, the computed period is good
       forEachDayInEachPossibleWeek(function(day, startWeek, nextWeekStart) {
-        var week = miniCalenderService.getWeekAroundDay({firstDay: startWeek.isoWeekday()}, day);
+        var week = miniCalenderService.getWeekAroundDay({ firstDay: startWeek.isoWeekday() }, day);
 
         expect(startWeek.isSame(week.firstWeekDay, 'day')).to.be.true;
         expect(nextWeekStart.isSame(week.nextFirstWeekDay, 'day')).to.be.true;
@@ -55,7 +55,7 @@ describe('The miniCalendarService service', function() {
 
     beforeEach(function() {
       aDay = calMoment('2015-11-30T11:39:00.376Z');
-      event = {start: calMoment(aDay)};
+      event = { start: calMoment(aDay) };
 
       spy = sinon.spy(function(day) {
         expect(day.isSame(aDay, 'day')).to.be.true;

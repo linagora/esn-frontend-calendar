@@ -11,8 +11,7 @@ angular.module('esn.calendar.libs')
       isEventFromSearch: '<'
     },
     controller: CalOpenEventFormOnClickController
-  }
-);
+  });
 
 function CalOpenEventFormOnClickController($element, calOpenEventForm, calOpenEventFromSearchForm) {
   var self = this;

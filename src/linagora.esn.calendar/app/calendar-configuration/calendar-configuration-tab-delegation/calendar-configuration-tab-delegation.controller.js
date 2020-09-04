@@ -34,8 +34,8 @@
 
     function onAddingUser($tags) {
       var canBeAdded = !!$tags._id && !self.delegations.some(function(delegation) {
-          return $tags._id === delegation.user._id;
-        });
+        return $tags._id === delegation.user._id;
+      });
 
       return canBeAdded;
     }

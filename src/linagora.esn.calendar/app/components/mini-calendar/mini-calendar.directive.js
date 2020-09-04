@@ -1,4 +1,4 @@
-require('../../components/mini-calendar/mini-calendar.service.js');
+require('./mini-calendar.service.js');
 require('./mini-calendar.controller');
 require('../calendar/calendar.component.js');
 
@@ -11,7 +11,7 @@ require('../calendar/calendar.component.js');
   function miniCalendarMobile($window, miniCalendarService, CAL_EVENTS) {
     var directive = {
       restrict: 'E',
-      template: require("./mini-calendar.pug"),
+      template: require('./mini-calendar.pug'),
       scope: {
         calendarHomeId: '='
       },

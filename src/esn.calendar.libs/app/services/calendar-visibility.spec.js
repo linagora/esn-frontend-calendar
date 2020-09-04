@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('The calendarVisibilityService', function() {
-  var self;
+  var self = this;
 
   beforeEach(function() {
     self = this;
@@ -32,7 +32,7 @@ describe('The calendarVisibilityService', function() {
     };
 
     this.getCalendar = function(id) {
-      return {uniqueId: id, getUniqueId: function() { return id; }};
+      return { uniqueId: id, getUniqueId: function() { return id; } };
     };
 
     angular.mock.module('esn.calendar.libs', function($provide) {
@@ -50,6 +50,7 @@ describe('The calendarVisibilityService', function() {
   describe('getHiddenCalendars function', function() {
     it('should return calendars as it was saved in the localstorage', function() {
       var thenSpy = sinon.spy();
+
       this.storageData.hiddenCalendarUniqueId = true;
       this.storageData.visibleCalendarUniqueId = false;
       this.calendarVisibilityService.getHiddenCalendars().then(thenSpy);
@@ -87,7 +88,7 @@ describe('The calendarVisibilityService', function() {
       this.$rootScope.$digest();
       expect(this.$rootScope.$broadcast).to.have.been.calledWith(
         this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW,
-        {calendarUniqueId: cal.uniqueId, hidden: true}
+        { calendarUniqueId: cal.uniqueId, hidden: true }
       );
 
       this.$rootScope.$broadcast.reset();
@@ -96,7 +97,7 @@ describe('The calendarVisibilityService', function() {
       this.$rootScope.$digest();
       expect(this.$rootScope.$broadcast).to.have.been.calledWith(
         this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW,
-        {calendarUniqueId: cal.uniqueId, hidden: false}
+        { calendarUniqueId: cal.uniqueId, hidden: false }
       );
     });
 

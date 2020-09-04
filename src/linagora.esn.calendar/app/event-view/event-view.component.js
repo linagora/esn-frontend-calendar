@@ -10,6 +10,6 @@
       },
       controllerAs: 'ctrl',
       controller: 'CalEventViewController',
-      template: require("./event-view.pug")
+      template: require('./event-view.pug')
     });
 })();

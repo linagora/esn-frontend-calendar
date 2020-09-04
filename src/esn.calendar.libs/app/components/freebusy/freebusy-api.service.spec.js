@@ -56,7 +56,7 @@ describe('The calFreebusyAPI service', function() {
 
     davItem = {
       _links: {
-        self: {href: '/dav/api/calendars/test/events.json'}
+        self: { href: '/dav/api/calendars/test/events.json' }
       },
       etag: '"123123"',
       data: [
@@ -137,7 +137,7 @@ describe('The calFreebusyAPI service', function() {
 
     it('should request the correct endpoint', function(done) {
       var result = {
-        users: {1: {}, 2: {}}
+        users: { 1: {}, 2: {} }
       };
 
       this.$httpBackend.expect('POST', freeBusyEndpoint, bulkRequest, headerContentTypeJsonChecker).respond(result);

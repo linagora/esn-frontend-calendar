@@ -9,5 +9,5 @@ angular.module('esn.calendar.libs')
     },
     controllerAs: 'ctrl',
     controller: 'CalAttendeeItemConsultController',
-    template: require("./attendee-item-consult.pug")
+    template: require('./attendee-item-consult.pug')
   });

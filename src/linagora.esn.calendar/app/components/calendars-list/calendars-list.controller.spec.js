@@ -19,7 +19,7 @@ describe('The calendarsList controller', function() {
       })
     };
 
-    hiddenCalendar = {uniqueId: 123};
+    hiddenCalendar = { uniqueId: 123 };
 
     calendarVisibilityServiceMock = {
       getHiddenCalendars: sinon.spy(function() {
@@ -85,7 +85,7 @@ describe('The calendarsList controller', function() {
         color: 'color3',
         description: 'description3',
         source: {
-          _links: {self: {href: '/calendars/12345/3_source.json'}}
+          _links: { self: { href: '/calendars/12345/3_source.json' } }
         }
       })
     ];

@@ -11,7 +11,7 @@ describe('The calEventFormService', function() {
 
   beforeEach(function() {
     calendarHomeId = '123';
-    calendar = {id: 1, calendarHomeId: calendarHomeId};
+    calendar = { id: 1, calendarHomeId: calendarHomeId };
     $modal = sinon.spy();
     $state = {
       go: sinon.spy()

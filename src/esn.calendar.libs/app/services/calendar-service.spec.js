@@ -8,7 +8,7 @@ describe('The calendarService service', function() {
   var CalendarCollectionShellMock,
     CalendarCollectionShellFuncMock,
     CalendarRightShellMock,
-    self,
+    self = this,
     CalendarRightShellResult,
     calendarApiOptions,
     listCalendars,
@@ -69,13 +69,13 @@ describe('The calendarService service', function() {
     it('should broadcast a CALENDARS.REMOVE event when the calendar has been created', function() {
       CalendarCollectionShellMock.buildUniqueId = sinon.stub().returns('calUniqueId');
 
-      var calendar = {id: 'calId'};
+      var calendar = { id: 'calId' };
 
       this.$rootScope.$broadcast = sinon.stub().returns({});
       this.calendarService.removeAndEmit('homeId', calendar);
       this.$rootScope.$digest();
 
-      expect(self.$rootScope.$broadcast).to.have.been.calledWith(this.CAL_EVENTS.CALENDARS.REMOVE, {uniqueId: 'calUniqueId'});
+      expect(self.$rootScope.$broadcast).to.have.been.calledWith(this.CAL_EVENTS.CALENDARS.REMOVE, { uniqueId: 'calUniqueId' });
       expect(CalendarCollectionShellMock.buildUniqueId).to.have.been.calledWith('homeId', calendar.id);
     });
   });
@@ -84,7 +84,7 @@ describe('The calendarService service', function() {
     var calendar, homeId;
 
     beforeEach(function() {
-      calendar = {id: 'calId', uniqueId: 'uniqueId'};
+      calendar = { id: 'calId', uniqueId: 'uniqueId' };
       homeId = 'homeId';
     });
 
@@ -115,7 +115,7 @@ describe('The calendarService service', function() {
       var spy = sinon.spy(function() {
         return {};
       });
-      var calendar2 = {id: calendar.id + 'foo', uniqueId: calendar.uniqueId + 'bar'};
+      var calendar2 = { id: calendar.id + 'foo', uniqueId: calendar.uniqueId + 'bar' };
 
       this.$rootScope.$broadcast = spy;
       this.calendarService.addAndEmit(homeId, calendar);
@@ -130,7 +130,7 @@ describe('The calendarService service', function() {
 
   describe('The updateAndEmit function', function() {
     it('should broadcast a CALENDARS.UPDATE event when the calendar has been created', function() {
-      var calendar = {id: 'calId'};
+      var calendar = { id: 'calId' };
 
       this.$rootScope.$broadcast = sinon.stub().returns({});
       this.calendarService.updateAndEmit('homeId', calendar);
@@ -205,7 +205,7 @@ describe('The calendarService service', function() {
     });
 
     it('should wrap each received dav:calendar in a CalendarCollectionShell', function(done) {
-      var calendarCollection = {id: this.calDefaultValue.get('calendarId')};
+      var calendarCollection = { id: this.calDefaultValue.get('calendarId') };
 
       CalendarCollectionShellFuncMock = sinon.spy(function(davCal) {
         expect(davCal).to.deep.equal(response._embedded['dav:calendar'][0]);
@@ -259,7 +259,7 @@ describe('The calendarService service', function() {
     });
 
     it('should return an array of CalendarCollectionShell', function(done) {
-      var calendarCollection = {id: this.calDefaultValue.get('calendarId')};
+      var calendarCollection = { id: this.calDefaultValue.get('calendarId') };
       var calendars = [
         {
           _links: {
@@ -313,7 +313,7 @@ describe('The calendarService service', function() {
     });
 
     it('should return an array of CalendarCollectionShell', function(done) {
-      var calendarCollection = {id: this.calDefaultValue.get('calendarId')};
+      var calendarCollection = { id: this.calDefaultValue.get('calendarId') };
       var calendars = [
         {
           _links: {
@@ -386,7 +386,7 @@ describe('The calendarService service', function() {
     });
 
     it('should return an array of CalendarCollectionShell', function(done) {
-      var calendarCollection = {id: this.calDefaultValue.get('calendarId')};
+      var calendarCollection = { id: this.calDefaultValue.get('calendarId') };
       var calendars = [
         {
           _links: {
@@ -440,7 +440,7 @@ describe('The calendarService service', function() {
     });
 
     it('should return an array of CalendarCollectionShell', function(done) {
-      var calendarCollection = {id: this.calDefaultValue.get('calendarId')};
+      var calendarCollection = { id: this.calDefaultValue.get('calendarId') };
       var calendars = [
         {
           _links: {
@@ -499,7 +499,7 @@ describe('The calendarService service', function() {
     });
 
     it('should return an array of CalendarCollectionShell', function(done) {
-      var calendarCollection = {id: this.calDefaultValue.get('calendarId')};
+      var calendarCollection = { id: this.calDefaultValue.get('calendarId') };
       var calendars = [
         {
           _links: {
@@ -591,7 +591,7 @@ describe('The calendarService service', function() {
 
   describe('The get right calendar fn', function() {
     it('should wrap the returning server response in  a CalendarRightShell', function() {
-      var calendar = {id: 'calId'};
+      var calendar = { id: 'calId' };
 
       var body = {
         acl: 'acl',
@@ -621,28 +621,31 @@ describe('The calendarService service', function() {
 
       var promiseSpy = sinon.spy();
 
-      this.calendarService.removeCalendar('homeId', {id: 'cal'}).then(promiseSpy);
+      this.calendarService.removeCalendar('homeId', { id: 'cal' }).then(promiseSpy);
 
       this.$httpBackend.flush();
       this.$rootScope.$digest();
 
-      expect(promiseSpy).to.have.been.calledWith(sinon.match({data: 'response'}));
+      expect(promiseSpy).to.have.been.calledWith(sinon.match({ data: 'response' }));
     });
 
     it('should sync cache of list calendars', function() {
       CalendarCollectionShellFuncMock = angular.identity;
 
-      this.$httpBackend.expectGET('/dav/api/calendars/homeId.json?withRights=true').respond({_embedded: {
-        'dav:calendar': [{id: 1}, {id: 2}]
-      }});
+      this.$httpBackend.expectGET('/dav/api/calendars/homeId.json?withRights=true').respond({
+        _embedded: {
+          'dav:calendar': [{ id: 1 }, { id: 2 }]
+        }
+      });
 
       this.$httpBackend.expectDELETE('/dav/api/calendars/homeId/2.json').respond(204, 'response');
 
       var thenSpy = sinon.spy();
-      this.calendarService.listCalendars('homeId').then(function() {
-        calendarsCacheMock.getList = sinon.stub().returns([{id: 1}]);
 
-        self.calendarService.removeCalendar('homeId', {id: 2}).then(function() {
+      this.calendarService.listCalendars('homeId').then(function() {
+        calendarsCacheMock.getList = sinon.stub().returns([{ id: 1 }]);
+
+        self.calendarService.removeCalendar('homeId', { id: 2 }).then(function() {
           self.calendarService.listCalendars('homeId').then(thenSpy);
         });
       });
@@ -651,12 +654,12 @@ describe('The calendarService service', function() {
       this.$rootScope.$digest();
       expect(thenSpy).to.have.been.calledWith(sinon.match({
         length: 1,
-        0: {id: 1}
+        0: { id: 1 }
       }));
     });
 
     it('should broadcast a CALENDARS.REMOVE event when the calendar has been created', function() {
-      var calendar = {id: 'calId'};
+      var calendar = { id: 'calId' };
 
       this.$httpBackend.expectDELETE('/dav/api/calendars/homeId/calId.json').respond(204, 'response');
       this.$rootScope.$broadcast = sinon.stub().returns({});
@@ -665,13 +668,13 @@ describe('The calendarService service', function() {
       this.$httpBackend.flush();
       this.$rootScope.$digest();
 
-      expect(self.$rootScope.$broadcast).to.have.been.calledWith(this.CAL_EVENTS.CALENDARS.REMOVE, {uniqueId: 'calUniqueId'});
+      expect(self.$rootScope.$broadcast).to.have.been.calledWith(this.CAL_EVENTS.CALENDARS.REMOVE, { uniqueId: 'calUniqueId' });
     });
   });
 
   describe('The create calendar fn', function() {
     it('should send a post request to the correct URL', function() {
-      var calendar = {id: 'calId'};
+      var calendar = { id: 'calId' };
 
       CalendarCollectionShellMock.toDavCalendar = sinon.spy(angular.identity);
 
@@ -690,15 +693,17 @@ describe('The calendarService service', function() {
 
     it('should sync cache of list calendars', function(done) {
       CalendarCollectionShellFuncMock = angular.identity;
-      var calendars = [{id: 1}, {id: 2}];
+      var calendars = [{ id: 1 }, { id: 2 }];
 
-      this.$httpBackend.expectGET('/dav/api/calendars/homeId.json?withRights=true').respond({_embedded: {
-        'dav:calendar': calendars
-      }});
+      this.$httpBackend.expectGET('/dav/api/calendars/homeId.json?withRights=true').respond({
+        _embedded: {
+          'dav:calendar': calendars
+        }
+      });
       this.$httpBackend.expectPOST('/dav/api/calendars/homeId.json').respond(201, {});
 
       this.calendarService.listCalendars('homeId').then(function() {
-        var calendar = {id: 'calId'};
+        var calendar = { id: 'calId' };
 
         CalendarCollectionShellMock.toDavCalendar = angular.identity;
         self.calendarService.createCalendar('homeId', calendar).then(function() {
@@ -708,7 +713,7 @@ describe('The calendarService service', function() {
           self.calendarService.listCalendars('homeId').then(function(calendar) {
             expect(calendar).to.shallowDeepEqual({
               length: 3,
-              2: {id: 'calId'}
+              2: { id: 'calId' }
             });
             done();
           });
@@ -720,7 +725,7 @@ describe('The calendarService service', function() {
     });
 
     it('should broadcast a CALENDARS.ADD event when the calendar has been created', function() {
-      var calendar = {id: 'calId'};
+      var calendar = { id: 'calId' };
 
       CalendarCollectionShellMock.toDavCalendar = sinon.spy(angular.identity);
 
@@ -739,7 +744,7 @@ describe('The calendarService service', function() {
 
   describe('The modify calendar fn', function() {
     it('should send a put request to the correct URL and return resulting calendar', function() {
-      var calendar = {id: 'calId'};
+      var calendar = { id: 'calId' };
 
       CalendarCollectionShellMock.toDavCalendar = sinon.spy(angular.identity);
 
@@ -759,21 +764,24 @@ describe('The calendarService service', function() {
     it('should sync cache of list calendars', function(done) {
       CalendarCollectionShellFuncMock = angular.identity;
 
-      this.$httpBackend.expectGET('/dav/api/calendars/homeId.json?withRights=true').respond({_embedded: {
-        'dav:calendar': [{id: 1}, {id: 'events', selected: true}]
-      }});
+      this.$httpBackend.expectGET('/dav/api/calendars/homeId.json?withRights=true').respond({
+        _embedded: {
+          'dav:calendar': [{ id: 1 }, { id: 'events', selected: true }]
+        }
+      });
       this.$httpBackend.expect('PROPPATCH', '/dav/api/calendars/homeId/events.json').respond(204, {});
 
       this.calendarService.listCalendars('homeId').then(function() {
-        var calendar = {id: 'events', name: 'modified cal', selected: true};
-        calendarsCacheMock.getList = sinon.stub().returns([{id: 1}, calendar]);
+        var calendar = { id: 'events', name: 'modified cal', selected: true };
+
+        calendarsCacheMock.getList = sinon.stub().returns([{ id: 1 }, calendar]);
 
         CalendarCollectionShellMock.toDavCalendar = angular.identity;
         self.calendarService.modifyCalendar('homeId', calendar).then(function() {
           self.calendarService.listCalendars('homeId').then(function(calendar) {
             expect(calendar).to.shallowDeepEqual({
               length: 2,
-              1: {id: 'events', name: 'modified cal', selected: true}
+              1: { id: 'events', name: 'modified cal', selected: true }
             });
             done();
           });
@@ -793,7 +801,7 @@ describe('The calendarService service', function() {
       };
       var oldCalendarShell = {};
 
-      this.calendarService.modifyRights('homeId', {id: 'calId'}, newCalendarShell, oldCalendarShell);
+      this.calendarService.modifyRights('homeId', { id: 'calId' }, newCalendarShell, oldCalendarShell);
 
       expect(newCalendarShell.toDAVShareRightsUpdate).to.have.been.calledWith(sinon.match.same(oldCalendarShell));
       this.$httpBackend.expect('POST', '/dav/api/calendars/homeId/calId.json', davDiff).respond(200, {});
@@ -839,13 +847,13 @@ describe('The calendarService service', function() {
         CalendarCollectionShellMock.toDavCalendar = sinon.spy(angular.identity);
 
         this.calendarService.subscribe(calendarHomeId, subscription)
-        .then(done, function(err) {
-          expect(err.message).to.equal(error.message);
-          expect(CalendarCollectionShellMock.toDavCalendar).to.have.been.calledWith(subscription);
-          expect(subscribeStub).to.have.been.calledOnce;
-          expect(self.$rootScope.$broadcast).to.not.have.been.called;
-          done();
-        });
+          .then(done, function(err) {
+            expect(err.message).to.equal(error.message);
+            expect(CalendarCollectionShellMock.toDavCalendar).to.have.been.calledWith(subscription);
+            expect(subscribeStub).to.have.been.calledOnce;
+            expect(self.$rootScope.$broadcast).to.not.have.been.called;
+            done();
+          });
 
         this.$rootScope.$digest();
       });
@@ -857,16 +865,17 @@ describe('The calendarService service', function() {
         var unsubscribeStub = sinon.stub(this.calCalendarSubscriptionApiService, 'unsubscribe', function() {
           return $q.when(subscription);
         });
+
         CalendarCollectionShellMock.buildUniqueId = sinon.stub().returns(uniqueId);
 
         this.$rootScope.$broadcast = sinon.stub().returns({});
         this.calendarService.unsubscribe(calendarHomeId, subscription)
-        .then(function(result) {
-          expect(result).to.equal(subscription);
-          expect(unsubscribeStub).to.have.been.calledWith(calendarHomeId, subscription.id);
-          expect(self.$rootScope.$broadcast).to.have.been.calledWith(self.CAL_EVENTS.CALENDARS.REMOVE, {uniqueId: uniqueId});
-          done();
-        }, done);
+          .then(function(result) {
+            expect(result).to.equal(subscription);
+            expect(unsubscribeStub).to.have.been.calledWith(calendarHomeId, subscription.id);
+            expect(self.$rootScope.$broadcast).to.have.been.calledWith(self.CAL_EVENTS.CALENDARS.REMOVE, { uniqueId: uniqueId });
+            done();
+          }, done);
 
         this.$rootScope.$digest();
       });
@@ -879,12 +888,12 @@ describe('The calendarService service', function() {
 
         this.$rootScope.$broadcast = sinon.stub().returns({});
         this.calendarService.unsubscribe(calendarHomeId, subscription)
-        .then(done, function(err) {
-          expect(err.message).to.equal(error.message);
-          expect(unsubscribeStub).to.have.been.calledWith(calendarHomeId, subscription.id);
-          expect(self.$rootScope.$broadcast).to.not.have.been.called;
-          done();
-        }, done);
+          .then(done, function(err) {
+            expect(err.message).to.equal(error.message);
+            expect(unsubscribeStub).to.have.been.calledWith(calendarHomeId, subscription.id);
+            expect(self.$rootScope.$broadcast).to.not.have.been.called;
+            done();
+          }, done);
 
         this.$rootScope.$digest();
       });
@@ -900,12 +909,12 @@ describe('The calendarService service', function() {
         CalendarCollectionShellMock.toDavCalendar = sinon.spy(angular.identity);
 
         this.calendarService.updateSubscription(calendarHomeId, subscription)
-        .then(function() {
-          expect(CalendarCollectionShellMock.toDavCalendar).to.have.been.calledWith(subscription);
-          expect(updateStub).to.have.been.calledOnce;
-          expect(self.$rootScope.$broadcast).to.have.been.calledWith(self.CAL_EVENTS.CALENDARS.UPDATE, subscription);
-          done();
-        }, done);
+          .then(function() {
+            expect(CalendarCollectionShellMock.toDavCalendar).to.have.been.calledWith(subscription);
+            expect(updateStub).to.have.been.calledOnce;
+            expect(self.$rootScope.$broadcast).to.have.been.calledWith(self.CAL_EVENTS.CALENDARS.UPDATE, subscription);
+            done();
+          }, done);
 
         this.$rootScope.$digest();
       });
@@ -920,13 +929,13 @@ describe('The calendarService service', function() {
         CalendarCollectionShellMock.toDavCalendar = sinon.spy(angular.identity);
 
         this.calendarService.updateSubscription(calendarHomeId, subscription)
-        .then(done, function(err) {
-          expect(err.message).to.equal(error.message);
-          expect(CalendarCollectionShellMock.toDavCalendar).to.have.been.calledWith(subscription);
-          expect(updateStub).to.have.been.calledOnce;
-          expect(self.$rootScope.$broadcast).to.not.have.been.called;
-          done();
-        }, done);
+          .then(done, function(err) {
+            expect(err.message).to.equal(error.message);
+            expect(CalendarCollectionShellMock.toDavCalendar).to.have.been.calledWith(subscription);
+            expect(updateStub).to.have.been.calledOnce;
+            expect(self.$rootScope.$broadcast).to.not.have.been.called;
+            done();
+          }, done);
 
         this.$rootScope.$digest();
       });

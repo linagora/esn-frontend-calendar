@@ -82,7 +82,7 @@ describe('The calFreebusyService service', function() {
 
       $httpBackend.expect('REPORT', '/dav/api/calendars/uid/events.json', data).respond(200, {
         _links: {
-          self: {href: '/prepath/path/to/calendar.json'}
+          self: { href: '/prepath/path/to/calendar.json' }
         },
         data: [
           'vcalendar', [], [
@@ -141,7 +141,7 @@ describe('The calFreebusyService service', function() {
         $httpBackend.expectGET('/dav/api/calendars/uid.json?withFreeBusy=true&withRights=true', { Accept: CAL_ACCEPT_HEADER }).respond(response);
         $httpBackend.expect('REPORT', '/dav/api/calendars/uid/events.json', undefined).respond(200, {
           _links: {
-            self: {href: '/prepath/path/to/calendar.json'}
+            self: { href: '/prepath/path/to/calendar.json' }
           },
           data: [
             'vcalendar', [], [
@@ -220,7 +220,7 @@ describe('The calFreebusyService service', function() {
     var start, end, attendees, event, getBulkFreebusyStatusStub;
 
     beforeEach(function() {
-      event = {uid: 123};
+      event = { uid: 123 };
       getBulkFreebusyStatusStub = sinon.stub(calFreebusyAPI, 'getBulkFreebusyStatus');
       attendees = [
         { email: 'a@open-paas.org' },
@@ -291,7 +291,7 @@ describe('The calFreebusyService service', function() {
               },
               {
                 id: 2,
-                busy: [{id: 'eventId', start: 1, end: 2}]
+                busy: [{ id: 'eventId', start: 1, end: 2 }]
               }
             ]
           },
@@ -329,7 +329,7 @@ describe('The calFreebusyService service', function() {
     var start, end, attendees, event, getBulkFreebusyStatusStub, externalAttendee;
 
     beforeEach(function() {
-      event = {uid: 123};
+      event = { uid: 123 };
       getBulkFreebusyStatusStub = sinon.stub(calFreebusyAPI, 'getBulkFreebusyStatus');
       attendees = [
         { email: 'a@open-paas.org' },
@@ -458,7 +458,7 @@ describe('The calFreebusyService service', function() {
               calendars: [
                 {
                   id: 1,
-                  busy: [{start: new Date(), end: new Date()}]
+                  busy: [{ start: new Date(), end: new Date() }]
                 },
                 {
                   id: 2,

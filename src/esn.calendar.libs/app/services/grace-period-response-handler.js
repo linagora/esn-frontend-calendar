@@ -1,4 +1,4 @@
-require('../services/http-response-handler.js');
+require('./http-response-handler.js');
 
 (function(angular) {
   'use strict';

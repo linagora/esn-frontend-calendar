@@ -66,7 +66,7 @@
       });
 
       $modal({
-        template: require("./calendar-color-picker.pug"),
+        template: require('./calendar-color-picker.pug'),
         controller: /* @ngInject */ function($scope) {
           angular.extend($scope, self);
         },

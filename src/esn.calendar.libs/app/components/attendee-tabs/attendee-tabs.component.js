@@ -2,7 +2,7 @@
 
 angular.module('esn.calendar.libs')
   .component('calAttendeeTabs', {
-    template: require("./attendee-tabs.pug"),
+    template: require('./attendee-tabs.pug'),
     bindings: {
       event: '=',
       selectedTab: '='

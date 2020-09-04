@@ -8,7 +8,7 @@ describe('The calendarCurrentView factory', function() {
   var locationMock, matchmediaMock, calMoment, calendarCurrentView, CAL_AVAILABLE_VIEWS, ESN_MEDIA_QUERY_SM_XS;
 
   beforeEach(function() {
-    locationMock = {search: sinon.spy(), url: function() { return ''; }};
+    locationMock = { search: sinon.spy(), url: function() { return ''; } };
     matchmediaMock = {
       is: function() {
         return false;
@@ -132,7 +132,7 @@ describe('The calendarCurrentView factory', function() {
 
     it('should return valid view name from get param', function() {
       CAL_AVAILABLE_VIEWS.forEach(function(name) {
-        locationMock.search = sinon.stub().returns({viewMode: name});
+        locationMock.search = sinon.stub().returns({ viewMode: name });
 
         var view = calendarCurrentView.get();
 
@@ -142,7 +142,7 @@ describe('The calendarCurrentView factory', function() {
     });
 
     it('should ignore invalid view name from get param', function() {
-      locationMock.search = sinon.stub().returns({viewMode: 'the beatles'});
+      locationMock.search = sinon.stub().returns({ viewMode: 'the beatles' });
 
       var view = calendarCurrentView.get();
 
@@ -153,7 +153,7 @@ describe('The calendarCurrentView factory', function() {
     it('should return valid date from get param', function() {
       var validDate = '1980-12-08';
 
-      locationMock.search = sinon.stub().returns({start: validDate});
+      locationMock.search = sinon.stub().returns({ start: validDate });
 
       var view = calendarCurrentView.get();
 
@@ -167,7 +167,7 @@ describe('The calendarCurrentView factory', function() {
           intervalEnd: calMoment('1980-12-09'),
           name: 'name',
           title: 'title'
-      },
+        },
         expectedView = {
           start: view.intervalStart,
           end: view.intervalEnd,
@@ -187,7 +187,7 @@ describe('The calendarCurrentView factory', function() {
       });
 
       it('should ignore invalid date from get param in keep defaultDate of calendar config', function() {
-        locationMock.search = sinon.stub().returns({start: 'this is not a date'});
+        locationMock.search = sinon.stub().returns({ start: 'this is not a date' });
 
         var view = calendarCurrentView.get();
 
@@ -212,7 +212,7 @@ describe('The calendarCurrentView factory', function() {
     });
 
     it('should get the value of location if no set before', function() {
-      locationMock.search = sinon.stub().returns({viewMode: 'month', start: '2015-12-01'});
+      locationMock.search = sinon.stub().returns({ viewMode: 'month', start: '2015-12-01' });
 
       var resGet = calendarCurrentView.get();
 

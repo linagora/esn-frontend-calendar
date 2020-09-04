@@ -58,9 +58,7 @@ describe('calendarView directive', function() {
 
   it('should broadcast "header:disable-scroll-listener" false on destroy', function(done) {
     this.$scope.$on('header:disable-scroll-listener', function(event, data) { // eslint-disable-line
-      if (data) {
-        return;
-      } else {
+      if (!data) {
         expect(data).to.be.false;
         done();
       }

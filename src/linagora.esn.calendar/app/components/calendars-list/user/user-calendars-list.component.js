@@ -3,7 +3,7 @@
 
   angular.module('esn.calendar')
     .component('calUserCalendarsList', {
-      template: require("./user-calendars-list.pug"),
+      template: require('./user-calendars-list.pug'),
       bindings: {
         userCalendars: '=',
         toggleCalendar: '=',

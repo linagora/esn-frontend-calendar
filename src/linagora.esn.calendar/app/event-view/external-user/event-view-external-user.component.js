@@ -11,6 +11,6 @@
       },
       controller: 'CalEventViewExternalUserController',
       controllerAs: 'ctrl',
-      template: require("../event-view-body.pug")
+      template: require('../event-view-body.pug')
     });
 })(angular);

@@ -12,7 +12,7 @@ angular.module('esn.calendar.libs')
 function eventRecurrenceEdition() {
   var directive = {
     restrict: 'E',
-    template: require("./event-recurrence-edition.pug"),
+    template: require('./event-recurrence-edition.pug'),
     scope: {
       _event: '=event',
       canModifyEventRecurrence: '=?'
@@ -112,7 +112,7 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, CAL_RECUR_F
     return days.sort(function(dayA, dayB) {
       if (weekDaysValues.indexOf(dayA) > weekDaysValues.indexOf(dayB)) {
         return 1;
-      } else if (weekDaysValues.indexOf(dayA) < weekDaysValues.indexOf(dayB)) {
+      } if (weekDaysValues.indexOf(dayA) < weekDaysValues.indexOf(dayB)) {
         return -1;
       }
 
@@ -136,22 +136,22 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, CAL_RECUR_F
     var until = new Date();
 
     switch (freq) {
-      case 'DAILY': {
-        until.setDate(until.getDate() + 1);
-        break;
-      }
-      case 'WEEKLY': {
-        until.setDate(until.getDate() + 7);
-        break;
-      }
-      case 'MONTHLY': {
-        until.setMonth(until.getMonth() + 1);
-        break;
-      }
-      case 'YEARLY': {
-        until.setFullYear(until.getFullYear() + 1);
-        break;
-      }
+    case 'DAILY': {
+      until.setDate(until.getDate() + 1);
+      break;
+    }
+    case 'WEEKLY': {
+      until.setDate(until.getDate() + 7);
+      break;
+    }
+    case 'MONTHLY': {
+      until.setMonth(until.getMonth() + 1);
+      break;
+    }
+    case 'YEARLY': {
+      until.setFullYear(until.getFullYear() + 1);
+      break;
+    }
     }
     resetCount();
     self.event.rrule.until = until;

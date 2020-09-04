@@ -13,7 +13,7 @@ describe('The calEntitiesAutocompleteInputController', function() {
       user: {
         _id: '123456',
         emails: ['user1@test.com'],
-        emailMap: {'user1@test.com': true}
+        emailMap: { 'user1@test.com': true }
       },
       domain: {
         company_name: 'test',
@@ -113,7 +113,7 @@ describe('The calEntitiesAutocompleteInputController', function() {
     var bindings = { mutableEntities: [{ a: '1' }] };
     var ctrl = initController(bindings);
 
-    expect(ctrl.mutableEntities).to.deep.equal([{a: '1'}]);
+    expect(ctrl.mutableEntities).to.deep.equal([{ a: '1' }]);
   });
 
   describe('getInvitableEntities', function() {
@@ -171,7 +171,7 @@ describe('The calEntitiesAutocompleteInputController', function() {
 
     describe('When excludeCurrentUser is falsy', function() {
       beforeEach(function() {
-        ctrl = initController({excludeCurrentUser: false});
+        ctrl = initController({ excludeCurrentUser: false });
       });
 
       it('should call calendarAttendeeService, keep session.user and sort the users based on the displayName property ', function(done) {
@@ -187,7 +187,7 @@ describe('The calEntitiesAutocompleteInputController', function() {
 
     describe('When excludeCurrentUser is truethy', function() {
       beforeEach(function() {
-        ctrl = initController({excludeCurrentUser: true});
+        ctrl = initController({ excludeCurrentUser: true });
       });
 
       it('should call calendarAttendeeService, remove session.user and sort the other users based on the displayName property ', function(done) {
@@ -244,7 +244,7 @@ describe('The calEntitiesAutocompleteInputController', function() {
           var response = [];
 
           for (var i = 0; i < 20; i++) {
-            response.push({id: 'contact' + i, email: i + 'mail@domain.com', partstat: 'NEEDS-ACTION'});
+            response.push({ id: 'contact' + i, email: i + 'mail@domain.com', partstat: 'NEEDS-ACTION' });
           }
 
           return $q.when(response);
@@ -271,7 +271,7 @@ describe('The calEntitiesAutocompleteInputController', function() {
       it('should call the calendarAttendeeService with defined types', function() {
         var types = ['twitter', 'facebook', 'github'];
 
-        ctrl = initController({types: types});
+        ctrl = initController({ types: types });
         calendarAttendeeService.getAttendeeCandidates = sinon.stub().returns($q.when([]));
         ctrl.getInvitableEntities();
 
@@ -282,16 +282,16 @@ describe('The calEntitiesAutocompleteInputController', function() {
 
       it('should filter out entities which does not have email', function(done) {
         var attendees = [1, 2, 3].map(function(i) {
-          return {id: 'contact' + i, email: i + 'mail@domain.com', partstat: 'NEEDS-ACTION'};
+          return { id: 'contact' + i, email: i + 'mail@domain.com', partstat: 'NEEDS-ACTION' };
         });
 
-        attendees.push({id: 'noemail'});
+        attendees.push({ id: 'noemail' });
 
         calendarAttendeeService.getAttendeeCandidates = sinon.stub().returns($q.when(attendees));
 
         ctrl.getInvitableEntities(query).then(function(response) {
           expect(response.length).to.equal(attendees.length - 1);
-          expect(_.find(response, {id: 'noemail'})).to.be.falsy;
+          expect(_.find(response, { id: 'noemail' })).to.be.falsy;
 
           done();
         });
@@ -316,7 +316,7 @@ describe('The calEntitiesAutocompleteInputController', function() {
       var entity, response;
       var ctrl = initController();
 
-      entity = {displayName: 'eric cartman'};
+      entity = { displayName: 'eric cartman' };
       response = ctrl.onAddingEntity(entity);
 
       expect(response).to.be.false;
@@ -326,7 +326,7 @@ describe('The calEntitiesAutocompleteInputController', function() {
       var entity, response;
       var ctrl = initController();
 
-      entity = {displayName: 'eric cartman', email: 'this is not an email'};
+      entity = { displayName: 'eric cartman', email: 'this is not an email' };
       response = ctrl.onAddingEntity(entity);
 
       expect(response).to.be.false;

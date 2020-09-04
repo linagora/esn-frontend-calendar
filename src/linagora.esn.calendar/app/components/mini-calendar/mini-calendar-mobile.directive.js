@@ -10,7 +10,7 @@ require('../calendar/calendar.component.js');
   function miniCalendar() {
     var directive = {
       restrict: 'E',
-      template: require("./mini-calendar.pug"),
+      template: require('./mini-calendar.pug'),
       scope: {
         calendarHomeId: '='
       },
