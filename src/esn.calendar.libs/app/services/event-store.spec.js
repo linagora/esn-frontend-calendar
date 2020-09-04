@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('The calEventStore factory', function() {
-  var self;
+  var self = this;
 
   function createPeriod(start, end) {
     return {

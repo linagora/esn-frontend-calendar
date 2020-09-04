@@ -37,7 +37,7 @@ function CalPartstatButtonsController($attrs, session, calEventService, calEvent
     self.currentPartstat = partstat;
 
     if ($attrs.changePartstat) {
-      self.changePartstat({partstat: partstat});
+      self.changePartstat({ partstat: partstat });
     } else {
       _changeParticipation(partstat);
     }
@@ -54,11 +54,11 @@ function CalPartstatButtonsController($attrs, session, calEventService, calEvent
       .then(onSuccess, onError);
 
     function onSuccess(result) {
-      self.onParticipationChangeSuccess && self.onParticipationChangeSuccess({event: result});
+      self.onParticipationChangeSuccess && self.onParticipationChangeSuccess({ event: result });
     }
 
     function onError(err) {
-      self.onParticipationChangeFailure && self.onParticipationChangeFailure({err: err});
+      self.onParticipationChangeFailure && self.onParticipationChangeFailure({ err: err });
     }
   }
 

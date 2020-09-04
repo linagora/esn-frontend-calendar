@@ -1,5 +1,6 @@
 const _ = require('lodash');
-require('../services/attendee.service.js');
+
+require('./attendee.service.js');
 
 (function(angular) {
   'use strict';

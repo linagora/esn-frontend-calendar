@@ -30,6 +30,7 @@
 
     function activate() {
       var view = calendarCurrentView.get();
+
       view && _calendarDateIndicator(view);
     }
 

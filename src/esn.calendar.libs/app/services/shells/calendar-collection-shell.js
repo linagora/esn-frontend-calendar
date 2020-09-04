@@ -1,12 +1,13 @@
 const _ = require('lodash');
+
 require('../../app.constants.js');
-require('../../services/calendar-utils.js');
-require('../../services/path-builder.js');
-require('../../services/path-parser.service.js');
-require('../../services/calendar-users-cache.js');
-require('../../services/cal-default-value.service.js');
-require('../../services/shells/calendar-right-shell.js');
-require('../../services/calendar-resource.service.js');
+require('../calendar-utils.js');
+require('../path-builder.js');
+require('../path-parser.service.js');
+require('../calendar-users-cache.js');
+require('../cal-default-value.service.js');
+require('./calendar-right-shell.js');
+require('../calendar-resource.service.js');
 
 (function(angular) {
   'use strict';

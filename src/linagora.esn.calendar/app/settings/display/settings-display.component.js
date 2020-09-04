@@ -4,5 +4,5 @@ angular.module('esn.calendar')
   .component('calSettingsDisplay', {
     controllerAs: 'ctrl',
     controller: 'CalSettingsDisplayController',
-    template: require("./settings-display.pug")
+    template: require('./settings-display.pug')
   });

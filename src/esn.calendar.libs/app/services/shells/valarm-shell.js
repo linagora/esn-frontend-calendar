@@ -33,9 +33,10 @@ require('../../app.constants.js');
       return CAL_ALARM_MODIFY_COMPARE_KEYS.every(function(key) {
         if (key === 'trigger') {
           return self.trigger.compare(that.trigger) === 0;
-        } else {
-          return angular.equals(self[key], that[key]);
         }
+
+        return angular.equals(self[key], that[key]);
+
       });
     }
   }

@@ -11,7 +11,7 @@
 
     function openResourceCreateModal() {
       $modal({
-        template: require("../components/resource-form-modal/resource-form-modal.pug"),
+        template: require('../components/resource-form-modal/resource-form-modal.pug'),
         controller: 'ESNResourceFormCreateController',
         backdrop: 'static',
         placement: 'center',

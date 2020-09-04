@@ -13,7 +13,7 @@ function CalAttendeeItemController($scope, CAL_FREEBUSY) {
   self.CAL_FREEBUSY = CAL_FREEBUSY;
 
   function removeAttendee() {
-    self.remove && self.remove({attendee: self.attendee});
+    self.remove && self.remove({ attendee: self.attendee });
   }
 
   function $onInit() {

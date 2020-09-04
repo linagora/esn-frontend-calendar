@@ -49,7 +49,7 @@ describe('The calWebsocketListenerService service', function() {
     calendarSourcePath = calendarSourceHomeId + '/' + calendarSourceId + '.json';
 
     CalendarShellMock = function() {
-      return self.CalendarShellConstMock.apply(this, arguments);
+      return window.self.CalendarShellConstMock.apply(this, arguments);
     };
 
     CalendarShellMock.from = sinon.spy(function(event, extendedProp) {
@@ -126,64 +126,66 @@ describe('The calWebsocketListenerService service', function() {
           removeListener: sinon.spy(),
           on: function(event, handler) {
             switch (event) {
-              case CAL_WEBSOCKET.EVENT.CREATED:
-                wsEventCreateListener = handler;
-                break;
-              case CAL_WEBSOCKET.EVENT.UPDATED:
-                wsEventModifyListener = handler;
-                break;
-              case CAL_WEBSOCKET.EVENT.DELETED:
-                wsEventDeleteListener = handler;
-                break;
-              case CAL_WEBSOCKET.EVENT.REQUEST:
-                wsEventRequestListener = handler;
-                break;
-              case CAL_WEBSOCKET.EVENT.REPLY:
-                wsEventReplyListener = handler;
-                break;
-              case CAL_WEBSOCKET.EVENT.CANCEL:
-                wsEventCancelListener = handler;
-                break;
-              case CAL_WEBSOCKET.SUBSCRIPTION.CREATED:
-                wsSubscriptionCreatedListener = handler;
-                break;
-              case CAL_WEBSOCKET.SUBSCRIPTION.UPDATED:
-                wsSubscriptionUpdatedListener = handler;
-                break;
-              case CAL_WEBSOCKET.SUBSCRIPTION.DELETED:
-                wsSubscriptionDeletedListener = handler;
-                break;
-              }
+            case CAL_WEBSOCKET.EVENT.CREATED:
+              wsEventCreateListener = handler;
+              break;
+            case CAL_WEBSOCKET.EVENT.UPDATED:
+              wsEventModifyListener = handler;
+              break;
+            case CAL_WEBSOCKET.EVENT.DELETED:
+              wsEventDeleteListener = handler;
+              break;
+            case CAL_WEBSOCKET.EVENT.REQUEST:
+              wsEventRequestListener = handler;
+              break;
+            case CAL_WEBSOCKET.EVENT.REPLY:
+              wsEventReplyListener = handler;
+              break;
+            case CAL_WEBSOCKET.EVENT.CANCEL:
+              wsEventCancelListener = handler;
+              break;
+            case CAL_WEBSOCKET.SUBSCRIPTION.CREATED:
+              wsSubscriptionCreatedListener = handler;
+              break;
+            case CAL_WEBSOCKET.SUBSCRIPTION.UPDATED:
+              wsSubscriptionUpdatedListener = handler;
+              break;
+            case CAL_WEBSOCKET.SUBSCRIPTION.DELETED:
+              wsSubscriptionDeletedListener = handler;
+              break;
+            }
           }
         };
       };
 
       testUpdateCalCachedEventSourceAndFcEmit = function(wsCallback, expectedCacheMethod, expectedEmitMethod, eventSourcePath) {
         canModifyMock = true;
-        var event = {id: 'id', calendarId: 'calId'};
+        var event = { id: 'id', calendarId: 'calId' };
         var path = eventSourcePath || 'path';
         var etag = 'etag';
-        var resultingEvent = CalendarShellMock.from(event, {etag: etag, path: path});
+        var resultingEvent = CalendarShellMock.from(event, { etag: etag, path: path });
 
-        wsCallback({event: event, eventPath: path, eventSourcePath: eventSourcePath, etag: etag});
+        wsCallback({
+          event: event, eventPath: path, eventSourcePath: eventSourcePath, etag: etag
+        });
         scope.$digest();
 
-        expect(CalendarShellMock.from).to.have.been.calledWith(event, {path: path, etag: etag});
+        expect(CalendarShellMock.from).to.have.been.calledWith(event, { path: path, etag: etag });
         expect(calendarEventEmitterMock[expectedEmitMethod]).to.have.been.calledWith(resultingEvent);
         expect(calCachedEventSourceMock[expectedCacheMethod]).to.have.been.calledWith(resultingEvent);
       };
 
       testUpdateCalMasterEventCache = function(wsCallback, expectedCacheMethod) {
         canModifyMock = false;
-        var event = {id: 'id', calendarId: 'calId', editable: false};
+        var event = { id: 'id', calendarId: 'calId', editable: false };
         var path = 'path';
         var etag = 'etag';
-        var resultingEvent = CalendarShellMock.from(event, {etag: etag, path: path, editable: false});
+        var resultingEvent = CalendarShellMock.from(event, { etag: etag, path: path, editable: false });
 
-        wsCallback({event: event, eventPath: path, etag: etag});
+        wsCallback({ event: event, eventPath: path, etag: etag });
         scope.$digest();
 
-        expect(CalendarShellMock.from).to.have.been.calledWith(event, {path: path, etag: etag});
+        expect(CalendarShellMock.from).to.have.been.calledWith(event, { path: path, etag: etag });
         expect(calMasterEventCacheMock[expectedCacheMethod]).to.have.been.calledWith(resultingEvent);
       };
 
@@ -252,55 +254,55 @@ describe('The calWebsocketListenerService service', function() {
 
     describe('on EVENT.CANCEL', function() {
       it('should remove event on calCachedEventSource and broadcast emit an event for a deletion if whole event is cancelled', function() {
-        var event = {id: 'id', calendarId: 'calId', status: CAL_ICAL.status.CANCELLED};
+        var event = { id: 'id', calendarId: 'calId', status: CAL_ICAL.status.CANCELLED };
         var path = 'path';
         var etag = 'etag';
-        var resultingEvent = CalendarShellMock.from(event, {etag: etag, path: path});
+        var resultingEvent = CalendarShellMock.from(event, { etag: etag, path: path });
 
-        wsEventCancelListener({event: event, eventPath: path, etag: etag});
+        wsEventCancelListener({ event: event, eventPath: path, etag: etag });
         scope.$digest();
 
-        expect(CalendarShellMock.from).to.have.been.calledWith(event, {path: path, etag: etag});
+        expect(CalendarShellMock.from).to.have.been.calledWith(event, { path: path, etag: etag });
         expect(calendarEventEmitterMock.emitRemovedEvent).to.have.been.calledWith(resultingEvent);
         expect(calCachedEventSourceMock.registerDelete).to.have.been.calledWith(resultingEvent);
       });
 
       it('should remove event on calMasterEventCache for a deletion if whole event is cancelled', function() {
-        var event = {id: 'id', calendarId: 'calId', status: CAL_ICAL.status.CANCELLED};
+        var event = { id: 'id', calendarId: 'calId', status: CAL_ICAL.status.CANCELLED };
         var path = 'path';
         var etag = 'etag';
-        var resultingEvent = CalendarShellMock.from(event, {etag: etag, path: path});
+        var resultingEvent = CalendarShellMock.from(event, { etag: etag, path: path });
 
-        wsEventCancelListener({event: event, eventPath: path, etag: etag});
+        wsEventCancelListener({ event: event, eventPath: path, etag: etag });
         scope.$digest();
 
-        expect(CalendarShellMock.from).to.have.been.calledWith(event, {path: path, etag: etag});
+        expect(CalendarShellMock.from).to.have.been.calledWith(event, { path: path, etag: etag });
         expect(calMasterEventCacheMock.remove).to.have.been.calledWith(resultingEvent);
       });
       it('should update event on calCachedEventSource and broadcast emit an event for a modification if master event is not cancelled', function() {
-        var event = {id: 'id', calendarId: 'calId'};
+        var event = { id: 'id', calendarId: 'calId' };
         var path = 'path';
         var etag = 'etag';
-        var resultingEvent = CalendarShellMock.from(event, {etag: etag, path: path, editable: false});
+        var resultingEvent = CalendarShellMock.from(event, { etag: etag, path: path, editable: false });
 
-        wsEventModifyListener({event: event, eventPath: path, etag: etag});
+        wsEventModifyListener({ event: event, eventPath: path, etag: etag });
         scope.$digest();
 
-        expect(CalendarShellMock.from).to.have.been.calledWith(event, {path: path, etag: etag});
+        expect(CalendarShellMock.from).to.have.been.calledWith(event, { path: path, etag: etag });
         expect(calendarEventEmitterMock.emitModifiedEvent).to.have.been.calledWith(resultingEvent);
         expect(calCachedEventSourceMock.registerUpdate).to.have.been.calledWith(resultingEvent);
       });
 
       it('should update event on calMasterEventCache for a modification if master event is not cancelled', function() {
-        var event = {id: 'id', calendarId: 'calId'};
+        var event = { id: 'id', calendarId: 'calId' };
         var path = 'path';
         var etag = 'etag';
-        var resultingEvent = CalendarShellMock.from(event, {etag: etag, path: path, editable: false});
+        var resultingEvent = CalendarShellMock.from(event, { etag: etag, path: path, editable: false });
 
-        wsEventModifyListener({event: event, eventPath: path, etag: etag});
+        wsEventModifyListener({ event: event, eventPath: path, etag: etag });
         scope.$digest();
 
-        expect(CalendarShellMock.from).to.have.been.calledWith(event, {path: path, etag: etag});
+        expect(CalendarShellMock.from).to.have.been.calledWith(event, { path: path, etag: etag });
         expect(calMasterEventCacheMock.save).to.have.been.calledWith(resultingEvent);
       });
     });
@@ -321,14 +323,14 @@ describe('The calWebsocketListenerService service', function() {
 
     describe('on SUBSCRIPTION.CREATED event', function() {
       it('should fetch and add calendar', function() {
-        var calendarCollectionShell = {_id: 1};
+        var calendarCollectionShell = { _id: 1 };
 
         calendarServiceMock.getCalendar = sinon.spy(function() {
           return $q.when(calendarCollectionShell);
         });
         calendarServiceMock.addAndEmit = sinon.spy();
 
-        wsSubscriptionCreatedListener({calendarPath: calendarPath});
+        wsSubscriptionCreatedListener({ calendarPath: calendarPath });
         scope.$digest();
 
         expect(calendarServiceMock.getCalendar).to.have.been.calledWith(calendarHomeId, calendarId);
@@ -336,14 +338,14 @@ describe('The calWebsocketListenerService service', function() {
       });
 
       it('should fetch and add calendar using the source path when defined', function() {
-        var calendarCollectionShell = {_id: 1};
+        var calendarCollectionShell = { _id: 1 };
 
         calendarServiceMock.getCalendar = sinon.spy(function() {
           return $q.when(calendarCollectionShell);
         });
         calendarServiceMock.addAndEmit = sinon.spy();
 
-        wsSubscriptionCreatedListener({calendarPath: calendarPath, calendarSourcePath: calendarSourcePath});
+        wsSubscriptionCreatedListener({ calendarPath: calendarPath, calendarSourcePath: calendarSourcePath });
         scope.$digest();
 
         expect(calendarServiceMock.getCalendar).to.have.been.calledWith(calendarSourceHomeId, calendarSourceId);
@@ -356,7 +358,7 @@ describe('The calWebsocketListenerService service', function() {
         });
         calendarServiceMock.addAndEmit = sinon.spy();
 
-        wsSubscriptionCreatedListener({calendarPath: calendarPath});
+        wsSubscriptionCreatedListener({ calendarPath: calendarPath });
         scope.$digest();
 
         expect(calendarServiceMock.getCalendar).to.have.been.calledWith(calendarHomeId, calendarId);
@@ -372,7 +374,7 @@ describe('The calWebsocketListenerService service', function() {
         });
         calendarServiceMock.addAndEmit = sinon.spy();
 
-        wsSubscriptionCreatedListener({calendarPath: calendarPath});
+        wsSubscriptionCreatedListener({ calendarPath: calendarPath });
         scope.$digest();
 
         expect(calendarServiceMock.getCalendar).to.have.been.calledWith(calendarHomeId, calendarId);
@@ -383,14 +385,14 @@ describe('The calWebsocketListenerService service', function() {
 
     describe('on SUBSCRIPTION.UPDATED event', function() {
       it('should fetch and update calendar', function() {
-        var calendarCollectionShell = {_id: 1};
+        var calendarCollectionShell = { _id: 1 };
 
         calendarServiceMock.getCalendar = sinon.spy(function() {
           return $q.when(calendarCollectionShell);
         });
         calendarServiceMock.updateAndEmit = sinon.spy();
 
-        wsSubscriptionUpdatedListener({calendarPath: calendarPath});
+        wsSubscriptionUpdatedListener({ calendarPath: calendarPath });
         scope.$digest();
 
         expect(calendarServiceMock.getCalendar).to.have.been.calledWith(calendarHomeId, calendarId);
@@ -398,14 +400,14 @@ describe('The calWebsocketListenerService service', function() {
       });
 
       it('should fetch and update calendar using the source path when defined', function() {
-        var calendarCollectionShell = {_id: 1};
+        var calendarCollectionShell = { _id: 1 };
 
         calendarServiceMock.getCalendar = sinon.spy(function() {
           return $q.when(calendarCollectionShell);
         });
         calendarServiceMock.updateAndEmit = sinon.spy();
 
-        wsSubscriptionUpdatedListener({calendarPath: calendarPath, calendarSourcePath: calendarSourcePath});
+        wsSubscriptionUpdatedListener({ calendarPath: calendarPath, calendarSourcePath: calendarSourcePath });
         scope.$digest();
 
         expect(calendarServiceMock.getCalendar).to.have.been.calledWith(calendarSourceHomeId, calendarSourceId);
@@ -418,7 +420,7 @@ describe('The calWebsocketListenerService service', function() {
         });
         calendarServiceMock.updateAndEmit = sinon.spy();
 
-        wsSubscriptionCreatedListener({calendarPath: calendarPath});
+        wsSubscriptionCreatedListener({ calendarPath: calendarPath });
         scope.$digest();
 
         expect(calendarServiceMock.getCalendar).to.have.been.calledWith(calendarHomeId, calendarId);
@@ -434,7 +436,7 @@ describe('The calWebsocketListenerService service', function() {
         });
         calendarServiceMock.updateAndEmit = sinon.spy();
 
-        wsSubscriptionUpdatedListener({calendarPath: calendarPath});
+        wsSubscriptionUpdatedListener({ calendarPath: calendarPath });
         scope.$digest();
 
         expect(calendarServiceMock.getCalendar).to.have.been.calledWith(calendarHomeId, calendarId);
@@ -446,18 +448,18 @@ describe('The calWebsocketListenerService service', function() {
     describe('on SUBSCRIPTION.DELETED event', function() {
       it('should call calendarService.removeAndEmit', function() {
         calendarServiceMock.removeAndEmit = sinon.spy();
-        wsSubscriptionDeletedListener({calendarPath: calendarPath});
+        wsSubscriptionDeletedListener({ calendarPath: calendarPath });
         scope.$digest();
 
-        expect(calendarServiceMock.removeAndEmit).to.have.been.calledWith(calendarHomeId, {id: calendarId});
+        expect(calendarServiceMock.removeAndEmit).to.have.been.calledWith(calendarHomeId, { id: calendarId });
       });
 
       it('should call calendarService.removeAndEmit using the source path when defined', function() {
         calendarServiceMock.removeAndEmit = sinon.spy();
-        wsSubscriptionDeletedListener({calendarPath: calendarPath, calendarSourcePath: calendarSourcePath});
+        wsSubscriptionDeletedListener({ calendarPath: calendarPath, calendarSourcePath: calendarSourcePath });
         scope.$digest();
 
-        expect(calendarServiceMock.removeAndEmit).to.have.been.calledWith(calendarSourceHomeId, {id: calendarSourceId});
+        expect(calendarServiceMock.removeAndEmit).to.have.been.calledWith(calendarSourceHomeId, { id: calendarSourceId });
       });
     });
   });

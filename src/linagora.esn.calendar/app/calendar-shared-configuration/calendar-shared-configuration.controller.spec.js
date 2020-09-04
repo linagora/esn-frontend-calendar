@@ -55,10 +55,10 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
 
   beforeEach(function() {
     calendarHomeId = 'calendarHomeId';
-    user = {id: 1};
-    anotherUser = {id: 2};
-    calendar = {_id: 3, href: 'href'};
-    anotherCalendar = {_id: 4};
+    user = { id: 1 };
+    anotherUser = { id: 2 };
+    calendar = { _id: 3, href: 'href' };
+    anotherCalendar = { _id: 4 };
     angular.mock.inject(function(_$rootScope_, _$controller_, _$q_, _$log_, _$state_, _calendarService_, _calendarHomeService_, _calCalendarRightComparatorService_, _notificationFactory_, _session_, _CAL_CALENDAR_SHARED_TYPE_) {
       $rootScope = _$rootScope_;
       $controller = _$controller_;
@@ -97,7 +97,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
     it('should return empty array when no calendar are selected', function() {
       var controller = initController();
 
-      controller.calendarsPerUser.push({user: user, calendar: calendar});
+      controller.calendarsPerUser.push({ user: user, calendar: calendar });
 
       expect(controller.getSelectedCalendars()).to.be.empty;
     });
@@ -105,7 +105,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
     it('should return only calendars which have been selected', function() {
       var controller = initController();
 
-      controller.calendarsPerUser.push({user: user, calendar: calendar, isSelected: true}, {user: user, calendar: anotherCalendar});
+      controller.calendarsPerUser.push({ user: user, calendar: calendar, isSelected: true }, { user: user, calendar: anotherCalendar });
 
       expect(controller.getSelectedCalendars(controller.calendarsPerUser)).to.deep.equal([calendar]);
     });
@@ -131,7 +131,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
       var spy = sinon.stub(calendarService, 'listPublicCalendars');
       var controller = initController();
 
-      controller.onUserAdded({name: 'unknown user'});
+      controller.onUserAdded({ name: 'unknown user' });
 
       expect(spy).to.not.have.been.called;
     });
@@ -157,6 +157,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
         return $q.when([]);
       });
       var controller = initController();
+
       $rootScope.$digest();
 
       controller.onUserAdded(user);
@@ -170,7 +171,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
 
     it('should not fill calendarsPerUser with a calendar which has already been subscribed', function() {
       var subscribedHref = 'This is the href of the original calendar';
-      var subscribed = { source: { href: subscribedHref }};
+      var subscribed = { source: { href: subscribedHref } };
 
       calendar.href = subscribedHref;
       publicCalendars.push(subscribed);
@@ -182,10 +183,11 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
         return $q.when([subscribed]);
       });
       var controller = initController();
+
       $rootScope.$digest();
 
-      controller.calendarsPerUser.push({calendar: calendar, user: user});
-      controller.calendarsPerUser.push({calendar: anotherCalendar, user: anotherUser});
+      controller.calendarsPerUser.push({ calendar: calendar, user: user });
+      controller.calendarsPerUser.push({ calendar: anotherCalendar, user: anotherUser });
       controller.onUserAdded(user);
       $rootScope.$digest();
 
@@ -213,8 +215,8 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
       });
 
       calCalendarRightComparatorService.getMostPermissive = sinon.spy(function(userId, cal, cal2) {
-          return cal.type === CAL_CALENDAR_SHARED_TYPE.DELEGATION ? cal : cal2;
-        });
+        return cal.type === CAL_CALENDAR_SHARED_TYPE.DELEGATION ? cal : cal2;
+      });
 
       var listPublicCalendarsStub = sinon.stub(calendarService, 'listPublicCalendars', function() {
         return $q.when([publicCalendar]);
@@ -225,6 +227,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
       });
 
       var controller = initController();
+
       $rootScope.$digest();
 
       controller.onUserAdded(user);
@@ -234,7 +237,9 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
       expect(listPersonalAndAcceptedDelegationCalendarsStub).to.have.been.calledWith(calendarHomeId);
       expect(userAndExternalCalendars).to.have.been.calledWith();
       expect(calendarService.listDelegationCalendars).to.have.been.calledWith(session.user._id, 'noresponse');
-      expect(controller.calendarsPerUser).to.deep.equal([{ user: user, source: sameCalendarHref, calendar: delegatedCalendar, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION }]);
+      expect(controller.calendarsPerUser).to.deep.equal([{
+        user: user, source: sameCalendarHref, calendar: delegatedCalendar, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION
+      }]);
     });
 
     it('should log error when public calendars fetch fails', function() {
@@ -280,7 +285,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
     it('should not change the controller calendars when user is not defined', function() {
       var controller = initController();
 
-      controller.calendarsPerUser.push({calendar: calendar, user: user});
+      controller.calendarsPerUser.push({ calendar: calendar, user: user });
       controller.onUserRemoved();
       $rootScope.$digest();
 
@@ -289,27 +294,27 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
     });
 
     it('should not change the controller calendars when user is not an OpenPaas user (no id field)', function() {
-        var controller = initController();
+      var controller = initController();
 
-        controller.calendarsPerUser.push({calendar: calendar, user: user});
-        controller.onUserRemoved({user: 'user'});
-        $rootScope.$digest();
+      controller.calendarsPerUser.push({ calendar: calendar, user: user });
+      controller.onUserRemoved({ user: 'user' });
+      $rootScope.$digest();
 
-        expect(controller.calendarsPerUser).to.have.lengthOf(1);
-        expect(calendarService.listDelegationCalendars).to.have.been.calledWith(session.user._id, 'noresponse');
-      });
+      expect(controller.calendarsPerUser).to.have.lengthOf(1);
+      expect(calendarService.listDelegationCalendars).to.have.been.calledWith(session.user._id, 'noresponse');
+    });
 
     it('should remove all the calendars of the given user', function() {
       var controller = initController();
 
-      controller.calendarsPerUser.push({calendar: calendar, user: user});
-      controller.calendarsPerUser.push({calendar: anotherCalendar, user: anotherUser});
+      controller.calendarsPerUser.push({ calendar: calendar, user: user });
+      controller.calendarsPerUser.push({ calendar: anotherCalendar, user: anotherUser });
 
       controller.onUserRemoved(user);
       $rootScope.$digest();
 
       expect(calendarService.listDelegationCalendars).to.have.been.calledWith(session.user._id, 'noresponse');
-      expect(controller.calendarsPerUser).to.deep.equal([{calendar: anotherCalendar, user: anotherUser}]);
+      expect(controller.calendarsPerUser).to.deep.equal([{ calendar: anotherCalendar, user: anotherUser }]);
     });
   });
 
@@ -333,8 +338,8 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
     it('should not call subscribe service when no public calendar has been selected', function() {
       var controller = initController();
 
-      controller.calendarsPerUser.push({calendar: calendar, user: user});
-      controller.calendarsPerUser.push({calendar: anotherCalendar, user: anotherUser});
+      controller.calendarsPerUser.push({ calendar: calendar, user: user });
+      controller.calendarsPerUser.push({ calendar: anotherCalendar, user: anotherUser });
 
       controller.addSharedCalendars();
       $rootScope.$digest();
@@ -347,7 +352,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
 
     it('should subscribe to all the selected calendars', function() {
       var controller = initController();
-      var shell = {foo: 'bar'};
+      var shell = { foo: 'bar' };
 
       CalendarCollectionShell.from = sinon.spy(function() {
         return shell;
@@ -356,9 +361,15 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
         return home + id;
       });
 
-      controller.calendarsPerUser.push({calendar: calendar, user: user, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC});
-      controller.calendarsPerUser.push({calendar: anotherCalendar, user: anotherUser, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC});
-      controller.calendarsPerUser.push({calendar: anotherCalendar, user: anotherUser, isSelected: false, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC});
+      controller.calendarsPerUser.push({
+        calendar: calendar, user: user, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC
+      });
+      controller.calendarsPerUser.push({
+        calendar: anotherCalendar, user: anotherUser, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC
+      });
+      controller.calendarsPerUser.push({
+        calendar: anotherCalendar, user: anotherUser, isSelected: false, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC
+      });
 
       controller.addSharedCalendars();
       $rootScope.$digest();
@@ -372,7 +383,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
 
     it('should update invite status to all the selected delegation calendars', function() {
       var controller = initController();
-      var shell = {foo: 'bar'};
+      var shell = { foo: 'bar' };
 
       CalendarCollectionShell.from = sinon.spy(function() {
         return shell;
@@ -381,9 +392,15 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
         return home + id;
       });
 
-      controller.calendarsPerUser.push({calendar: calendar, user: user, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION});
-      controller.calendarsPerUser.push({calendar: anotherCalendar, user: anotherUser, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION});
-      controller.calendarsPerUser.push({calendar: anotherCalendar, user: anotherUser, isSelected: false, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION});
+      controller.calendarsPerUser.push({
+        calendar: calendar, user: user, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION
+      });
+      controller.calendarsPerUser.push({
+        calendar: anotherCalendar, user: anotherUser, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION
+      });
+      controller.calendarsPerUser.push({
+        calendar: anotherCalendar, user: anotherUser, isSelected: false, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION
+      });
 
       controller.addSharedCalendars();
       $rootScope.$digest();
@@ -398,7 +415,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
     it('should reject when one subscription fails', function() {
       var controller = initController();
       var error = new Error('I failed to subscribe');
-      var shell = {foo: 'bar'};
+      var shell = { foo: 'bar' };
 
       calendarService.subscribe.restore();
 
@@ -413,8 +430,12 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
         return home + id;
       });
 
-      controller.calendarsPerUser.push({calendar: calendar, user: user, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC});
-      controller.calendarsPerUser.push({calendar: anotherCalendar, user: anotherUser, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC});
+      controller.calendarsPerUser.push({
+        calendar: calendar, user: user, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC
+      });
+      controller.calendarsPerUser.push({
+        calendar: anotherCalendar, user: anotherUser, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.PUBLIC
+      });
 
       controller.addSharedCalendars();
       $rootScope.$digest();
@@ -428,7 +449,7 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
     it('should reject when one acceptInvitation fails', function() {
       var controller = initController();
       var error = new Error('I failed to acceptInvitation');
-      var shell = {foo: 'bar'};
+      var shell = { foo: 'bar' };
 
       calendarService.updateInviteStatus.restore();
 
@@ -443,8 +464,12 @@ describe('The CalCalendarSharedConfigurationController controller', function() {
         return home + id;
       });
 
-      controller.calendarsPerUser.push({calendar: calendar, user: user, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION});
-      controller.calendarsPerUser.push({calendar: anotherCalendar, user: anotherUser, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION});
+      controller.calendarsPerUser.push({
+        calendar: calendar, user: user, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION
+      });
+      controller.calendarsPerUser.push({
+        calendar: anotherCalendar, user: anotherUser, isSelected: true, type: CAL_CALENDAR_SHARED_TYPE.DELEGATION
+      });
 
       controller.addSharedCalendars();
       $rootScope.$digest();

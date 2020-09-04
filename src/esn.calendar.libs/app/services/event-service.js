@@ -1,6 +1,9 @@
+/* eslint-disable no-warning-comments */
+
 'use strict';
 
 const _ = require('lodash');
+
 require('../app.constants.js');
 require('./ical.js');
 require('./cached-event-source.js');
@@ -91,7 +94,7 @@ function calEventService(
           var vevents = vcalendar.getAllSubcomponents('vevent');
 
           vevents.forEach(function(vevent) {
-            var shell = new CalendarShell(vevent, {path: icaldata._links.self.href, etag: icaldata.etag});
+            var shell = new CalendarShell(vevent, { path: icaldata._links.self.href, etag: icaldata.etag });
 
             shells.push(shell);
           });
@@ -168,11 +171,11 @@ function calEventService(
   function getEvent(eventPath) {
     return calEventAPI.get(eventPath)
       .then(function(response) {
-        return CalendarShell.from(response.data, {path: eventPath, etag: response.headers('ETag')});
+        return CalendarShell.from(response.data, { path: eventPath, etag: response.headers('ETag') });
       });
   }
 
-/**
+  /**
  * Gets an event by its UID. This searches in all user's calendar.
  *
  * @param calendarHomeId {String} The calendar home ID to search in
@@ -226,7 +229,8 @@ function calEventService(
           return response;
         }
 
-        event.gracePeriodTaskId = taskId = response;
+        taskId = response;
+        event.gracePeriodTaskId = taskId;
         event.isRecurring() && calMasterEventCache.save(event);
         calCachedEventSource.registerAdd(event);
         calendarEventEmitter.emitCreatedEvent();
@@ -234,7 +238,7 @@ function calEventService(
         return gracePeriodService.grace({
           id: taskId,
           delay: CAL_GRACE_DELAY,
-          context: {id: event.uid},
+          context: { id: event.uid },
           performedAction: esnI18nService.translate('You are about to create a new event (%s).', { title: calEventUtils.getEventTitle(event) }),
           cancelFailed: 'An error has occured, the creation could not been reverted',
           cancelTooLate: 'It is too late to cancel the creation',
@@ -246,7 +250,8 @@ function calEventService(
         notificationFactory.weakError(
           'Event creation failed',
           err.statusText ? esnI18nService.translate('%s. Please refresh your calendar', { error: err.statusText }) :
-          esnI18nService.translate('Event creation failed. Please refresh your calendar'));
+            esnI18nService.translate('Event creation failed. Please refresh your calendar')
+        );
 
         return $q.reject(err);
       })
@@ -281,7 +286,7 @@ function calEventService(
 
         return true;
       }, $q.reject);
-    } else if (event.gracePeriodTaskId) {
+    } if (event.gracePeriodTaskId) {
       gracePeriodService.cancel(event.gracePeriodTaskId);
     }
 
@@ -299,14 +304,15 @@ function calEventService(
             return id;
           }
 
-          event.gracePeriodTaskId = taskId = id;
+          taskId = id;
+          event.gracePeriodTaskId = taskId;
           calCachedEventSource.registerDelete(event);
           calendarEventEmitter.emitRemovedEvent(event.id);
 
           return gracePeriodService.grace({
             id: taskId,
             delay: CAL_GRACE_DELAY,
-            context: {id: event.uid},
+            context: { id: event.uid },
             performedAction: esnI18nService.translate('You are about to delete the event (%s).', { title: calEventUtils.getEventTitle(event) }),
             cancelFailed: 'An error has occurred, can not revert the deletion',
             cancelSuccess: esnI18nService.translate('Calendar - Deletion of %s has been cancelled', { title: calEventUtils.getEventTitle(event) }),
@@ -321,7 +327,7 @@ function calEventService(
                 calCachedEventSource.resetCache();
                 $rootScope.$broadcast(CAL_EVENTS.CALENDAR_REFRESH);
               }
-              }
+            }
 
           }).then(_.constant(true), function() {
             onTaskCancel();
@@ -333,7 +339,8 @@ function calEventService(
           notificationFactory.weakError(
             'Event deletion failed',
             err.statusText ? esnI18nService.translate('%s. Please refresh your calendar', { error: err.statusText }) :
-            esnI18nService.translate('Event deletion failed. Please refresh your calendar'));
+              esnI18nService.translate('Event deletion failed. Please refresh your calendar')
+          );
 
           return $q.reject(err);
         })
@@ -391,7 +398,8 @@ function calEventService(
    * @return {Boolean}                             true on success, false if cancelled
    */
   function modifyEvent(path, event, oldEvent, etag, onCancel, options) {
-    oldEvent = oldEventStore[event.uid] = oldEventStore[event.uid] || oldEvent;
+    oldEventStore[event.uid] = oldEventStore[event.uid] || oldEvent;
+    oldEvent = oldEventStore[event.uid];
     options = options || {};
 
     if (calEventUtils.hasSignificantChange(event, oldEvent)) {
@@ -424,7 +432,8 @@ function calEventService(
           return id;
         }
 
-        event.gracePeriodTaskId = taskId = id;
+        taskId = id;
+        event.gracePeriodTaskId = taskId;
         calCachedEventSource.registerUpdate(event);
         event.isRecurring() && calMasterEventCache.save(event);
         calendarEventEmitter.emitModifiedEvent(event);
@@ -432,7 +441,7 @@ function calEventService(
         return gracePeriodService.grace(angular.extend({
           id: taskId,
           delay: CAL_GRACE_DELAY,
-          context: {id: event.uid},
+          context: { id: event.uid },
           performedAction: esnI18nService.translate('You are about to modify an event (%s).', { title: calEventUtils.getEventTitle(event) }),
           cancelFailed: 'An error has occured, the modification can not be reverted',
           cancelTooLate: 'It is too late to cancel the modification',
@@ -446,7 +455,7 @@ function calEventService(
               calCachedEventSource.resetCache();
               $rootScope.$broadcast(CAL_EVENTS.CALENDAR_REFRESH);
             }
-            },
+          },
           successText: 'Event updated'
         }, options.graceperiodMessage)).then(_.constant(true), function() {
           onTaskCancel();
@@ -458,7 +467,8 @@ function calEventService(
         notificationFactory.weakError(
           'Event modification failed',
           err.statusText ? esnI18nService.translate('%s, Please refresh your calendar', { error: err.statusText }) :
-          esnI18nService.translate('Event modification failed, Please refresh your calendar'));
+            esnI18nService.translate('Event modification failed, Please refresh your calendar')
+        );
 
         return $q.reject(err);
       })
@@ -499,8 +509,8 @@ function calEventService(
       return calEventAPI.changeParticipation(eventPath, masterEvent.vcalendar, etag)
         .then(function(response) {
           if (response.status === 200) {
-            return CalendarShell.from(response.data, {path: eventPath, etag: response.headers('ETag')});
-          } else if (response.status === 204) {
+            return CalendarShell.from(response.data, { path: eventPath, etag: response.headers('ETag') });
+          } if (response.status === 204) {
             return getEvent(eventPath).then(function(shell) {
               if (emitEvents) {
                 calendarEventEmitter.emitModifiedEvent(shell);
@@ -542,7 +552,7 @@ function calEventService(
 
   function _generateCounterRequestBody(sourceEvent, senderEmail) {
     var counterEvent = sourceEvent.clone(),
-        vcalendar = counterEvent.vcalendar;
+      vcalendar = counterEvent.vcalendar;
 
     if (vcalendar.hasProperty('method')) {
       vcalendar.updatePropertyWithValue('method', 'COUNTER');

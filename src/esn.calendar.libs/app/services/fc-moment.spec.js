@@ -25,7 +25,8 @@ describe('calMoment factory', function() {
         return {
           name: function() {
             return 'Europe/Paris';
-          }};
+          }
+        };
       }
     };
 
@@ -91,6 +92,7 @@ describe('calMoment factory', function() {
   });
 
   it('has a duration method which is like moment.duration', function() {
+  /*global moment*/
     expect(this.calMoment.duration).to.deep.equal(moment.duration);
   });
 

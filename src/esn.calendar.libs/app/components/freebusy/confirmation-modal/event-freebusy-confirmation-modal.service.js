@@ -6,7 +6,7 @@ angular.module('esn.calendar.libs')
 function calEventFreeBusyConfirmationModalService($modal) {
   return function(onConfirm, onEdit, onCancel) {
     return $modal({
-      template: require("./event-freebusy-confirmation-modal.pug"),
+      template: require('./event-freebusy-confirmation-modal.pug'),
       controller: function() {
         this.submit = onConfirm;
         this.edit = function() {

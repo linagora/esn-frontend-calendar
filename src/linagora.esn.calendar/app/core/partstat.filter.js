@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('esn.calendar')
-         .filter('partstat', partstat);
+    .filter('partstat', partstat);
 
   function partstat() {
     function filter(input, partstat) {

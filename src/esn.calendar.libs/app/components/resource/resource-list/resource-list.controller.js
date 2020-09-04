@@ -9,6 +9,6 @@ function CalResourceListController() {
   self.removeResource = removeResource;
 
   function removeResource(resource) {
-    self.onResourceRemoved && self.onResourceRemoved({resource: resource});
+    self.onResourceRemoved && self.onResourceRemoved({ resource: resource });
   }
 }

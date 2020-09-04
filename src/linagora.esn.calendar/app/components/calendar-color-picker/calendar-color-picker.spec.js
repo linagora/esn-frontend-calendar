@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('The calendar color picker component', function() {
-  var self;
+  var self = this;
 
   beforeEach(function() {
     self = this;

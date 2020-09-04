@@ -7,6 +7,6 @@
     },
     controllerAs: 'ctrl',
     controller: 'esnResourceAvatarController',
-    template: require("./resource-avatar.pug")
+    template: require('./resource-avatar.pug')
   });
 })(angular);

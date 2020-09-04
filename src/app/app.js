@@ -20,8 +20,8 @@ require('esn-frontend-common-libs/src/frontend/js/modules/i18n/i18n.module');
 require('esn-frontend-common-libs/src/frontend/js/modules/login');
 require('esn-frontend-common-libs/src/frontend/js/modules/material/material.module');
 
-require ('../esn.resource.libs/app/app.module.js');
-require ('../esn.calendar.libs/app/app.module.js');
+require('../esn.resource.libs/app/app.module.js');
+require('../esn.calendar.libs/app/app.module.js');
 
 require('../linagora.esn.calendar/app/app.js');
 require('../linagora.esn.resource/app/app.js');

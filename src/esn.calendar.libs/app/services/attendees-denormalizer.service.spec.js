@@ -76,7 +76,7 @@ describe('The calAttendeesDenormalizerService service', function() {
   });
 
   it('should send back attendee when attendee.cutype is undefined', function(done) {
-    var attendee = {_id: 1};
+    var attendee = { _id: 1 };
 
     calAttendeesDenormalizerService([attendee]).then(function(result) {
       expect(result).to.deep.equals([attendee]);
@@ -123,7 +123,7 @@ describe('The calAttendeesDenormalizerService service', function() {
       var members = [member1, member2];
       var resolve = sinon.stub().returns($q.when(members));
 
-      esnMemberResolverRegistry.getResolver.returns({resolve: resolve});
+      esnMemberResolverRegistry.getResolver.returns({ resolve: resolve });
 
       calAttendeesDenormalizerService([group]).then(function(result) {
         expect(esnMemberResolverRegistry.getResolver).to.have.been.calledWith('group');
@@ -192,7 +192,7 @@ describe('The calAttendeesDenormalizerService service', function() {
       resolver.withArgs(group.email).returns($q.when(members1));
       resolver.withArgs(member3.member.email).returns($q.when(member3.member.members));
 
-      esnMemberResolverRegistry.getResolver.returns({resolve: resolver});
+      esnMemberResolverRegistry.getResolver.returns({ resolve: resolver });
 
       calAttendeesDenormalizerService([group]).then(function(result) {
         expect(esnMemberResolverRegistry.getResolver).to.have.been.calledWith('group');
@@ -200,10 +200,10 @@ describe('The calAttendeesDenormalizerService service', function() {
         expect(resolver).to.have.been.calledWith(group.email);
         expect(resolver).to.have.been.calledWith(member3.member.email);
         expect(result).to.shallowDeepEqual([
-          {email: 'user1@open-paas.org', cutype: 'INDIVIDUAL'},
-          {email: 'user2@open-paas.org', cutype: 'INDIVIDUAL'},
-          {email: 'user3@open-paas.org', cutype: 'INDIVIDUAL'},
-          {email: 'user4@open-paas.org', cutype: 'INDIVIDUAL'}
+          { email: 'user1@open-paas.org', cutype: 'INDIVIDUAL' },
+          { email: 'user2@open-paas.org', cutype: 'INDIVIDUAL' },
+          { email: 'user3@open-paas.org', cutype: 'INDIVIDUAL' },
+          { email: 'user4@open-paas.org', cutype: 'INDIVIDUAL' }
         ]);
         done();
       });
@@ -231,15 +231,15 @@ describe('The calAttendeesDenormalizerService service', function() {
       var resolver = sinon.stub();
 
       resolver.withArgs(group.email).returns($q.when(members1));
-      esnMemberResolverRegistry.getResolver.returns({resolve: resolver});
+      esnMemberResolverRegistry.getResolver.returns({ resolve: resolver });
 
       calAttendeesDenormalizerService([group]).then(function(result) {
         expect(esnMemberResolverRegistry.getResolver).to.have.been.calledWith('group');
         expect(resolver).to.have.been.calledOnce;
         expect(resolver).to.have.been.calledWith(group.email);
         expect(result).to.shallowDeepEqual([
-          {email: 'user1@open-paas.org', cutype: 'INDIVIDUAL'},
-          {email: 'user2@open-paas.org', cutype: 'INDIVIDUAL'}
+          { email: 'user1@open-paas.org', cutype: 'INDIVIDUAL' },
+          { email: 'user2@open-paas.org', cutype: 'INDIVIDUAL' }
         ]);
         done();
       });

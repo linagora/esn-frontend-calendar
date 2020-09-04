@@ -5,7 +5,8 @@
 var expect = chai.expect;
 
 describe('The calEventService service', function() {
-  var ICAL, calCachedEventSourceMock, self, calendarHomeId, calendarId, eventUUID, dtstart, dtend;
+  var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend;
+  var self = this;
 
   beforeEach(function() {
     self = this;
@@ -56,7 +57,8 @@ describe('The calEventService service', function() {
         return {
           name: function() {
             return 'Europe/Paris';
-          }};
+          }
+        };
       }
     };
 
@@ -83,7 +85,7 @@ describe('The calEventService service', function() {
       $provide.value('$modal', self.$modal);
       $provide.value('calCachedEventSource', calCachedEventSourceMock);
       $provide.value('calendarEventEmitter', self.calendarEventEmitterMock);
-      $provide.value('gracePeriodLiveNotificationService', {start: angular.noop});
+      $provide.value('gracePeriodLiveNotificationService', { start: angular.noop });
       $provide.value('esnI18nService', {
         translate: function(input) { return input; }
       });
@@ -131,6 +133,7 @@ describe('The calEventService service', function() {
       var data = {
         match: { start: '20140101T000000', end: '20140102T000000' }
       };
+
       this.$httpBackend.expect('REPORT', '/dav/api/calendars/uid/events.json', data).respond({
         _links: {
           self: { href: '/prepath/path/to/calendar.json' }
@@ -181,6 +184,7 @@ describe('The calEventService service', function() {
       var data = {
         match: { start: '20140101T000000', end: '20140103T000000' }
       };
+
       this.$httpBackend.expect('REPORT', '/dav/api/calendars/uid/events.json', data).respond({
         _links: {
           self: { href: '/prepath/path/to/calendar.json' }
@@ -352,7 +356,7 @@ describe('The calEventService service', function() {
       self.calEventService.createEvent(calendar, event, { graceperiod: true }).catch(catchSpy);
       self.$httpBackend.flush();
 
-      expect(catchSpy).to.have.been.calledWith(sinon.match({status: 500}));
+      expect(catchSpy).to.have.been.calledWith(sinon.match({ status: 500 }));
     });
 
     it('should fail on a 2xx status that is not 202', function() {
@@ -374,7 +378,7 @@ describe('The calEventService service', function() {
       self.calEventService.createEvent(calendar, event, { graceperiod: true }).catch(catchSpy);
       self.$httpBackend.flush();
 
-      expect(catchSpy).to.have.been.calledWith(sinon.match({status: 200}));
+      expect(catchSpy).to.have.been.calledWith(sinon.match({ status: 200 }));
     });
 
     it('should succeed when everything is correct and return true', function() {
@@ -403,7 +407,7 @@ describe('The calEventService service', function() {
         expect(taskId).to.equal(gracePeriodTaskId);
       };
 
-      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: gracePeriodTaskId});
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: gracePeriodTaskId });
 
       var thenSpy = sinon.spy();
 
@@ -443,7 +447,7 @@ describe('The calEventService service', function() {
         expect(taskId).to.equal(gracePeriodTaskId);
       };
 
-      self.$httpBackend.expectPUT(getEventPath(sourceHomeId, sourceId) + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: gracePeriodTaskId});
+      self.$httpBackend.expectPUT(getEventPath(sourceHomeId, sourceId) + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: gracePeriodTaskId });
       calendar.source = {
         id: sourceId,
         calendarHomeId: sourceHomeId
@@ -474,7 +478,7 @@ describe('The calEventService service', function() {
         return $q.reject({});
       };
 
-      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: gracePeriodTaskId});
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: gracePeriodTaskId });
 
       var spy = sinon.spy();
 
@@ -496,7 +500,7 @@ describe('The calEventService service', function() {
 
       self.gracePeriodService.grace = $q.when.bind(null, {});
 
-      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       var spy = sinon.spy();
 
@@ -525,14 +529,14 @@ describe('The calEventService service', function() {
 
       self.gracePeriodService.cancel = $q.when.bind(null, {});
 
-      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
       self.calEventService.createEvent(calendar, event, { graceperiod: true });
 
       self.$httpBackend.flush();
 
       event.isRecurring = _.constant(false);
 
-      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
       self.calEventService.createEvent(calendar, event, { graceperiod: true });
 
       self.$httpBackend.flush();
@@ -554,7 +558,7 @@ describe('The calEventService service', function() {
 
       calCachedEventSourceMock.deleteRegistration = sinon.spy();
 
-      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       self.calEventService.createEvent(calendar, event, { graceperiod: true });
       self.$httpBackend.flush();
@@ -573,13 +577,13 @@ describe('The calEventService service', function() {
 
       self.gracePeriodService.grace = $q.reject.bind(null, {});
 
-      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       event.isRecurring = _.constant(true);
       self.calEventService.createEvent(calendar, event, { graceperiod: true });
       self.$httpBackend.flush();
 
-      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       event.isRecurring = _.constant(false);
       self.calEventService.createEvent(calendar, event, { graceperiod: true });
@@ -597,8 +601,8 @@ describe('The calEventService service', function() {
 
     beforeEach(function() {
       var attendees = [
-        {emails: ['user1@lng.com'], partstat: 'ACCEPTED'},
-        {emails: ['user2@lng.com'], partstat: 'NEEDS-ACTION'}
+        { emails: ['user1@lng.com'], partstat: 'ACCEPTED' },
+        { emails: ['user2@lng.com'], partstat: 'NEEDS-ACTION' }
       ];
       var vcalendar = new ICAL.Component('vcalendar');
       var vevent = new ICAL.Component('vevent');
@@ -630,7 +634,7 @@ describe('The calEventService service', function() {
     it('should fail if status is not 202', function(done) {
       self.$httpBackend.expectPUT('/dav/api/path/to/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(200);
 
-      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, {notifyFullcalendar: true}).then(
+      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, { notifyFullcalendar: true }).then(
         unexpected.bind(null, done), function(response) {
           expect(response.status).to.equal(200);
           done();
@@ -649,7 +653,7 @@ describe('The calEventService service', function() {
 
       var spy = sinon.spy();
 
-      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, {notifyFullcalendar: true}).then(spy);
+      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, { notifyFullcalendar: true }).then(spy);
 
       self.$httpBackend.flush();
       expect(self.calendarEventEmitterMock.emitModifiedEvent).to.have.been.called;
@@ -662,7 +666,7 @@ describe('The calEventService service', function() {
 
       var spy = sinon.spy();
 
-      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, {notifyFullcalendar: true}).then(spy);
+      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, { notifyFullcalendar: true }).then(spy);
 
       self.$httpBackend.flush();
       expect(self.gracePeriodService.grace).to.have.been.calledWith(sinon.match({
@@ -673,6 +677,7 @@ describe('The calEventService service', function() {
           hideCross: true,
           action: sinon.match.func.and(sinon.match(function(action) {
             var onSpy = sinon.spy();
+
             self.$rootScope.$on(self.CAL_EVENTS.CALENDAR_REFRESH, onSpy);
             action();
 
@@ -680,8 +685,7 @@ describe('The calEventService service', function() {
             expect(onSpy).to.have.been.calledOnce;
 
             return true;
-          }
-          ))
+          }))
         }
       }));
     });
@@ -693,13 +697,13 @@ describe('The calEventService service', function() {
 
       self.event.isRecurring = _.constant(true);
       self.$httpBackend.expectPUT('/dav/api/path/to/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
-      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, {notifyFullcalendar: true});
+      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, { notifyFullcalendar: true });
 
       self.$httpBackend.flush();
 
       self.event.isRecurring = _.constant(false);
       self.$httpBackend.expectPUT('/dav/api/path/to/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
-      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, {notifyFullcalendar: true});
+      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, { notifyFullcalendar: true });
 
       self.$httpBackend.flush();
       expect(self.calMasterEventCache.save).to.have.been.calledOnce;
@@ -724,7 +728,7 @@ describe('The calEventService service', function() {
 
       var modifyEventThen = sinon.spy();
 
-      this.calEventService.modifyEvent('/path/to/uid.ics', occShell, occShell, 'etag', angular.noop, {notifyFullcalendar: true}).then(modifyEventThen);
+      this.calEventService.modifyEvent('/path/to/uid.ics', occShell, occShell, 'etag', angular.noop, { notifyFullcalendar: true }).then(modifyEventThen);
 
       function checkPUT(data) {
         vcalendar = new ICAL.Component(JSON.parse(data));
@@ -733,7 +737,7 @@ describe('The calEventService service', function() {
       }
 
       $httpBackend.whenGET(/^\/dav\/api\/path\/to\/uid.ics/).respond(200, vcalendar, headers);
-      $httpBackend.expectPUT('/dav/api/path/to/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY, checkPUT).respond(202, {id: '123456789'});
+      $httpBackend.expectPUT('/dav/api/path/to/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY, checkPUT).respond(202, { id: '123456789' });
       $httpBackend.flush();
 
       expect(modifyEventThen).to.have.been.calledWith(true);
@@ -761,7 +765,7 @@ describe('The calEventService service', function() {
 
       var spy = sinon.spy();
 
-      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, {notifyFullcalendar: true}).then(spy);
+      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.event, 'etag', angular.noop, { notifyFullcalendar: true }).then(spy);
 
       self.$httpBackend.flush();
       expect(spy).to.have.been.calledWith(true);
@@ -788,7 +792,7 @@ describe('The calEventService service', function() {
 
       var spy = sinon.spy();
 
-      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.oldEvent, 'etag', angular.noop, {notifyFullcalendar: true}).then(spy);
+      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.oldEvent, 'etag', angular.noop, { notifyFullcalendar: true }).then(spy);
 
       self.$httpBackend.flush();
       expect(spy).to.have.been.calledWith(true);
@@ -814,7 +818,7 @@ describe('The calEventService service', function() {
 
       var spy = sinon.spy();
 
-      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.oldEvent, 'etag', angular.noop, {notifyFullcalendar: true}).then(spy);
+      self.calEventService.modifyEvent('/path/to/uid.ics', self.event, self.oldEvent, 'etag', angular.noop, { notifyFullcalendar: true }).then(spy);
       self.$httpBackend.flush();
 
       expect(spy).to.have.been.calledWith(true);
@@ -825,9 +829,10 @@ describe('The calEventService service', function() {
       self.gracePeriodService.cancel = sinon.spy();
       var gracePeriodTaskId, event = self.event.clone();
 
-      gracePeriodTaskId = event.gracePeriodTaskId = '12345';
+      event.gracePeriodTaskId = '12345';
+      gracePeriodTaskId = event.gracePeriodTaskId;
       self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
-      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', event, event, 'etag', angular.noop, {notifyFullcalendar: true});
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', event, event, 'etag', angular.noop, { notifyFullcalendar: true });
       self.$httpBackend.flush();
 
       expect(self.gracePeriodService.cancel).to.have.been.calledWith(gracePeriodTaskId);
@@ -841,11 +846,11 @@ describe('The calEventService service', function() {
         return $q.reject();
       };
 
-      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       var onCancel = sinon.spy();
 
-      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', self.event, self.event, 'etag', onCancel, {notifyFullcalendar: true});
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', self.event, self.event, 'etag', onCancel, { notifyFullcalendar: true });
 
       self.$httpBackend.flush();
 
@@ -862,12 +867,12 @@ describe('The calEventService service', function() {
 
       self.gracePeriodService.cancel = $q.when.bind(null, {});
 
-      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       var event = self.event;
       var spy = sinon.spy();
 
-      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', event, event, 'etag', angular.noop, {notifyFullcalendar: true}).then(spy);
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', event, event, 'etag', angular.noop, { notifyFullcalendar: true }).then(spy);
 
       self.$httpBackend.flush();
 
@@ -879,7 +884,7 @@ describe('The calEventService service', function() {
 
       self.gracePeriodService.grace = $q.reject.bind(null);
 
-      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       var event = self.event;
 
@@ -888,7 +893,7 @@ describe('The calEventService service', function() {
 
       calCachedEventSourceMock.registerUpdate = sinon.spy();
 
-      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', event, oldEvent, 'etag', angular.noop, {notifyFullcalendar: true});
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', event, oldEvent, 'etag', angular.noop, { notifyFullcalendar: true });
       self.$httpBackend.flush();
 
       expect(calCachedEventSourceMock.registerUpdate.firstCall).to.have.been.calledWith(sinon.match.same(event));
@@ -903,21 +908,23 @@ describe('The calEventService service', function() {
       calCachedEventSourceMock.registerUpdate = sinon.spy();
       self.gracePeriodService.cancel = sinon.spy();
 
-      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       var event = self.event.clone();
+
       event.start = self.calMoment(new Date(2016, 1, 1));
       var firstOldEvent = self.event.clone();
 
-      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', event, firstOldEvent, 'etag', angular.noop, {notifyFullcalendar: true});
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', event, firstOldEvent, 'etag', angular.noop, { notifyFullcalendar: true });
 
       self.$httpBackend.flush();
-      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       var secondEvent = event.clone();
+
       secondEvent.start = self.calMoment(new Date(2016, 1, 3));
 
-      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', secondEvent, event, 'etag', angular.noop, {notifyFullcalendar: true});
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', secondEvent, event, 'etag', angular.noop, { notifyFullcalendar: true });
 
       self.$httpBackend.flush();
 
@@ -935,13 +942,13 @@ describe('The calEventService service', function() {
       var oldEvent = self.event.clone();
 
       oldEvent.isRecurring = _.constant(true);
-      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
-      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', self.event, oldEvent, 'etag', angular.noop, {notifyFullcalendar: true});
+      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', self.event, oldEvent, 'etag', angular.noop, { notifyFullcalendar: true });
       self.$httpBackend.flush();
 
       oldEvent.isRecurring = _.constant(false);
-      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
-      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', self.event, oldEvent, 'etag', angular.noop, {notifyFullcalendar: true});
+      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', self.event, oldEvent, 'etag', angular.noop, { notifyFullcalendar: true });
       self.$httpBackend.flush();
 
       expect(self.calMasterEventCache.save).to.have.been.calledWith(sinon.match.same(oldEvent));
@@ -976,7 +983,7 @@ describe('The calEventService service', function() {
       };
 
       self.master = {
-        expand: _.constant({length: 2}),
+        expand: _.constant({ length: 2 }),
         clone: sinon.stub().returns(self.cloneOfMaster)
       };
 
@@ -995,7 +1002,7 @@ describe('The calEventService service', function() {
       self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', self.event, 'etag').catch(errorSpy);
       self.$httpBackend.flush();
 
-      expect(errorSpy).to.have.been.calledWith(sinon.match({status: 201}));
+      expect(errorSpy).to.have.been.calledWith(sinon.match({ status: 201 }));
     });
 
     it('should cancel the task if there is no etag and if it is not a recurring', function() {
@@ -1024,7 +1031,9 @@ describe('The calEventService service', function() {
       self.gracePeriodService.cancel = sinon.spy();
       var event = angular.copy(self.event);
 
-      var gracePeriodId = event.gracePeriodTaskId = '12345';
+      event.gracePeriodTaskId = '12345';
+      var gracePeriodId = event.gracePeriodTaskId;
+
       self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', event, 'etag');
       self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(201);
       self.$httpBackend.flush();
@@ -1042,9 +1051,10 @@ describe('The calEventService service', function() {
         expect(taskId).to.equal('123456789');
       };
 
-      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       var spy = sinon.spy();
+
       self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', self.event, 'etag').then(spy);
 
       self.$httpBackend.flush();
@@ -1057,7 +1067,7 @@ describe('The calEventService service', function() {
       var spy = sinon.spy();
 
       self.gracePeriodService.grace = $q.when.bind(null);
-      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', self.event, 'etag').then(spy);
       self.$httpBackend.flush();
@@ -1071,7 +1081,7 @@ describe('The calEventService service', function() {
 
       calCachedEventSourceMock.deleteRegistration = sinon.spy();
 
-      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', self.event, 'etag');
       self.$httpBackend.flush();
@@ -1086,7 +1096,7 @@ describe('The calEventService service', function() {
         return $q.when();
       };
 
-      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: taskId});
+      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: taskId });
 
       var spy = sinon.spy();
 
@@ -1123,13 +1133,13 @@ describe('The calEventService service', function() {
     it('should remove master of event if event is the only instance of a recurring event', function() {
       var taskId = '123456789';
 
-      self.master.expand = _.constant({length: 1});
+      self.master.expand = _.constant({ length: 1 });
 
       self.gracePeriodService.grace = function() {
         return $q.when();
       };
 
-      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: taskId});
+      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: taskId });
 
       var thenSpy = sinon.spy();
 
@@ -1146,7 +1156,7 @@ describe('The calEventService service', function() {
         return $q.when();
       };
 
-      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: taskId});
+      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: taskId });
 
       var thenSpy = sinon.spy();
 
@@ -1157,7 +1167,7 @@ describe('The calEventService service', function() {
     });
 
     it('should provide a link to refresh the browser if graceperiod fail', function() {
-      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, {id: '123456789'});
+      self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(202, { id: '123456789' });
 
       self.gracePeriodService.grace = sinon.stub().returns($q.when());
 
@@ -1232,7 +1242,7 @@ describe('The calEventService service', function() {
       att.setParameter('rsvp', 'TRUE');
       att.setParameter('role', 'REQ-PARTICIPANT');
       att.setParameter('cutype', 'INDIVIDUAL');
-      self.event.attendees = [{emails: emails}];
+      self.event.attendees = [{ emails: emails }];
       self.$httpBackend.expectPUT('/dav/api/path/to/uid.ics', copy.toJSON()).respond(200, new ICAL.Component('vcalendar').jCal);
 
       self.calEventService.changeParticipation('/path/to/uid.ics', self.event, emails, 'ACCEPTED').then(
@@ -1250,7 +1260,7 @@ describe('The calEventService service', function() {
 
       var promiseSpy = sinon.spy();
 
-      self.event.attendees = [{emails: emails, partstat: 'DECLINED'}];
+      self.event.attendees = [{ emails: emails, partstat: 'DECLINED' }];
       self.calEventService.changeParticipation('/path/to/uid.ics', self.event, emails, 'DECLINED').then(promiseSpy);
       self.$rootScope.$apply();
 
@@ -1302,9 +1312,9 @@ describe('The calEventService service', function() {
     });
 
     it('should change the participation status if the event is recurrent', function(done) {
-      var recurrentCalendarShell = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/reventWithTz.ics'])), {path: '/path/to/uid.ics'});
+      var recurrentCalendarShell = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/reventWithTz.ics'])), { path: '/path/to/uid.ics' });
 
-      recurrentCalendarShell.attendees = [{email: 'test@example.com'}];
+      recurrentCalendarShell.attendees = [{ email: 'test@example.com' }];
       var copy = new self.CalendarShell(new ICAL.Component(ICAL.helpers.clone(recurrentCalendarShell.vcalendar.toJSON(), true)));
 
       var instance = recurrentCalendarShell.expand()[0];
@@ -1671,7 +1681,7 @@ describe('The calEventService service', function() {
     });
 
     it('should return undefined if suggested event is incomplete', function(done) {
-      var fakeEvent = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/event.ics'])), {path: '/path/to/uid.ics'});
+      var fakeEvent = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/event.ics'])), { path: '/path/to/uid.ics' });
 
       delete fakeEvent.vcalendar;
 
@@ -1686,7 +1696,7 @@ describe('The calEventService service', function() {
 
     it('should call calEventAPI with correct event path', function(done) {
       var fakePath = '/path/to/uid.ics';
-      var fakeEvent = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/recurringEventWithTwoExceptions.ics'])), {path: fakePath});
+      var fakeEvent = new self.CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/recurringEventWithTwoExceptions.ics'])), { path: fakePath });
 
       this.$httpBackend.expect('POST', '/dav/api' + fakePath).respond(200, 'aResponse');
 
@@ -1702,17 +1712,17 @@ describe('The calEventService service', function() {
     it('should call calEventAPI with a correctly formatted request body', function(done) {
       var fakePath = '/path/to/uid.ics';
       var icalRequestParsed = ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/eventRequestRegular.ics']);
-      var eventRequest = new self.CalendarShell(new ICAL.Component(icalRequestParsed), {path: fakePath});
+      var eventRequest = new self.CalendarShell(new ICAL.Component(icalRequestParsed), { path: fakePath });
 
       var expectedCounter = new self.CalendarShell(new ICAL.Component(JSON.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/counter_test/counter.json'])));
       var expectedBody = {
-            ical: expectedCounter.vcalendar.toString(),
-            sender: undefined,
-            recipient: 'a@example.com',
-            uid: 'calsrv.example.com-873970198738777a@example.com',
-            sequence: 0,
-            method: 'COUNTER'
-          };
+        ical: expectedCounter.vcalendar.toString(),
+        sender: undefined,
+        recipient: 'a@example.com',
+        uid: 'calsrv.example.com-873970198738777a@example.com',
+        sequence: 0,
+        method: 'COUNTER'
+      };
 
       this.$httpBackend.expect('POST', '/dav/api' + fakePath).respond(200, 'aResponse');
 

@@ -8,7 +8,7 @@
 
   function calendarConfigurationTabMain() {
     return {
-      template: require("./calendar-configuration-tab-main.pug"),
+      template: require('./calendar-configuration-tab-main.pug'),
       bindings: {
         calendar: '=',
         calendarHomeId: '=',

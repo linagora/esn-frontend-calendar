@@ -21,7 +21,8 @@ const _ = require('lodash');
     userAndExternalCalendars,
     CAL_CALENDAR_SHARED_INVITE_STATUS,
     CAL_ATTENDEE_OBJECT_TYPE,
-    CAL_CALENDAR_SHARED_TYPE) {
+    CAL_CALENDAR_SHARED_TYPE
+  ) {
 
     var self = this;
     var noResponseDelegationCalendars;
@@ -80,21 +81,21 @@ const _ = require('lodash');
 
     function getPublicCalendarsForUser(user) {
       return calendarService.listPublicCalendars(user.id).then(function(calendars) {
-          return calendars.map(function(calendar) {
-            if (calendar.type === 'resource') {
-              calendarService.getResourceDescription(calendar).then(function(resourceDescription) {
-                user.description = resourceDescription;
-              });
-            }
+        return calendars.map(function(calendar) {
+          if (calendar.type === 'resource') {
+            calendarService.getResourceDescription(calendar).then(function(resourceDescription) {
+              user.description = resourceDescription;
+            });
+          }
 
-            return {
-              user: user,
-              calendar: calendar,
-              source: calendar.href,
-              type: CAL_CALENDAR_SHARED_TYPE.PUBLIC
-            };
-          });
+          return {
+            user: user,
+            calendar: calendar,
+            source: calendar.href,
+            type: CAL_CALENDAR_SHARED_TYPE.PUBLIC
+          };
         });
+      });
     }
 
     function getNoResponseDelegationCalendarsForCurrentUser() {
@@ -189,24 +190,23 @@ const _ = require('lodash');
 
     function _filterDuplicates(calendars) {
       return calendars.reduce(function(accCalendarList, currentCalendar) {
-          var duplicateIndex = _.findIndex(accCalendarList, function(tmpCalListItem) {
-            return (tmpCalListItem.source === currentCalendar.source);
-          });
+        var duplicateIndex = _.findIndex(accCalendarList, function(tmpCalListItem) {
+          return (tmpCalListItem.source === currentCalendar.source);
+        });
 
-          if (duplicateIndex >= 0) {
-            var chosenOne = calCalendarRightComparatorService.getMostPermissive(session.user._id, currentCalendar, accCalendarList[duplicateIndex]);
+        if (duplicateIndex >= 0) {
+          var chosenOne = calCalendarRightComparatorService.getMostPermissive(session.user._id, currentCalendar, accCalendarList[duplicateIndex]);
 
-            if (chosenOne === currentCalendar) {
-              accCalendarList.splice(duplicateIndex, 1, chosenOne);
-            }
-          } else {
-            accCalendarList.push(currentCalendar);
+          if (chosenOne === currentCalendar) {
+            accCalendarList.splice(duplicateIndex, 1, chosenOne);
           }
+        } else {
+          accCalendarList.push(currentCalendar);
+        }
 
-          return accCalendarList;
-        },
-        []
-      );
+        return accCalendarList;
+      },
+      []);
     }
 
     function subscribeToSelectedCalendars() {
@@ -243,11 +243,11 @@ const _ = require('lodash');
         subscribeToSelectedCalendars(),
         acceptInvitationToSelectedCalendars()
       ])
-      .then(function() {
-        notificationFactory.weakInfo('Shared calendars', 'Successfully added shared calendar' + (getSelectedCalendars(self.calendarsPerUser).length > 1 ? 's' : ''));
-      }, function() {
-        notificationFactory.weakError('Shared calendars', 'Can not add shared calendar' + (getSelectedCalendars(self.calendarsPerUser).length > 1 ? 's' : ''));
-      });
+        .then(function() {
+          notificationFactory.weakInfo('Shared calendars', 'Successfully added shared calendar' + (getSelectedCalendars(self.calendarsPerUser).length > 1 ? 's' : ''));
+        }, function() {
+          notificationFactory.weakError('Shared calendars', 'Can not add shared calendar' + (getSelectedCalendars(self.calendarsPerUser).length > 1 ? 's' : ''));
+        });
     }
   }
 })(angular);

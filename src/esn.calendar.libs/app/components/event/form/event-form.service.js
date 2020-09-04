@@ -43,7 +43,7 @@ function calEventFormServiceFactory($rootScope, $modal, calendarService, calUIAu
 
     modalIsOpen = true;
     $modal({
-      template: require("./modals/event-form-modal.pug"),
+      template: require('./modals/event-form-modal.pug'),
       resolve: {
         event: function() {
           return calEventUtils.getEditedEvent();
@@ -78,7 +78,7 @@ function calEventFormServiceFactory($rootScope, $modal, calendarService, calUIAu
 
   function _openRecurringModal(calendar, event, relatedEvents) {
     $modal({
-      template: require("./modals/edit-instance-or-series-modal.pug"),
+      template: require('./modals/edit-instance-or-series-modal.pug'),
       resolve: {
         calendar: function() {
           return calendar;

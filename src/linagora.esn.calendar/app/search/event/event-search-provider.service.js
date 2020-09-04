@@ -45,22 +45,22 @@ const _ = require('lodash');
                 }
 
                 switch (query.advanced.cal) {
-                  case CAL_ADVANCED_SEARCH_CALENDAR_TYPES.ALL_CALENDARS:
-                    options.calendars = calendars;
-                    break;
-                  case CAL_ADVANCED_SEARCH_CALENDAR_TYPES.MY_CALENDARS:
-                    options.calendars = userAndExternalCalendars(calendars).userCalendars;
-                    break;
-                  case CAL_ADVANCED_SEARCH_CALENDAR_TYPES.SHARED_CALENDARS:
-                    var categorizedCalendars = userAndExternalCalendars(calendars);
+                case CAL_ADVANCED_SEARCH_CALENDAR_TYPES.ALL_CALENDARS:
+                  options.calendars = calendars;
+                  break;
+                case CAL_ADVANCED_SEARCH_CALENDAR_TYPES.MY_CALENDARS:
+                  options.calendars = userAndExternalCalendars(calendars).userCalendars;
+                  break;
+                case CAL_ADVANCED_SEARCH_CALENDAR_TYPES.SHARED_CALENDARS:
+                  var categorizedCalendars = userAndExternalCalendars(calendars);
 
-                    options.calendars = (categorizedCalendars.publicCalendars || [])
-                      .concat(categorizedCalendars.sharedCalendars || []);
-                    break;
-                  default:
-                    options.calendars = calendars.filter(function(calendar) {
-                      return calendar.id === query.advanced.cal;
-                    });
+                  options.calendars = (categorizedCalendars.publicCalendars || [])
+                    .concat(categorizedCalendars.sharedCalendars || []);
+                  break;
+                default:
+                  options.calendars = calendars.filter(function(calendar) {
+                    return calendar.id === query.advanced.cal;
+                  });
                 }
 
                 return _searchEvents(options);
@@ -81,7 +81,7 @@ const _ = require('lodash');
                   event.calendar = _.find(options.calendars, function(calendar) {
                     return calendar.source ? calendar.source.id === event.calendarId : calendar.id === event.calendarId;
                   });
-                  event.type = name;
+                  event.type = 'Events';
                   _injectEventPropertiesForDisplay(event);
 
                   return event;

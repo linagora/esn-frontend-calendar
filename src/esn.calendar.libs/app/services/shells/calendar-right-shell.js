@@ -1,6 +1,7 @@
 const _ = require('lodash');
+
 require('../../app.constants.js');
-require('../../services/calendar-utils.js');
+require('../calendar-utils.js');
 
 (function(angular) {
   'use strict';
@@ -71,12 +72,12 @@ require('../../services/calendar-utils.js');
       acl && acl.forEach(function(aclItem) {
         if (aclItem.principal === '{DAV:}authenticated') {
           switch (aclItem.privilege) {
-            case CAL_CALENDAR_PUBLIC_RIGHT.READ:
-            case CAL_CALENDAR_PUBLIC_RIGHT.READ_WRITE:
-              this._public = pickHighestPriorityRight(this._public, aclItem.privilege);
-              break;
-            default:
-              this._public = this._public || CAL_CALENDAR_PUBLIC_RIGHT.PRIVATE;
+          case CAL_CALENDAR_PUBLIC_RIGHT.READ:
+          case CAL_CALENDAR_PUBLIC_RIGHT.READ_WRITE:
+            this._public = pickHighestPriorityRight(this._public, aclItem.privilege);
+            break;
+          default:
+            this._public = this._public || CAL_CALENDAR_PUBLIC_RIGHT.PRIVATE;
           }
         }
       }, this);
@@ -183,30 +184,30 @@ require('../../services/calendar-utils.js');
 
       _.forEach(this._sharee, function(sharedRight, userId) {
         switch (sharedRight) {
-          case CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ:
-            result.share.set.push({
-              'dav:href': HREF_PREFIX + this._userEmails[userId],
-              'dav:read': true
-            });
-            break;
-          case CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ_WRITE:
-            result.share.set.push({
-              'dav:href': HREF_PREFIX + this._userEmails[userId],
-              'dav:read-write': true
-            });
-            break;
-          case CAL_CALENDAR_SHARED_RIGHT.SHAREE_ADMIN:
-            result.share.set.push({
-              'dav:href': HREF_PREFIX + this._userEmails[userId],
-              'dav:administration': true
-            });
-            break;
-          case CAL_CALENDAR_SHARED_RIGHT.SHAREE_FREE_BUSY:
-            result.share.set.push({
-              'dav:href': HREF_PREFIX + this._userEmails[userId],
-              'dav:freebusy': true
-            });
-            break;
+        case CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ:
+          result.share.set.push({
+            'dav:href': HREF_PREFIX + this._userEmails[userId],
+            'dav:read': true
+          });
+          break;
+        case CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ_WRITE:
+          result.share.set.push({
+            'dav:href': HREF_PREFIX + this._userEmails[userId],
+            'dav:read-write': true
+          });
+          break;
+        case CAL_CALENDAR_SHARED_RIGHT.SHAREE_ADMIN:
+          result.share.set.push({
+            'dav:href': HREF_PREFIX + this._userEmails[userId],
+            'dav:administration': true
+          });
+          break;
+        case CAL_CALENDAR_SHARED_RIGHT.SHAREE_FREE_BUSY:
+          result.share.set.push({
+            'dav:href': HREF_PREFIX + this._userEmails[userId],
+            'dav:freebusy': true
+          });
+          break;
         }
       }, this);
 
@@ -245,7 +246,7 @@ require('../../services/calendar-utils.js');
     function equals(otherShell) {
       if (otherShell === this) {
         return true;
-      } else if (!otherShell || otherShell.constructor !== CalendarRightShell) {
+      } if (!otherShell || otherShell.constructor !== CalendarRightShell) {
         return false;
       }
 

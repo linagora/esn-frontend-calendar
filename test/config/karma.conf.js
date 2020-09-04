@@ -20,7 +20,7 @@ module.exports = function(config) {
       'src/index.test.js',
       'test/fixtures/*.js',
       'test/unit-frontend/fixtures/**',
-      'src/linagora.esn.calendar/app/fixtures/**',
+      'src/linagora.esn.calendar/app/fixtures/**'
     ],
     frameworks: ['mocha', 'sinon-chai'],
     colors: true,

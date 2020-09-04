@@ -2,7 +2,7 @@
 
 angular.module('esn.calendar.libs')
   .component('calResourceAvatar', {
-    template: require("./resource-avatar.pug"),
+    template: require('./resource-avatar.pug'),
     bindings: {
       resource: '<'
     },

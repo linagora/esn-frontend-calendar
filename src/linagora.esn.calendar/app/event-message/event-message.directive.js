@@ -1,4 +1,4 @@
-require('../event-message/event-message.service.js');
+require('./event-message.service.js');
 
 (function(angular) {
   'use strict';
@@ -9,7 +9,7 @@ require('../event-message/event-message.service.js');
   function calEventMessage() {
     var directive = {
       restrict: 'E',
-      template: require("./event-message.pug"),
+      template: require('./event-message.pug'),
       scope: {
         activitystream: '=',
         message: '=',

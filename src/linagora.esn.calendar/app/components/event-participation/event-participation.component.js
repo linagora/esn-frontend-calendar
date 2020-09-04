@@ -7,5 +7,5 @@ angular.module('esn.calendar')
       changeParticipation: '=',
       userAsAttendee: '<'
     },
-    template: require("./event-participation.pug")
+    template: require('./event-participation.pug')
   });

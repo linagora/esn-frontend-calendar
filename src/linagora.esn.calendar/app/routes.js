@@ -9,7 +9,7 @@ function routesConfig($stateProvider) {
   $stateProvider
     .state('calendar', {
       url: '/calendar',
-      template: require("./index.pug"),
+      template: require('./index.pug'),
       abstract: true,
       resolve: {
         isModuleActive: isModuleActive,
@@ -50,7 +50,7 @@ function routesConfig($stateProvider) {
       },
       views: {
         'content@calendar': {
-          template: require("./settings/settings.pug"),
+          template: require('./settings/settings.pug'),
           controller: 'CalSettingsIndexController'
         }
       }

@@ -7,7 +7,7 @@
   function esnResourceAttendeeProvider(ESN_RESOURCE_OBJECT_TYPE) {
     return {
       objectType: ESN_RESOURCE_OBJECT_TYPE,
-      template: require("./attendee-template.pug")
+      template: require('./attendee-template.pug')
     };
   }
 })(angular);

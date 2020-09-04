@@ -1,4 +1,4 @@
-require('../services/ical.js');
+require('./ical.js');
 
 (function(angular) {
   'use strict';
@@ -30,9 +30,10 @@ require('../services/ical.js');
     function _findTimezone(tzid) {
       if (TIMEZONES.zones[tzid]) {
         return _buildTimezone(tzid, TIMEZONES.zones[tzid]);
-      } else {
-        return _findTimezone(TIMEZONES.aliases[tzid].aliasTo);
       }
+
+      return _findTimezone(TIMEZONES.aliases[tzid].aliasTo);
+
     }
   }
 

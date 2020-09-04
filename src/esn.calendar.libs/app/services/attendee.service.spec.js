@@ -42,25 +42,25 @@ describe('The calAttendeeService service', function() {
   describe('The splitAttendeesFromTypefunction', function() {
     it('should return empty arrays when attendees is not defined', function() {
       expect(calAttendeeService.splitAttendeesFromType()).to.deep.equals({
-          users: [],
-          resources: []
+        users: [],
+        resources: []
       });
     });
 
     it('should return empty arrays when attendees is empty', function() {
       expect(calAttendeeService.splitAttendeesFromType([])).to.deep.equals({
-          users: [],
-          resources: []
-        });
+        users: [],
+        resources: []
+      });
     });
 
     it('should set attendee without cutype as user', function() {
       var attendee = { _id: 1 };
 
       expect(calAttendeeService.splitAttendeesFromType([attendee])).to.deep.equals({
-          users: [attendee],
-          resources: []
-        });
+        users: [attendee],
+        resources: []
+      });
     });
 
     it('should set attendees in correct category', function() {
@@ -68,9 +68,9 @@ describe('The calAttendeeService service', function() {
       var resourceAttendee = { _id: 1, cutype: CAL_ICAL.cutype.resource };
 
       expect(calAttendeeService.splitAttendeesFromType([userAttendee, resourceAttendee])).to.deep.equals({
-          users: [userAttendee],
-          resources: [resourceAttendee]
-        });
+        users: [userAttendee],
+        resources: [resourceAttendee]
+      });
     });
   });
 
@@ -130,8 +130,10 @@ describe('The calAttendeeService service', function() {
     });
 
     it('should request complementary resource data', function(done) {
-      var resourceAttendee = { _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1'};
-      var resourceAttendeeExpected = { _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1', deleted: true };
+      var resourceAttendee = { _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1' };
+      var resourceAttendeeExpected = {
+        _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1', deleted: true
+      };
 
       calAttendeeService.splitAttendeesFromTypeWithResourceDetails([resourceAttendee]).then(function(result) {
         expect(calResourceService.getResource).to.have.been.called;
@@ -150,7 +152,7 @@ describe('The calAttendeeService service', function() {
     var user;
 
     beforeEach(function() {
-      user = {_id: 1, emails: ['user1@open-paas.org'], emailMap: {'user1@open-paas.org': true}};
+      user = { _id: 1, emails: ['user1@open-paas.org'], emailMap: { 'user1@open-paas.org': true } };
     });
 
     it('should return undefined when user is not defined', function() {
@@ -172,7 +174,7 @@ describe('The calAttendeeService service', function() {
     });
 
     it('should send back the attendee', function() {
-      var attendees = [{ email: 'user2@open-paas.org' }, { email: 'user1@open-paas.org'}];
+      var attendees = [{ email: 'user2@open-paas.org' }, { email: 'user1@open-paas.org' }];
 
       expect(calAttendeeService.getAttendeeForUser(attendees, user)).to.deep.equals(attendees[1]);
     });
@@ -180,19 +182,19 @@ describe('The calAttendeeService service', function() {
 
   describe('The filterDuplicates function', function() {
     it('should keep original values', function() {
-      var attendees = [{email: 'user1@open-paas.org'}, {email: 'user2@open-paas.org'}];
+      var attendees = [{ email: 'user1@open-paas.org' }, { email: 'user2@open-paas.org' }];
 
       expect(calAttendeeService.filterDuplicates(attendees)).to.deep.equals(attendees);
     });
 
     it('should keep attendees with partstat when duplicates 1', function() {
-      var attendees = [{email: 'user1@open-paas.org'}, {email: 'user2@open-paas.org', partstat: 'needs-action'}, {email: 'user2@open-paas.org'}];
+      var attendees = [{ email: 'user1@open-paas.org' }, { email: 'user2@open-paas.org', partstat: 'needs-action' }, { email: 'user2@open-paas.org' }];
 
       expect(calAttendeeService.filterDuplicates(attendees)).to.deep.equals([attendees[0], attendees[1]]);
     });
 
     it('should keep attendees with partstat when duplicates 2', function() {
-      var attendees = [{email: 'user1@open-paas.org'}, {email: 'user2@open-paas.org'}, {email: 'user2@open-paas.org', partstat: 'needs-action'}];
+      var attendees = [{ email: 'user1@open-paas.org' }, { email: 'user2@open-paas.org' }, { email: 'user2@open-paas.org', partstat: 'needs-action' }];
 
       expect(calAttendeeService.filterDuplicates(attendees)).to.deep.equals([attendees[0], attendees[2]]);
     });
@@ -201,15 +203,15 @@ describe('The calAttendeeService service', function() {
   describe('The manageResourceDetailsPromiseResolutions function', function() {
     it('should log rejected promise as error', function(done) {
       var resourcesFromDbPromises = [
-        { state: 'fulfilled', value: { _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1' }},
-        { state: 'rejected', reason: { _id: 2, error: { message: 'could not find resource', code: 404 }}},
-        { state: 'fulfilled', value: { _id: 3, cutype: CAL_ICAL.cutype.resource, email: '3@3.3' }}
+        { state: 'fulfilled', value: { _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1' } },
+        { state: 'rejected', reason: { _id: 2, error: { message: 'could not find resource', code: 404 } } },
+        { state: 'fulfilled', value: { _id: 3, cutype: CAL_ICAL.cutype.resource, email: '3@3.3' } }
       ];
       var logSpy = sinon.spy($log, 'error');
 
       calAttendeeService.manageResourceDetailsPromiseResolutions(resourcesFromDbPromises).then(function() {
         expect(logSpy).to.have.been.calledOnce;
-        expect(logSpy).to.have.been.calledWith(sinon.match.string, { _id: 2, error: { message: 'could not find resource', code: 404 }});
+        expect(logSpy).to.have.been.calledWith(sinon.match.string, { _id: 2, error: { message: 'could not find resource', code: 404 } });
 
         done();
       }, done);
@@ -219,15 +221,15 @@ describe('The calAttendeeService service', function() {
 
     it('should returned only fulfilled promise value', function(done) {
       var resourcesFromDbPromises = [
-        { state: 'fulfilled', value: { _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1' }},
-        { state: 'rejected', reason: { _id: 2, error: { message: 'could not find resource', code: 404 }}},
-        { state: 'fulfilled', value: { _id: 3, cutype: CAL_ICAL.cutype.resource, email: '3@3.3' }}
+        { state: 'fulfilled', value: { _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1' } },
+        { state: 'rejected', reason: { _id: 2, error: { message: 'could not find resource', code: 404 } } },
+        { state: 'fulfilled', value: { _id: 3, cutype: CAL_ICAL.cutype.resource, email: '3@3.3' } }
       ];
 
       calAttendeeService.manageResourceDetailsPromiseResolutions(resourcesFromDbPromises).then(function(result) {
         expect(result).to.deep.equals([
-          { _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1'},
-          { _id: 3, cutype: CAL_ICAL.cutype.resource, email: '3@3.3'}
+          { _id: 1, cutype: CAL_ICAL.cutype.resource, email: '1@1.1' },
+          { _id: 3, cutype: CAL_ICAL.cutype.resource, email: '3@3.3' }
         ]);
 
         done();
@@ -238,16 +240,16 @@ describe('The calAttendeeService service', function() {
 
     it('should return a reject promise when there is no fulfilled promise', function(done) {
       var resourcesFromDbPromises = [
-        { state: 'rejected', reason: { _id: 1, error: { message: 'could not find resource', code: 404 }}},
-        { state: 'rejected', reason: { _id: 2, error: { message: 'could not find resource', code: 404 }}},
-        { state: 'rejected', reason: { _id: 3, error: { message: 'could not find resource', code: 404 }}}
+        { state: 'rejected', reason: { _id: 1, error: { message: 'could not find resource', code: 404 } } },
+        { state: 'rejected', reason: { _id: 2, error: { message: 'could not find resource', code: 404 } } },
+        { state: 'rejected', reason: { _id: 3, error: { message: 'could not find resource', code: 404 } } }
       ];
 
       calAttendeeService.manageResourceDetailsPromiseResolutions(resourcesFromDbPromises).catch(function(error) {
         expect(error).to.deep.equals([
-          { _id: 1, error: { message: 'could not find resource', code: 404 }},
-          { _id: 2, error: { message: 'could not find resource', code: 404 }},
-          { _id: 3, error: { message: 'could not find resource', code: 404 }}
+          { _id: 1, error: { message: 'could not find resource', code: 404 } },
+          { _id: 2, error: { message: 'could not find resource', code: 404 } },
+          { _id: 3, error: { message: 'could not find resource', code: 404 } }
         ]);
 
         done();
@@ -349,9 +351,9 @@ describe('The calAttendeeService service', function() {
     });
 
     it('should not resolve with attendees which failed', function(done) {
-      calAttendeesCache.get.withArgs(attendees[0].email).returns($q.when({_id: 0}));
+      calAttendeesCache.get.withArgs(attendees[0].email).returns($q.when({ _id: 0 }));
       calAttendeesCache.get.withArgs(attendees[1].email).returns($q.reject(new Error()));
-      calAttendeesCache.get.withArgs(attendees[2].email).returns($q.when({_id: 2}));
+      calAttendeesCache.get.withArgs(attendees[2].email).returns($q.when({ _id: 2 }));
 
       calAttendeeService.getUsersIdsForAttendees(attendees)
         .then(function(result) {
@@ -364,9 +366,9 @@ describe('The calAttendeeService service', function() {
     });
 
     it('should not fail when attendee is not an user', function(done) {
-      calAttendeesCache.get.withArgs(attendees[0].email).returns($q.when({_id: 0}));
+      calAttendeesCache.get.withArgs(attendees[0].email).returns($q.when({ _id: 0 }));
       calAttendeesCache.get.withArgs(attendees[1].email).returns($q.when());
-      calAttendeesCache.get.withArgs(attendees[2].email).returns($q.when({_id: 2}));
+      calAttendeesCache.get.withArgs(attendees[2].email).returns($q.when({ _id: 2 }));
 
       calAttendeeService.getUsersIdsForAttendees(attendees)
         .then(function(result) {

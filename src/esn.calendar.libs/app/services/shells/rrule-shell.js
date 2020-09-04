@@ -53,7 +53,9 @@ require('../ical.js');
       set until(value) {
         if (value) {
           value = calMoment.isMoment(value) ? value : calMoment(value);
-          value = value.set({ hour: 23, minute: 59, second: 59, millisecond: 999 });
+          value = value.set({
+            hour: 23, minute: 59, second: 59, millisecond: 999
+          });
           value = value.utc().toDate();
         }
 

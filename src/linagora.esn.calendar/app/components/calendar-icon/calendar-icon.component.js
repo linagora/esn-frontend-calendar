@@ -3,7 +3,7 @@
 
   angular.module('esn.calendar')
     .component('calendarIcon', {
-      template: require("./calendar-icon.pug"),
+      template: require('./calendar-icon.pug'),
       bindings: {
         isResource: '=?',
         calendarIcon: '=?',

@@ -21,14 +21,14 @@ describe('The CalSharedRightsDisplayController controller', function() {
   });
 
   function initController(bindings) {
-    return $controller('CalSharedRightsDisplayController', {$scope: $scope}, bindings);
+    return $controller('CalSharedRightsDisplayController', { $scope: $scope }, bindings);
   }
 
   describe('The $onInit function', function() {
     it('should set the humanReadable property for delegation right', function() {
       var right = 'This is a right';
       var delegationAsHumanReadableStub = sinon.spy(CalCalendarRightsUtilsService, 'delegationAsHumanReadable');
-      var controller = initController({delegation: right});
+      var controller = initController({ delegation: right });
 
       controller.$onInit();
 
@@ -39,7 +39,7 @@ describe('The CalSharedRightsDisplayController controller', function() {
     it('should set the humanReadable property for public right', function() {
       var right = 'This is a right';
       var publicAsHumanReadableStub = sinon.spy(CalCalendarRightsUtilsService, 'publicAsHumanReadable');
-      var controller = initController({public: right});
+      var controller = initController({ public: right });
 
       controller.$onInit();
 

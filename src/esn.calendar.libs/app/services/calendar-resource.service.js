@@ -1,6 +1,5 @@
-const Restangular = require('restangular');
 require('../app.constants');
-require('../services/calendar-resource-restangular.js');
+require('./calendar-resource-restangular.js');
 
 (function(angular) {
   'use strict';

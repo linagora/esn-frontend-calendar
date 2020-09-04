@@ -56,7 +56,9 @@ describe('The calMailToAttendeesController', function() {
     });
 
     it('should not add resource attendee', function() {
-      attendeesTest.push({email: 'aresource@example.com', partstat: 'ACCEPTED', clicked: false, cutype: CAL_ICAL.cutype.resource});
+      attendeesTest.push({
+        email: 'aresource@example.com', partstat: 'ACCEPTED', clicked: false, cutype: CAL_ICAL.cutype.resource
+      });
 
       expect(ctrl.getEmailAddressesFromUsers(attendeesTest)).to.equal(attendeesMailTest);
     });

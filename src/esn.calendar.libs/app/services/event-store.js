@@ -1,5 +1,6 @@
 const _ = require('lodash');
-require('../services/fc-moment.js');
+
+require('./fc-moment.js');
 
 (function(angular) {
   'use strict';
@@ -56,13 +57,13 @@ require('../services/fc-moment.js');
       var result = [];
 
       var indexOfFirstInEnlargedPeriod = _.sortedIndex(
-          store.eventsSortedByStart,
-          {
-            start: period.start.clone().subtract(calMoment.duration(store.maxEventsDuration, 'seconds').add(1, 'day'))
-          },
-          function(event) {
-            return event.start.unix();
-          }
+        store.eventsSortedByStart,
+        {
+          start: period.start.clone().subtract(calMoment.duration(store.maxEventsDuration, 'seconds').add(1, 'day'))
+        },
+        function(event) {
+          return event.start.unix();
+        }
       );
 
       //pre filter for efficiency we take event that start after maxEventsDuration + 24 hour before the start of the period

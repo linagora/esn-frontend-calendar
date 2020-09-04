@@ -6,7 +6,7 @@ var expect = chai.expect;
 
 describe('The calendarsCache service', function() {
   var calendarsCache,
-      calendars;
+    calendars;
 
   calendars = [
     {

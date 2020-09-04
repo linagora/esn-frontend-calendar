@@ -70,7 +70,7 @@
         $log.debug('Calendar deleted', type, msg);
         var calendarPath = calPathParser.parseCalendarPath(getCalendarPath(msg));
 
-        calendarService.removeAndEmit(calendarPath.calendarHomeId, {id: calendarPath.calendarId});
+        calendarService.removeAndEmit(calendarPath.calendarHomeId, { id: calendarPath.calendarId });
       }
 
       function _onCalendarUpdated(type, msg) {
@@ -89,7 +89,7 @@
 
       function _onEventCreateRequestOrUpdate(type, msg) {
         $log.debug('Calendar Event created/updated', type, msg);
-        var event = CalendarShell.from(msg.event, {etag: msg.etag, path: getEventPath(msg)});
+        var event = CalendarShell.from(msg.event, { etag: msg.etag, path: getEventPath(msg) });
 
         calendarService.getCalendar(event.calendarHomeId, event.calendarId).then(function(calendar) {
           if (!calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id)) {
@@ -102,21 +102,21 @@
 
       function _onEventReply(type, msg) {
         $log.debug('Calendar Event reply', type, msg);
-        var event = CalendarShell.from(msg.event, {etag: msg.etag, path: msg.eventPath});
+        var event = CalendarShell.from(msg.event, { etag: msg.etag, path: msg.eventPath });
 
         _udpateEventCacheAndNotify(event);
       }
 
       function _onEventDeleted(type, msg) {
         $log.debug('Calendar Event deleted/canceled', type, msg);
-        var event = CalendarShell.from(msg.event, {etag: msg.etag, path: getEventPath(msg)});
+        var event = CalendarShell.from(msg.event, { etag: msg.etag, path: getEventPath(msg) });
 
         _removeFromEventCacheAndNotify(event);
       }
 
       function _onEventCancelled(type, msg) {
         $log.debug('Calendar Event deleted/canceled', type, msg);
-        var event = CalendarShell.from(msg.event, {etag: msg.etag, path: getEventPath(msg)});
+        var event = CalendarShell.from(msg.event, { etag: msg.etag, path: getEventPath(msg) });
 
         //If instances of reccurring event have been cancelled but not the whole event
         // Then event is not cancelled but modified

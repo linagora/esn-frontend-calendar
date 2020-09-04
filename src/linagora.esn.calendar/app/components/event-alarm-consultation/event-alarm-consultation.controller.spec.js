@@ -23,15 +23,14 @@ describe('The calEventAlarmConsultationController', function() {
   it('should get trigger of the alarm when initialize event-alarm-consultation component', function() {
     var bindings = {
       event: CalendarShell.fromIncompleteShell({
-          start: moment('2013-02-08 12:30'),
-          end: moment('2013-02-08 13:30'),
-          location: 'aLocation',
-          alarm: {
-            trigger: '-P1W',
-            attendee: 'test@open-paas.org'
-          }
+        start: moment('2013-02-08 12:30'),
+        end: moment('2013-02-08 13:30'),
+        location: 'aLocation',
+        alarm: {
+          trigger: '-P1W',
+          attendee: 'test@open-paas.org'
         }
-      )
+      })
     };
     var ctrl = initController(bindings);
 

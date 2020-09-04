@@ -1,10 +1,11 @@
 const _ = require('lodash');
+
 require('../app.constants');
-require('../services/calendar-explored-period-service.js');
-require('../services/fullcalendar/calendar-configuration.service.js');
-require('../services/event-store.js');
-require('../services/event-utils.js');
-require('../services/cal-ui-authorization-service.js');
+require('./calendar-explored-period-service.js');
+require('./fullcalendar/calendar-configuration.service.js');
+require('./event-store.js');
+require('./event-utils.js');
+require('./cal-ui-authorization-service.js');
 
 (function(angular) {
   'use strict';
@@ -150,7 +151,7 @@ require('../services/cal-ui-authorization-service.js');
 
     function fetchEventOnlyIfNeeded(start, end, timezone, calendarUniqueId, calendarSource) {
       var defer = $q.defer();
-      var period = {start: start, end: end};
+      var period = { start: start, end: end };
 
       if (calendarExploredPeriodService.getUnexploredPeriodsInPeriod(calendarUniqueId, period).length === 0) {
         defer.resolve(calEventStore.getInPeriod(calendarUniqueId, period));

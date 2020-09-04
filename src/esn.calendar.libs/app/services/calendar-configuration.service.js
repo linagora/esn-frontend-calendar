@@ -1,16 +1,16 @@
 (function(angular) {
-    'use strict';
+  'use strict';
 
-    angular.module('esn.calendar.libs').factory('calendarConfiguration', calendarConfiguration);
+  angular.module('esn.calendar.libs').factory('calendarConfiguration', calendarConfiguration);
 
-    function calendarConfiguration(esnConfig) {
+  function calendarConfiguration(esnConfig) {
 
-      return {
-        get: get
-      };
+    return {
+      get: get
+    };
 
-      function get(key, defaultValue) {
-        return esnConfig('core.modules.linagora.esn.calendar.' + key, defaultValue);
-      }
+    function get(key, defaultValue) {
+      return esnConfig('core.modules.linagora.esn.calendar.' + key, defaultValue);
     }
-  })(angular);
+  }
+})(angular);

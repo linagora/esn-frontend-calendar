@@ -1,16 +1,17 @@
 const _ = require('lodash');
+
 require('../app.constants');
-require('../services/calendar-api.js');
-require('../services/calendar-subscription-api.service.js');
-require('../services/shells/calendar-collection-shell.js');
-require('../services/shells/calendar-right-shell.js');
-require('../services/calendar-cache.js');
+require('./calendar-api.js');
+require('./calendar-subscription-api.service.js');
+require('./shells/calendar-collection-shell.js');
+require('./shells/calendar-right-shell.js');
+require('./calendar-cache.js');
 
 (function(angular) {
   'use strict';
 
   angular.module('esn.calendar.libs')
-         .service('calendarService', calendarService);
+    .service('calendarService', calendarService);
 
   function calendarService(
     $q,
@@ -286,7 +287,7 @@ require('../services/calendar-cache.js');
     }
 
     function unsubscribe(calendarHomeId, subscription) {
-       return calCalendarSubscriptionApiService.unsubscribe(calendarHomeId, subscription.id)
+      return calCalendarSubscriptionApiService.unsubscribe(calendarHomeId, subscription.id)
         .then(function(response) {
           removeAndEmit(calendarHomeId, subscription);
 
@@ -351,7 +352,7 @@ require('../services/calendar-cache.js');
      */
     function getResourceDescription(calendar) {
       return calendar.getOwner().then(function(owner) {
-          return owner.description;
+        return owner.description;
       });
     }
   }

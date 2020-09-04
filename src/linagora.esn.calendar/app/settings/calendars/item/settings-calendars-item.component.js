@@ -11,6 +11,6 @@
       },
       controllerAs: 'ctrl',
       controller: 'CalSettingsCalendarsItemController',
-      template: require("./settings-calendars-item.pug")
+      template: require('./settings-calendars-item.pug')
     });
 })(angular);

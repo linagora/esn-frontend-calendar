@@ -26,12 +26,14 @@ describe('The esnCalendarController controller', function() {
       find: function() { return []; }
     };
 
-    element = {children: sinon.spy(function() {
-      return calElement;
-    })};
+    element = {
+      children: sinon.spy(function() {
+        return calElement;
+      })
+    };
 
     initController = function() {
-      vm = $controller('esnCalendarController', {$scope: $scope, $element: element});
+      vm = $controller('esnCalendarController', { $scope: $scope, $element: element });
       vm.config = {
         viewRender: sinon.spy(),
         data: 'data'

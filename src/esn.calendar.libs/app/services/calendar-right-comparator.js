@@ -20,17 +20,19 @@ require('../app.constants');
     function getMostPermissive(userId, calendar1, calendar2) {
       if (_getCalendarRightWeight(userId, calendar1) > _getCalendarRightWeight(userId, calendar2)) {
         return calendar1;
-      } else {
-        return calendar2;
       }
+
+      return calendar2;
+
     }
 
     function _getCalendarRightWeight(userId, calendar) {
       if (calendar.type === CAL_CALENDAR_SHARED_TYPE.PUBLIC) {
         return rightsWeights[calendar.calendar.rights.getPublicRight()];
-      } else {
-        return rightsWeights[calendar.calendar.rights.getShareeRight(userId)];
       }
+
+      return rightsWeights[calendar.calendar.rights.getShareeRight(userId)];
+
     }
 
     function initPublicRights() {

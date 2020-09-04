@@ -59,7 +59,7 @@ describe('The ESNResourceFormUpdateController controller', function() {
     var ctrl;
 
     beforeEach(function() {
-      ctrl = initController({type: undefined, resource: resource});
+      ctrl = initController({ type: undefined, resource: resource });
 
       resourceUpdated = {
         name: 'Foo udpated',

@@ -1,4 +1,5 @@
 const _ = require('lodash');
+
 require('../app.constants');
 
 (function(angular) {

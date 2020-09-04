@@ -52,7 +52,7 @@ describe('The calendar module apis', function() {
     this.start = this.calMoment('2014-01-01');
     this.end = this.calMoment('2014-01-02');
     this.data = {
-      match: {start: this.start.format(davDateFormat), end: this.end.format(davDateFormat)}
+      match: { start: this.start.format(davDateFormat), end: this.end.format(davDateFormat) }
     };
 
     this.vcalendar = {
@@ -61,7 +61,7 @@ describe('The calendar module apis', function() {
 
     davItem = {
       _links: {
-        self: {href: '/prepath/path/to/calendar/myuid.ics'}
+        self: { href: '/prepath/path/to/calendar/myuid.ics' }
       },
       etag: '"123123"',
       data: [
@@ -78,7 +78,7 @@ describe('The calendar module apis', function() {
     };
     davItemRecurring = {
       _links: {
-        self: {href: '/prepath/path/to/calendar/myuid.ics'}
+        self: { href: '/prepath/path/to/calendar/myuid.ics' }
       },
       etag: '"123123"',
       data: [
@@ -244,7 +244,7 @@ describe('The calendar module apis', function() {
           });
         this.$httpBackend.flush();
       });
-});
+    });
 
     describe('listCalendars request', function() {
       it('should request the correct path without params and return an array of items included in dav:calendar', function(done) {
@@ -341,7 +341,7 @@ describe('The calendar module apis', function() {
 
         this.$httpBackend.flush();
       });
-  });
+    });
 
     describe('getCalendar request', function() {
       it('should request the correct path with params if the options object is defined and return a dav:calendar', function(done) {
@@ -395,7 +395,7 @@ describe('The calendar module apis', function() {
 
         this.$httpBackend.flush();
       });
-  });
+    });
 
     describe('removeCalendar request', function() {
       it('should return the http response if response.status is 204', function() {
@@ -405,7 +405,7 @@ describe('The calendar module apis', function() {
         this.calendarAPI.removeCalendar('test', 'cal').then(thenSpy);
         this.$httpBackend.flush();
 
-        expect(thenSpy).to.have.been.calledWith(sinon.match({data: 'aResponse'}));
+        expect(thenSpy).to.have.been.calledWith(sinon.match({ data: 'aResponse' }));
       });
 
       it('should return an Error if response.status is not 204', function() {
@@ -422,14 +422,14 @@ describe('The calendar module apis', function() {
 
         this.$httpBackend.expectDELETE('/dav/api/calendars/test/cal.json').respond(500, 'error');
         this.calendarAPI.removeCalendar('test', 'cal')
-        .catch(function() {
-          expect(notificationFactoryMock.weakError).to.have.been.calledWith('Failed to remove calendar', 'Cannot join the server, please try later');
+          .catch(function() {
+            expect(notificationFactoryMock.weakError).to.have.been.calledWith('Failed to remove calendar', 'Cannot join the server, please try later');
 
-          done();
-        });
+            done();
+          });
         this.$httpBackend.flush();
       });
-  });
+    });
     describe('createCalendar request', function() {
 
       it('should return the http response if response.status is 201', function(done) {
@@ -456,18 +456,18 @@ describe('The calendar module apis', function() {
         this.$httpBackend.flush();
       });
 
-    it('should return an Error if response.status is not 201', function(done) {
-      this.$httpBackend.expectPOST('/dav/api/calendars/test.json', this.vcalendar).respond(500, 'Error');
+      it('should return an Error if response.status is not 201', function(done) {
+        this.$httpBackend.expectPOST('/dav/api/calendars/test.json', this.vcalendar).respond(500, 'Error');
 
-      this.calendarAPI.createCalendar('test', this.vcalendar)
-      .catch(function() {
-        expect(notificationFactoryMock.weakError).to.have.been.calledWith('Failed to create calendar', 'Cannot join the server, please try later');
+        this.calendarAPI.createCalendar('test', this.vcalendar)
+          .catch(function() {
+            expect(notificationFactoryMock.weakError).to.have.been.calledWith('Failed to create calendar', 'Cannot join the server, please try later');
 
-        done();
+            done();
+          });
+        this.$httpBackend.flush();
       });
-      this.$httpBackend.flush();
     });
-  });
 
     describe('The getEventByUID fn', function() {
 
@@ -484,7 +484,7 @@ describe('The calendar module apis', function() {
       });
 
       it('should get a recurring event', function(done) {
-        this.$httpBackend.expect('REPORT', '/dav/api/calendars/home.json', {uid: 'myuid'}).respond(davItemsResponse(davItemsRecurring));
+        this.$httpBackend.expect('REPORT', '/dav/api/calendars/home.json', { uid: 'myuid' }).respond(davItemsResponse(davItemsRecurring));
 
         this.calendarAPI.getEventByUID('home', 'myuid').then(function(data) {
           expect(data).to.deep.equal(davItemsRecurring);
@@ -500,7 +500,7 @@ describe('The calendar module apis', function() {
     describe('The searchEvents request', function() {
       var eventSearchItems = [{
         _links: {
-          self: {href: '/prepath/path/to/calendar/myuid.ics'}
+          self: { href: '/prepath/path/to/calendar/myuid.ics' }
         },
         data: {}
       }];

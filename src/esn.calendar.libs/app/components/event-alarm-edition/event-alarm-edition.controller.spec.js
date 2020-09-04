@@ -13,7 +13,7 @@ describe('The calEventAlarmEditionController', function() {
       user: {
         _id: '123456',
         emails: ['test@open-paas.org'],
-        emailMap: {'test@open-paas.org': true}
+        emailMap: { 'test@open-paas.org': true }
       },
       domain: {
         company_name: 'test',

@@ -219,7 +219,8 @@ describe('The CalEventFormController controller', function() {
     CAL_EVENT_FORM,
     _CAL_ICAL_
   ) {
-    this.rootScope = $rootScope = _$rootScope_;
+    $rootScope = _$rootScope_;
+    this.rootScope = $rootScope;
     this.scope = $rootScope.$new();
     this.controller = $controller;
     this.moment = moment;
@@ -377,7 +378,7 @@ describe('The CalEventFormController controller', function() {
           end: this.moment('2013-02-08 13:30'),
           otherProperty: 'aString'
         });
-        var clone = this.CalendarShell.fromIncompleteShell({_id: 'theclone'});
+        var clone = this.CalendarShell.fromIncompleteShell({ _id: 'theclone' });
 
         this.scope.event.clone = sinon.spy(function() {
           return clone;
@@ -567,20 +568,20 @@ describe('The CalEventFormController controller', function() {
 
         this.initController();
 
-        expect(this.scope.attendees.users).to.shallowDeepEqual([{displayName: 'attendee1'}]);
-        expect(this.scope.attendees.resources).to.shallowDeepEqual([{displayName: 'resource1'}]);
+        expect(this.scope.attendees.users).to.shallowDeepEqual([{ displayName: 'attendee1' }]);
+        expect(this.scope.attendees.resources).to.shallowDeepEqual([{ displayName: 'resource1' }]);
       });
 
       it('should set inputSuggestions from scope.relatedEvents', function() {
         var relatedCounterEvent = {
           type: 'counter',
           event: {},
-          actor: {id: '1'}
+          actor: { id: '1' }
         };
         var relatedFooEvent = {
           type: 'foo',
           event: {},
-          actor: {id: '1'}
+          actor: { id: '1' }
         };
 
         this.scope.event = this.CalendarShell.fromIncompleteShell({
@@ -679,18 +680,18 @@ describe('The CalEventFormController controller', function() {
 
       it('should initialize displayParticipationButton with true if user is attendee and calendar.readOnly is false', function() {
         this.calendarServiceMock.listPersonalAndAcceptedDelegationCalendars = sinon.spy(function() {
-            return $q.when([{
-              readOnly: false,
-              selected: true,
-              isOwner: sinon.stub().returns(true),
-              getOwner: function() {
-                return $q.when(user);
-              },
-              getUniqueId: function() {
-                return calendarTest.getUniqueId();
-              }
-            }]);
-          });
+          return $q.when([{
+            readOnly: false,
+            selected: true,
+            isOwner: sinon.stub().returns(true),
+            getOwner: function() {
+              return $q.when(user);
+            },
+            getUniqueId: function() {
+              return calendarTest.getUniqueId();
+            }
+          }]);
+        });
 
         this.initController();
 
@@ -832,12 +833,14 @@ describe('The CalEventFormController controller', function() {
 
         it('should not send modify request if properties not visible in the UI changed', function(done) {
           var editedEvent = {};
-          var event = this.scope.event = this.CalendarShell.fromIncompleteShell({
+
+          this.scope.event = this.CalendarShell.fromIncompleteShell({
             start: this.moment(),
             end: this.moment(),
             title: 'title',
             diff: 123123
           });
+          var event = this.scope.event;
 
           this.scope.$hide = function() {
             expect(event.diff).to.equal(123123);
@@ -847,7 +850,8 @@ describe('The CalEventFormController controller', function() {
           };
           this.initController();
 
-          editedEvent = this.scope.editedEvent = event.clone();
+          this.scope.editedEvent = event.clone();
+          editedEvent = this.scope.editedEvent;
           this.scope.editedEvent.diff = 234234;
           this.scope.modifyEvent();
         });
@@ -932,15 +936,15 @@ describe('The CalEventFormController controller', function() {
           this.scope.onResourceAttendeeRemoved(resource);
           this.scope.newAttendees = [
             addedAttendee,
-          {
-            displayName: 'attendee2',
-            email: 'user2@test.com',
-            partstat: 'ACCEPTED'
-          }, {
-            displayName: 'attendee3',
-            email: 'user3@test.com',
-            partstat: 'ACCEPTED'
-          }];
+            {
+              displayName: 'attendee2',
+              email: 'user2@test.com',
+              partstat: 'ACCEPTED'
+            }, {
+              displayName: 'attendee3',
+              email: 'user3@test.com',
+              partstat: 'ACCEPTED'
+            }];
           this.scope.newResources = [addedResource];
           this.scope.attendees.users = [];
           this.scope.attendees.resources = [];
@@ -952,17 +956,17 @@ describe('The CalEventFormController controller', function() {
             title: 'title',
             attendees: [
               attendee,
-            {
-              displayName: 'attendee2',
-              email: 'user2@test.com',
-              partstat: 'ACCEPTED'
-            }, {
-              displayName: 'attendee3',
-              email: 'user3@test.com',
-              partstat: 'ACCEPTED'
-            },
-            resource
-          ]
+              {
+                displayName: 'attendee2',
+                email: 'user2@test.com',
+                partstat: 'ACCEPTED'
+              }, {
+                displayName: 'attendee3',
+                email: 'user3@test.com',
+                partstat: 'ACCEPTED'
+              },
+              resource
+            ]
           });
         });
 
@@ -1458,7 +1462,7 @@ describe('The CalEventFormController controller', function() {
     describe('changeParticipation function', function() {
       describe('non-recurring event', function() {
         beforeEach(function() {
-          this.scope.event = this.scope.event = this.CalendarShell.fromIncompleteShell({
+          this.scope.event = this.CalendarShell.fromIncompleteShell({
             start: this.moment('2013-02-08 12:30'),
             end: end,
             organizer: {
@@ -1662,10 +1666,11 @@ describe('The CalEventFormController controller', function() {
     describe('The submitSuggestion function', function() {
 
       it('Should trigger a success toaster when sending worked', function() {
-        var suggestedEvent = this.scope.suggestedEvent = this.CalendarShell.fromIncompleteShell({
+        this.scope.suggestedEvent = this.CalendarShell.fromIncompleteShell({
           start: start,
           end: end
         });
+        var suggestedEvent = this.scope.suggestedEvent;
 
         this.scope.event = this.CalendarShell.fromIncompleteShell({
           start: start,
@@ -1682,10 +1687,12 @@ describe('The CalEventFormController controller', function() {
 
       it('Should trigger an error toaster when sending did not work', function(done) {
         var self = this;
-        var suggestedEvent = this.scope.suggestedEvent = this.CalendarShell.fromIncompleteShell({
+
+        this.scope.suggestedEvent = this.CalendarShell.fromIncompleteShell({
           start: start,
           end: end
         });
+        var suggestedEvent = this.scope.suggestedEvent;
 
         calEventServiceMock.sendCounter = sinon.stub().returns($q.reject(new Error('Pouet')));
 
@@ -1793,12 +1800,12 @@ describe('The CalEventFormController controller', function() {
             partstart: 'ACCEPTED',
             cutype: CAL_ICAL.cutype.individual
           },
-            {
-              name: 'attendee1',
-              email: 'attendee1@openpaas.org',
-              partstart: 'ACCEPTED',
-              cutype: CAL_ICAL.cutype.individual
-            }]
+          {
+            name: 'attendee1',
+            email: 'attendee1@openpaas.org',
+            partstart: 'ACCEPTED',
+            cutype: CAL_ICAL.cutype.individual
+          }]
         });
 
         this.initController();
@@ -1847,12 +1854,12 @@ describe('The CalEventFormController controller', function() {
             partstart: 'ACCEPTED',
             cutype: CAL_ICAL.cutype.individual
           },
-            {
-              name: 'attendee1',
-              email: 'attendee1@openpaas.org',
-              partstart: 'ACCEPTED',
-              cutype: CAL_ICAL.cutype.individual
-            }],
+          {
+            name: 'attendee1',
+            email: 'attendee1@openpaas.org',
+            partstart: 'ACCEPTED',
+            cutype: CAL_ICAL.cutype.individual
+          }],
           gracePeriodTaskId: '0000',
           etag: '0000'
         });
@@ -1879,12 +1886,12 @@ describe('The CalEventFormController controller', function() {
             partstart: 'ACCEPTED',
             cutype: CAL_ICAL.cutype.individual
           },
-            {
-              name: 'attendee1',
-              email: 'attendee1@openpaas.org',
-              partstart: 'ACCEPTED',
-              cutype: CAL_ICAL.cutype.individual
-            }],
+          {
+            name: 'attendee1',
+            email: 'attendee1@openpaas.org',
+            partstart: 'ACCEPTED',
+            cutype: CAL_ICAL.cutype.individual
+          }],
           gracePeriodTaskId: '0000'
         });
 

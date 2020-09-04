@@ -8,6 +8,6 @@
         onRemove: '='
       },
       controllerAs: 'ctrl',
-      template: require("./resource-administrator-list-item.pug")
+      template: require('./resource-administrator-list-item.pug')
     });
 })(angular);

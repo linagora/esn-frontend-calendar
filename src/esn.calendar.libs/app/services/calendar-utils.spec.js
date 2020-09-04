@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('The calendarUtils service', function() {
-  var self;
+  var self = this;
 
   beforeEach(function() {
     self = this;
@@ -55,44 +55,44 @@ describe('The calendarUtils service', function() {
   describe('the getNewStartDate', function() {
     it('should return the next hour returned by getNewStartDate', function() {
       [
-        {input: '10:00', output: '10:30'},
-        {input: '10:01', output: '10:30'},
-        {input: '11:31', output: '12:00'},
-        {input: '11:59', output: '12:00'},
-        {input: '12:30', output: '13:00'}
+        { input: '10:00', output: '10:30' },
+        { input: '10:01', output: '10:30' },
+        { input: '11:31', output: '12:00' },
+        { input: '11:59', output: '12:00' },
+        { input: '12:30', output: '13:00' }
       ].map(function(obj) {
-          return _.mapValues(obj, function(hour) {
-            return self.calMoment('1991-10-03 ' + hour);
-          });
-        }).forEach(function(obj) {
-          self.calMomentMock = sinon.stub().returns(obj.input);
-          var result = self.calendarUtils.getNewStartDate();
+        return _.mapValues(obj, function(hour) {
+          return self.calMoment('1991-10-03 ' + hour);
+        });
+      }).forEach(function(obj) {
+        self.calMomentMock = sinon.stub().returns(obj.input);
+        var result = self.calendarUtils.getNewStartDate();
 
-          expect(result.isSame(obj.output, 'second')).to.be.true;
-          expect(self.calMomentMock).to.have.been.calledOnce;
-        }, this);
+        expect(result.isSame(obj.output, 'second')).to.be.true;
+        expect(self.calMomentMock).to.have.been.calledOnce;
+      }, this);
     });
   });
 
   describe('the getNewEndDate', function() {
     it('should return the next hour returned by getNewStartDate', function() {
       [
-        {input: '10:00', output: '11:30'},
-        {input: '10:01', output: '11:30'},
-        {input: '11:31', output: '13:00'},
-        {input: '11:59', output: '13:00'},
-        {input: '12:30', output: '14:00'}
+        { input: '10:00', output: '11:30' },
+        { input: '10:01', output: '11:30' },
+        { input: '11:31', output: '13:00' },
+        { input: '11:59', output: '13:00' },
+        { input: '12:30', output: '14:00' }
       ].map(function(obj) {
-          return _.mapValues(obj, function(hour) {
-            return self.calMoment('1991-10-03 ' + hour);
-          });
-        }).forEach(function(obj) {
-          self.calMomentMock = sinon.stub().returns(obj.input);
-          var result = self.calendarUtils.getNewEndDate();
+        return _.mapValues(obj, function(hour) {
+          return self.calMoment('1991-10-03 ' + hour);
+        });
+      }).forEach(function(obj) {
+        self.calMomentMock = sinon.stub().returns(obj.input);
+        var result = self.calendarUtils.getNewEndDate();
 
-          expect(result.isSame(obj.output, 'second')).to.be.true;
-          expect(self.calMomentMock).to.have.been.calledOnce;
-        }, this);
+        expect(result.isSame(obj.output, 'second')).to.be.true;
+        expect(self.calMomentMock).to.have.been.calledOnce;
+      }, this);
     });
   });
 

@@ -7,7 +7,7 @@
       bindings: {
         isCurrentViewAroundToday: '&'
       },
-      template: require("./calendar-today-button.pug"),
+      template: require('./calendar-today-button.pug'),
       controller: 'CalendarTodayButtonController'
     });
 })(angular);

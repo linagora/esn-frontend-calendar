@@ -7,6 +7,6 @@
         submit: '&',
         form: '<'
       },
-      template: require("./settings-display-subheader.pug")
+      template: require('./settings-display-subheader.pug')
     });
 })(angular);

@@ -8,8 +8,8 @@ describe('The calendarDateIndicator directive', function() {
   beforeEach(function() {
     var self = this;
 
-    this.calView = {title: 'calDate'};
-    this.minicalView = {title: 'minicalView'};
+    this.calView = { title: 'calDate' };
+    this.minicalView = { title: 'minicalView' };
     this.calendarCurrentView = {
       get: sinon.stub().returns(this.calView),
       set: sinon.spy(),
@@ -49,7 +49,7 @@ describe('The calendarDateIndicator directive', function() {
   it('should change the dateIndicator on home calendar change', function() {
     var element = this.initDirective(this.$scope);
 
-    this.$rootScope.$broadcast('calendar:homeViewChange', {title: 'newDate'});
+    this.$rootScope.$broadcast('calendar:homeViewChange', { title: 'newDate' });
     this.$scope.$digest();
     expect(this.calendarCurrentView.get).to.have.been.calledOnce;
     expect(element.html()).to.equal('newDate');
@@ -62,7 +62,7 @@ describe('The calendarDateIndicator directive', function() {
     this.$scope.$digest();
     expect(element.html()).to.equal(this.minicalView.title);
 
-    this.$rootScope.$broadcast('calendar:mini:viewchange', {title: 'newnewDate'});
+    this.$rootScope.$broadcast('calendar:mini:viewchange', { title: 'newnewDate' });
     this.$scope.$digest();
     expect(element.html()).to.equal('newnewDate');
     expect(this.calendarCurrentView.get).to.have.been.calledOnce;

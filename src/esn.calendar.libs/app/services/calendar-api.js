@@ -1,9 +1,10 @@
 const _ = require('lodash');
+
 require('../app.constants');
-require('../services/calendar-restangular.js');
-require('../services/path-builder.js');
-require('../services/dav-request.js');
-require('../services/http-response-handler.js');
+require('./calendar-restangular.js');
+require('./path-builder.js');
+require('./dav-request.js');
+require('./http-response-handler.js');
 
 (function(angular) {
   'use strict';
@@ -66,7 +67,7 @@ require('../services/http-response-handler.js');
       };
 
       return calDavRequest('report', calendarHref, JSON_CONTENT_TYPE_HEADER, body)
-      .then(responseHandler('dav:item'));
+        .then(responseHandler('dav:item'));
     }
 
     /**
@@ -157,7 +158,7 @@ require('../services/http-response-handler.js');
       var path = calPathBuilder.forCalendarId(calendarHomeId, calendarId);
 
       return calDavRequest('report', path, JSON_CONTENT_TYPE_HEADER, body)
-      .then(responseHandler('dav:item'));
+        .then(responseHandler('dav:item'));
     }
 
     /**
@@ -169,8 +170,8 @@ require('../services/http-response-handler.js');
     function listCalendars(calendarId, options) {
       var path = calPathBuilder.forCalendarHomeId(calendarId);
 
-      return calDavRequest('get', path, {Accept: CAL_ACCEPT_HEADER}, {}, options)
-      .then(responseHandler('dav:calendar'));
+      return calDavRequest('get', path, { Accept: CAL_ACCEPT_HEADER }, {}, options)
+        .then(responseHandler('dav:calendar'));
     }
 
     /**
@@ -182,8 +183,8 @@ require('../services/http-response-handler.js');
     function getCalendar(calendarHomeId, calendarId, options) {
       var path = calPathBuilder.forCalendarId(calendarHomeId, calendarId);
 
-      return calDavRequest('get', path, {Accept: CAL_ACCEPT_HEADER}, {}, options)
-      .then(calHttpResponseHandler(200, _.property('data')));
+      return calDavRequest('get', path, { Accept: CAL_ACCEPT_HEADER }, {}, options)
+        .then(calHttpResponseHandler(200, _.property('data')));
     }
 
     /**
@@ -196,12 +197,12 @@ require('../services/http-response-handler.js');
       var path = calPathBuilder.forCalendarHomeId(calendarHomeId);
 
       return calDavRequest('post', path, null, calendar)
-      .then(calHttpResponseHandler(201))
-      .catch(function(error) {
-        notificationFactory.weakError('Failed to create calendar', 'Cannot join the server, please try later');
+        .then(calHttpResponseHandler(201))
+        .catch(function(error) {
+          notificationFactory.weakError('Failed to create calendar', 'Cannot join the server, please try later');
 
-        return $q.reject(error);
-      });
+          return $q.reject(error);
+        });
     }
 
     /**
@@ -214,12 +215,12 @@ require('../services/http-response-handler.js');
       var path = calPathBuilder.forCalendarId(calendarHomeId, calendarId);
 
       return calDavRequest('delete', path)
-      .then(calHttpResponseHandler(204))
-      .catch(function(error) {
-        notificationFactory.weakError('Failed to remove calendar', 'Cannot join the server, please try later');
+        .then(calHttpResponseHandler(204))
+        .catch(function(error) {
+          notificationFactory.weakError('Failed to remove calendar', 'Cannot join the server, please try later');
 
-        return $q.reject(error);
-      });
+          return $q.reject(error);
+        });
     }
 
     /**
@@ -232,12 +233,12 @@ require('../services/http-response-handler.js');
       var path = calPathBuilder.forCalendarId(calendarHomeId, calendar.id);
 
       return calDavRequest('proppatch', path, JSON_CONTENT_TYPE_HEADER, calendar)
-      .then(calHttpResponseHandler(204))
-      .catch(function(error) {
-        notificationFactory.weakError('Failed to modify calendar', 'Cannot join the server, please try later');
+        .then(calHttpResponseHandler(204))
+        .catch(function(error) {
+          notificationFactory.weakError('Failed to modify calendar', 'Cannot join the server, please try later');
 
-        return $q.reject(error);
-      });
+          return $q.reject(error);
+        });
     }
 
     /**
@@ -299,7 +300,7 @@ require('../services/http-response-handler.js');
       var body = vcalendar.toJSON();
 
       return calDavRequest('put', eventPath, headers, body)
-      .then(calHttpResponseHandler([200, 204]));
+        .then(calHttpResponseHandler([200, 204]));
     }
   }
 })(angular);

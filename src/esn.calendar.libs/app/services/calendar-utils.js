@@ -1,5 +1,5 @@
 require('../app.constants.js');
-require('../services/fc-moment.js');
+require('./fc-moment.js');
 
 (function(angular) {
   'use strict';

@@ -8,7 +8,7 @@
 
   function calendarConfigurationTabs() {
     return {
-      template: require("./calendar-configuration-tabs.pug"),
+      template: require('./calendar-configuration-tabs.pug'),
       bindings: {
         selectedTab: '=',
         newCalendar: '=',

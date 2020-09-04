@@ -6,12 +6,12 @@ require('./calendar-view/calendar-view.directive.js');
 
   angular.module('esn.calendar')
     .component('calCalendar', {
-      template: require("./calendar.pug"),
+      template: require('./calendar.pug'),
       bindings: {
         calendarHomeId: '=',
         businessHours: '='
       },
       controllerAs: 'ctrl',
       controller: 'CalCalendarController'
-  });
+    });
 })(angular);

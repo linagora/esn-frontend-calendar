@@ -1,4 +1,4 @@
-require('../search/event/event-search-provider.service.js');
+require('./event/event-search-provider.service.js');
 
 (function(angular) {
   'use strict';

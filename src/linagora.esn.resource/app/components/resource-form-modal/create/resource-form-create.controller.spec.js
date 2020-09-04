@@ -12,7 +12,7 @@ describe('The ESNResourceFormCreateController controller', function() {
   });
 
   beforeEach(function() {
-    resource = {name: 'Foo', description: 'bar', icon: 'Icon'};
+    resource = { name: 'Foo', description: 'bar', icon: 'Icon' };
     resourceType = 'resource';
     asyncAction = sinon.spy();
     esnResourceAPIClient = {};
@@ -49,7 +49,7 @@ describe('The ESNResourceFormCreateController controller', function() {
   }));
 
   function initController() {
-    return $controller('ESNResourceFormCreateController', {$scope: $scope}, context);
+    return $controller('ESNResourceFormCreateController', { $scope: $scope }, context);
   }
 
   describe('The submit function', function() {

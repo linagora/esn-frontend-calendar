@@ -1,12 +1,12 @@
 (function(angular) {
-    'use strict';
+  'use strict';
 
-    angular.module('esn.calendar')
-      .component('calCalendarsListItemConfiguration', {
-        template: require("./configuration-list.pug"),
-        controller: 'CalendarsListItemConfigurationController',
-        bindings: {
-          calendarId: '='
-        }
-      });
-  })(angular);
+  angular.module('esn.calendar')
+    .component('calCalendarsListItemConfiguration', {
+      template: require('./configuration-list.pug'),
+      controller: 'CalendarsListItemConfigurationController',
+      bindings: {
+        calendarId: '='
+      }
+    });
+})(angular);

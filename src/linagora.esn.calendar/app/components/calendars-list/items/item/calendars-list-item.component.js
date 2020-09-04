@@ -3,7 +3,7 @@
 
   angular.module('esn.calendar')
     .component('calCalendarsListItem', {
-      template: require("./calendars-list-item.pug"),
+      template: require('./calendars-list-item.pug'),
       controller: 'CalendarsListItemController',
       bindings: {
         calendar: '<',

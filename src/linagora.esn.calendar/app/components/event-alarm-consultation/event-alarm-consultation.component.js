@@ -2,7 +2,7 @@
 
 angular.module('esn.calendar')
   .component('calEventAlarmConsultation', {
-    template: require("./event-alarm-consultation.pug"),
+    template: require('./event-alarm-consultation.pug'),
     bindings: {
       event: '='
     },

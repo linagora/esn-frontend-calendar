@@ -2,7 +2,7 @@
 
 angular.module('esn.calendar.libs')
   .component('calEventDateEdition', {
-    template: require("./event-date-edition.pug"),
+    template: require('./event-date-edition.pug'),
     controller: 'calEventDateEditionController',
     controllerAs: 'ctrl',
     bindings: {

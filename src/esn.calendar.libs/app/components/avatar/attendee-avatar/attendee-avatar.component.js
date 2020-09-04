@@ -2,7 +2,7 @@
 
 angular.module('esn.calendar.libs')
   .component('calAttendeeAvatar', {
-    template: require("./attendee-avatar.pug"),
+    template: require('./attendee-avatar.pug'),
     bindings: {
       attendee: '<'
     },

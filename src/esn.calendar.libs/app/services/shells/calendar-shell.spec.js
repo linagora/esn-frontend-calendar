@@ -209,21 +209,21 @@ describe('CalendarShell factory', function() {
     });
 
     it('should work with recurring event with exception', function() {
-      var shell = new CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/reventWithTz.ics'])), {path: '/path/to/uid.ics'});
+      var shell = new CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/reventWithTz.ics'])), { path: '/path/to/uid.ics' });
 
       shell.attendees = [{
-          displayName: 'Leigh Rafe',
-          email: 'leigh.rafe@demo.open-paas.org',
-          fullmail: 'Leigh Rafe <leigh.rafe@demo.open-paas.org>',
-          name: 'Leigh Rafe',
-          partstat: 'NEEDS-ACTION'
-        }];
+        displayName: 'Leigh Rafe',
+        email: 'leigh.rafe@demo.open-paas.org',
+        fullmail: 'Leigh Rafe <leigh.rafe@demo.open-paas.org>',
+        name: 'Leigh Rafe',
+        partstat: 'NEEDS-ACTION'
+      }];
 
       expect(shell.expand()[0].attendees.length).to.equal(1);
     });
 
     it('should not break vcomponents.toString()', function() {
-      var shell = new CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/reventWithTz.ics'])), {path: '/path/to/uid.ics'});
+      var shell = new CalendarShell(new ICAL.Component(ICAL.parse(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/reventWithTz.ics'])), { path: '/path/to/uid.ics' });
 
       shell.attendees = [{
         email: 'leigh.rafe@demo.open-paas.org',
@@ -1073,7 +1073,7 @@ describe('CalendarShell factory', function() {
         recurrenceId: date
       });
 
-      var masterFromCache = CalendarShell.fromIncompleteShell({start: date});
+      var masterFromCache = CalendarShell.fromIncompleteShell({ start: date });
 
       this.calMasterEventCache.get = sinon.stub().returns(masterFromCache);
       this.calMasterEventCache.save = sinon.spy();
@@ -1096,7 +1096,8 @@ describe('CalendarShell factory', function() {
         recurrenceId: date
       });
 
-      var masterFromCache = CalendarShell.fromIncompleteShell({start: date});
+      var masterFromCache = CalendarShell.fromIncompleteShell({ start: date });
+
       sinon.spy(masterFromCache, 'modifyOccurrence');
 
       this.calMasterEventCache.get = sinon.stub().returns(masterFromCache);
@@ -1117,7 +1118,8 @@ describe('CalendarShell factory', function() {
         recurrenceId: date
       });
 
-      var masterFromCache = CalendarShell.fromIncompleteShell({start: date});
+      var masterFromCache = CalendarShell.fromIncompleteShell({ start: date });
+
       sinon.spy(masterFromCache, 'modifyOccurrence');
 
       this.calMasterEventCache.get = sinon.stub().returns(masterFromCache);
@@ -1135,7 +1137,7 @@ describe('CalendarShell factory', function() {
     it('should fetch the master on the server if not already cached', function(done) {
       var path = 'this is a path';
       var date = calMoment('2005-05-19 01:01');
-      var vcalendar = CalendarShell.fromIncompleteShell({start: date}).vcalendar;
+      var vcalendar = CalendarShell.fromIncompleteShell({ start: date }).vcalendar;
       var gracePeriodTaskId = 'gracePeriodID';
       var etag = 'eta';
 
@@ -1152,7 +1154,7 @@ describe('CalendarShell factory', function() {
       this.calEventAPIMock.get = function(_path) {
         expect(_path).to.equal(path);
 
-        return $q.when({data: vcalendar.toJSON()});
+        return $q.when({ data: vcalendar.toJSON() });
       };
 
       var self = this;
@@ -1173,7 +1175,7 @@ describe('CalendarShell factory', function() {
     it('should skip adding modified occurrence when skipAddingModifiedOccurence is set to true', function(done) {
       var path = 'this is a path';
       var date = calMoment('2005-05-19 01:01');
-      var vcalendar = CalendarShell.fromIncompleteShell({start: date}).vcalendar;
+      var vcalendar = CalendarShell.fromIncompleteShell({ start: date }).vcalendar;
       var gracePeriodTaskId = 'gracePeriodID';
       var etag = 'eta';
 
@@ -1189,7 +1191,7 @@ describe('CalendarShell factory', function() {
       this.calEventAPIMock.get = function(_path) {
         expect(_path).to.equal(path);
 
-        return $q.when({data: vcalendar.toJSON()});
+        return $q.when({ data: vcalendar.toJSON() });
       };
 
       shell.getModifiedMaster(true).then(function(masterShell) {
@@ -1219,10 +1221,11 @@ describe('CalendarShell factory', function() {
 
       shell.getModifiedMaster().then(
         done.bind(this, 'this promise should have failed'),
-      function(_error) {
-        expect(_error).to.equal(error);
-        done();
-      });
+        function(_error) {
+          expect(_error).to.equal(error);
+          done();
+        }
+      );
 
       $rootScope.$apply();
     });
@@ -1231,7 +1234,7 @@ describe('CalendarShell factory', function() {
 
   describe('calendarId property', function() {
     it('should compute the id from the path', function() {
-      var event = CalendarShell.fromIncompleteShell({path: '/calendarHomeId/calendarId/events'});
+      var event = CalendarShell.fromIncompleteShell({ path: '/calendarHomeId/calendarId/events' });
 
       expect(event.calendarId).to.equal('calendarId');
     });
@@ -1239,7 +1242,7 @@ describe('CalendarShell factory', function() {
 
   describe('calendarHomeId property', function() {
     it('should compute the id from the path', function() {
-      var event = CalendarShell.fromIncompleteShell({path: '/calendarHomeId/calendarId/events'});
+      var event = CalendarShell.fromIncompleteShell({ path: '/calendarHomeId/calendarId/events' });
 
       expect(event.calendarHomeId).to.equal('calendarHomeId');
     });
@@ -1247,7 +1250,7 @@ describe('CalendarShell factory', function() {
 
   describe('calendarUniqueId property', function() {
     it('should be computed with calPathBuilder.forCalendarId function from calendar Home Id and Id', function() {
-      var event = CalendarShell.fromIncompleteShell({path: 'xxxxxxxxxxxx/calendarHomeId/calendarId/eventUid.ics'});
+      var event = CalendarShell.fromIncompleteShell({ path: 'xxxxxxxxxxxx/calendarHomeId/calendarId/eventUid.ics' });
 
       expect(event.calendarUniqueId).to.equal(calPathBuilder.forCalendarId('calendarHomeId', 'calendarId'));
     });
@@ -1275,7 +1278,7 @@ describe('CalendarShell factory', function() {
 
       this.calMasterEventCache.save = sinon.spy();
 
-      var masterEvent = CalendarShell.fromIncompleteShell({start: calMoment('2015-08-21 01:01')});
+      var masterEvent = CalendarShell.fromIncompleteShell({ start: calMoment('2015-08-21 01:01') });
 
       masterEvent.modifyOccurrence(nonMasterEvent);
 
@@ -1294,6 +1297,7 @@ describe('CalendarShell factory', function() {
 
     it('should replace the modified occurence in the vcalendar of the master shell if already there', function() {
       var recurrenceId = calMoment('1999-05-19 01:01');
+
       this.calMasterEventCache.save = sinon.spy();
 
       var nonMasterEvent = CalendarShell.fromIncompleteShell({
@@ -1305,7 +1309,8 @@ describe('CalendarShell factory', function() {
         start: calMoment('1983-05-25 01:01')
       });
 
-      var masterEvent = CalendarShell.fromIncompleteShell({start: calMoment('1983-05-25 01:01'), rrule: {freq: 'DAILY', count: 7}});
+      var masterEvent = CalendarShell.fromIncompleteShell({ start: calMoment('1983-05-25 01:01'), rrule: { freq: 'DAILY', count: 7 } });
+
       masterEvent.modifyOccurrence(nonMasterEvent);
 
       masterEvent.modifyOccurrence(nonMasterEventModified);
@@ -1326,7 +1331,7 @@ describe('CalendarShell factory', function() {
     it('should always replace an existing exception', function() {
       this.calMasterEventCache.save = sinon.spy();
 
-      var masterEvent = CalendarShell.fromIncompleteShell({summary: 'Test', start: calMoment('1983-05-25 01:01'), rrule: {freq: 'DAILY', count: 7}});
+      var masterEvent = CalendarShell.fromIncompleteShell({ summary: 'Test', start: calMoment('1983-05-25 01:01'), rrule: { freq: 'DAILY', count: 7 } });
 
       var instance = masterEvent.expand()[1];
 
@@ -1363,7 +1368,8 @@ describe('CalendarShell factory', function() {
 
       this.calMasterEventCache.save = sinon.spy();
 
-      var masterEvent = CalendarShell.fromIncompleteShell({start: calMoment('1983-05-25 01:01')});
+      var masterEvent = CalendarShell.fromIncompleteShell({ start: calMoment('1983-05-25 01:01') });
+
       masterEvent.modifyOccurrence(nonMasterEvent, true);
       expect(this.calMasterEventCache.save).to.not.have.been.called;
     });
@@ -1379,7 +1385,7 @@ describe('CalendarShell factory', function() {
         start: start
       });
 
-      var masterEvent = CalendarShell.fromIncompleteShell({start: recurrenceId});
+      var masterEvent = CalendarShell.fromIncompleteShell({ start: recurrenceId });
 
       expect(masterEvent.isRealException(nonMasterEventModified)).to.be.true;
     });
@@ -1391,7 +1397,7 @@ describe('CalendarShell factory', function() {
         start: start
       });
 
-      var masterEvent = CalendarShell.fromIncompleteShell({start: start});
+      var masterEvent = CalendarShell.fromIncompleteShell({ start: start });
 
       expect(masterEvent.isRealException(nonMasterEventNonModified)).to.be.false;
     });
@@ -1598,7 +1604,7 @@ describe('CalendarShell factory', function() {
       });
 
       try {
-        eventA.alarm = {attendeeEmail: 'test'};
+        eventA.alarm = { attendeeEmail: 'test' };
       } catch (e) {
         done();
       }
@@ -1612,7 +1618,7 @@ describe('CalendarShell factory', function() {
       });
 
       try {
-        eventA.alarm = {trigger: 'test'};
+        eventA.alarm = { trigger: 'test' };
       } catch (e) {
         done();
       }
@@ -1650,22 +1656,22 @@ describe('CalendarShell factory', function() {
 
     it('should update the alarm when any related information is updated', function() {
       var summary = 'Initial summary',
-          updatedSummary = 'Updated summary',
-          location = 'Initial location',
-          classProperty = 'Initial class',
-          updatedClass = 'Updated class',
-          updatedLocation = 'Updated location',
-          start = calMoment('2015-01-01 12:00'),
-          updatedStart = calMoment('2015-01-01 13:00'),
-          end = calMoment('2015-01-02 12:00'),
-          updatedEnd = calMoment('2015-01-02 13:00'),
-          event = CalendarShell.fromIncompleteShell({
-            start: start,
-            end: end,
-            location: location,
-            summary: summary,
-            class: classProperty
-          });
+        updatedSummary = 'Updated summary',
+        location = 'Initial location',
+        classProperty = 'Initial class',
+        updatedClass = 'Updated class',
+        updatedLocation = 'Updated location',
+        start = calMoment('2015-01-01 12:00'),
+        updatedStart = calMoment('2015-01-01 13:00'),
+        end = calMoment('2015-01-02 12:00'),
+        updatedEnd = calMoment('2015-01-02 13:00'),
+        event = CalendarShell.fromIncompleteShell({
+          start: start,
+          end: end,
+          location: location,
+          summary: summary,
+          class: classProperty
+        });
 
       event.alarm = { trigger: '-PT30M', attendee: 'test@open-paas.org' };
       expectAlarm(event, summary, location, 'Thu Jan 01 2015 12:00:00', 'Fri Jan 02 2015 12:00:00', classProperty);
@@ -1978,7 +1984,7 @@ describe('CalendarShell factory', function() {
         freq: 'WEEKLY'
       };
 
-      var shell = new CalendarShell.fromIncompleteShell({rrule: rrule});
+      var shell = new CalendarShell.fromIncompleteShell({ rrule: rrule });
 
       expect(shell.rrule.freq).to.be.equal('WEEKLY');
     });
@@ -1987,7 +1993,7 @@ describe('CalendarShell factory', function() {
       var rrule = {
         freq: 'WEEKLY'
       };
-      var shell = new CalendarShell.fromIncompleteShell({rrule: rrule});
+      var shell = new CalendarShell.fromIncompleteShell({ rrule: rrule });
 
       expect(shell.rrule).to.exist;
 

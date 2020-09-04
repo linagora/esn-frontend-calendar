@@ -2,5 +2,5 @@
 
 angular.module('esn.calendar')
   .component('calImportCalendarMenuItem', {
-    template: require("./import-calendar-menu-item.pug")
+    template: require('./import-calendar-menu-item.pug')
   });

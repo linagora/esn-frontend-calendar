@@ -52,14 +52,14 @@ describe('The CalSettingsDisplayController', function() {
   it('should get a list configurations from server on init', function() {
     var expectResult = { key1: 'value1', key2: 'value2' };
     var httpResponse = [
-        {
-          name: moduleName,
-          configurations: [{
-            name: 'workingDays',
-            value: null
-          }]
-        }
-      ];
+      {
+        name: moduleName,
+        configurations: [{
+          name: 'workingDays',
+          value: null
+        }]
+      }
+    ];
     var payload = [
       {
         name: moduleName,

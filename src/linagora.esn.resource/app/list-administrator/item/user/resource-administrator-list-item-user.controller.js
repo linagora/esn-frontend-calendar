@@ -4,15 +4,15 @@
   angular.module('linagora.esn.resource')
     .controller('ESNResourceAdministratorListItemUserController', ESNResourceAdministratorListItemUserController);
 
-    function ESNResourceAdministratorListItemUserController(userAPI) {
-      var self = this;
+  function ESNResourceAdministratorListItemUserController(userAPI) {
+    var self = this;
 
-      self.$onInit = $onInit;
+    self.$onInit = $onInit;
 
-      function $onInit() {
-        userAPI.user(self.administrator.id).then(function(user) {
-          self.administratorInfo = user.data;
-        });
-      }
+    function $onInit() {
+      userAPI.user(self.administrator.id).then(function(user) {
+        self.administratorInfo = user.data;
+      });
     }
+  }
 })(angular);

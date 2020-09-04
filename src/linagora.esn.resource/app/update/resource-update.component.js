@@ -10,6 +10,6 @@
       controller: 'ESNResourceUpdateModalController',
       controllerAs: 'ctrl',
       transclude: true,
-      template: require("./resource-update.pug")
+      template: require('./resource-update.pug')
     });
 })(angular);

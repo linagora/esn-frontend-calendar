@@ -57,7 +57,7 @@ describe('The request utility functions', function() {
 
     it('should pass the resolved response to the custom handler if there is one', function(done) {
       var data = { a: 'b' },
-          response = { status: 200, data: data };
+        response = { status: 200, data: data };
 
       expectResolve(calHttpResponseHandler(200, function(response) {
         return response.data;

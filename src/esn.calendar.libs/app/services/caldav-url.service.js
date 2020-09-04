@@ -1,5 +1,6 @@
 const _ = require('lodash');
-require('../services/path-parser.service.js');
+
+require('./path-parser.service.js');
 
 (function(angular) {
   'use strict';
@@ -39,7 +40,7 @@ require('../services/path-parser.service.js');
             return getDefaultURL();
           }
 
-          var davserver = _.find(configurations, {name: DAVSERVER_CONFIGURATION});
+          var davserver = _.find(configurations, { name: DAVSERVER_CONFIGURATION });
 
           if (!davserver) {
             $log.debug('davserver configuration is not set');

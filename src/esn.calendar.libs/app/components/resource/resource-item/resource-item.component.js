@@ -9,5 +9,5 @@ angular.module('esn.calendar.libs')
     },
     controller: 'CalResourceItemController',
     controllerAs: 'ctrl',
-    template: require("./resource-item.pug")
+    template: require('./resource-item.pug')
   });

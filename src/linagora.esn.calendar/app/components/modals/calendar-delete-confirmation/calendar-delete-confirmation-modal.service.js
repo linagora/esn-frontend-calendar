@@ -7,7 +7,7 @@
   function calCalendarDeleteConfirmationModalService($modal) {
     return function(calendar, onConfirm) {
       return $modal({
-        template: require("./calendar-delete-confirmation-modal.pug"),
+        template: require('./calendar-delete-confirmation-modal.pug'),
         controller: function() {
           this.calendarName = calendar.name;
           this.delete = onConfirm;

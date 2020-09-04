@@ -1,7 +1,8 @@
 const _ = require('lodash');
-require('../services/dav-request.js');
-require('../services/http-response-handler.js');
-require('../services/path-builder.js');
+
+require('./dav-request.js');
+require('./http-response-handler.js');
+require('./path-builder.js');
 
 (function(angular) {
   'use strict';

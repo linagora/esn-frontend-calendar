@@ -7,7 +7,7 @@
   function calCalendarPlanningAside($rootScope, $timeout) {
     var directive = {
       restrict: 'E',
-      template: require("./calendar-planning-aside.pug"),
+      template: require('./calendar-planning-aside.pug'),
       link: link
     };
 
