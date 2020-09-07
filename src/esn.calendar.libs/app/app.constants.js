@@ -378,23 +378,6 @@
       DESKTOP: 45
     })
 
-    .constant('CAL_MODULE_METADATA', {
-      id: 'linagora.esn.calendar',
-      title: 'Calendar',
-      icon: '/calendar/images/calendar-icon.svg',
-      homePage: 'calendar.main',
-      config: {
-        template: 'calendar-config-form',
-        displayIn: {
-          user: false,
-          domain: true,
-          platform: true
-        }
-      },
-      disableable: true,
-      isDisplayedByDefault: true
-    })
-
     .constant('CAL_WEBSOCKET', {
       NAMESPACE: '/calendars',
       EVENT: {

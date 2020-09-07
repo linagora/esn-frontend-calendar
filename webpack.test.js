@@ -39,7 +39,6 @@ module.exports = merge(commons, {
           path.resolve(__dirname, 'node_modules/esn-frontend-common-libs/src/frontend/js/modules/user/user.run.js'),
           path.resolve(__dirname, 'src/app/app.run.js'),
           path.resolve(__dirname, 'src/linagora.esn.calendar/app/search/search.run.js'),
-          path.resolve(__dirname, 'src/linagora.esn.calendar/app/module-registry.run.js'),
           path.resolve(__dirname, 'src/linagora.esn.calendar/app/configuration/configuration.run.js'),
           path.resolve(__dirname, 'src/linagora.esn.calendar/app/services/cal-default-value.run.js'),
           path.resolve(__dirname, 'src/linagora.esn.calendar/app/services/websocket/listener.run.js'),
