@@ -50,7 +50,7 @@ function CalCalendarImportController(
   }
 
   function importFromFile() {
-    const OPENPAAS_URL = process.env.OPENPAAS_URL || 'http://localhost:8080';
+    const OPENPAAS_URL = window.location.origin;
     const esnDavImportClient = new ESNDavImportClient(fileUploadService.uploadFile, OPENPAAS_URL);
 
     return esnDavImportClient.importFromFile(self.file, self.calendar.href);
