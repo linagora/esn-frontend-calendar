@@ -15,16 +15,16 @@ function calUIAuthorizationService(
 ) {
 
   return {
-    canAccessEventDetails: canAccessEventDetails,
-    canDeleteCalendar: canDeleteCalendar,
-    canExportCalendarIcs: canExportCalendarIcs,
-    canImportCalendarIcs: canImportCalendarIcs,
-    canModifyCalendarProperties: canModifyCalendarProperties,
-    canModifyEvent: canModifyEvent,
-    canModifyEventAttendees: canModifyEventAttendees,
-    canModifyEventRecurrence: canModifyEventRecurrence,
-    canModifyPublicSelection: canModifyPublicSelection,
-    canShowDelegationTab: canShowDelegationTab
+    canAccessEventDetails,
+    canDeleteCalendar,
+    canExportCalendarIcs,
+    canImportCalendarIcs,
+    canModifyCalendarProperties,
+    canModifyEvent,
+    canModifyEventAttendees,
+    canModifyEventRecurrence,
+    canModifyPublicSelection,
+    canShowDelegationTab
   };
 
   ////////////
