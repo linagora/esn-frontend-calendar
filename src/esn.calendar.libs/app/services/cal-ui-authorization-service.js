@@ -43,7 +43,7 @@ function calUIAuthorizationService(
   }
 
   function canImportCalendarIcs(calendar, userId) {
-    return !!calendar && calendar.isOwner(userId) && !calendar.isSubscription() && !calendar.isPublic();
+    return !!calendar && calendar.isOwner(userId) && !calendar.isSubscription();
   }
 
   function canModifyEvent(calendar, event, userId) {

@@ -602,7 +602,7 @@ describe('The calUIAuthorizationService service', function() {
   });
 
   describe('The canImportCalendarIcs function', function() {
-    var calendar;
+    let calendar;
 
     beforeEach(function() {
       userId = 'userId';
@@ -612,30 +612,42 @@ describe('The calUIAuthorizationService service', function() {
       expect(calUIAuthorizationService.canImportCalendarIcs()).to.be.false;
     });
 
-    it('should return true if user is the owner of the calendar', function() {
-      calendar = {
-        isOwner: sinon.stub().returns(true),
-        isReadable: sinon.stub().returns(true),
-        isSubscription: sinon.stub().returns(false),
-        isPublic: sinon.stub().returns(false)
-      };
-      var result = calUIAuthorizationService.canImportCalendarIcs(calendar, userId);
-
-      expect(calendar.isOwner).to.have.been.calledWith(userId);
-      expect(result).to.be.true;
-    });
-
     it('should return false if user is not the owner of the calendar', function() {
       calendar = {
         isOwner: sinon.stub().returns(false),
-        isReadable: sinon.stub().returns(false),
-        isSubscription: sinon.stub().returns(false),
-        isPublic: sinon.stub().returns(false)
+        isSubscription: sinon.stub().returns(false)
       };
-      var result = calUIAuthorizationService.canImportCalendarIcs(calendar, userId);
+      const result = calUIAuthorizationService.canImportCalendarIcs(calendar, userId);
 
       expect(calendar.isOwner).to.have.been.calledWith(userId);
+      expect(calendar.isSubscription).to.not.have.been.called;
       expect(result).to.be.false;
+    });
+
+    describe('When user is the owner is the calendar', function() {
+      beforeEach(function() {
+        calendar = {
+          isOwner: sinon.stub().returns(true)
+        };
+      });
+
+      it('should return false if calendar is a subscription instance', function() {
+        calendar.isSubscription = sinon.stub().returns(true);
+        const result = calUIAuthorizationService.canImportCalendarIcs(calendar, userId);
+
+        expect(calendar.isOwner).to.have.been.calledWith(userId);
+        expect(calendar.isSubscription).to.have.been.calledOnce;
+        expect(result).to.be.false;
+      });
+
+      it('should return true if calendar is not a subscription instance', function() {
+        calendar.isSubscription = sinon.stub().returns(false);
+        const result = calUIAuthorizationService.canImportCalendarIcs(calendar, userId);
+
+        expect(calendar.isOwner).to.have.been.calledWith(userId);
+        expect(calendar.isSubscription).to.have.been.calledOnce;
+        expect(result).to.be.true;
+      });
     });
   });
 });
