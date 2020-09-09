@@ -85,7 +85,8 @@ module.exports = {
         '/calendar/app',
         '/calendar/api',
         '/linagora.esn.resource/api',
-        '/linagora.esn.dav.import/api'
+        '/linagora.esn.dav.import/api',
+        '/group/api'
       ],
       target: OPENPAAS_URL,
       disableHostCheck: true,

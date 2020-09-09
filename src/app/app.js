@@ -10,7 +10,9 @@ angular.module('esnApp', [
   'esn.login',
   'esn.i18n',
   'esn.material',
-  'openpaas-logo'
+  'linagora.esn.group',
+  'openpaas-logo',
+  'ngTagsInput'
 ]);
 
 require('esn-frontend-common-libs/src/frontend/js/modules/session');
@@ -19,6 +21,31 @@ require('esn-frontend-common-libs/src/frontend/js/modules/config/config.module')
 require('esn-frontend-common-libs/src/frontend/js/modules/i18n/i18n.module');
 require('esn-frontend-common-libs/src/frontend/js/modules/login');
 require('esn-frontend-common-libs/src/frontend/js/modules/material/material.module');
+
+angular.module('linagora.esn.group', [
+  'op.dynamicDirective',
+  'restangular',
+  'esn.router',
+  'esn.member',
+  'esn.http',
+  'esn.infinite-list',
+  'esn.core',
+  'esn.user',
+  'esn.async-action',
+  'esn.session',
+  'esn.attendee',
+  'esn.scroll',
+  'esn.ui',
+  'esn.i18n',
+  'esn.header',
+  'ngTagsInput'
+]);
+require('esn-frontend-group/src/app/app.constants');
+require('esn-frontend-group/src/app/app.config');
+require('esn-frontend-group/src/app/app.run');
+
+require('esn-frontend-group/src/app/common/group-member-resolver.service');
+require('esn-frontend-group/src/app/attendee/group.attendee-provider.service');
 
 require('../esn.resource.libs/app/app.module.js');
 require('../esn.calendar.libs/app/app.module.js');
