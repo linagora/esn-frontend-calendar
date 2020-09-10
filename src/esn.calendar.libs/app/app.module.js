@@ -200,3 +200,5 @@ require('./components/event-recurrence-edition/event-recurrence-edition.js');
 require('./components/event-alarm-edition/event-alarm-edition.component.js');
 require('./components/event-alarm-edition/event-alarm-edition.controller.js');
 require('./app.run.js');
+require('./app.config.js');
+
