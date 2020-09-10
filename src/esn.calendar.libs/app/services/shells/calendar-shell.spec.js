@@ -1879,7 +1879,7 @@ describe('CalendarShell factory', function() {
       }]);
     });
 
-    it('should not change organizer partstat', function() {
+    it('should change organizer partstat', function() {
       shell.attendees = [{
         email: 'user1@demo.open-paas.org',
         partstat: 'NEEDS-ACTION'
@@ -1891,10 +1891,10 @@ describe('CalendarShell factory', function() {
         email: 'user1@demo.open-paas.org',
         displayName: 'user1'
       };
-      expect(shell.changeParticipation('ACCEPTED')).to.be.false;
+      expect(shell.changeParticipation('ACCEPTED')).to.be.true;
       expect(shell.attendees).to.shallowDeepEqual([{
         email: 'user1@demo.open-paas.org',
-        partstat: 'NEEDS-ACTION'
+        partstat: 'ACCEPTED'
       }, {
         email: 'user2@demo.open-paas.org',
         partstat: 'ACCEPTED'
@@ -1942,7 +1942,7 @@ describe('CalendarShell factory', function() {
         }]);
       });
 
-      it('should not change organizer partstat', function() {
+      it('should change organizer partstat', function() {
         shell.attendees = [{
           email: 'user1@demo.open-paas.org',
           partstat: 'NEEDS-ACTION'
@@ -1954,10 +1954,10 @@ describe('CalendarShell factory', function() {
           email: 'user1@demo.open-paas.org',
           displayName: 'user1'
         };
-        expect(shell.changeParticipation('ACCEPTED'), ['user1@demo.open-paas.org']).to.be.false;
+        expect(shell.changeParticipation('ACCEPTED'), ['user1@demo.open-paas.org']).to.be.true;
         expect(shell.attendees).to.shallowDeepEqual([{
           email: 'user1@demo.open-paas.org',
-          partstat: 'NEEDS-ACTION'
+          partstat: 'ACCEPTED'
         }, {
           email: 'user2@demo.open-paas.org',
           partstat: 'ACCEPTED'

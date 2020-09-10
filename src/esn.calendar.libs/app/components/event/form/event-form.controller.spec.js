@@ -1539,6 +1539,24 @@ describe('The CalEventFormController controller', function() {
 
             done();
           });
+
+          it('should call changeParticipation and broadcast on CAL_EVENTS.EVENT_ATTENDEES_UPDATE', function(done) {
+            this.scope.$on(this.CAL_EVENTS.EVENT_ATTENDEES_UPDATE, function() {
+              expect(this.scope.calendarOwnerAsAttendee).to.deep.equal({
+                email: 'owner@test.com',
+                partstat: 'ACCEPTED'
+              });
+              expect(this.scope.editedEvent.changeParticipation).to.have.been.calledWith('ACCEPTED', ['owner@test.com']);
+
+              done();
+            }.bind(this));
+
+            this.scope.editedEvent.changeParticipation = sinon.spy();
+            this.scope.calendarOwnerAsAttendee = {
+              email: 'owner@test.com'
+            };
+            this.scope.changeParticipation('ACCEPTED');
+          });
         });
       });
 

@@ -292,9 +292,7 @@ function CalEventFormController(
         return;
       }
 
-      if (!$scope.canModifyEvent) {
-        calPartstatUpdateNotificationService(partstat);
-      }
+      calPartstatUpdateNotificationService(partstat);
     }, function() {
       _displayNotification(notificationFactory.weakError, 'Event participation modification failed', 'Please refresh your calendar');
     }).finally(function() {
@@ -384,8 +382,10 @@ function CalEventFormController(
     $scope.calendarOwnerAsAttendee.partstat = status;
     if ($scope.editedEvent.organizer && $scope.calendarOwnerAsAttendee.email === $scope.editedEvent.organizer.email) {
       if (status !== $scope.editedEvent.getOrganizerPartStat()) {
-        $scope.editedEvent.setOrganizerPartStat(status);
+        $scope.editedEvent.changeParticipation(status, [$scope.calendarOwnerAsAttendee.email]);
         $scope.$broadcast(CAL_EVENTS.EVENT_ATTENDEES_UPDATE);
+
+        _changeParticipationAsAttendee();
       }
     } else if ($scope.editedEvent.isInstance()) {
       $modal({
