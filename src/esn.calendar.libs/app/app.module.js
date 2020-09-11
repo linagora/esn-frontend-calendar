@@ -3,7 +3,6 @@
 angular.module('esn.calendar.libs', [
   'AngularJstz',
   'angularMoment',
-  'esn.mailto-handler',
   'esn.aggregator',
   'esn.authentication',
   'esn.avatar',

@@ -102,7 +102,7 @@ require('esn-frontend-common-libs/src/frontend/js/modules/onscroll/on-scroll.mod
 require('esn-frontend-common-libs/src/frontend/js/modules/localstorage.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/scroll.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/previous-page.js');
-
+require('esn-frontend-mailto-handler/src/index.js');
 require('../../esn.calendar.libs/app/app.module.js');
 
 require('./app.config.js');
