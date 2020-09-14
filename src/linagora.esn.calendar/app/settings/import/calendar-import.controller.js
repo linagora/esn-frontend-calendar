@@ -12,7 +12,8 @@ function CalCalendarImportController(
   calendarService,
   calendarHomeService,
   calUIAuthorizationService,
-  session
+  session,
+  esnApiClient
 ) {
   var self = this;
 
@@ -50,8 +51,7 @@ function CalCalendarImportController(
   }
 
   function importFromFile() {
-    const OPENPAAS_URL = window.location.origin;
-    const esnDavImportClient = new ESNDavImportClient(fileUploadService.uploadFile, OPENPAAS_URL);
+    const esnDavImportClient = new ESNDavImportClient({ esnApiClient, uploadFile: fileUploadService.uploadFile });
 
     return esnDavImportClient.importFromFile(self.file, self.calendar.href);
   }
