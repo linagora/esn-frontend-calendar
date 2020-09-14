@@ -56,7 +56,8 @@ angular.module('esn.calendar', [
   'angular-clockpicker',
   'linagora.esn.videoconference',
   'linagora.esn.videoconference.calendar',
-  'esn.calendar.libs'
+  'esn.calendar.libs',
+  'esn.api-client'
 ]);
 
 require('esn-frontend-common-libs/src/frontend/js/modules/esn.router.js');
@@ -102,6 +103,7 @@ require('esn-frontend-common-libs/src/frontend/js/modules/onscroll/on-scroll.mod
 require('esn-frontend-common-libs/src/frontend/js/modules/localstorage.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/scroll.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/previous-page.js');
+require('esn-frontend-common-libs/src/frontend/js/modules/esn.api-client.js');
 require('esn-frontend-mailto-handler/src/index.js');
 require('../../esn.calendar.libs/app/app.module.js');
 
