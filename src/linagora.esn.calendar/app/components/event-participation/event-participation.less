@@ -1,11 +1,18 @@
 .cal-participation-btn-group {
+  .btn-group {
+    box-shadow: none !important;
+  }
+
   .btn {
     font-size: 13px;
-    border-left: 1px solid;
-    border-right: 1px solid;
-    border-color: @darkenBgColor;
     text-transform: none;
     padding: 6px;
+    margin-right: 2px !important;
+    margin-left: 2px !important;
+    
+    &:hover {
+      background-color: @darkenBgColor;
+    }
 
     i.mdi {
       margin-right: 4px;
@@ -17,6 +24,13 @@
       &.mdi-help {
         font-size: 15px;
         bottom: 1px;
+        color: #2196F3;
+      }
+      &.mdi-check {
+        color: #4CAF50 ;
+      }
+      &.mdi-close {
+        color: #F44336;
       }
     }
 
