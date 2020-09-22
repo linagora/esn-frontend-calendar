@@ -27,10 +27,13 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
     self.full24HoursDay = self.event.full24HoursDay;
 
     self.start = calMoment(self.event.start);
+    self.startTime = self.start.toDate();
     // In CalDAV backend, the end date of an all-day event is stored +1 day compared to the end date when a user saves the event.
     // Therefore, if this is an all-day event, we need to display -1 day for the end date input.
     self.end = !self.full24HoursDay ? calMoment(self.event.end) : calMoment(self.event.end).subtract(1, 'days');
-
+    self.endTime = self.end.toDate();
+    // initiate the time input with the event start and end time
+    _initEventTimeInput();
     // On load, ensure the duration between start and end is calculated
     _calcDateDiff();
     _updateMinEndDate();
@@ -76,6 +79,8 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
   }
 
   function onStartDateChange() {
+    _setDateStartTime();
+
     if (!self.start || !self.start.isValid()) {
       return;
     }
@@ -98,6 +103,8 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
   }
 
   function onEndDateChange() {
+    _setDateEndTime();
+
     if (!self.end || !self.end.isValid()) {
       return;
     }
@@ -114,6 +121,7 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
   }
 
   function onEndDateTimeChange() {
+    _setDateEndTime();
     _checkAndForceEndAfterStart();
     _calcDateDiff();
     _syncEventDateTime();
@@ -163,5 +171,36 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
 
   function _updateMinEndDate() {
     self.minEndDate = getMinEndDate();
+  }
+
+  function _initEventTimeInput() {
+    self.startTime.setHours(self.start.hour());
+    self.startTime.setMinutes(self.start.minute());
+    self.endTime.setHours(self.end.hour());
+    self.endTime.setMinutes(self.end.minute());
+  }
+
+  function _getDateHoursAndMinutes(date) {
+    return date.getTime() ?
+      { hours: date.getHours(), minutes: date.getMinutes() } :
+      { hours: 0, minutes: 0 };
+  }
+
+  function _setDateStartTime() {
+    const selectedStartTime = _getDateHoursAndMinutes(self.startTime);
+
+    self.start.set({
+      hour: selectedStartTime.hours,
+      minute: selectedStartTime.minutes
+    });
+  }
+
+  function _setDateEndTime() {
+    const selectedEndTime = _getDateHoursAndMinutes(self.endTime);
+
+    self.end.set({
+      hour: selectedEndTime.hours,
+      minute: selectedEndTime.minutes
+    });
   }
 }
