@@ -59,7 +59,7 @@ function CalCalendarImportController(
   function submit() {
     var notificationMessages = {
       progressing: 'Submitting importing calendar request...',
-      success: 'Request submitted',
+      success: 'An email will be sent when the import is finished',
       failure: 'Failed to submit request'
     };
 
