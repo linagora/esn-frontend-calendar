@@ -1,3 +1,5 @@
+require('./app/app.mocks.js');
+
 require('fullcalendar/dist/fullcalendar.js');
 require('fullcalendar/dist/locale-all.js');
 
