@@ -46,7 +46,8 @@ angular.module('esn.calendar.libs', [
   'esn.localstorage',
   'esn.scroll',
   'ngTagsInput',
-  'esn.member'
+  'esn.member',
+  'mp.autoFocus'
 ]);
 
 require('esn-frontend-common-libs/src/frontend/js/modules/esn.router.js');
