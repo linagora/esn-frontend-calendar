@@ -24,7 +24,14 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
             .col-xs-12
               .form-group
                 .fg-line
-                  input.input.title.form-control(type="text", ng-model='editedEvent.title', ng-model-options="{getterSetter: true}", maxlength="{{::CAL_EVENT_FORM.title.maxlength}}", placeholder="{{ 'Title' | translate }}", ng-readonly="!canModifyEvent")
+                  input.input.title.form-control(
+                    type="text",
+                    ng-model='editedEvent.title',
+                    ng-model-options="{getterSetter: true}",
+                    maxlength="{{::CAL_EVENT_FORM.title.maxlength}}",
+                    placeholder="{{ 'Title' | translate }}",
+                    ng-readonly="!canModifyEvent",
+                    auto-focus)
             .col-xs-12(ng-if='displayParticipationButton')
               .partstat
                 cal-partstat-buttons(event="event", change-partstat="changeParticipation(partstat)" show-date-suggestion="toggleSuggestedEvent()")
