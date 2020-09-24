@@ -43,7 +43,7 @@
 
     function set() {
       if (self.selected) {
-        self.color = self.CAL_LIST_OF_COLORS[self.selected];
+        self.color = self.selected in self.CAL_LIST_OF_COLORS ? self.CAL_LIST_OF_COLORS[self.selected] : self.selected;
       }
     }
 
@@ -58,7 +58,6 @@
     function openModal() {
       var colorHex = self.color.toUpperCase();
 
-      self.selected = undefined;
       angular.forEach(CAL_LIST_OF_COLORS, function(value, key) {
         if (colorHex === value) {
           self.selected = key;

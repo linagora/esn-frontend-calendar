@@ -47,5 +47,17 @@ describe('The calendar color picker component', function() {
     expect(this.eleScope.vm.selected).to.be.undefined;
   });
 
-});
+  it('should set color to hex value if select a default color', function() {
+    this.initDirective(this.$scope);
+    this.eleScope.vm.selected = 'indigo';
+    this.eleScope.vm.set();
+    expect(this.eleScope.vm.color).to.be.equal('#3F51B5');
+  });
 
+  it('should set color to hex value if select a random color', function() {
+    this.initDirective(this.$scope);
+    this.eleScope.vm.selected = '#3F51B5';
+    this.eleScope.vm.set();
+    expect(this.eleScope.vm.color).to.be.equal('#3F51B5');
+  });
+});
