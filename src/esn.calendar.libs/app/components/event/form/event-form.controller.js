@@ -325,6 +325,9 @@ function CalEventFormController(
     if ($scope.event.rrule && !$scope.event.rrule.equals($scope.editedEvent.rrule)) {
       $scope.editedEvent.deleteAllException();
     }
+    if ($scope.event.alarm && !$scope.editedEvent.alarm) {
+      $scope.editedEvent.alarm = $scope.event.alarm;
+    }
 
     return $q.when()
       .then(cacheAttendees)

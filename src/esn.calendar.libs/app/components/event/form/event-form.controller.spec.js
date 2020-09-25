@@ -343,6 +343,39 @@ describe('The CalEventFormController controller', function() {
         expect(calEventFreeBusyConfirmationModalService).to.not.have.been.called;
       });
 
+      it('should test if alarm is undefined in modifyEvent', function(done) {
+        const expectedAlarm = {
+          trigger: this.CAL_ALARM_TRIGGER[1].value,
+          attendee: 'test@open-paas.org'
+        };
+
+        this.calEventUtils.isNew = function() { return false; };
+        this.scope.event = this.CalendarShell.fromIncompleteShell({
+          path: '/calendars/' + owner._id + '/' + this.calendars[1].id + '/eventID',
+          title: 'title',
+          start: this.moment('2013-02-08 12:30'),
+          end: this.moment('2013-02-08 13:30'),
+          location: 'aLocation',
+          alarm: expectedAlarm
+        });
+
+        calEventServiceMock.modifyEvent = function() {
+          done();
+        };
+        this.initController();
+        this.scope.editedEvent = this.scope.event.clone();
+        this.scope.editedEvent.title = 'newTitle';
+        this.scope.calendar = {
+          id: 'calendarId'
+        };
+        this.scope.submit();
+
+        this.rootScope.$digest();
+
+        expect(this.scope.editedEvent.alarm).to.not.be.undefined;
+        expect(this.scope.editedEvent.alarm).to.equal(expectedAlarm);
+      });
+
       it('should call calEventFreeBusyConfirmationModalService when some attendees are busy', function() {
         this.scope.event = this.CalendarShell.fromIncompleteShell({
           start: start,
