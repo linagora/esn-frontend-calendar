@@ -435,9 +435,15 @@ angular.module('esn.calendar.libs')
         aliasTo: 'Etc/UTC'
       }
     },
+    // If you need to add a new timezone, please refer to http://tzurl.org.
     zones: {
       'Etc/UTC': {
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Etc/UTC\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0000\r\nTZOFFSETTO:+0000\r\nTZNAME:UTC\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
+        latitude: '+0000000',
+        longitude: '+0000000'
+      },
+      UTC: {
+        ics: 'BEGIN:VTIMEZONE\r\nTZID:UTC\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0000\r\nTZOFFSETTO:+0000\r\nTZNAME:UTC\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
         latitude: '+0000000',
         longitude: '+0000000'
       },
@@ -1281,6 +1287,11 @@ angular.module('esn.calendar.libs')
         latitude: '+0182806',
         longitude: '-0660622'
       },
+      'America/Punta_Arenas': {
+        ics: 'BEGIN:VTIMEZONE\r\nTZID:America/Punta_Arenas\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:-0300\r\nTZOFFSETTO:-0300\r\nTZNAME:-03\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
+        latitude: '-0531500',
+        longitude: '-0709100'
+      },
       'America/Rainy_River': {
         ics: 'BEGIN:VTIMEZONE\r\nTZID:America/Rainy_River\r\nBEGIN:DAYLIGHT\r\nTZOFFSETFROM:-0600\r\nTZOFFSETTO:-0500\r\nTZNAME:CDT\r\nDTSTART:19700308T020000\r\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\r\nEND:DAYLIGHT\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:-0500\r\nTZOFFSETTO:-0600\r\nTZNAME:CST\r\nDTSTART:19701101T020000\r\nRRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\r\nEND:STANDARD\r\nEND:VTIMEZONE',
         latitude: '+0484300',
@@ -1511,6 +1522,11 @@ angular.module('esn.calendar.libs')
         latitude: '+0644500',
         longitude: '+1772900'
       },
+      'Asia/Atyrau': {
+        ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Atyrau\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0500\r\nTZOFFSETTO:+0500\r\nTZNAME:+05\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
+        latitude: '+0471200',
+        longitude: '+0518800'
+      },
       'Asia/Aqtau': {
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Aqtau\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0500\r\nTZOFFSETTO:+0500\r\nTZNAME:AQTT\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
         latitude: '+0443100',
@@ -1605,6 +1621,11 @@ angular.module('esn.calendar.libs')
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Dushanbe\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0500\r\nTZOFFSETTO:+0500\r\nTZNAME:TJT\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
         latitude: '+0383500',
         longitude: '+0684800'
+      },
+      'Asia/Famagusta': {
+        ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Famagusta\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0300\r\nTZOFFSETTO:+0200\r\nTZNAME:EET\r\nDTSTART:19701025T040000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
+        latitude: '+0351210',
+        longitude: '+0339390'
       },
       'Asia/Gaza': {
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Gaza\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0300\r\nTZOFFSETTO:+0200\r\nTZNAME:EET\r\nDTSTART:19701023T000000\r\nRRULE:FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=21,22,23,24,25,26,27;BYDAY=FR\r\nEND:STANDARD\r\nBEGIN:DAYLIGHT\r\nTZOFFSETFROM:+0200\r\nTZOFFSETTO:+0300\r\nTZNAME:EEST\r\nDTSTART:19700328T010000\r\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SA\r\nEND:DAYLIGHT\r\nEND:VTIMEZONE',
@@ -1776,6 +1797,11 @@ angular.module('esn.calendar.libs')
         latitude: '+0251700',
         longitude: '+0513200'
       },
+      'Asia/Qostanay': {
+        ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Qostanay\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0500\r\nTZOFFSETTO:+0500\r\nTZNAME:UZT\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
+        latitude: '+0532100',
+        longitude: '+0636200'
+      },
       'Asia/Qyzylorda': {
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Qyzylorda\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0600\r\nTZOFFSETTO:+0600\r\nTZNAME:QYZT\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
         latitude: '+0444800',
@@ -1851,6 +1877,11 @@ angular.module('esn.calendar.libs')
         latitude: '+0353916',
         longitude: '+1394441'
       },
+      'Asia/Tomsk': {
+        ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Tomsk\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0700\r\nTZOFFSETTO:+0700\r\nTZNAME:+07\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
+        latitude: '+0585000',
+        longitude: '+0825000'
+      },
       'Asia/Ulaanbaatar': {
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Ulaanbaatar\r\nBEGIN:DAYLIGHT\r\nTZOFFSETFROM:+0800\r\nTZOFFSETTO:+0900\r\nTZNAME:ULAST\r\nDTSTART:19700328T020000\r\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SA\r\nEND:DAYLIGHT\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0900\r\nTZOFFSETTO:+0800\r\nTZNAME:ULAT\r\nDTSTART:19700926T000000\r\nRRULE:FREQ=YEARLY;BYMONTH=9;BYDAY=-1SA\r\nEND:STANDARD\r\nEND:VTIMEZONE',
         latitude: '+0475500',
@@ -1880,6 +1911,11 @@ angular.module('esn.calendar.libs')
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Yakutsk\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0900\r\nTZOFFSETTO:+0900\r\nTZNAME:YAKT\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
         latitude: '+0620000',
         longitude: '+1294000'
+      },
+      'Asia/Yangon': {
+        ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Yangon\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0630\r\nTZOFFSETTO:+0630\r\nTZNAME:+0630\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
+        latitude: '+0168100',
+        longitude: '+0961600'
       },
       'Asia/Yekaterinburg': {
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Asia/Yekaterinburg\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0500\r\nTZOFFSETTO:+0500\r\nTZNAME:YEKT\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
@@ -2111,6 +2147,11 @@ angular.module('esn.calendar.libs')
         latitude: '+0502600',
         longitude: '+0303100'
       },
+      'Europe/Kirov': {
+        ics: 'BEGIN:VTIMEZONE\r\nTZID:Europe/Kirov\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0300\r\nTZOFFSETTO:+0300\r\nTZNAME:+03\r\nDTSTART:19700329T030000\r\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\r\nEND:DAYLIGHT\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0300\r\nTZOFFSETTO:+0200\r\nTZNAME:EET\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
+        latitude: '+0580000',
+        longitude: '+0580000'
+      },
       'Europe/Lisbon': {
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Europe/Lisbon\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0100\r\nTZOFFSETTO:+0000\r\nTZNAME:WET\r\nDTSTART:19701025T020000\r\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\r\nEND:STANDARD\r\nBEGIN:DAYLIGHT\r\nTZOFFSETFROM:+0000\r\nTZOFFSETTO:+0100\r\nTZNAME:WEST\r\nDTSTART:19700329T010000\r\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\r\nEND:DAYLIGHT\r\nEND:VTIMEZONE',
         latitude: '+0384300',
@@ -2205,6 +2246,11 @@ angular.module('esn.calendar.libs')
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Europe/San_Marino\r\nBEGIN:DAYLIGHT\r\nTZOFFSETFROM:+0100\r\nTZOFFSETTO:+0200\r\nTZNAME:CEST\r\nDTSTART:19700329T020000\r\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\r\nEND:DAYLIGHT\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0200\r\nTZOFFSETTO:+0100\r\nTZNAME:CET\r\nDTSTART:19701025T030000\r\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\r\nEND:STANDARD\r\nEND:VTIMEZONE',
         latitude: '+0435500',
         longitude: '+0122800'
+      },
+      'Europe/Saratov': {
+        ics: 'BEGIN:VTIMEZONE\r\nTZID:Europe/Saratov\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0400\r\nTZOFFSETTO:+0400\r\nTZNAME:+04\r\nDTSTART:19700101T000000\r\nEND:STANDARD\r\nEND:VTIMEZONE',
+        latitude: '+0515400',
+        longitude: '+0460100'
       },
       'Europe/Sarajevo': {
         ics: 'BEGIN:VTIMEZONE\r\nTZID:Europe/Sarajevo\r\nBEGIN:DAYLIGHT\r\nTZOFFSETFROM:+0100\r\nTZOFFSETTO:+0200\r\nTZNAME:CEST\r\nDTSTART:19700329T020000\r\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\r\nEND:DAYLIGHT\r\nBEGIN:STANDARD\r\nTZOFFSETFROM:+0200\r\nTZOFFSETTO:+0100\r\nTZNAME:CET\r\nDTSTART:19701025T030000\r\nRRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\r\nEND:STANDARD\r\nEND:VTIMEZONE',
