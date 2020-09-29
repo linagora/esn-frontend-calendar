@@ -1,0 +1,26 @@
+md-menu(md-offset="10 60", time-select-menu-close="$mdMenu.close()")
+  .form-group(ng-class="{ 'has-error': !ctrl.isInputValid }")
+    input.input.form-control(
+      ng-model="ctrl.selectedTime",
+      type="text",
+      size="10",
+      ng-click="$mdMenu.open()",
+      ng-change="ctrl.onSelectedTimeChange()",
+      ng-blur="ctrl.onTimeSelectBlur()"
+    )
+  md-menu-content(
+    width="3",
+    ng-mouseleave="$mdMenu.close()",
+    time-select-scroll
+  )
+    md-menu-item(
+      ng-repeat='option in ctrl.timeOptions',
+      ng-class="{ 'active-item': ctrl.selectedTime === option }",
+    )
+      md-button.time-option(
+        ng-click="ctrl.onSetSelectedTime(option)",
+        ng-class="{ 'md-primary': ctrl.selectedTime === option }",
+        md-no-ink
+      )
+        span(md-menu-align-target)
+        |  {{ option }}
