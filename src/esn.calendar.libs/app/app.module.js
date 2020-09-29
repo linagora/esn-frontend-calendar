@@ -199,6 +199,9 @@ require('./components/partstat/icon/partstat-icon.controller.js');
 require('./components/event-recurrence-edition/event-recurrence-edition.js');
 require('./components/event-alarm-edition/event-alarm-edition.component.js');
 require('./components/event-alarm-edition/event-alarm-edition.controller.js');
+require('./components/time-select/time-select.component');
+require('./components/time-select/time-select.controller');
+require('./components/time-select/time-select-scroll.directive');
+require('./components/time-select/time-select-menu-close.directive');
 require('./app.run.js');
 require('./app.config.js');
-
