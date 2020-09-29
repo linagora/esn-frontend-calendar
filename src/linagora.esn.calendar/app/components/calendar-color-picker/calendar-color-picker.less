@@ -9,11 +9,47 @@
     margin: 3px;
     .all-centered;
   }
+  .square-box-color-picker{
+    .all-centered;
+    margin: 3px;
+    border: 2px dashed #B5B5B5;
+    padding: 1px;
+  }
   .color-box {
     width: 36px;
     height: 36px;
   }
   .selected {
     border: 1px solid @m-red;
+  }
+  .calendar-theme-color-picker{
+    .all-centered;
+    width: 36px;
+    height: 36px;
+  }
+  
+  &:hover{
+    cursor: pointer;
+  }
+
+  input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    padding: 0;
+  }
+  
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  
+  input[type="color"]::-webkit-color-swatch {
+    border: none;
+  }
+  
+  i.mdi.mdi-plus{
+    position: absolute;
+    pointer-events: none;
+    font-size: 24px;
+    filter: invert(1) hue-rotate(180deg) contrast(2);
   }
 }
