@@ -35,6 +35,10 @@ body  {
     vertical-align: middle;
   }
 
+  .modal-header, .modal-footer{
+    cursor: grabbing;
+  }
+
   .modal-body {
     .message {
       color: @secondaryTextColor;
@@ -285,5 +289,11 @@ body  {
 @media (min-width: @screen-sm-min) {
   .event-subelement-flex-container {
     margin-left: 50px;
+  }
+}
+
+@media (max-width: @screen-sm-min) {
+  .modal-dialog {
+    position: absolute !important;
   }
 }
