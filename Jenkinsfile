@@ -15,6 +15,11 @@ pipeline {
         sh 'npm run lint'
         sh 'npm run test'
       }
+      post {
+        always {
+          deleteDir() /* clean up our workspace */
+        }
+      }
     }
 
     stage('Deliver Docker images') {
