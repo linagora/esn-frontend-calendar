@@ -1,5 +1,11 @@
 const moment = require('moment');
 
+require('moment/locale/fr');
+require('moment/locale/en-gb');
+require('moment/locale/vi');
+require('moment/locale/ru');
+require('moment/locale/zh-cn');
+
 require('../app.constants');
 require('./event-utils.js');
 
