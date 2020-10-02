@@ -19,7 +19,8 @@ describe('The calEventDateEditionController', function() {
         src._ambigTime = !!ambigTime;
 
         return src;
-      }
+      },
+      getTimeFormat: () => 'H:mm'
     };
 
     angular.mock.module('esn.calendar.libs', function($provide) {
