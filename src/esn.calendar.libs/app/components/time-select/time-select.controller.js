@@ -3,85 +3,93 @@
 angular.module('esn.calendar.libs')
   .controller('calTimeSelectController', calTimeSelectController);
 
-function calTimeSelectController($scope, calMoment) {
+function calTimeSelectController($scope, $element, calMoment) {
   const self = this;
-  let locale;
-  let timeFormat;
 
   self.$onInit = onInit;
-  self.onSelectedTimeChange = onSelectedTimeChange;
-  self.onSetSelectedTime = onSetSelectedTime;
+  self.onTimeInputChange = onTimeInputChange;
+  self.onSelectingTimeOption = onSelectingTimeOption;
   self.onTimeSelectBlur = onTimeSelectBlur;
+  self.onInputKeydown = onInputKeydown;
 
   function onInit() {
-    locale = self.locale;
-    timeFormat = self.timeFormat;
     self.timeOptions = getTimeOptions();
     self.isInputValid = true;
-    self.selectedTime = this.date.format(timeFormat);
+    self.selectedTime = this.date.format(self.timeFormat);
 
     // $watch for handling the offset being added to the date
     $scope.$watch('ctrl.date', function(newDate) {
       initTimeInput(newDate);
     });
+
+    // The input field is added to the click refs so that the dropdwon doesn't close when clicking inside the input
+    $scope.additionalClickRefs = [$element.find('input')[0]];
+  }
+
+  function onInputKeydown(event, mdMenu) {
+    if (event.keyCode !== 13) return;
+
+    event.preventDefault();
+
+    onTimeSelectBlur();
+    mdMenu.close();
   }
 
   function getTimeOptions() {
     const options = [];
 
     [...Array(24).keys()].map(hour => {
-      options.push(calMoment({ hour }).locale(locale).format(timeFormat));
-      options.push(calMoment({ hour, minute: 15 }).locale(locale).format(timeFormat));
-      options.push(calMoment({ hour, minute: 30 }).locale(locale).format(timeFormat));
-      options.push(calMoment({ hour, minute: 45 }).locale(locale).format(timeFormat));
+      options.push(calMoment({ hour }).locale(self.locale).format(self.timeFormat));
+      options.push(calMoment({ hour, minute: 15 }).locale(self.locale).format(self.timeFormat));
+      options.push(calMoment({ hour, minute: 30 }).locale(self.locale).format(self.timeFormat));
+      options.push(calMoment({ hour, minute: 45 }).locale(self.locale).format(self.timeFormat));
     });
 
     return options;
   }
 
   function initTimeInput(date) {
-    if (date) {
-      self.selectedTime = date.format(timeFormat);
-    }
+    if (!date) return;
+
+    self.selectedTime = date.format(self.timeFormat);
   }
 
-  function onSelectedTimeChange() {
-    if (calMoment(self.selectedTime, timeFormat, true).isValid()) {
-      const { hour, minute } = parseSelectedTime(self.selectedTime);
+  function onTimeInputChange() {
+    const momentTime = calMoment(self.selectedTime, self.timeFormat);
 
-      self.isInputValid = true;
-
-      self.date.set({
-        hour,
-        minute
-      });
-
-      self.onTimeChange();
-    } else {
+    if (!momentTime.isValid()) {
       self.isInputValid = false;
+
+      return;
     }
+
+    self.isInputValid = true;
   }
 
-  function parseSelectedTime(timeString) {
-    const time = calMoment(timeString, timeFormat);
-
-    return {
-      hour: time.hour(),
-      minute: time.minute()
-    };
-  }
-
-  function onSetSelectedTime(timeString) {
+  function onSelectingTimeOption(timeString) {
     self.selectedTime = timeString;
 
-    onSelectedTimeChange();
+    _setTimeFromString(self.selectedTime);
   }
 
-  // on blur, resets the input to the original time if it's not valid
   function onTimeSelectBlur() {
     if (!self.isInputValid) {
       initTimeInput(self.date);
       self.isInputValid = true;
     }
+
+    _setTimeFromString(self.selectedTime);
+  }
+
+  function _setTimeFromString(timeString) {
+    const momentTime = calMoment(timeString, self.timeFormat);
+
+    self.date.set({
+      hour: momentTime.hour(),
+      minute: momentTime.minute()
+    });
+
+    self.selectedTime = self.date.format(self.timeFormat);
+    self.onTimeChange();
   }
 }

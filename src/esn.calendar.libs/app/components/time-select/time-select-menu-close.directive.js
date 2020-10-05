@@ -7,19 +7,23 @@ angular.module('esn.calendar.libs')
 function timeSelectMenuClose() {
   return {
     restrict: 'A',
-    link: function($scope, element, attrs) {
+    link: function(scope, element, attrs) {
       const clickHandler = function(event) {
-        const clickledOnChild = $(element).has(event.target).length > 0;
+        const clickedOnRefs = Array.isArray(scope.additionalClickRefs) && scope.additionalClickRefs.some(ref => event.target === ref);
+        const clickedOnChild = $(element).has(event.target).length > 0;
         const clickedOnSelf = element[0] === event.target;
-        const clickedInsideMenu = clickedOnSelf || clickledOnChild;
 
-        if (!clickedInsideMenu) {
-          $scope.$apply(attrs.timeSelectMenuClose);
+        if (!clickedOnSelf && !clickedOnChild && !clickedOnRefs) {
+          scope.$apply(attrs.timeSelectMenuClose);
         }
       };
 
-      $scope.$watch('$mdMenuOpen', function() {
+      scope.$on('$mdMenuOpen', function() {
         document.addEventListener('click', clickHandler);
+      });
+
+      scope.$on('$mdMenuClose', function() {
+        document.removeEventListener('click', clickHandler);
       });
     }
   };
