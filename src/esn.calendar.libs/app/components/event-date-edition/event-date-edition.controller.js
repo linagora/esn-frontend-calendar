@@ -6,7 +6,7 @@ require('../../services/event-utils.js');
 angular.module('esn.calendar.libs')
   .controller('calEventDateEditionController', calEventDateEditionController);
 
-function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeService, calMoment, calEventUtils) {
+function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeService, esnI18nService, calMoment, calEventUtils) {
   var self = this;
   var previousStart;
   var previousEnd;
@@ -25,11 +25,13 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
     self.dateFormat = esnI18nDateFormatService.getLongDateFormat();
     self.disabled = self.disabled || false;
     self.full24HoursDay = self.event.full24HoursDay;
+    self.locale = esnI18nService.getLocale();
+    self.timeFormat = esnDatetimeService.getTimeFormat();
 
-    self.start = calMoment(self.event.start);
+    self.start = calMoment(self.event.start).locale(self.locale);
     // In CalDAV backend, the end date of an all-day event is stored +1 day compared to the end date when a user saves the event.
     // Therefore, if this is an all-day event, we need to display -1 day for the end date input.
-    self.end = !self.full24HoursDay ? calMoment(self.event.end) : calMoment(self.event.end).subtract(1, 'days');
+    self.end = !self.full24HoursDay ? calMoment(self.event.end).locale(self.locale) : calMoment(self.event.end).locale(self.locale).subtract(1, 'days');
 
     // On load, ensure the duration between start and end is calculated
     _calcDateDiff();

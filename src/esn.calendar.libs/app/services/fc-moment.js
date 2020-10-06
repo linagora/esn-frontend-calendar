@@ -1,5 +1,12 @@
 const moment = require('moment');
 
+// TODO: We need to have moment locale mapping and a single source of truth for all the available locales.
+// see issue https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/160
+require('moment/locale/fr');
+require('moment/locale/vi');
+require('moment/locale/ru');
+require('moment/locale/zh-cn');
+
 require('../app.constants');
 require('./event-utils.js');
 
