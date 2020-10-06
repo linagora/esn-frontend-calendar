@@ -6,7 +6,7 @@ const _ = require('lodash');
   angular.module('esn.calendar')
     .controller('CalEventViewExternalUserController', CalEventViewExternalUserController);
 
-  function CalEventViewExternalUserController($http, notificationFactory, esnI18nService) {
+  function CalEventViewExternalUserController($http, $rootScope, notificationFactory, esnI18nService) {
     var self = this;
 
     self.$onInit = $onInit;
@@ -25,6 +25,7 @@ const _ = require('lodash');
     }
 
     function changeParticipation(partstat) {
+      $rootScope.$emit('UPDATE_ACTION_EXCAL', self.linksMapping[partstat]);
       self.userAsAttendee.partstat = partstat;
       self.usersAttendeesList = self.usersAttendeesList.map(function(user) {
         if (user.email === self.externalAttendee.email) {
