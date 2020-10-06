@@ -120,7 +120,7 @@ function CalEventFormController(
   }
 
   function _displayNotification(notificationFactoryFunction, title, content, z_index) {
-    notificationFactoryFunction(title, content, z_index);
+    return notificationFactoryFunction(title, content, z_index);
   }
 
   function initFormData() {
@@ -256,6 +256,9 @@ function CalEventFormController(
     if (selectedCalendar) {
       $scope.restActive = true;
       _hideModal();
+
+      const notification = _displayNotification(notificationFactory.strongInfo, 'Event creation', 'Saving event...');
+
       $scope.editedEvent.attendees = getAttendees();
       setOrganizer()
         .then(cacheAttendees)
@@ -266,7 +269,11 @@ function CalEventFormController(
             notifyFullcalendar: $state.is('calendar.main')
           });
         })
-        .then(onEventCreateUpdateResponse)
+        .then(success => {
+          notification.close();
+
+          return onEventCreateUpdateResponse(success);
+        })
         .finally(function() {
           $scope.restActive = false;
         });
@@ -278,7 +285,11 @@ function CalEventFormController(
   function deleteEvent() {
     $scope.restActive = true;
     _hideModal();
+
+    const notification = _displayNotification(notificationFactory.strongInfo, 'Event deletion', 'Removing event...');
+
     calEventService.removeEvent($scope.event.path, $scope.event, $scope.event.etag).finally(function() {
+      notification.close();
       $scope.restActive = false;
     });
   }
@@ -329,6 +340,8 @@ function CalEventFormController(
       $scope.editedEvent.alarm = $scope.event.alarm;
     }
 
+    const notification = _displayNotification(notificationFactory.strongInfo, 'Event update', 'Saving event...');
+
     return $q.when()
       .then(cacheAttendees)
       .then(denormalizeAttendees)
@@ -342,7 +355,11 @@ function CalEventFormController(
           { graceperiod: true, notifyFullcalendar: $state.is('calendar.main') }
         );
       })
-      .then(onEventCreateUpdateResponse)
+      .then(success => {
+        notification.close();
+
+        return onEventCreateUpdateResponse(success);
+      })
       .finally(function() {
         $scope.restActive = false;
       });
