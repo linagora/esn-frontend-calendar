@@ -31,10 +31,12 @@ function CalEventFormController(
   userUtils,
   calEventService,
   calAttendeeService,
+  calendarAttendeeService,
   calEventUtils,
   notificationFactory,
   calOpenEventForm,
   calUIAuthorizationService,
+  esnPeopleAPI,
   calAttendeesDenormalizerService,
   esnDatetimeService,
   session,
@@ -49,7 +51,8 @@ function CalEventFormController(
   CAL_EVENT_FORM,
   CAL_ICAL,
   CAL_FREEBUSY,
-  CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION
+  CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION,
+  ESN_PEOPLE_FIELDS
 ) {
   var initialUserAttendeesRemoved = [];
   var initialResourceAttendeesRemoved = [];
@@ -212,16 +215,20 @@ function CalEventFormController(
       });
   }
 
-  function denormalizeAttendees() {
-    var attendees = angular.copy($scope.editedEvent.attendees);
+  function denormalizeAttendees(attendees) {
+    return $q.all(attendees.map(attendee => {
+      if (attendee.cutype) return $q.resolve(attendee);
 
-    return calAttendeesDenormalizerService($scope.editedEvent.attendees)
-      .then(function(denormalized) {
-        $scope.editedEvent.attendees = calAttendeeService.filterDuplicates(denormalized);
-      })
+      return esnPeopleAPI.resolve(ESN_PEOPLE_FIELDS.EMAIL_ADDRESS, attendee.email, { objectTypes: [CAL_ATTENDEE_OBJECT_TYPE.group] })
+        .then(calendarAttendeeService.parseEntityAsAttendee)
+        .catch(() => $q.resolve(attendee));
+    }))
+      .then(calAttendeesDenormalizerService)
+      .then(calAttendeeService.filterDuplicates)
       .catch(function(err) {
         $log.error('Can not denormalize attendees, defaulting to original ones', err);
-        $scope.editedEvent.attendees = attendees;
+
+        return attendees;
       });
   }
 
@@ -253,26 +260,27 @@ function CalEventFormController(
 
     var selectedCalendar = _getCalendarByUniqueId($scope.selectedCalendar.uniqueId);
 
-    if (selectedCalendar) {
-      $scope.restActive = true;
-      _hideModal();
-      $scope.editedEvent.attendees = getAttendees();
-      setOrganizer()
-        .then(cacheAttendees)
-        .then(denormalizeAttendees)
-        .then(function() {
-          return calEventService.createEvent(selectedCalendar, $scope.editedEvent, {
-            graceperiod: true,
-            notifyFullcalendar: $state.is('calendar.main')
-          });
-        })
-        .then(onEventCreateUpdateResponse)
-        .finally(function() {
-          $scope.restActive = false;
-        });
-    } else {
-      _displayNotification(notificationFactory.weakError, 'Event creation failed', 'Cannot join the server, please try later');
+    if (!selectedCalendar) {
+      return _displayNotification(notificationFactory.weakError, 'Event creation failed', 'Cannot join the server, please try later');
     }
+
+    $scope.restActive = true;
+    _hideModal();
+
+    setOrganizer()
+      .then(cacheAttendees)
+      .then(() => denormalizeAttendees(getAttendees()))
+      .then(denormalizedAttendees => {
+        $scope.editedEvent.attendees = [].concat($scope.editedEvent.attendees, denormalizedAttendees);
+      })
+      .then(() => calEventService.createEvent(selectedCalendar, $scope.editedEvent, {
+        graceperiod: true,
+        notifyFullcalendar: $state.is('calendar.main')
+      }))
+      .then(onEventCreateUpdateResponse)
+      .finally(() => {
+        $scope.restActive = false;
+      });
   }
 
   function deleteEvent() {
@@ -307,16 +315,14 @@ function CalEventFormController(
       $scope.editedEvent.title = CAL_EVENT_FORM.title.empty;
     }
 
-    $scope.editedEvent.attendees = getUpdatedAttendees();
+    const updatedAttendees = getUpdatedAttendees();
+
+    $scope.editedEvent.attendees = updatedAttendees;
 
     if (!calEventUtils.hasAnyChange($scope.editedEvent, $scope.event)) {
       _hideModal();
 
       return;
-    }
-
-    if ($scope.editedEvent.attendees.length > 0 && !$scope.editedEvent.organizer) {
-      setOrganizer();
     }
 
     $scope.restActive = true;
@@ -329,9 +335,18 @@ function CalEventFormController(
       $scope.editedEvent.alarm = $scope.event.alarm;
     }
 
-    return $q.when()
+    return $q(resolve => {
+      if ($scope.editedEvent.attendees.length > 0 && !$scope.editedEvent.organizer) {
+        return resolve(setOrganizer());
+      }
+
+      return resolve();
+    })
       .then(cacheAttendees)
-      .then(denormalizeAttendees)
+      .then(() => denormalizeAttendees(updatedAttendees))
+      .then(denormalizedAttendees => {
+        $scope.editedEvent.attendees = denormalizedAttendees;
+      })
       .then(function() {
         return calEventService.modifyEvent(
           $scope.event.path || calPathBuilder.forCalendarPath($scope.calendarHomeId, _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).id),

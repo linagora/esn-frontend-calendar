@@ -8,7 +8,8 @@ require('../app.constants');
 
   function calendarAttendeeService(attendeeService, CAL_ICAL, CAL_ATTENDEE_OBJECT_TYPE) {
     var service = {
-      getAttendeeCandidates: getAttendeeCandidates
+      getAttendeeCandidates,
+      parseEntityAsAttendee
     };
     var attendeeTypeToPartstat = {};
     var attendeeTypeToCUType = {};
@@ -26,8 +27,12 @@ require('../app.constants');
     function getAttendeeCandidates(query, limit, types) {
       return attendeeService.getAttendeeCandidates(query, limit, types)
         .then(function(attendeeCandidates) {
-          return attendeeCandidates.map(mapPartStat).map(mapCUType);
+          return attendeeCandidates.map(parseEntityAsAttendee);
         });
+    }
+
+    function parseEntityAsAttendee(attendee) {
+      return mapCUType(mapPartStat(attendee));
     }
 
     function mapPartStat(attendee) {
