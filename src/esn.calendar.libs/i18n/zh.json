@@ -279,5 +279,8 @@
   "The event has not been found": "该事件尚未找到",
   "An error occured on our side, please contact administrator if problem persists": "我们发生错误，如果问题仍然存在，请与管理员联系",
   "Search in events": "搜索活动",
-  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "转发此邀请后，任何收件人都可以向组织者发送回复，并且被添加到邀请对象列表；无论其邀请状态为何，他们都可以邀请其他人；或者，他们也可以修改您的回复。"
+  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "转发此邀请后，任何收件人都可以向组织者发送回复，并且被添加到邀请对象列表；无论其邀请状态为何，他们都可以邀请其他人；或者，他们也可以修改您的回复。",
+  "Saving configuration...": "保存设置…",
+  "Configuration saved": "设置保存成功",
+  "Failed to save configuration": "设置保存失败"
 }

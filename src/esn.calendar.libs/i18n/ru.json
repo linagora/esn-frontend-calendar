@@ -279,5 +279,8 @@
   "The event has not been found": "Событие не найдено",
   "An error occured on our side, please contact administrator if problem persists": "На нашей стороне произошла ошибка, пожалуйста, свяжитесь с администратором, если проблема не устранена",
   "Search in events": "Поиск по событиям",
-  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Если вы перешлете это приглашение, получатель сможет отправить ответ на него организатору, чтобы его добавили в список гостей, приглашать других людей вне зависимости от статуса собственного приглашения, а также изменить ваш ответ."
+  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Если вы перешлете это приглашение, получатель сможет отправить ответ на него организатору, чтобы его добавили в список гостей, приглашать других людей вне зависимости от статуса собственного приглашения, а также изменить ваш ответ.",
+  "Saving configuration...": "Сохранение конфигурации ...",
+  "Configuration saved": "Конфигурация сохранена",
+  "Failed to save configuration": "Не удалось сохранить конфигурацию"
 }

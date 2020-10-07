@@ -279,5 +279,8 @@
   "The event has not been found": "L'événement n'a pas été trouvé",
   "An error occured on our side, please contact administrator if problem persists": "Une erreur s'est produite de notre côté, veuillez contacter l'administrateur si le problème persiste",
   "Search in events": "Rechercher dans les événements",
-  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "En transférant cette invitation, vous risquez d'autoriser tous les destinataires à envoyer une réponse à l'organisateur et à être ajoutés à la liste des invités, à inviter d'autres personnes indépendamment de l'état de l'invitation qu'ils ont reçue, ou à modifier votre réponse à l'invitation."
+  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "En transférant cette invitation, vous risquez d'autoriser tous les destinataires à envoyer une réponse à l'organisateur et à être ajoutés à la liste des invités, à inviter d'autres personnes indépendamment de l'état de l'invitation qu'ils ont reçue, ou à modifier votre réponse à l'invitation.",
+  "Saving configuration...": "Enregistrer la configuration...",
+  "Configuration saved": "Configuration enregistrée",
+  "Failed to save configuration": "Impossible de sauvegarder la configuration"
 }

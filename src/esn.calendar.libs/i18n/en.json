@@ -279,5 +279,8 @@
   "The event has not been found": "The event has not been found",
   "An error occured on our side, please contact administrator if problem persists": "An error occured on our side, please contact administrator if problem persists",
   "Search in events": "Search in events",
-  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP."
+  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.",
+  "Saving configuration...": "Saving configuration...",
+  "Configuration saved": "Configuration saved",
+  "Failed to save configuration": "Failed to save configuration"
 }

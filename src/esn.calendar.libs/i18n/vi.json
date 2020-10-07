@@ -279,5 +279,8 @@
   "The event has not been found": "Sự kiện chưa được tìm thấy",
   "An error occured on our side, please contact administrator if problem persists": "Đã xảy ra lỗi ở phía chúng tôi, vui lòng liên hệ với quản trị viên nếu sự cố vẫn tiếp diễn",
   "Search in events": "Tìm sự kiện",
-  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Nhờ chuyển tiếp lời mời này, mọi người nhận có thể gửi câu trả lời cho người tổ chức và được thêm vào danh sách khách hoặc mời những người khác bất kể trạng thái lời mời của họ hoặc sửa đổi câu trả lời."
+  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Nhờ chuyển tiếp lời mời này, mọi người nhận có thể gửi câu trả lời cho người tổ chức và được thêm vào danh sách khách hoặc mời những người khác bất kể trạng thái lời mời của họ hoặc sửa đổi câu trả lời.",
+  "Saving configuration...": "Đang lưu cấu hình...",
+  "Configuration saved": "Đã lưu cấu hình",
+  "Failed to save configuration": "Không thể lưu cấu hình"
 }
