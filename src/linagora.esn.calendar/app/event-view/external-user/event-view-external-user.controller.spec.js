@@ -6,13 +6,15 @@
   var expect = chai.expect;
 
   describe('The CalEventViewExternalUserController controller', function() {
-    var $httpBackend, $controller, $scope, notificationFactory, esnI18nService, bindings, organizerAttendee, userAttendee, resourceAttendee, CAL_ICAL;
+    var $httpBackend, $controller, $scope, $rootScope, CAL_EVENTS, notificationFactory, esnI18nService, bindings, organizerAttendee, userAttendee, resourceAttendee, CAL_ICAL;
 
     beforeEach(function() {
       angular.mock.module('esn.calendar');
-      angular.mock.inject(function($rootScope, _$controller_, _$httpBackend_, _notificationFactory_, _esnI18nService_, _CAL_ICAL_) {
+      angular.mock.inject(function(_$rootScope_, _$controller_, _$httpBackend_, _notificationFactory_, _CAL_EVENTS_, _esnI18nService_, _CAL_ICAL_) {
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
+        $rootScope = _$rootScope_;
+        CAL_EVENTS = _CAL_EVENTS_;
         $scope = $rootScope.$new();
         notificationFactory = _notificationFactory_;
         esnI18nService = _esnI18nService_;
@@ -64,6 +66,8 @@
     it('The changeParticipation function', function() {
       var ctrl = initController();
 
+      $rootScope.$emit = sinon.spy();
+
       $httpBackend.expectGET(bindings.links.yes).respond(200, {});
       sinon.spy(notificationFactory, 'weakInfo');
       sinon.spy(esnI18nService, 'translate');
@@ -74,7 +78,7 @@
       ctrl.changeParticipation(CAL_ICAL.partstat.accepted);
       $scope.$digest();
       $httpBackend.flush();
-
+      expect($rootScope.$emit).to.have.been.calledWith(CAL_EVENTS.UPDATE_ACTION_EXCAL, bindings.links.yes);
       expect(ctrl.userAsAttendee.partstat).to.deep.equals(CAL_ICAL.partstat.accepted);
       expect(ctrl.usersAttendeesList).to.deep.equals([ctrl.userAsAttendee]);
       expect(notificationFactory.weakInfo).has.been.calledWith();
