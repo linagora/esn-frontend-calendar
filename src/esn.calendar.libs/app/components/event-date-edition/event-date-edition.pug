@@ -23,7 +23,8 @@
                 date="ctrl.start",
                 on-time-change="ctrl.onStartDateTimeChange",
                 locale="{{ ::ctrl.locale }}",
-                time-format="{{ ::ctrl.timeFormat }}"
+                time-format="{{ ::ctrl.timeFormat }}",
+                disabled="ctrl.disabled"
               )
         .col-xs-12.col-md-4
           .fg-line
@@ -46,7 +47,8 @@
                 date="ctrl.end",
                 on-time-change="ctrl.onEndDateTimeChange",
                 locale="{{ ::ctrl.locale }}",
-                time-format="{{ ::ctrl.timeFormat }}"
+                time-format="{{ ::ctrl.timeFormat }}",
+                disabled="ctrl.disabled"
               )
         .col-xs-12.col-md-4.hidden-xs
           .form-group.text-center

@@ -9,6 +9,7 @@ angular.module('esn.calendar.libs')
       date: '<',
       onTimeChange: '=',
       locale: '@',
-      timeFormat: '@'
+      timeFormat: '@',
+      disabled: '@?'
     }
   });
