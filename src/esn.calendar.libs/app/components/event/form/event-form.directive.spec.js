@@ -76,10 +76,4 @@ describe('The cal-event-form Angular module directives', function() {
 
     expect(event.defaultPrevented).to.be.false;
   });
-
-  it('.modal-dialog should have class ui-draggable', function() {
-    var element = this.initDirective(this.$scope);
-
-    expect(element.children().hasClass('ui-draggable')).to.be.true;
-  });
 });

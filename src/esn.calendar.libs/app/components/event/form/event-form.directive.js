@@ -18,11 +18,7 @@ function calEventForm() {
 
   ////////////
 
-  function link(scope, element) {
-    element.children().draggable({
-      handle: '.modal-header, .modal-body, .modal-footer'
-    });
-
+  function link(scope) {
     scope.$on('$locationChangeStart', hideModal);
 
     function hideModal(event) {
