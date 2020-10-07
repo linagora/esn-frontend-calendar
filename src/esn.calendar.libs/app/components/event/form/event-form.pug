@@ -140,5 +140,5 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
             button.btn.btn-link.btn-icon.color-danger.delete(type='button', ng-click="deleteEvent()", ng-disabled="!canPerformCall()")
               i.mdi.mdi-delete
         .flex-vertical-centered.flex-end
-          button.btn.btn-link.color-default.close-button(type='button', ng-click="cancel()") {{ 'Cancel' | translate }}
+          button.btn.btn-link.color-default.close-button(type='button', ng-click="cancel()") {{ 'Close' | translate }}
           button.btn.btn-primary.save.save-button(ng-if='canModifyEvent' type='submit', ng-disabled="!canPerformCall()") {{ 'Save' | translate }}
