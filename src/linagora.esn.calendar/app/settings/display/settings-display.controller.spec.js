@@ -7,7 +7,7 @@ var expect = chai.expect;
 
 describe('The CalSettingsDisplayController', function() {
 
-  var $controller, $rootScope, $httpBackend, $scope;
+  var $controller, $rootScope, $httpBackend, $scope, $state;
   var esnUserConfigurationService, moduleName, moduleConfiguration, configResponse;
 
   beforeEach(angular.mock.module(function($provide) {
@@ -27,11 +27,13 @@ describe('The CalSettingsDisplayController', function() {
     ];
 
     inject(function(
+      _$state_,
       _$controller_,
       _$rootScope_,
       _$httpBackend_,
       _esnUserConfigurationService_
     ) {
+      $state = _$state_;
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $httpBackend = _$httpBackend_;
@@ -123,6 +125,31 @@ describe('The CalSettingsDisplayController', function() {
 
       $scope.$digest();
     });
-  });
 
+    it('should redirect users to the calendar main page after saving configuration successfully', function(done) {
+      esnUserConfigurationService.get = () => $q.when(configResponse);
+      $state.go = sinon.stub();
+
+      const controller = initController();
+      const updatedConfigs = {
+        key1: 'updatedValue1',
+        key2: 'updatedValue2'
+      };
+
+      controller.$onInit();
+      $rootScope.$digest();
+
+      controller.configurations = updatedConfigs;
+      esnUserConfigurationService.set = () => $q.when(configResponse);
+
+      controller.submit(form)
+        .then(() => {
+          expect($state.go).to.have.been.calledWith('calendar.main');
+          done();
+        })
+        .catch(err => done(err || new Error('should resolve')));
+
+      $scope.$digest();
+    });
+  });
 });

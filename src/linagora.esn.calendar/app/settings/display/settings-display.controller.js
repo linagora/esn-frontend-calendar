@@ -6,6 +6,7 @@ angular.module('esn.calendar')
   .controller('CalSettingsDisplayController', CalSettingsDisplayController);
 
 function CalSettingsDisplayController(
+  $state,
   asyncAction,
   calFullUiConfiguration,
   esnUserConfigurationService,
@@ -52,6 +53,8 @@ function CalSettingsDisplayController(
     return esnUserConfigurationService.set(configurationsArray, CAL_USER_CONFIGURATION.moduleName)
       .then(function() {
         calFullUiConfiguration.setHiddenDeclinedEvents(self.configurations.hideDeclinedEvents);
+
+        $state.go('calendar.main');
       });
   }
 }

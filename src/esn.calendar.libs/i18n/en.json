@@ -117,6 +117,7 @@
   "Export your calendar to iCalendar format file (.ics) which you can import to other applications.": "Export your calendar to iCalendar format file (.ics) which you can import to other applications.",
   "Failed to create resource": "Failed to create resource",
   "Failed to retrieve resources details": "Failed to retrieve resources details",
+  "Failed to submit request": "Failed to submit request",
   "Find public calendar": "Find public calendar",
   "Free": "Free",
   "Free/Busy": "Free/Busy",
@@ -129,7 +130,8 @@
   "has proposed changes to the event": "has proposed changes to the event",
   "has replied \"Maybe\" to this invitation": "has replied \"Maybe\" to this invitation",
   "has updated a meeting": "has updated a meeting",
-  "Hide": "Hide",
+  "Hide non-working days": "Hide non-working days",
+  "Hide declined events": "Hide declined events",
   "Hide calendar": "Hide calendar",
   "hour": "hour",
   "hours": "hours",
@@ -229,6 +231,7 @@
   "Some attendees are not available": "Some attendees are not available",
   "Some meeting information contained in this message cannot be processed.": "Some meeting information contained in this message cannot be processed.",
   "Subscription": "Subscription",
+  "Submitting importing calendar request": "Submitting importing calendar request...",
   "Successfully subscribed to calendar": "Successfully subscribed to calendar",
   "Successfully subscribed to calendars": "Successfully subscribed to calendars",
   "Tentative": "Tentative",
@@ -236,6 +239,7 @@
   "The reservation of resource {{name}} has been accepted": "The reservation of resource {{name}} has been accepted",
   "The reservation of resource {{name}} has been declined": "The reservation of resource {{name}} has been declined",
   "The resource reservation event can not be retrieved.": "The resource reservation event can not be retrieved.",
+  "The calendar is being imported. You will receive a report email when the import is finished.": "The calendar is being imported. You will receive a report email when the import is finished.",
   "This event": "This event",
   "This event has been cancelled": "This event has been cancelled",
   "This message contains an invitation to an event": "This message contains an invitation to an event",
@@ -275,5 +279,8 @@
   "The event has not been found": "The event has not been found",
   "An error occured on our side, please contact administrator if problem persists": "An error occured on our side, please contact administrator if problem persists",
   "Search in events": "Search in events",
-  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP."
+  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.",
+  "Saving configuration...": "Saving configuration...",
+  "Configuration saved": "Configuration saved",
+  "Failed to save configuration": "Failed to save configuration"
 }

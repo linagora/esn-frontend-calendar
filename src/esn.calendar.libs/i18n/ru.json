@@ -117,6 +117,7 @@
   "Export your calendar to iCalendar format file (.ics) which you can import to other applications.": "Экспортируйте свой календарь в файл формата iCalendar (.ics), который вы можете импортировать в другие приложения.",
   "Failed to create resource": "Не удалось создать ресурс",
   "Failed to retrieve resources details": "Не удалось получить информацию о ресурсах",
+  "Failed to submit request": "Не удалось отправить запрос...",
   "Find public calendar": "Найти общедоступный календарь",
   "Free": "Свободно",
   "Free/Busy": "Свободно/Занято",
@@ -129,7 +130,8 @@
   "has proposed changes to the event": "предложил изменения к событию",
   "has replied \"Maybe\" to this invitation": "ответил \"Возможно\" на это приглашение",
   "has updated a meeting": "обновил встречу",
-  "Hide": "Скрыть",
+  "Hide non-working days": "Скрыть нерабочие дни",
+  "Hide declined events": "Скрыть отклоненные мероприятия",
   "Hide calendar": "Скрыть календарь",
   "hour": "час",
   "hours": "часы",
@@ -229,6 +231,7 @@
   "Some attendees are not available": "Некоторые участники не доступны",
   "Some meeting information contained in this message cannot be processed.": "Некоторая информация о собрании, содержащаяся в этом сообщении, не может быть обработана.",
   "Subscription": "Подписка",
+  "Submitting importing calendar request": "Отправка запроса на импорт календаря...",
   "Successfully subscribed to calendar": "Успешно подписан на календарь",
   "Successfully subscribed to calendars": "Успешно подписан на календари",
   "Tentative": "Предварительный",
@@ -236,6 +239,7 @@
   "The reservation of resource {{name}} has been accepted": "Резервирование ресурса {{name}} принято",
   "The reservation of resource {{name}} has been declined": "Резервирование ресурса {{name}} было отклонено",
   "The resource reservation event can not be retrieved.": "Событие резервирования ресурса не может быть получено.",
+  "The calendar is being imported. You will receive a report email when the import is finished.": "Календарь импортируется. Когда импорт будет завершен, вы получите электронное письмо с отчетом.",
   "This event": "Это событие",
   "This event has been cancelled": "Это событие было отменено",
   "This message contains an invitation to an event": "Это сообщение содержит приглашение на событие",
@@ -275,5 +279,8 @@
   "The event has not been found": "Событие не найдено",
   "An error occured on our side, please contact administrator if problem persists": "На нашей стороне произошла ошибка, пожалуйста, свяжитесь с администратором, если проблема не устранена",
   "Search in events": "Поиск по событиям",
-  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Если вы перешлете это приглашение, получатель сможет отправить ответ на него организатору, чтобы его добавили в список гостей, приглашать других людей вне зависимости от статуса собственного приглашения, а также изменить ваш ответ."
+  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Если вы перешлете это приглашение, получатель сможет отправить ответ на него организатору, чтобы его добавили в список гостей, приглашать других людей вне зависимости от статуса собственного приглашения, а также изменить ваш ответ.",
+  "Saving configuration...": "Сохранение конфигурации ...",
+  "Configuration saved": "Конфигурация сохранена",
+  "Failed to save configuration": "Не удалось сохранить конфигурацию"
 }

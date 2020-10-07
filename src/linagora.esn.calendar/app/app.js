@@ -107,7 +107,6 @@ require('esn-frontend-common-libs/src/frontend/js/modules/esn.api-client.js');
 require('esn-frontend-mailto-handler/src/index.js');
 require('../../esn.calendar.libs/app/app.module.js');
 
-require('./app.config.js');
 require('./calendar-configuration/calendar-configuration-header/calendar-configuration-header.directive.js');
 require('./calendar-configuration/calendar-configuration-tab-delegation/calendar-configuration-tab-delegation.component.js');
 require('./calendar-configuration/calendar-configuration-tab-delegation/calendar-configuration-tab-delegation.controller.js');

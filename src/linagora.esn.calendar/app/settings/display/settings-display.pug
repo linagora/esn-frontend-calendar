@@ -3,18 +3,13 @@ sub-header
   cal-settings-display-subheader(submit="ctrl.submit()", form="form")
 
 form(name="form")
-  .cal-settings-display-block
-    h3 {{ "Non-working days" | translate }}
-    p.cal-setting-switch
-      span.working-days-disabled(ng-class="{'toggle-active': ctrl.configurations.workingDays}")
-        | {{ "Show" | translate }}
-      toggle-switch(ng-model="ctrl.configurations.workingDays", color='blue', form="form")
-      span.working-days-enabled(ng-class="{'toggle-active': ctrl.configurations.workingDays}")
-        | {{ "Hide" | translate }}
-    h3 {{ 'Declined events' | translate }}
-    p.cal-setting-switch
-      span.working-days-disabled(ng-class="{'toggle-active': ctrl.configurations.hideDeclinedEvents}")
-        | {{ "Show" | translate }}
-      toggle-switch(ng-model="ctrl.configurations.hideDeclinedEvents", color='blue', form="form")
-      span.working-days-enabled(ng-class="{'toggle-active': ctrl.configurations.hideDeclinedEvents}")
-        | {{ "Hide" | translate }}
+  h3 {{ "Non-working days" | translate }}
+  label.checkbox.checkbox-inline.flex
+    input(type="checkbox", ng-model="ctrl.configurations.workingDays")
+    i.input-helper
+    span {{ "Hide non-working days" | translate }}
+  h3 {{ 'Declined events' | translate }}
+  label.checkbox.checkbox-inline.flex
+    input(type="checkbox", ng-model="ctrl.configurations.hideDeclinedEvents")
+    i.input-helper
+    span {{ "Hide declined events" | translate }}

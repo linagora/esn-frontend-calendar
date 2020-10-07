@@ -117,6 +117,7 @@
   "Export your calendar to iCalendar format file (.ics) which you can import to other applications.": "将您的日历导出到iCalendar格式文件（.ics），您可以将其导入其他应用程序。",
   "Failed to create resource": "资源创建失败",
   "Failed to retrieve resources details": "撤回资源详细信息失败",
+  "Failed to submit request": "提交请求失败",
   "Find public calendar": "查找公共日历",
   "Free": "有空",
   "Free/Busy": "有空/忙碌",
@@ -129,7 +130,8 @@
   "has proposed changes to the event": "对事件提出了更改建议",
   "has replied \"Maybe\" to this invitation": "对该邀请回复了\"也许",
   "has updated a meeting": "更新了会议",
-  "Hide": "隐藏",
+  "Hide non-working days": "隐藏非工作日",
+  "Hide declined events": "隐藏拒绝的事件",
   "Hide calendar": "隐藏日历",
   "hour": "小时",
   "hours": "小时",
@@ -229,6 +231,7 @@
   "Some attendees are not available": "某些参与者没空",
   "Some meeting information contained in this message cannot be processed.": "无法处理此消息内所含的某些会议信息",
   "Subscription": "订阅",
+  "Submitting importing calendar request": "提交导入日历请求...",
   "Successfully subscribed to calendar": "成功订阅日历",
   "Successfully subscribed to calendars": "成功订阅日历组",
   "Tentative": "拟接受",
@@ -236,6 +239,7 @@
   "The reservation of resource {{name}} has been accepted": "{{name}} 资源预定被接受",
   "The reservation of resource {{name}} has been declined": "{{name}} 资源预定被拒绝",
   "The resource reservation event can not be retrieved.": "资源预定事件无法被撤回",
+  "The calendar is being imported. You will receive a report email when the import is finished.": "日历正在导入。导入完成后，您将收到报告电子邮件.",
   "This event": "该事件",
   "This event has been cancelled": "该事件已被删除",
   "This message contains an invitation to an event": "本消息包含一条事件邀请",
@@ -275,5 +279,8 @@
   "The event has not been found": "该事件尚未找到",
   "An error occured on our side, please contact administrator if problem persists": "我们发生错误，如果问题仍然存在，请与管理员联系",
   "Search in events": "搜索活动",
-  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "转发此邀请后，任何收件人都可以向组织者发送回复，并且被添加到邀请对象列表；无论其邀请状态为何，他们都可以邀请其他人；或者，他们也可以修改您的回复。"
+  "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "转发此邀请后，任何收件人都可以向组织者发送回复，并且被添加到邀请对象列表；无论其邀请状态为何，他们都可以邀请其他人；或者，他们也可以修改您的回复。",
+  "Saving configuration...": "保存设置…",
+  "Configuration saved": "设置保存成功",
+  "Failed to save configuration": "设置保存失败"
 }
