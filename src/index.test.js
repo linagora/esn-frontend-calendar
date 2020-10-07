@@ -1,7 +1,6 @@
 window.jstz = require('esn-frontend-common-libs/src/frontend/components/jstzdetect/jstz.js');
 window.jQuery = require('jquery/dist/jquery.js');
 window.$ = window.jQuery;
-require('jquery-ui/ui/widgets/draggable.js');
 require('esn-frontend-common-libs/src/frontend/vendor-libs.js');
 require('esn-frontend-common-libs/src/frontend/js/material.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/session.js');
