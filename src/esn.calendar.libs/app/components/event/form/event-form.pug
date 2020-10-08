@@ -62,7 +62,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
               on-entity-added='onUserAttendeesAdded',
               template='/calendar/app/components/entities-autocomplete-input/entities-autocomplete-input-freebusy-tag.html'
             )
-            cal-entities-autocomplete-input(
+            cal-entities-autocomplete-input.cal-resource-autocomplete-input(
               ng-hide='!canModifyEventAttendees',
               types='[CAL_ATTENDEE_OBJECT_TYPE.resource]',
               input-type="text"
