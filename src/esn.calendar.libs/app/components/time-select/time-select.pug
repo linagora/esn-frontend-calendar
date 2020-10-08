@@ -8,7 +8,7 @@ md-menu(md-offset="10 60")
       ng-change="ctrl.onTimeInputChange()",
       ng-blur="ctrl.onTimeSelectBlur()",
       ng-keydown="ctrl.onInputKeydown($event, $mdMenu)",
-      ng-disabled="ctrl.disabled"
+      ng-disabled="{{ ctrl.disabled }}"
     )
   md-menu-content(
     width="3",
