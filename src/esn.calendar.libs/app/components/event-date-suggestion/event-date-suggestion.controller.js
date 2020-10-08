@@ -5,7 +5,7 @@ require('../../services/fc-moment.js');
 angular.module('esn.calendar.libs')
   .controller('calEventDateSuggestionController', calEventDateSuggestionController);
 
-function calEventDateSuggestionController(esnI18nDateFormatService, calMoment) {
+function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, esnDatetimeService, esnI18nService) {
   var self = this;
 
   self.$onInit = $onInit;
@@ -18,6 +18,8 @@ function calEventDateSuggestionController(esnI18nDateFormatService, calMoment) {
   function $onInit() {
     self.dateFormat = esnI18nDateFormatService.getLongDateFormat();
     self.full24HoursDay = self.event.full24HoursDay;
+    self.locale = esnI18nService.getLocale();
+    self.timeFormat = esnDatetimeService.getTimeFormat();
     // on load, ensure that duration between start and end is stored inside editedEvent
     self.onEndDateChange();
   }
