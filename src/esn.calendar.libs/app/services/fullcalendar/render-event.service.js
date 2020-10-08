@@ -16,6 +16,7 @@ function calFullCalendarRenderEventService(
   esnDatetimeService,
   calEventUtils,
   calUIAuthorizationService,
+  calFullUiConfiguration,
   ESN_MEDIA_QUERY_SM_XS,
   CAL_MAX_DURATION_OF_SMALL_EVENT,
   CAL_REDRAW_MULTI_DAY_EVENT,
@@ -142,7 +143,7 @@ function calFullCalendarRenderEventService(
         } else if (userAsAttendee.partstat === 'ACCEPTED') {
           element.addClass('event-accepted');
         } else if (userAsAttendee.partstat === 'DECLINED') {
-          element.addClass('event-declined');
+          calFullUiConfiguration.isDeclinedEventsHidden() ? element.hide() : element.addClass('event-declined');
         } else {
           element.addClass('event-needs-action');
         }

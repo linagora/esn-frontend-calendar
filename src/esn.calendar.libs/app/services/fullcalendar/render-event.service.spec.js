@@ -44,6 +44,8 @@ describe('The calFullCalendarRenderEventService service', function() {
 
   Element.prototype.css = sinon.spy();
 
+  Element.prototype.hide = sinon.spy();
+
   var userEmail = 'aAttendee@open-paas.org';
 
   beforeEach(function() {
@@ -136,6 +138,7 @@ describe('The calFullCalendarRenderEventService service', function() {
     _$q_,
     $rootScope,
     calFullCalendarRenderEventService,
+    calFullUiConfiguration,
     calEventUtils,
     calMoment,
     CalendarShell,
@@ -145,6 +148,7 @@ describe('The calFullCalendarRenderEventService service', function() {
     CAL_MAX_DURATION_OF_SMALL_EVENT
   ) {
     this.calFullCalendarRenderEventService = calFullCalendarRenderEventService;
+    this.calFullUiConfiguration = calFullUiConfiguration;
     this.calEventUtils = calEventUtils;
     $q = _$q_;
     this.$rootScope = $rootScope;
@@ -525,7 +529,22 @@ describe('The calFullCalendarRenderEventService service', function() {
           };
         });
 
-        it('should add event-needs-action class if current user is found in the DECLINED attendees', function() {
+        it('should hide event if calendar owner is found in the DECLINED attendees and hiddenDeclinedEvents is true', function() {
+          this.calFullUiConfiguration.setHiddenDeclinedEvents(true);
+
+          event.attendees.push({
+            email: userEmail,
+            partstat: 'DECLINED'
+          });
+
+          this.calFullCalendarRenderEventService(calendar)(event, element, view);
+          this.$rootScope.$digest();
+
+          expect(element.hide).to.be.called;
+          expect(element.class).to.not.contain('event-declined');
+        });
+
+        it('should add event-declined class if current user is found in the DECLINED attendees', function() {
           event.attendees.push({
             email: userEmail,
             partstat: 'DECLINED'
@@ -537,7 +556,7 @@ describe('The calFullCalendarRenderEventService service', function() {
           expect(element.class).to.deep.equal(['event-declined']);
         });
 
-        it('should add event-needs-action class if current user is found in the ACCEPTED attendees', function() {
+        it('should add event-accepted class if current user is found in the ACCEPTED attendees', function() {
           event.attendees.push({
             email: userEmail,
             partstat: 'ACCEPTED'
@@ -614,7 +633,23 @@ describe('The calFullCalendarRenderEventService service', function() {
             return false;
           };
         });
-        it('should add event-needs-action class if current user is found in the DECLINED attendees', function() {
+
+        it('should hide event if calendar owner is found in the DECLINED attendees and hiddenDeclinedEvents is true', function() {
+          this.calFullUiConfiguration.setHiddenDeclinedEvents(true);
+
+          event.attendees.push({
+            email: userEmail,
+            partstat: 'DECLINED'
+          });
+
+          this.calFullCalendarRenderEventService(calendar)(event, element, view);
+          this.$rootScope.$digest();
+
+          expect(element.hide).to.be.called;
+          expect(element.class).to.not.contain('event-declined');
+        });
+
+        it('should add event-declined class if current user is found in the DECLINED attendees', function() {
           event.attendees.push({
             email: userEmail,
             partstat: 'DECLINED'
@@ -626,7 +661,7 @@ describe('The calFullCalendarRenderEventService service', function() {
           expect(element.class).to.deep.equal(['event-declined']);
         });
 
-        it('should add event-needs-action class if current user is found in the ACCEPTED attendees', function() {
+        it('should add event-accepted class if current user is found in the ACCEPTED attendees', function() {
           event.attendees.push({
             email: userEmail,
             partstat: 'ACCEPTED'
