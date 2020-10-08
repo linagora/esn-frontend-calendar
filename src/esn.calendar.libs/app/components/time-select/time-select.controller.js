@@ -29,6 +29,7 @@ function calTimeSelectController($scope, $element, calMoment) {
   }
 
   function onInputKeydown(event, mdMenu) {
+    if (event.key === 'Tab') return mdMenu.close();
     if (event.key !== 'Enter') return;
 
     event.preventDefault();
