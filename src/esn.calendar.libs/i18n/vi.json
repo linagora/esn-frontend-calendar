@@ -189,7 +189,7 @@
   "Organizer": "Người tổ chức",
   "Organizers": "Người tổ chức",
   "Owner": "Chủ nhân",
-  "Participation updated: %s": "Việc tham gia đã cập nhật: {{ participation }}",
+  "Participation updated to:": "Đã cập nhật sự tham gia thành: ",
   "Pick a color": "Chọn một màu",
   "Pick an icon": "Chọn một biểu tượng",
   "Planning": "Kế hoạch",

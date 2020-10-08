@@ -189,7 +189,7 @@
   "Organizer": "Организатор",
   "Organizers": "Организаторы",
   "Owner": "Владелец",
-  "Participation updated: %s": "Участие обновлено: {{ participation }}",
+  "Participation updated to:": "Участие обновлено до: ",
   "Pick a color": "Выберите цвет",
   "Pick an icon": "Выберите иконку",
   "Planning": "Планирование",
