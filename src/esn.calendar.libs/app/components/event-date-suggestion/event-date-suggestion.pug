@@ -30,7 +30,7 @@
           .fg-line
             .checkbox.allday
               label
-                input(type="checkbox", ng-model='ctrl.allDay', ng-change="ctrl.setEventDates();")
+                input(type="checkbox", ng-model='ctrl.full24HoursDay', ng-change="ctrl.setEventDates();")
                 i.input-helper
                 span {{ 'All day' | translate }}
       .col-xs-12
