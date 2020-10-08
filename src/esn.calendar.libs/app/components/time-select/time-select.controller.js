@@ -84,7 +84,7 @@ function calTimeSelectController($scope, $element, calMoment) {
   }
 
   function _setTimeFromString(timeString) {
-    const momentTime = calMoment(timeString, self.timeFormat);
+    const momentTime = calMoment(timeString, self.timeFormat, self.locale);
 
     self.date.set({
       hour: momentTime.hour(),
