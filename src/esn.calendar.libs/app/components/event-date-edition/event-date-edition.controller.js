@@ -6,7 +6,7 @@ require('../../services/event-utils.js');
 angular.module('esn.calendar.libs')
   .controller('calEventDateEditionController', calEventDateEditionController);
 
-function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeService, esnI18nService, calMoment, calEventUtils) {
+function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeService, esnI18nService, calMoment, calEventUtils, detectUtils) {
   var self = this;
   var previousStart;
   var previousEnd;
@@ -27,12 +27,13 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
     self.full24HoursDay = self.event.full24HoursDay;
     self.locale = esnI18nService.getLocale();
     self.timeFormat = esnDatetimeService.getTimeFormat();
-
+    self.isMobile = detectUtils.isMobile();
     self.start = calMoment(self.event.start).locale(self.locale);
     // In CalDAV backend, the end date of an all-day event is stored +1 day compared to the end date when a user saves the event.
     // Therefore, if this is an all-day event, we need to display -1 day for the end date input.
     self.end = !self.full24HoursDay ? calMoment(self.event.end).locale(self.locale) : calMoment(self.event.end).locale(self.locale).subtract(1, 'days');
-
+    // Initialize the time inputs for the native mobile picker.
+    _initMobileTimeInputs();
     // On load, ensure the duration between start and end is calculated
     _calcDateDiff();
     _updateMinEndDate();
@@ -92,9 +93,13 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
     _updateMinEndDate();
     _syncEventDateTime();
     _onDateChange();
+    _initMobileTimeInputs();
   }
 
   function onStartDateTimeChange() {
+    if (self.isMobile) {
+      _setStartDateFromMobileInput();
+    }
     // When we select a time we have to move the end time
     onStartDateChange();
   }
@@ -113,13 +118,19 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
     _syncEventDateTime();
     _calcDateDiff();
     _onDateChange();
+    _initMobileTimeInputs();
   }
 
   function onEndDateTimeChange() {
+    if (self.isMobile) {
+      _setEndDateFromMobileInput();
+    }
+
     _checkAndForceEndAfterStart();
     _calcDateDiff();
     _syncEventDateTime();
     _onDateChange();
+    _initMobileTimeInputs();
   }
 
   function _saveEventDateTime(start, end) {
@@ -165,5 +176,34 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
 
   function _updateMinEndDate() {
     self.minEndDate = getMinEndDate();
+  }
+
+  function _initMobileTimeInputs() {
+    self.startTime = self.start.toDate();
+    self.endTime = self.end.toDate();
+
+    // Due to differences between moment and the Date object we need to handle the hours differences.
+    // The timezone has no meaning for Date object, the moment().toDate() converts the date to the browser timezone.
+    // So the hours and minutes differ between the same moment date and the resulting date of .toDate() which is not wanted.
+    self.startTime.setHours(self.start.hours());
+    self.startTime.setMinutes(self.start.minutes());
+    self.endTime.setHours(self.end.hours());
+    self.endTime.setMinutes(self.end.minutes());
+  }
+
+  // When the date object gets modified by the native mobile picker we just get the hours and minutes
+  // and set them back into the moment object, this has no impact on the timezone or whatsoever.
+  function _setStartDateFromMobileInput() {
+    self.start.set({
+      hour: self.startTime.getHours(),
+      minute: self.startTime.getMinutes()
+    });
+  }
+
+  function _setEndDateFromMobileInput() {
+    self.end.set({
+      hour: self.endTime.getHours(),
+      minute: self.endTime.getMinutes()
+    });
   }
 }
