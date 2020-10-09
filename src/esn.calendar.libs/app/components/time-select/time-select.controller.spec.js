@@ -194,6 +194,20 @@ describe('the calTimeSelectController', function() {
       ctrl.onSelectingTimeOption('13:00');
       expect(ctrl.onTimeChange).to.have.been.called;
     });
+
+    it('should set the time correctly depending on the chosen locale', function() {
+      const ctrl = initCtrl(
+        {
+          timeFormat: 'h:mm A',
+          locale: 'vi',
+          onTimeChange: () => {}
+        }
+      );
+
+      ctrl.onSelectingTimeOption('2:00 CH');
+      expect(ctrl.date.hour()).to.equal(14);
+      expect(ctrl.date.minute()).to.equal(0);
+    });
   });
 
   describe('the onInputKeydown event handler', function() {
