@@ -10,6 +10,6 @@ angular.module('esn.calendar.libs')
       onTimeChange: '=',
       locale: '@',
       timeFormat: '@',
-      disabled: '@?'
+      disabled: '<?'
     }
   });
