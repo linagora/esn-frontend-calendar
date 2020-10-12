@@ -5,7 +5,7 @@ require('../../services/fc-moment.js');
 angular.module('esn.calendar.libs')
   .controller('calEventDateSuggestionController', calEventDateSuggestionController);
 
-function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, esnDatetimeService, esnI18nService) {
+function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, esnDatetimeService, esnI18nService, detectUtils) {
   var self = this;
 
   self.$onInit = $onInit;
@@ -14,14 +14,18 @@ function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, e
   self.setEventDates = setEventDates;
   self.onStartDateChange = onStartDateChange;
   self.onEndDateChange = onEndDateChange;
+  self.onStartDateTimeChange = onStartDateTimeChange;
+  self.onEndDateTimeChange = onEndDateTimeChange;
 
   function $onInit() {
     self.dateFormat = esnI18nDateFormatService.getLongDateFormat();
     self.full24HoursDay = self.event.full24HoursDay;
     self.locale = esnI18nService.getLocale();
     self.timeFormat = esnDatetimeService.getTimeFormat();
+    self.isMobile = detectUtils.isMobile();
     // on load, ensure that duration between start and end is stored inside editedEvent
     self.onEndDateChange();
+    _initMobileTimeInputs();
   }
 
   function dateOnBlurFn() {
@@ -78,5 +82,44 @@ function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, e
       self.event.end = calMoment(self.event.start).add(1, 'hours');
     }
     self.diff = self.event.end.diff(self.event.start);
+  }
+
+  // Only fired when using the native mobile picker.
+  function onStartDateTimeChange() {
+    self.event.start.set({
+      hour: self.startTime.getHours(),
+      minute: self.startTime.getMinutes()
+    });
+
+    self.onStartDateChange();
+    // Update the input fields to display the new time ( in case of any internal change like offset ).
+    _initMobileTimeInputs();
+  }
+
+  // Only fired when using the native mobile picker.
+  function onEndDateTimeChange() {
+    self.event.end.set({
+      hour: self.endTime.getHours(),
+      minute: self.endTime.getMinutes()
+    });
+
+    self.onEndDateChange();
+    // Update the input fields to display the new time ( in case of any internal change like offset ).
+    _initMobileTimeInputs();
+  }
+
+  function _initMobileTimeInputs() {
+    if (!self.event.start || !self.event.start.isValid() || !self.event.end || !self.event.end.isValid()) {
+      return;
+    }
+
+    self.startTime = self.event.start.toDate();
+    self.endTime = self.event.end.toDate();
+
+    // Set the hours to avoid the timzone issues when converting a moment object to Date.
+    self.startTime.setHours(self.event.start.hours());
+    self.startTime.setMinutes(self.event.start.minutes());
+    self.endTime.setHours(self.event.end.hours());
+    self.endTime.setMinutes(self.event.end.minutes());
   }
 }
