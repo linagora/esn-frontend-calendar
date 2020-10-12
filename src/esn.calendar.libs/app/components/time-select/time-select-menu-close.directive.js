@@ -25,6 +25,15 @@ function timeSelectMenuClose() {
       scope.$on('$mdMenuClose', function() {
         document.removeEventListener('click', clickHandler);
       });
+
+      // Close the menu when the event form is dragged.
+      const draggable = $('.event-form .ui-draggable');
+
+      if (draggable && draggable.length) {
+        draggable.on('dragstart', function() {
+          scope.$apply(attrs.timeSelectMenuClose);
+        });
+      }
     }
   };
 }
