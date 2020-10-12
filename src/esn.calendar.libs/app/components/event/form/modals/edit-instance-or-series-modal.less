@@ -3,4 +3,13 @@
     font-size: 1.1em;
     font-weight: 400;
   }
+  .suggest-form {
+    .modal-dialog {
+      // Position of modal dialog is absolute by default (causes display issues on small screens)
+      position: relative !important;
+      width: auto;
+      max-width: 600px;
+      margin: 12px;
+    }
+  }
 }
