@@ -370,7 +370,8 @@
         TOGGLE: 'calendar:mini:toggle',
         VIEW_CHANGE: 'calendar:mini:viewchange'
       },
-      MODAL: 'calendar:modal'
+      MODAL: 'calendar:modal',
+      UPDATE_ACTION_EXCAL: 'calendar:jwt:update'
     })
 
     .constant('CAL_MAX_DURATION_OF_SMALL_EVENT', {
