@@ -180,13 +180,15 @@ require('./cal-ui-authorization-service.js');
     }
 
     function setEditable(calendar, events) {
-      return events.map(function(event) {
-        if (!calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id)) {
-          event.editable = false;
-        }
+      return $q.all(events.map(function(event) {
+        return calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id).then(function(canModifyEvent) {
+          if (!canModifyEvent) {
+            event.editable = false;
+          }
 
-        return event;
-      });
+          return event;
+        });
+      }));
     }
 
     function filterEndBeforeStartEvents(events) {

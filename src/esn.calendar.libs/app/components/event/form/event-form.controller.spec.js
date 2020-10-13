@@ -248,7 +248,7 @@ describe('The CalEventFormController controller', function() {
     });
 
     sinon.stub(calUIAuthorizationService, 'canModifyEvent', function() {
-      return canModifyEventResult;
+      return $q.when(canModifyEventResult);
     });
 
     sinon.stub(calUIAuthorizationService, 'canModifyEventAttendees', function() {

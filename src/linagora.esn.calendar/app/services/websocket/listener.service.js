@@ -91,13 +91,16 @@
         $log.debug('Calendar Event created/updated', type, msg);
         var event = CalendarShell.from(msg.event, { etag: msg.etag, path: getEventPath(msg) });
 
-        calendarService.getCalendar(event.calendarHomeId, event.calendarId).then(function(calendar) {
-          if (!calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id)) {
-            event.editable = false;
-          }
+        calendarService.getCalendar(event.calendarHomeId, event.calendarId)
+          .then(function(calendar) {
+            return calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id);
+          }).then(function(canModifyEvent) {
+            if (!canModifyEvent) {
+              event.editable = false;
+            }
 
-          _udpateEventCacheAndNotify(event);
-        });
+            _udpateEventCacheAndNotify(event);
+          });
       }
 
       function _onEventReply(type, msg) {
