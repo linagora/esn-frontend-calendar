@@ -13,6 +13,15 @@
               on-time-change="ctrl.onStartDateChange",
               locale="{{ ::ctrl.locale }}",
               time-format="{{ ::ctrl.timeFormat }}"
+              ng-if="!ctrl.isMobile"
+            )
+            input.input.form-control(
+              type="time",
+              ng-model="ctrl.startTime",
+              ng-change="ctrl.onStartDateTimeChange()",
+              ng-blur="ctrl.dateOnBlurFn()",
+              ng-disabled="ctrl.full24HoursDay",
+              ng-if="ctrl.isMobile"
             )
       .col-xs-12.col-md-4
         .form-group
@@ -24,6 +33,15 @@
               on-time-change="ctrl.onEndDateChange",
               locale="{{ ::ctrl.locale }}",
               time-format="{{ ::ctrl.timeFormat }}"
+              ng-if="!ctrl.isMobile"
+            )
+            input.input.form-control(
+              type="time",
+              ng-model="ctrl.endTime",
+              ng-change="ctrl.onEndDateTimeChange()",
+              ng-blur="ctrl.dateOnBlurFn()",
+              ng-disabled="ctrl.full24HoursDay",
+              ng-if="ctrl.isMobile"
             )
       .col-xs-12.col-md-4
         .form-group.nopadding

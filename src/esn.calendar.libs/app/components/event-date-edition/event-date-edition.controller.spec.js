@@ -123,6 +123,21 @@ describe('The calEventDateEditionController', function() {
       expect(ctrl.start.isSame(bindings.event.start, 'day')).to.be.true;
       expect(calEventUtils.stripTimeWithTz(ctrl.end.clone().add(1, 'days')).isSame(bindings.event.end, 'day')).to.be.true;
     });
+
+    it('should set the startTime and EndTime correctly for the native mobile picker', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        }
+      };
+      const ctrl = initController(bindings);
+
+      expect(ctrl.startTime instanceof Date).to.be.true;
+      expect(ctrl.endTime instanceof Date).to.be.true;
+      expect(ctrl.start.hours()).to.equal(ctrl.startTime.getHours());
+      expect(ctrl.end.hours()).to.equal(ctrl.endTime.getHours());
+    });
   });
 
   describe('The dateOnBlurFn function', function() {
@@ -282,6 +297,30 @@ describe('The calEventDateEditionController', function() {
         expect(bindings.event.end.isSame(ctrl.end)).to.be.true;
       }, this);
     });
+
+    it('should refresh the time inputs to the newly selected time', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        },
+        onDateChange: sinon.spy()
+      };
+      const ctrl = initController(bindings);
+
+      // Those are random fake dates that are not taken into consideration.
+      // just wanted to simulate they are going to change.
+      ctrl.startTime = new Date('2013-02-08 11:33');
+      ctrl.endTime = new Date('2013-02-08 11:40');
+      ctrl.onStartDateChange();
+
+      expect(ctrl.startTime.getHours()).to.not.equal(11);
+      expect(ctrl.endTime.getHours()).to.not.equal(11);
+      expect(ctrl.startTime.getMinutes()).to.not.equal(33);
+      expect(ctrl.endTime.getMinutes()).to.not.equal(40);
+      expect(ctrl.startTime.getHours()).to.equal(startTestMoment.hours());
+      expect(ctrl.endTime.getHours()).to.equal(endTestMoment.hours());
+    });
   });
 
   describe('The onEndDateChange function', function() {
@@ -351,6 +390,85 @@ describe('The calEventDateEditionController', function() {
       checkEventDateTimeSync(ctrl);
 
       expect(bindings.onDateChange).to.have.been.calledOnce;
+    });
+
+    it('should refresh the time inputs to the newly selected time', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        },
+        onDateChange: sinon.spy()
+      };
+      const ctrl = initController(bindings);
+
+      // Those are random fake dates that are not taken into consideration.
+      // just wanted to simulate they are going to change.
+      ctrl.startTime = new Date('2013-02-08 11:33');
+      ctrl.endTime = new Date('2013-02-08 11:40');
+      ctrl.onEndDateChange();
+
+      expect(ctrl.startTime.getHours()).to.not.equal(11);
+      expect(ctrl.endTime.getHours()).to.not.equal(11);
+      expect(ctrl.startTime.getMinutes()).to.not.equal(33);
+      expect(ctrl.endTime.getMinutes()).to.not.equal(40);
+      expect(ctrl.startTime.getHours()).to.equal(startTestMoment.hours());
+      expect(ctrl.endTime.getHours()).to.equal(endTestMoment.hours());
+    });
+  });
+
+  describe('the onStartDateTimeChange handler', function() {
+    it('should set the selected time from the native mobile picker into the event start date', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        }
+      };
+
+      const ctrl = initController(bindings);
+
+      ctrl.startTime = new Date('2013-02-08 11:33');
+      ctrl.isMobile = true;
+      ctrl.onStartDateTimeChange();
+      expect(ctrl.start.hours()).to.equal(11);
+      expect(ctrl.start.minutes()).to.equal(33);
+    });
+  });
+
+  describe('the onEndDateTimeChange handler', function() {
+    it('should set the selected time from the native mobile picker into the event end date', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        }
+      };
+
+      const ctrl = initController(bindings);
+
+      ctrl.endTime = new Date('2013-02-08 10:27');
+      ctrl.isMobile = true;
+      ctrl.onEndDateTimeChange();
+      expect(ctrl.end.hours()).to.equal(10);
+      expect(ctrl.end.minutes()).to.equal(27);
+    });
+
+    it('should ignore the native mobile input if not on mobile', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        }
+      };
+
+      const ctrl = initController(bindings);
+
+      ctrl.endTime = new Date('2013-02-08 09:27');
+      ctrl.isMobile = false;
+      ctrl.onEndDateTimeChange();
+      expect(ctrl.end.hours()).to.not.equal(9);
+      expect(ctrl.end.minutes()).to.not.equal(27);
     });
   });
 });

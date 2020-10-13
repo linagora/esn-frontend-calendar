@@ -294,4 +294,61 @@ describe('The calEventDateSuggestionController', function() {
       });
     });
   });
+
+  describe('the onStartDateTimeChange function', function() {
+    it('should set the start time from the mobile input models', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment,
+          end: endTestMoment,
+          full24HoursDay: false
+        }
+      };
+      const ctrl = initController(bindings);
+
+      ctrl.startTime = new Date('2020-02-08 11:33');
+      ctrl.onStartDateTimeChange();
+
+      expect(ctrl.event.start.hours()).to.equal(11);
+      expect(ctrl.event.start.minutes()).to.equal(33);
+    });
+  });
+
+  describe('the onEndDateTimeChange function', function() {
+    it('should set the end time from the mobile input models', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment,
+          end: endTestMoment,
+          full24HoursDay: false
+        }
+      };
+      const ctrl = initController(bindings);
+
+      ctrl.endTime = new Date('2020-02-08 12:16');
+      ctrl.onEndDateTimeChange();
+
+      expect(ctrl.event.end.hours()).to.equal(12);
+      expect(ctrl.event.end.minutes()).to.equal(16);
+    });
+
+    it('should ignore the mobile input if the end time is before the start time', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment,
+          end: endTestMoment,
+          full24HoursDay: false
+        }
+      };
+      const ctrl = initController(bindings);
+
+      ctrl.startTime = new Date('2020-02-08 9:00');
+      ctrl.onStartDateTimeChange();
+      ctrl.endTime = new Date('2020-02-08 8:15');
+      ctrl.onEndDateTimeChange();
+
+      expect(ctrl.event.end.hours()).to.not.equal(8);
+      expect(ctrl.event.end.minutes()).to.not.equal(15);
+    });
+  });
 });

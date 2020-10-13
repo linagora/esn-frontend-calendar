@@ -24,7 +24,16 @@
                 on-time-change="ctrl.onStartDateTimeChange",
                 locale="{{ ::ctrl.locale }}",
                 time-format="{{ ::ctrl.timeFormat }}",
-                disabled="ctrl.disabled"
+                disabled="ctrl.disabled",
+                ng-if="!ctrl.isMobile"
+              )
+              input.input.form-control(
+                type="time",
+                ng-model="ctrl.startTime",
+                ng-change="ctrl.onStartDateTimeChange()",
+                ng-blur="ctrl.dateOnBlurFn()",
+                ng-disabled="ctrl.disabled",
+                ng-if="ctrl.isMobile"
               )
         .col-xs-12.col-md-4
           .fg-line
@@ -48,7 +57,16 @@
                 on-time-change="ctrl.onEndDateTimeChange",
                 locale="{{ ::ctrl.locale }}",
                 time-format="{{ ::ctrl.timeFormat }}",
-                disabled="ctrl.disabled"
+                disabled="ctrl.disabled",
+                ng-if="!ctrl.isMobile"
+              )
+              input.input.form-control(
+                type="time",
+                ng-model="ctrl.endTime",
+                ng-change="ctrl.onEndDateTimeChange()",
+                ng-blur="ctrl.dateOnBlurFn()",
+                ng-disabled="ctrl.disabled",
+                ng-if="ctrl.isMobile"
               )
         .col-xs-12.col-md-4.hidden-xs
           .form-group.text-center
