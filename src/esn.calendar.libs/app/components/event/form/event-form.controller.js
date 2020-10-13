@@ -169,18 +169,23 @@ function CalEventFormController(
             $scope.editedEvent.class = CAL_EVENT_FORM.class.default;
           }
 
-          $scope.canModifyEvent = _canModifyEvent();
           $scope.displayParticipationButton = displayParticipationButton();
           $scope.displayCalMailToAttendeesButton = displayCalMailToAttendeesButton;
           $scope.canModifyEventAttendees = calUIAuthorizationService.canModifyEventAttendees(selectedCalendar, $scope.editedEvent, session.user._id);
-          $scope.canModifyEventRecurrence = calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id);
-          $scope.excludeCurrentUserFromSuggestedAttendees = excludeCurrentUser();
-          $scope.$watch('selectedCalendar.uniqueId', onCalendarUpdated);
+          $scope.$watch('selectedCalendar.uniqueId', setExcludeCurrentUser);
+
+          return $q.all([
+            _canModifyEvent(),
+            calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id)
+          ]);
+        }).then(function(uiAuthorizations) {
+          $scope.canModifyEvent = uiAuthorizations[0];
+          $scope.canModifyEventRecurrence = uiAuthorizations[1];
+          setExcludeCurrentUser();
 
           return calAttendeeService.splitAttendeesFromTypeWithResourceDetails($scope.editedEvent.attendees);
         }).then(function(attendeesWithResourceDetails) {
           $scope.attendees = _.assign({}, $scope.attendees, attendeesWithResourceDetails);
-        }).then(function() {
           calFreebusyService.setBulkFreeBusyStatus(getAttendees(), $scope.event.start, $scope.event.end, [$scope.event]);
           $timeout.cancel(spinnerTimeoutPromise);
           usSpinnerService.stop(spinnerKey);
@@ -189,12 +194,10 @@ function CalEventFormController(
     }
   }
 
-  function onCalendarUpdated() {
-    $scope.excludeCurrentUserFromSuggestedAttendees = excludeCurrentUser();
-  }
-
-  function excludeCurrentUser() {
-    return _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).isOwner(session.user._id) ? true : !_canModifyEvent();
+  function setExcludeCurrentUser() {
+    return _canModifyEvent().then(function(canModifyEvent) {
+      $scope.excludeCurrentUserFromSuggestedAttendees = _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).isOwner(session.user._id) ? true : !canModifyEvent;
+    });
   }
 
   function setOrganizer() {

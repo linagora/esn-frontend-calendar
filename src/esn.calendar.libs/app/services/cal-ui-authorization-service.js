@@ -8,10 +8,9 @@ angular.module('esn.calendar.libs')
   .service('calUIAuthorizationService', calUIAuthorizationService);
 
 function calUIAuthorizationService(
+  $q,
   calEventUtils,
-  calDefaultValue,
-  CAL_CALENDAR_PUBLIC_RIGHT,
-  CAL_CALENDAR_SHARED_RIGHT
+  calDefaultValue
 ) {
 
   return {
@@ -48,7 +47,7 @@ function calUIAuthorizationService(
 
   function canModifyEvent(calendar, event, userId) {
     if (!!event && calEventUtils.isNew(event)) {
-      return true;
+      return $q.when(true);
     }
 
     return _canModifyEvent(calendar, event, userId);
@@ -78,7 +77,11 @@ function calUIAuthorizationService(
   }
 
   function canModifyEventRecurrence(calendar, event, userId) {
-    return _canModifyEvent(calendar, event, userId) && !!event && !event.isInstance();
+    if (!event || event.isInstance()) {
+      return $q.when(false);
+    }
+
+    return _canModifyEvent(calendar, event, userId);
   }
 
   function canModifyPublicSelection(calendar, userId) {
@@ -103,20 +106,18 @@ function calUIAuthorizationService(
     return calendar.isOwner(userId) && calEventUtils.isOrganizer(event);
   }
 
+  function _isOwnerOrganizer(calendar, event) {
+    return calendar.getOwner().then(function(owner) {
+      return calEventUtils.isOrganizer(event, owner);
+    });
+  }
+
   function _canModifyEvent(calendar, event, userId) {
-    var publicRight, sharedRight, isOrganizerAndOwner;
-
     if (!!calendar && !!event) {
-      sharedRight = calendar.rights.getShareeRight(userId);
-      publicRight = calendar.rights.getPublicRight();
-      isOrganizerAndOwner = _isOrganizerAndOwner(calendar, event, userId);
-
-      return isOrganizerAndOwner ||
-        sharedRight === CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ_WRITE ||
-        sharedRight === CAL_CALENDAR_SHARED_RIGHT.SHAREE_ADMIN ||
-        (!isOrganizerAndOwner && publicRight === CAL_CALENDAR_PUBLIC_RIGHT.READ_WRITE);
+      return _isOwnerOrganizer(calendar, event)
+        .then(isEventOrganiser => isEventOrganiser && calendar.isWritable(userId));
     }
 
-    return false;
+    return $q.when(false);
   }
 }

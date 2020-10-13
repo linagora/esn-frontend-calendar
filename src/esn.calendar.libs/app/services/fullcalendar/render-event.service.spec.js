@@ -73,7 +73,7 @@ describe('The calFullCalendarRenderEventService service', function() {
     calendarService = {};
     calUIAuthorizationService = {
       canModifyEvent: function() {
-        return true;
+        return $q.when(true);
       }
     };
 
@@ -327,7 +327,7 @@ describe('The calFullCalendarRenderEventService service', function() {
     });
 
     it('should set startEditable and durationEditable to false if the current user can not edit event', function() {
-      var canModifyEvent = sinon.stub(calUIAuthorizationService, 'canModifyEvent').returns(false);
+      var canModifyEvent = sinon.stub(calUIAuthorizationService, 'canModifyEvent').returns($q.when(false));
 
       event.organizer = {
         email: 'organizerEmail'

@@ -26,10 +26,12 @@ function calFullCalendarPlanningRenderEventService(
       }
 
       function setEventRights() {
-        if (!calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id)) {
-          event.startEditable = false;
-          event.durationEditable = false;
-        }
+        calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id).then(function(canModifyEvent) {
+          if (!canModifyEvent) {
+            event.startEditable = false;
+            event.durationEditable = false;
+          }
+        });
       }
 
       function setPastEventStyle() {

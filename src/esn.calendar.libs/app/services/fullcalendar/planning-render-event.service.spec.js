@@ -36,12 +36,6 @@ describe('The calFullCalendarPlanningRenderEventService service', function() {
       }
     };
 
-    calUIAuthorizationService = {
-      canModifyEvent: function() {
-        return true;
-      }
-    };
-
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
       $provide.factory('session', function($q) {
@@ -49,7 +43,6 @@ describe('The calFullCalendarPlanningRenderEventService service', function() {
 
         return session;
       });
-      $provide.value('calUIAuthorizationService', calUIAuthorizationService);
     });
 
     event = {
@@ -74,6 +67,7 @@ describe('The calFullCalendarPlanningRenderEventService service', function() {
 
   beforeEach(angular.mock.inject(function(
     _$q_,
+    _calUIAuthorizationService_,
     $rootScope,
     calFullCalendarPlanningRenderEventService,
     calEventUtils,
@@ -82,6 +76,7 @@ describe('The calFullCalendarPlanningRenderEventService service', function() {
     CAL_MAX_DURATION_OF_SMALL_EVENT
   ) {
     $q = _$q_;
+    calUIAuthorizationService = _calUIAuthorizationService_;
     this.calFullCalendarPlanningRenderEventService = calFullCalendarPlanningRenderEventService;
     this.calEventUtils = calEventUtils;
     this.$rootScope = $rootScope;
@@ -99,6 +94,8 @@ describe('The calFullCalendarPlanningRenderEventService service', function() {
           emails: [userEmail]
         }))
       };
+
+      sinon.stub(calUIAuthorizationService, 'canModifyEvent', function() {return $q.when(true);});
     });
 
     it('should have planning-event-accepted class if event is accepted', function() {
@@ -109,6 +106,7 @@ describe('The calFullCalendarPlanningRenderEventService service', function() {
       this.calFullCalendarPlanningRenderEventService(calendar)(event, element);
       this.$rootScope.$digest();
 
+      expect(calUIAuthorizationService.canModifyEvent).to.have.been.called;
       expect(calendar.getOwner).to.have.been.called;
       expect(element.class).to.deep.equal(['planning-event-accepted']);
     });
@@ -121,6 +119,7 @@ describe('The calFullCalendarPlanningRenderEventService service', function() {
       this.calFullCalendarPlanningRenderEventService(calendar)(event, element);
       this.$rootScope.$digest();
 
+      expect(calUIAuthorizationService.canModifyEvent).to.have.been.called;
       expect(calendar.getOwner).to.have.been.called;
       expect(element.class).to.deep.equal(['planning-event-declined']);
     });
@@ -133,6 +132,7 @@ describe('The calFullCalendarPlanningRenderEventService service', function() {
       this.calFullCalendarPlanningRenderEventService(calendar)(event, element);
       this.$rootScope.$digest();
 
+      expect(calUIAuthorizationService.canModifyEvent).to.have.been.called;
       expect(calendar.getOwner).to.have.been.called;
       expect(element.class).to.deep.equal(['planning-event-tentative']);
     });
@@ -145,8 +145,44 @@ describe('The calFullCalendarPlanningRenderEventService service', function() {
       this.calFullCalendarPlanningRenderEventService(calendar)(event, element);
       this.$rootScope.$digest();
 
+      expect(calUIAuthorizationService.canModifyEvent).to.have.been.called;
       expect(calendar.getOwner).to.have.been.called;
       expect(element.class).to.deep.equal(['planning-event-needs-action']);
     });
   });
+
+  describe('The setEventRights function', function() {
+    beforeEach(function() {
+      calendar = {
+        getOwner: sinon.stub().returns($q.when({
+          emails: [userEmail]
+        }))
+      };
+    });
+
+    it('should have event editable and draggable undefined if user can modify event', function() {
+      sinon.stub(calUIAuthorizationService, 'canModifyEvent', function() {return $q.when(true);});
+
+      this.calFullCalendarPlanningRenderEventService(calendar)(event, element);
+      this.$rootScope.$digest();
+
+      expect(calUIAuthorizationService.canModifyEvent).to.have.been.called;
+      expect(calendar.getOwner).to.have.been.called;
+      expect(event.startEditable).to.be.undefined;
+      expect(event.durationEditable).to.be.undefined;
+    });
+
+    it('should have event editable and draggable set to false if user cannot modify event', function() {
+      sinon.stub(calUIAuthorizationService, 'canModifyEvent', function() {return $q.when(false);});
+
+      this.calFullCalendarPlanningRenderEventService(calendar)(event, element);
+      this.$rootScope.$digest();
+
+      expect(calUIAuthorizationService.canModifyEvent).to.have.been.called;
+      expect(calendar.getOwner).to.have.been.called;
+      expect(event.startEditable).to.be.false;
+      expect(event.durationEditable).to.be.false;
+    });
+  });
+
 });

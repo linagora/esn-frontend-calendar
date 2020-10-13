@@ -216,10 +216,12 @@ function calFullCalendarRenderEventService(
   }
 
   function setEventRights(calendar, event) {
-    if (!calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id)) {
-      event.startEditable = false;
-      event.durationEditable = false;
-    }
+    calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id).then(function(canModifyEvent) {
+      if (!canModifyEvent) {
+        event.startEditable = false;
+        event.durationEditable = false;
+      }
+    });
   }
 
   function switchTitleAndTime(element, view, titleDiv, timeDiv) {
