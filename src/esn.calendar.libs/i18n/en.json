@@ -189,7 +189,7 @@
   "Organizer": "Organizer",
   "Organizers": "Organizers",
   "Owner": "Owner",
-  "Participation updated: %s": "Participation updated: {{ participation }}",
+  "Participation updated to:": "Participation updated to: ",
   "Pick a color": "Pick a color",
   "Pick an icon": "Pick an icon",
   "Planning": "Planning",

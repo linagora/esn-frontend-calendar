@@ -189,7 +189,7 @@
   "Organizer": "组织者",
   "Organizers": "主办单位",
   "Owner": "所有者",
-  "Participation updated: %s": "参与情况已更新：{{ participation }}",
+  "Participation updated to:": "参与度已更新为: ",
   "Pick a color": "选择颜色",
   "Pick an icon": "选择图标",
   "Planning": "日程计划",
