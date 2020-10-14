@@ -5,6 +5,7 @@ md-menu(md-offset="10 60")
       type="text",
       size="10",
       ng-click="$mdMenu.open()",
+      ng-focus="$mdMenu.open()",
       ng-change="ctrl.onTimeInputChange()",
       ng-blur="ctrl.onTimeSelectBlur()",
       ng-keydown="ctrl.onInputKeydown($event, $mdMenu)",

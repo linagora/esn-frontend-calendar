@@ -277,5 +277,28 @@ describe('the calTimeSelectController', function() {
       expect(menu.close).to.not.have.been.called;
       expect(ctrl.onTimeSelectBlur).to.not.have.been.called;
     });
+
+    it('should close the mdMenu when the user presses Tab', function() {
+      const ctrl = initCtrl(
+        {
+          timeFormat: 'H:mm',
+          locale: 'fr',
+          onTimeChange: () => { }
+        }
+      );
+      const event = {
+        key: 'Tab',
+        preventDefault: () => { }
+      };
+      const menu = {
+        close: sinon.spy()
+      };
+
+      ctrl.onTimeSelectBlur = sinon.spy();
+
+      ctrl.onInputKeydown(event, menu);
+      expect(menu.close).to.have.been.called;
+      expect(ctrl.onTimeSelectBlur).to.not.have.been.called;
+    });
   });
 });
