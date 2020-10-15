@@ -246,12 +246,7 @@ function calEventService(
           successText: 'Event created'
         }).then(_.constant(true), onTaskCancel);
       }, function(err) {
-        // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/46)
-        notificationFactory.weakError(
-          'Event creation failed',
-          err.statusText ? esnI18nService.translate('%s. Please refresh your calendar', { error: err.statusText }) :
-            esnI18nService.translate('Event creation failed. Please refresh your calendar')
-        );
+        notificationFactory.weakError('Event creation failed', 'Event creation failed. Please refresh your calendar');
 
         return $q.reject(err);
       })
@@ -335,12 +330,7 @@ function calEventService(
             return false;
           });
         }, function(err) {
-          // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/46)
-          notificationFactory.weakError(
-            'Event deletion failed',
-            err.statusText ? esnI18nService.translate('%s. Please refresh your calendar', { error: err.statusText }) :
-              esnI18nService.translate('Event deletion failed. Please refresh your calendar')
-          );
+          notificationFactory.weakError('Event deletion failed', 'Event deletion failed. Please refresh your calendar');
 
           return $q.reject(err);
         })
@@ -463,12 +453,7 @@ function calEventService(
           return false;
         });
       }, function(err) {
-        // TODO: Write tests for this (https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/46)
-        notificationFactory.weakError(
-          'Event modification failed',
-          err.statusText ? esnI18nService.translate('%s, Please refresh your calendar', { error: err.statusText }) :
-            esnI18nService.translate('Event modification failed, Please refresh your calendar')
-        );
+        notificationFactory.weakError('Event modification failed', 'Event modification failed. Please refresh your calendar');
 
         return $q.reject(err);
       })

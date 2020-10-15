@@ -489,6 +489,34 @@ describe('The calEventService service', function() {
       expect(self.calendarEventEmitterMock.emitRemovedEvent).to.have.been.called;
     });
 
+    it('should display an error notification when the request to create the event fails', function(done) {
+      var vcalendar = new ICAL.Component('vcalendar');
+      var vevent = new ICAL.Component('vevent');
+
+      vevent.addPropertyWithValue('uid', eventUUID);
+      vevent.addPropertyWithValue('dtstart', dtstart);
+      vevent.addPropertyWithValue('dtend', dtend);
+      vcalendar.addSubcomponent(vevent);
+
+      var event = new self.CalendarShell(vcalendar);
+
+      self.gracePeriodService.grace = function() {
+        return $q.resolve();
+      };
+
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(500);
+
+      self.calEventService.createEvent(calendar, event, { graceperiod: true })
+        .then(() => done(new Error('should not resolve')))
+        .catch(err => {
+          expect(err).to.exist;
+          expect(self.notificationFactoryMock.weakError).to.have.been.calledWith('Event creation failed', 'Event creation failed. Please refresh your calendar');
+          done();
+        });
+
+      self.$httpBackend.flush();
+    });
+
     it('should call calCachedEventSource.registerAdd', function() {
       var vcalendar = new ICAL.Component('vcalendar');
       var vevent = new ICAL.Component('vevent');
@@ -858,6 +886,22 @@ describe('The calEventService service', function() {
       expect(self.calendarEventEmitterMock.emitModifiedEvent).to.have.been.calledOnce;
     });
 
+    it('should display an error notification when the request to modify the event fails', function(done) {
+      self.gracePeriodService.grace = () => $q.resolve();
+
+      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(500);
+
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', self.event, self.event, 'etag')
+        .then(() => done(new Error('should not resolve')))
+        .catch(err => {
+          expect(err).to.exist;
+          expect(self.notificationFactoryMock.weakError).to.have.been.calledWith('Event modification failed', 'Event modification failed. Please refresh your calendar');
+          done();
+        });
+
+      self.$httpBackend.flush();
+    });
+
     it('should call calCachedEventSource.registerUpdate', function() {
 
       self.gracePeriodService.grace = $q.when.bind(null, {
@@ -1003,6 +1047,20 @@ describe('The calEventService service', function() {
       self.$httpBackend.flush();
 
       expect(errorSpy).to.have.been.calledWith(sinon.match({ status: 201 }));
+    });
+
+    it('should display an error notification when the request to remove the event fails', function(done) {
+      self.$httpBackend.expectDELETE(`/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=${self.CAL_GRACE_DELAY}`).respond(500);
+
+      self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', self.event, 'etag')
+        .then(() => done(new Error('should not resolve')))
+        .catch(err => {
+          expect(err).to.exist;
+          expect(self.notificationFactoryMock.weakError).to.have.been.calledWith('Event deletion failed', 'Event deletion failed. Please refresh your calendar');
+          done();
+        });
+
+      self.$httpBackend.flush();
     });
 
     it('should cancel the task if there is no etag and if it is not a recurring', function() {
