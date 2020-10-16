@@ -1430,6 +1430,37 @@ describe('The calEventService service', function() {
       expect(errorSpy).to.have.been.calledOnce;
     });
 
+    it('should call the event setOrganizerPartStat function when the organizer is trying to change his status', function() {
+      const emails = ['organize@example.com'];
+      const promiseSpy = sinon.spy();
+
+      self.calEventAPI.changeParticipation = sinon.stub().returns($q.when({}));
+      self.event.setOrganizerPartStat = sinon.spy();
+      self.event.changeParticipation = sinon.spy();
+      self.event.organizer = { email: 'organize@example.com' };
+      self.calEventService.changeParticipation('/path/to/uid.ics', self.event, emails, 'DECLINED').then(promiseSpy);
+      self.$rootScope.$apply();
+
+      expect(self.event.setOrganizerPartStat).to.have.been.called;
+      expect(self.event.changeParticipation).to.not.have.been.called;
+      expect(self.calEventAPI.changeParticipation).to.have.been.called;
+    });
+
+    it('should not call the event setOrganizerPartStat function when a non organizer is trying to change his status', function() {
+      const emails = ['somethingelse@example.com'];
+      const promiseSpy = sinon.spy();
+
+      self.calEventAPI.changeParticipation = sinon.stub().returns($q.when({}));
+      self.event.setOrganizerPartStat = sinon.spy();
+      self.event.changeParticipation = sinon.spy();
+      self.event.organizer = { email: 'organize@example.com' };
+      self.calEventService.changeParticipation('/path/to/uid.ics', self.event, emails, 'DECLINED').then(promiseSpy);
+      self.$rootScope.$apply();
+
+      expect(self.event.setOrganizerPartStat).to.not.have.been.called;
+      expect(self.event.changeParticipation).to.have.been.called;
+    });
+
     // Everything else is covered by the modify fn
   });
 
