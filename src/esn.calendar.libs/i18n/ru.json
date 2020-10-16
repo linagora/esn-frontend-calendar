@@ -107,7 +107,7 @@
   "Event deletion failed. Please refresh your calendar": "Ошибка удаления события. Пожалуйста, обновите свой календарь",
   "Event details": "Детали события",
   "Event modification failed": "Ошибка модификации события",
-  "Event modification failed, please refresh your calendar": "Не удалось изменить событие, обновите календарь",
+  "Event modification failed. Please refresh your calendar": "Не удалось изменить событие. обновите календарь",
   "Event participation modification failed": "Не удалось изменить участие в мероприятии",
   "Event removed": "Событие удалено",
   "Event updated": "Событие обновлено",

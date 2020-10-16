@@ -260,8 +260,6 @@ function CalEventFormController(
       $scope.restActive = true;
       _hideModal();
 
-      const notification = _displayNotification(notificationFactory.strongInfo, 'Event creation', 'Saving event...');
-
       $scope.editedEvent.attendees = getAttendees();
       setOrganizer()
         .then(cacheAttendees)
@@ -272,11 +270,7 @@ function CalEventFormController(
             notifyFullcalendar: $state.is('calendar.main')
           });
         })
-        .then(success => {
-          notification.close();
-
-          return onEventCreateUpdateResponse(success);
-        })
+        .then(onEventCreateUpdateResponse)
         .finally(function() {
           $scope.restActive = false;
         });
@@ -289,10 +283,7 @@ function CalEventFormController(
     $scope.restActive = true;
     _hideModal();
 
-    const notification = _displayNotification(notificationFactory.strongInfo, 'Event deletion', 'Removing event...');
-
     calEventService.removeEvent($scope.event.path, $scope.event, $scope.event.etag).finally(function() {
-      notification.close();
       $scope.restActive = false;
     });
   }
@@ -343,8 +334,6 @@ function CalEventFormController(
       $scope.editedEvent.alarm = $scope.event.alarm;
     }
 
-    const notification = _displayNotification(notificationFactory.strongInfo, 'Event update', 'Saving event...');
-
     return $q.when()
       .then(cacheAttendees)
       .then(denormalizeAttendees)
@@ -358,11 +347,7 @@ function CalEventFormController(
           { graceperiod: true, notifyFullcalendar: $state.is('calendar.main') }
         );
       })
-      .then(success => {
-        notification.close();
-
-        return onEventCreateUpdateResponse(success);
-      })
+      .then(onEventCreateUpdateResponse)
       .finally(function() {
         $scope.restActive = false;
       });

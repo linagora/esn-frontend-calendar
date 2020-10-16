@@ -858,56 +858,6 @@ describe('The CalEventFormController controller', function() {
           });
         });
 
-        it('should send modify request and display a notification while the request is being processed and close it when the request is done', function() {
-          scope.event = CalendarShell.fromIncompleteShell({
-            start: moment(),
-            end: moment(),
-            title: 'title',
-            attendees: [{
-              name: 'attendee1',
-              email: 'attendee1@openpaas.org',
-              partstart: 'DECLINED'
-            }]
-          });
-          initController();
-
-          scope.attendees.users = [{
-            name: 'attendee1',
-            email: 'attendee1@openpaas.org',
-            partstat: 'ACCEPTED'
-          }];
-          scope.editedEvent = CalendarShell.fromIncompleteShell({
-            start: moment(),
-            end: moment(),
-            title: 'title',
-            attendees: scope.attendees.users
-          });
-
-          const deferred = $q.defer();
-
-          calEventServiceMock.modifyEvent = sinon.stub().returns(deferred.promise);
-
-          scope.modifyEvent();
-
-          scope.$digest();
-
-          const calendarId = calendarTest.id;
-          const expectedPath = '/calendars/' + calendarHomeId + '/' + calendarId;
-
-          expect(calEventServiceMock.modifyEvent).to.have.been.calledWith(expectedPath, scope.editedEvent, scope.event, scope.etag, sinon.match.any, {
-            graceperiod: true,
-            notifyFullcalendar: $stateMock.is()
-          });
-          expect(notificationFactoryMock.strongInfo).to.have.been.calledWith('Event update', 'Saving event...');
-          expect(closeNotificationStub).to.have.not.been.called;
-
-          deferred.resolve();
-
-          scope.$digest();
-
-          expect(closeNotificationStub).to.have.been.calledOnce;
-        });
-
         it('should not send modify request if properties not visible in the UI changed', function(done) {
           let editedEvent = {};
 
@@ -1441,27 +1391,6 @@ describe('The CalEventFormController controller', function() {
         expect(resourcesCacheSpy).to.have.been.calledWith(newResources);
       });
 
-      it('should display a notification while the request to create event is being processed and close it when the request is done', function() {
-        const deferred = $q.defer();
-
-        calEventServiceMock.createEvent = sinon.stub().returns(deferred.promise);
-
-        scope.createEvent();
-        scope.$digest();
-
-        expect(calEventServiceMock.createEvent).to.have.been.calledWith(calendarTest, scope.editedEvent, {
-          graceperiod: true,
-          notifyFullcalendar: $stateMock.is()
-        });
-        expect(notificationFactoryMock.strongInfo).to.have.been.calledWith('Event creation', 'Saving event...');
-        expect(closeNotificationStub).to.have.not.been.called;
-
-        deferred.resolve();
-        scope.$digest();
-
-        expect(closeNotificationStub).to.have.been.calledOnce;
-      });
-
       it('should return error notification when there is no selected calendar', function() {
         scope.selectedCalendar = {};
 
@@ -1530,36 +1459,6 @@ describe('The CalEventFormController controller', function() {
         expect(calEventServiceMock.createEvent).to.have.been.calledOnce;
         expect(restoreSpy).to.not.have.been.called;
         expect(calOpenEventFormMock).to.have.been.calledWith(sinon.match.any, scope.editedEvent);
-      });
-    });
-
-    describe('deleteEvent function', function() {
-      beforeEach(function() {
-        scope.event = CalendarShell.fromIncompleteShell({
-          _id: '123456',
-          start: moment('2013-02-08 12:30'),
-          end: moment('2013-02-08 13:30'),
-          otherProperty: 'aString'
-        });
-        initController();
-      });
-
-      it('should display a notification while the request to delete event is being processed and close it when the request is done', function() {
-        const deferred = $q.defer();
-
-        calEventServiceMock.removeEvent = sinon.stub().returns(deferred.promise);
-
-        scope.deleteEvent();
-        scope.$digest();
-
-        expect(calEventServiceMock.removeEvent).to.have.been.calledWith(scope.event.path, scope.event, scope.event.etag);
-        expect(notificationFactoryMock.strongInfo).to.have.been.calledWith('Event deletion', 'Removing event...');
-        expect(closeNotificationStub).to.have.not.been.called;
-
-        deferred.resolve();
-        scope.$digest();
-
-        expect(closeNotificationStub).to.have.been.calledOnce;
       });
     });
 

@@ -46,10 +46,13 @@ describe('The calEventService service', function() {
       }
     };
 
+    self.closeNotificationMock = sinon.stub();
+
     self.notificationFactoryMock = {
       weakInfo: sinon.spy(),
       weakError: sinon.spy(),
-      weakSuccess: sinon.spy()
+      weakSuccess: sinon.spy(),
+      strongInfo: sinon.stub().returns({ close: self.closeNotificationMock })
     };
 
     self.jstz = {
@@ -699,7 +702,7 @@ describe('The calEventService service', function() {
       self.$httpBackend.flush();
       expect(self.gracePeriodService.grace).to.have.been.calledWith(sinon.match({
         gracePeriodFail: {
-          text: 'Event modification failed, please refresh your calendar',
+          text: 'Event modification failed. Please refresh your calendar',
           actionText: 'Refresh calendar',
           delay: -1,
           hideCross: true,
@@ -1560,6 +1563,67 @@ describe('The calEventService service', function() {
         self.$httpBackend.expectPUT(getEventPath()).respond(201, { id: '123456789' });
       });
 
+      it('should display a notification when the request to create an event is being processed and close it when the request succeeds', function(done) {
+        const vcalendar = new ICAL.Component('vcalendar');
+        const vevent = new ICAL.Component('vevent');
+
+        vevent.addPropertyWithValue('uid', eventUUID);
+        vevent.addPropertyWithValue('dtstart', dtstart);
+        vevent.addPropertyWithValue('dtend', dtend);
+        vevent.addPropertyWithValue('summary', 'test event');
+        vcalendar.addSubcomponent(vevent);
+
+        const path = getEventPath();
+        const etag = 'ETAG';
+        const calendarShell = new self.CalendarShell(vcalendar, {
+          path: path,
+          etag: etag
+        });
+
+        self.calEventAPI.create = () => $q.resolve();
+
+        self.calEventService.createEvent(calendar, calendarShell)
+          .then(() => {
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          })
+          .catch(err => done(err || new Error('should resolve')));
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event creation', 'Saving event...');
+        self.$rootScope.$digest();
+      });
+
+      it('should display a notification when the request to create an event is being processed and close it when the request fails', function(done) {
+        const vcalendar = new ICAL.Component('vcalendar');
+        const vevent = new ICAL.Component('vevent');
+
+        vevent.addPropertyWithValue('uid', eventUUID);
+        vevent.addPropertyWithValue('dtstart', dtstart);
+        vevent.addPropertyWithValue('dtend', dtend);
+        vevent.addPropertyWithValue('summary', 'test event');
+        vcalendar.addSubcomponent(vevent);
+
+        const path = getEventPath();
+        const etag = 'ETAG';
+        const calendarShell = new self.CalendarShell(vcalendar, {
+          path: path,
+          etag: etag
+        });
+
+        self.calEventAPI.create = () => $q.reject(new Error('Request failed'));
+
+        self.calEventService.createEvent(calendar, calendarShell)
+          .then(() => done(new Error('should not resolve')))
+          .catch(err => {
+            expect(err).to.exist;
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          });
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event creation', 'Saving event...');
+        self.$rootScope.$digest();
+      });
+
       it('should not call calCachedEventSource.registerAdd', function() {
         self.calEventService.createEvent(calendar, event, {});
 
@@ -1618,6 +1682,35 @@ describe('The calEventService service', function() {
         self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics').respond(204, { id: '123456789' });
       });
 
+      it('should display a notification when the request to remove the event is being processed and close it when the request succeeds', function(done) {
+        self.calEventAPI.remove = () => $q.resolve();
+
+        self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', event, 'etag')
+          .then(() => {
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          })
+          .catch(err => done(err || new Error('should resolve')));
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event removal', 'Removing event...');
+        self.$rootScope.$digest();
+      });
+
+      it('should display a notification when the request to remove the event is being processed and close it when the request fails', function(done) {
+        self.calEventAPI.remove = () => $q.reject(new Error('Request failed'));
+
+        self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', event, 'etag')
+          .then(() => done(new Error('should not resolve')))
+          .catch(err => {
+            expect(err).to.exist;
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          });
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event removal', 'Removing event...');
+        self.$rootScope.$digest();
+      });
+
       it('should not call calCachedEventSource.registerDelete', function() {
         self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', event, 'etag');
 
@@ -1659,6 +1752,7 @@ describe('The calEventService service', function() {
           { emails: ['user1@lng.com'], partstat: 'ACCEPTED' },
           { emails: ['user2@lng.com'], partstat: 'NEEDS-ACTION' }
         ];
+
         var vcalendar = new ICAL.Component('vcalendar');
         var vevent = new ICAL.Component('vevent');
 
@@ -1687,6 +1781,35 @@ describe('The calEventService service', function() {
         sinon.spy(self.gracePeriodService, 'grace');
 
         self.$httpBackend.expectPUT('/dav/api/path/to/uid.ics').respond(204, { id: '123456789' });
+      });
+
+      it('should display a notification while the request to modify the event is being processed and close it when the request succeeds', function(done) {
+        self.calEventAPI.modify = () => $q.when();
+
+        self.calEventService.modifyEvent('/path/to/uid.ics', event, event, 'etag', angular.noop)
+          .then(() => {
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          })
+          .catch(err => done(err || new Error('should resolve')));
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event modification', 'Saving event...');
+        self.$rootScope.$digest();
+      });
+
+      it('should display a notification while the request to modify the event is being processed and close it when the request fails', function(done) {
+        self.calEventAPI.modify = () => $q.reject(new Error('Request failed'));
+
+        self.calEventService.modifyEvent('/path/to/uid.ics', event, event, 'etag', angular.noop)
+          .then(() => done(new Error('should not resolve')))
+          .catch(err => {
+            expect(err).to.exist;
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          });
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event modification', 'Saving event...');
+        self.$rootScope.$digest();
       });
 
       it('should not call calendarEventEmitterMock.emitModifiedEvent', function() {
