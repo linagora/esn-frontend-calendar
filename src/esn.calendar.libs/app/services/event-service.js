@@ -447,7 +447,7 @@ function calEventService(
           cancelTooLate: 'It is too late to cancel the modification',
           cancelSuccess: esnI18nService.translate('Calendar - Modification of %s has been canceled.', { title: calEventUtils.getEventTitle(event) }),
           gracePeriodFail: {
-            text: 'Event modification failed, please refresh your calendar',
+            text: 'Event modification failed. Please refresh your calendar',
             delay: -1,
             hideCross: true,
             actionText: 'Refresh calendar',

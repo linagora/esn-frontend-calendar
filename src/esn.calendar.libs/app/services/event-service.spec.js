@@ -702,7 +702,7 @@ describe('The calEventService service', function() {
       self.$httpBackend.flush();
       expect(self.gracePeriodService.grace).to.have.been.calledWith(sinon.match({
         gracePeriodFail: {
-          text: 'Event modification failed, please refresh your calendar',
+          text: 'Event modification failed. Please refresh your calendar',
           actionText: 'Refresh calendar',
           delay: -1,
           hideCross: true,
