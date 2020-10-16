@@ -223,6 +223,8 @@ function calEventService(
       return false;
     }
 
+    const savingEventNotification = notificationFactory.strongInfo('Event creation', 'Saving event...');
+
     return calEventAPI.create(eventPath, event.vcalendar, options)
       .then(function(response) {
         if (!CAL_GRACE_DELAY_IS_ACTIVE || typeof response !== 'string') {
@@ -256,6 +258,8 @@ function calEventService(
         return response;
       })
       .finally(function() {
+        savingEventNotification.close();
+
         event.gracePeriodTaskId = undefined;
       });
   }
@@ -293,6 +297,8 @@ function calEventService(
     }
 
     function performRemove() {
+      const removingEventNotification = notificationFactory.strongInfo('Event removal', 'Removing event...');
+
       return calEventAPI.remove(eventPath, etag)
         .then(function(id) {
           if (!CAL_GRACE_DELAY_IS_ACTIVE) {
@@ -340,6 +346,8 @@ function calEventService(
           return CAL_GRACE_DELAY_IS_ACTIVE ? response : true;
         })
         .finally(function() {
+          removingEventNotification.close();
+
           event.gracePeriodTaskId = undefined;
         });
     }
@@ -414,6 +422,8 @@ function calEventService(
       calendarEventEmitter.emitModifiedEvent(oldEvent);
     }
 
+    const savingEventNotification = notificationFactory.strongInfo('Event modification', 'Saving event...');
+
     return event.getModifiedMaster().then(function(masterEvent) {
       return calEventAPI.modify(path, masterEvent.vcalendar, etag);
     })
@@ -463,6 +473,8 @@ function calEventService(
         return CAL_GRACE_DELAY_IS_ACTIVE ? response : true;
       })
       .finally(function() {
+        savingEventNotification.close();
+
         delete oldEventStore[event.uid];
         event.gracePeriodTaskId = undefined;
       });
