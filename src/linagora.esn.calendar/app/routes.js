@@ -32,6 +32,26 @@ function routesConfig($stateProvider) {
         }
       }
     })
+    .state('calendar.main.participation', {
+      url: '/participation',
+
+      onEnter: function($log, session, $state, notificationFactory, calendarHomeService, $location, calOpenEventForm, calEventService) {
+        const jwt = $location.search().jwt;
+        const eventUid = $location.search().eventUid;
+
+        if (jwt && eventUid) {
+          calEventService.changeParticipationFromLink(jwt).then(response => response)
+            .then(() => calendarHomeService.getUserCalendarHomeId())
+            .then(calendarHomeId => calEventService.getEventByUID(calendarHomeId, eventUid))
+            .then((event, calendarHomeId) => calOpenEventForm(calendarHomeId, event))
+            .catch(err => {
+              $log.error('Can not display the requested event', err);
+              notificationFactory.weakError('Can not display the event');
+              $state.go('calendar.main');
+            });
+        }
+      }
+    })
     .state('calendar.main.planning', {
       url: '/planning',
       views: {

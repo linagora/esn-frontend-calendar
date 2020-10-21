@@ -41,12 +41,14 @@ function calEventService(
   CAL_GRACE_DELAY,
   CAL_GRACE_DELAY_IS_ACTIVE,
   CAL_EVENTS,
-  session
+  session,
+  httpConfigurer
 ) {
   var self = this;
   var oldEventStore = {};
 
   self.changeParticipation = changeParticipation;
+  self.changeParticipationFromLink = changeParticipationFromLink;
   self.sendCounter = sendCounter;
   self.getInvitedAttendees = getInvitedAttendees;
   self.getEvent = getEvent;
@@ -536,6 +538,18 @@ function calEventService(
   }
 
   /**
+   * Change the status of participation from external link
+   * @return {Mixed}                              Jwt
+   * Note that we retry the request in case of 412. This is the code returned for a conflict.
+   */
+  function changeParticipationFromLink(jwt) {
+
+    return $http({ method: 'GET', url: getChangeParticipationUrl(jwt) })
+      .then(response => response.data)
+      .catch(error => error.data);
+  }
+
+  /**
    * Answers to an invite with a counter proposal (suggesting another time)
    * @param  {CalendarShell}            suggestedEvent      the event in which we seek the attendees
    * See https://tools.ietf.org/html/rfc5546#page-86
@@ -575,4 +589,8 @@ function calEventService(
       return new CalendarShell(ICAL.Component.fromString(response.data));
     });
   }
+  function getChangeParticipationUrl(jwt) {
+    return `${httpConfigurer.getUrl('/calendar/api/calendars/event/participation')}?jwt=${jwt}`;
+  }
+
 }
