@@ -333,6 +333,11 @@
     .constant('CAL_ALARM_MODIFY_COMPARE_KEYS', ['action', 'attendee', 'description', 'summary', 'trigger'])
 
     /**
+     * When duplicating an event, the JSON keys on the event will be copied.
+     */
+    .constant('CAL_EVENT_DUPLICATE_KEYS', ['attendees', 'title', 'start', 'end', 'location', 'description', 'xOpenpaasVideoconference', 'class'])
+
+    /**
      * see RFC 5546 https://tools.ietf.org/html/rfc5546#page-11
      */
     .constant('CAL_SIGNIFICANT_CHANGE_KEYS', ['start', 'end', 'duration', 'due', 'rrule', 'rdate', 'exdate', 'status'])

@@ -1,3 +1,5 @@
+'use strict';
+
 const _ = require('lodash');
 
 require('../../freebusy/confirmation-modal/event-freebusy-confirmation-modal.service.js');
@@ -13,8 +15,7 @@ require('../../freebusy/freebusy.service.js');
 require('../../../services/partstat-update-notification.service.js');
 require('../../../app.constants.js');
 require('../../freebusy/freebusy.constants.js');
-
-'use strict';
+require('../../../services/shells/calendar-shell.js');
 
 angular.module('esn.calendar.libs')
   .controller('CalEventFormController', CalEventFormController);
@@ -32,6 +33,7 @@ function CalEventFormController(
   calEventService,
   calAttendeeService,
   calEventUtils,
+  CalendarShell,
   notificationFactory,
   calOpenEventForm,
   calUIAuthorizationService,
@@ -43,13 +45,16 @@ function CalEventFormController(
   usSpinnerService,
   calFreebusyService,
   calPartstatUpdateNotificationService,
+  VideoConfConfigurationService,
+  uuid4,
   CAL_ATTENDEE_OBJECT_TYPE,
   CAL_RELATED_EVENT_TYPES,
   CAL_EVENTS,
   CAL_EVENT_FORM,
   CAL_ICAL,
   CAL_FREEBUSY,
-  CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION
+  CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION,
+  CAL_EVENT_DUPLICATE_KEYS
 ) {
   var initialUserAttendeesRemoved = [];
   var initialResourceAttendeesRemoved = [];
@@ -65,6 +70,7 @@ function CalEventFormController(
   $scope.modifyEvent = modifyEvent;
   $scope.deleteEvent = deleteEvent;
   $scope.createEvent = createEvent;
+  $scope.duplicateEvent = duplicateEvent;
   $scope.isNew = $scope.event.fetchFullEvent ? function() { return false; } : calEventUtils.isNew;
   $scope.isInvolvedInATask = calEventUtils.isInvolvedInATask;
   $scope.updateAlarm = updateAlarm;
@@ -586,6 +592,71 @@ function CalEventFormController(
   function _getCalendarByUniqueId(uniqueId) {
     return _.find($scope.calendars, function(calendar) {
       return calendar.getUniqueId() === uniqueId;
+    });
+  }
+
+  function duplicateEvent() {
+    // Build an event copy based on the currently edited event.
+    const duplicate = _generateEditedEventCopy();
+
+    // Set the alarm if there was any
+    // alarm can't be set with CalendarShell.fromIncompleteShell because the event needs to be created or cloned first.
+    if ($scope.editedEvent.alarm) {
+      duplicate.alarm = $scope.editedEvent.alarm;
+    }
+
+    // Reset the partstat from the original event.
+    _resetAttendeesParticipation(duplicate);
+
+    // Check and set a new video conference link if needed.
+    if (duplicate && duplicate.xOpenpaasVideoconference) {
+      // Wait for the VideoConfConfigurationService to generate a link.
+      return _generateVideoConferenceUrl().then(url => {
+        duplicate.xOpenpaasVideoconference = url;
+        _showDuplicateEventForm(duplicate);
+      });
+    }
+
+    _showDuplicateEventForm(duplicate);
+  }
+
+  function _showDuplicateEventForm(event) {
+    if (!event) return;
+    // Close the currently opened event form.
+    $scope.cancel();
+    // Open the duplicate event creation form after a short delay ( let the first modal finish hiding ).
+    $timeout(function() {
+      calOpenEventForm($scope.event.calendarHomeId, event);
+    }, CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION);
+  }
+
+  function _generateEditedEventCopy() {
+    const details = CAL_EVENT_DUPLICATE_KEYS
+      .reduce((details, key) => ($scope.editedEvent[key] ? { [key]: $scope.editedEvent[key], ...details } : details), {});
+
+    return CalendarShell.fromIncompleteShell(details);
+  }
+
+  function _generateVideoConferenceUrl() {
+
+    return VideoConfConfigurationService.getOpenPaasVideoconferenceAppUrl()
+      .then(openPaasVideoconferenceAppUrl => `${openPaasVideoconferenceAppUrl}${uuid4.generate()}`)
+      .catch(err => {
+        $log.error('Cannot generate a new video conference URL', err);
+        _displayNotification(notificationFactory.weakError, null, 'Failed to create a new video conference room');
+      });
+  }
+
+  function _resetAttendeesParticipation(event) {
+    if (!event || !event.attendees) return;
+
+    event.attendees = event.attendees.map(attendee => {
+      // Ignore resources
+      if (attendee && attendee.cutype !== CAL_ICAL.cutype.resource) {
+        return { ...attendee, partstat: CAL_ICAL.partstat.needsaction };
+      }
+
+      return attendee;
     });
   }
 }

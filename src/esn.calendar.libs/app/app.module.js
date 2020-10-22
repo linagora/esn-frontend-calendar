@@ -47,7 +47,8 @@ angular.module('esn.calendar.libs', [
   'esn.scroll',
   'ngTagsInput',
   'esn.member',
-  'mp.autoFocus'
+  'mp.autoFocus',
+  'linagora.esn.videoconference'
 ]);
 
 require('esn-frontend-common-libs/src/frontend/js/modules/esn.router.js');
@@ -91,6 +92,7 @@ require('esn-frontend-common-libs/src/frontend/js/modules/widget-helper.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/onscroll/on-scroll.module.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/localstorage.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/scroll.js');
+require('esn-frontend-videoconference-calendar/src/linagora.esn.videoconference/app/videoconference.module.js');
 
 require('../../esn.resource.libs/app/app.module.js');
 
