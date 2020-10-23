@@ -34,21 +34,19 @@ function routesConfig($stateProvider) {
     })
     .state('calendar.main.participation', {
       url: '/participation',
+      resolve: {
+        event: function($log, $state, $location, notificationFactory, calEventService) {
+          const jwt = $location.search().jwt;
+          const eventUid = $location.search().eventUid;
 
-      onEnter: function($log, session, $state, notificationFactory, calendarHomeService, $location, calOpenEventForm, calEventService) {
-        const jwt = $location.search().jwt;
-        const eventUid = $location.search().eventUid;
-
-        if (jwt && eventUid) {
-          calEventService.changeParticipationFromLink(jwt).then(response => response)
-            .then(() => calendarHomeService.getUserCalendarHomeId())
-            .then(calendarHomeId => calEventService.getEventByUID(calendarHomeId, eventUid))
-            .then((event, calendarHomeId) => calOpenEventForm(calendarHomeId, event))
-            .catch(err => {
-              $log.error('Can not display the requested event', err);
-              notificationFactory.weakError('Can not display the event');
-              $state.go('calendar.main');
-            });
+          if (jwt && eventUid) {
+            calEventService.changeParticipationFromLink(eventUid, jwt)
+              .catch(err => {
+                $log.error('Can not display the requested event', err);
+                notificationFactory.weakError(null, 'Can not display the event');
+                $state.go('calendar.main');
+              });
+          }
         }
       }
     })

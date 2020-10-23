@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('The calEventService service', function() {
-  var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend;
+  var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend, calendarHomeServiceMock, calOpenEventFormMock;
   var self = this;
 
   beforeEach(function() {
@@ -74,6 +74,12 @@ describe('The calEventService service', function() {
       emitModifiedEvent: sinon.spy()
     };
 
+    calendarHomeServiceMock = {
+      getUserCalendarHomeId: sinon.stub().returns($q.when('1'))
+    };
+
+    calOpenEventFormMock = sinon.stub();
+
     angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.ical');
@@ -89,6 +95,8 @@ describe('The calEventService service', function() {
       $provide.value('calCachedEventSource', calCachedEventSourceMock);
       $provide.value('calendarEventEmitter', self.calendarEventEmitterMock);
       $provide.value('gracePeriodLiveNotificationService', { start: angular.noop });
+      $provide.value('calendarHomeService', calendarHomeServiceMock);
+      $provide.value('calOpenEventForm', calOpenEventFormMock);
       $provide.value('esnI18nService', {
         translate: function(input) { return input; }
       });
@@ -1462,6 +1470,49 @@ describe('The calEventService service', function() {
     });
 
     // Everything else is covered by the modify fn
+  });
+
+  describe('the change participation from link', function() {
+
+    it('should open modal after successfully changing the participation status and open the appropriate event dialog', function() {
+      const eventUid = '123';
+      const jwt = '123';
+
+      this.$httpBackend.expectGET('/calendar/api/calendars/event/participation?jwt=123').respond({});
+      this.$httpBackend.when('REPORT', '/dav/api/calendars/1.json', { uid: '123' }).respond({
+        _links: {
+          self: { href: '/prepath/path/to/calendar.json' }
+        },
+        _embedded: {
+          'dav:item': [{
+            _links: {
+              self: { href: '/prepath/path/to/calendar/myuid.ics' }
+            },
+            etag: '"123123"',
+            data: [
+              'vcalendar', [], [
+                ['vevent', [
+                  ['uid', {}, 'text', 'myuid'],
+                  ['summary', {}, 'text', 'title'],
+                  ['location', {}, 'text', 'location'],
+                  ['dtstart', {}, 'date-time', '2014-01-01T02:03:04'],
+                  ['dtend', {}, 'date-time', '2014-01-01T03:03:04']
+                ], []]
+              ]
+            ]
+          }]
+        }
+      });
+      self.calEventService.changeParticipationFromLink(eventUid, jwt).then(function() {
+        self.$httpBackend.flush();
+        const stubArgs = calOpenEventFormMock.firstCall.args;
+
+        expect(calendarHomeServiceMock.getUserCalendarHomeId).to.have.been.called;
+        expect(stubArgs[0]).to.eq(1);
+        expect(stubArgs[1].etag).to.eq('"123123"');
+      });
+    });
+
   });
 
   describe('The getEventByUID fn', function() {

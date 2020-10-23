@@ -23,6 +23,7 @@ angular.module('esn.calendar.libs')
 function calEventService(
   $q,
   $http,
+  $log,
   $rootScope,
   ICAL,
   calCachedEventSource,
@@ -37,7 +38,9 @@ function calEventService(
   calMasterEventCache,
   calFreebusyHooksService,
   notificationFactory,
+  calOpenEventForm,
   esnI18nService,
+  calendarHomeService,
   CAL_GRACE_DELAY,
   CAL_GRACE_DELAY_IS_ACTIVE,
   CAL_EVENTS,
@@ -539,14 +542,20 @@ function calEventService(
 
   /**
    * Change the status of participation from external link
-   * @return {Mixed}                              Jwt
-   * Note that we retry the request in case of 412. This is the code returned for a conflict.
+   * @param {Mixed}    eventUid   the uid of event
+   * @param {Mixed}    jwt        jwt
    */
-  function changeParticipationFromLink(jwt) {
-
-    return $http({ method: 'GET', url: getChangeParticipationUrl(jwt) })
-      .then(response => response.data)
-      .catch(error => error.data);
+  function changeParticipationFromLink(eventUid, jwt) {
+    $http({ method: 'GET', url: getChangeParticipationUrl(jwt) })
+      .then(() => calendarHomeService.getUserCalendarHomeId())
+      .then(calendarHomeId => {
+        getEventByUID(calendarHomeId, eventUid).then(event => {
+          calOpenEventForm(calendarHomeId, event);
+        });
+      }).catch(err => {
+        $log.error('Can not change participation', err);
+        notificationFactory.weakError(null, 'Event participation modification failed');
+      });
   }
 
   /**
@@ -589,8 +598,8 @@ function calEventService(
       return new CalendarShell(ICAL.Component.fromString(response.data));
     });
   }
+
   function getChangeParticipationUrl(jwt) {
     return `${httpConfigurer.getUrl('/calendar/api/calendars/event/participation')}?jwt=${jwt}`;
   }
-
 }
