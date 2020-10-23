@@ -288,6 +288,33 @@ function CalEventFormController(
     });
   }
 
+  function _changeOrganizerParticipation(status) {
+    const eventPayload = $scope.event.clone();
+
+    eventPayload.setOrganizerPartStat(status);
+    $scope.restActive = true;
+
+    calEventService.changeParticipation(eventPayload.path, eventPayload, [eventPayload.organizer.email], status, eventPayload.etag)
+      .then(({ etag }) => {
+        if (!etag) {
+          return notificationFactory.weakError('', 'Event participation modification failed');
+        }
+
+        calPartstatUpdateNotificationService(status);
+
+        // Set the new Etag to avoid 412 precondition failed
+        $scope.event.etag = etag;
+        $scope.editedEvent.etag = etag;
+      })
+      .catch(err => {
+        $log.error('Organizer event participation update failed', err);
+        notificationFactory.weakError('Event participation modification failed', 'Please refresh your calendar');
+      })
+      .finally(() => {
+        $scope.restActive = false;
+      });
+  }
+
   function _changeParticipationAsAttendee(event) {
     var partstat = $scope.calendarOwnerAsAttendee.partstat;
 
@@ -394,6 +421,7 @@ function CalEventFormController(
       if (status !== $scope.editedEvent.getOrganizerPartStat()) {
         $scope.editedEvent.setOrganizerPartStat(status);
         $scope.$broadcast(CAL_EVENTS.EVENT_ATTENDEES_UPDATE);
+        _changeOrganizerParticipation(status);
       }
     } else if ($scope.editedEvent.isInstance()) {
       $modal({

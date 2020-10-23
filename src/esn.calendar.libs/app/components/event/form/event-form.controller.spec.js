@@ -110,7 +110,9 @@ describe('The CalEventFormController controller', function() {
         return $q.when({});
       }),
       changeParticipation: sinon.spy(function() {
-        return $q.when({});
+        return $q.when({
+          etag: 'TEST-ETAG'
+        });
       }),
       modifyEvent: function(path, e) { // eslint-disable-line
         eventTest = e;
@@ -1268,11 +1270,13 @@ describe('The CalEventFormController controller', function() {
           attendees: [owner],
           otherProperty: 'aString'
         });
+
         canModifyEventResult = false;
         $stateMock.go = sinon.spy();
         scope.$hide = sinon.spy();
         initController();
         scope.isOrganizer = false;
+        scope.$digest();
       });
 
       it('should update the event', function() {
@@ -1296,6 +1300,57 @@ describe('The CalEventFormController controller', function() {
 
         expect(calEventServiceMock.changeParticipation).to.have.been.called;
         expect(scope.$hide).to.not.have.been.called;
+      });
+
+      it('should call the calEventService.changeParticipation when an organizer is changing his partstat', function() {
+        scope.editedEvent.organizer = { ...owner, email: 'owner@test.com' };
+        scope.calendarOwnerAsAttendee.email = 'owner@test.com';
+        scope.editedEvent.getOrganizerPartStat = sinon.stub().returns('NEEDS-ACTION');
+        scope.editedEvent.setOrganizerPartStat = sinon.spy();
+
+        scope.changeParticipation('ACCEPTED');
+
+        expect(scope.editedEvent.setOrganizerPartStat).to.have.been.called;
+        expect(calEventServiceMock.changeParticipation).to.have.been.called;
+      });
+
+      it('should update the event and editedEvent etag after updating the organizer partstat', function() {
+        scope.editedEvent.organizer = { ...owner, email: 'owner@test.com' };
+        scope.calendarOwnerAsAttendee.email = 'owner@test.com';
+        scope.editedEvent.getOrganizerPartStat = sinon.stub().returns('NEEDS-ACTION');
+        scope.editedEvent.setOrganizerPartStat = sinon.spy();
+
+        scope.changeParticipation('ACCEPTED');
+        scope.$digest();
+
+        expect(scope.editedEvent.setOrganizerPartStat).to.have.been.called;
+        expect(scope.editedEvent.etag).to.eq('TEST-ETAG');
+        expect(scope.event.etag).to.eq('TEST-ETAG');
+      });
+
+      it('should not call the calEventService.changeParticipation if the organizer status did not change', function() {
+        scope.editedEvent.organizer = { ...owner, email: 'owner@test.com' };
+        scope.calendarOwnerAsAttendee.email = 'owner@test.com';
+        scope.editedEvent.getOrganizerPartStat = sinon.stub().returns('NEEDS-ACTION');
+        scope.editedEvent.setOrganizerPartStat = sinon.spy();
+
+        scope.changeParticipation('NEEDS-ACTION');
+
+        expect(scope.editedEvent.setOrganizerPartStat).to.not.have.been.called;
+        expect(calEventServiceMock.changeParticipation).to.not.have.been.called;
+      });
+
+      it('should disable the form action buttons while changing the organizer partstat', function() {
+        scope.editedEvent.organizer = { ...owner, email: 'owner@test.com' };
+        scope.calendarOwnerAsAttendee.email = 'owner@test.com';
+        scope.editedEvent.getOrganizerPartStat = sinon.stub().returns('NEEDS-ACTION');
+        calEventServiceMock.changeParticipation = function() {
+          expect(scope.restActive).to.eq(true);
+
+          return $q.when({ etag: 'something' });
+        };
+
+        scope.changeParticipation('ACCEPTED');
       });
     });
 

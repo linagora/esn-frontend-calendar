@@ -497,7 +497,10 @@ function calEventService(
     if (!angular.isArray(event.attendees)) {
       return $q.when(null);
     }
-    if (!event.changeParticipation(status, emails)) {
+
+    if (event.organizer && emails.length === 1 && emails[0] === event.organizer.email) {
+      event.setOrganizerPartStat(status);
+    } else if (!event.changeParticipation(status, emails)) {
       return $q.when(null);
     }
 
