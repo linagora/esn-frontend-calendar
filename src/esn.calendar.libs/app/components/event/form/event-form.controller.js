@@ -292,6 +292,7 @@ function CalEventFormController(
     const eventPayload = $scope.event.clone();
 
     eventPayload.setOrganizerPartStat(status);
+    $scope.restActive = true;
 
     calEventService.changeParticipation(eventPayload.path, eventPayload, [eventPayload.organizer.email], status, eventPayload.etag)
       .then(({ etag }) => {
@@ -308,6 +309,9 @@ function CalEventFormController(
       .catch(err => {
         $log.error('Organizer event participation update failed', err);
         notificationFactory.weakError('Event participation modification failed', 'Please refresh your calendar');
+      })
+      .finally(() => {
+        $scope.restActive = false;
       });
   }
 
