@@ -34,7 +34,7 @@ describe('the CalendarsListItemConfiguration controller', function() {
   describe('goTo function', function() {
 
     it('should call $state.go with calendarUniqueId', function() {
-      var stateToGo = 'calendar.edit';
+      var stateToGo = 'calendar.main.edit';
 
       CalendarsListItemConfiguration.calendarId = calendarUniqueId;
 
