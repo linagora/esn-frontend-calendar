@@ -9,4 +9,4 @@
         span(ng-if="ctrl.isShared") {{ 'This will unsubscribe you from the "%s" calendar.' | translate:ctrl }}
       .modal-footer
         button.btn.btn-default(type="button", ng-click="$hide()") {{ 'Cancel' | translate }}
-        button.btn.btn-primary(type="button", ng-click="ctrl.delete(); $hide()") {{ 'Accept' | translate }}
+        button.btn.btn-primary(type="button", ng-click="ctrl.delete(); ctrl.closeBehindModal(); $hide()") {{ 'Accept' | translate }}

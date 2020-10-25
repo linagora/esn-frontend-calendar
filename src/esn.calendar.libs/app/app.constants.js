@@ -600,6 +600,12 @@
 
     .constant('CAL_SIDEBAR_VISIBILITY', 'calendar:changeSidebarVisibility')
     .constant('CAL_ACCEPT_EXPORT_HEADER', 'application/calendar')
-    .constant('CAL_EXPORT_FILE_TYPE', 'application/calendar;charset=utf-8');
+    .constant('CAL_EXPORT_FILE_TYPE', 'application/calendar;charset=utf-8')
+    .constant('UPDATE_CAL_SETTINGS', 'cal-settings:status:updated')
+    .constant('CAL_SETTINGS_STATUS', {
+      UPDATING: 'updating',
+      UPDATED: 'updated',
+      FAILED: 'failed'
+    });
 
 })(angular);

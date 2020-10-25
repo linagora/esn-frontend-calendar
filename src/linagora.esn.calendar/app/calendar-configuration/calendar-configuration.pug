@@ -1,32 +1,43 @@
-.calendar-configuration.card.form-container
-  sub-header
-    calendar-configuration-header(previous-state='$ctrl.previousState')
-  .calendar-configuration-title.hidden-xs
-    h2 {{ 'Calendar configuration' | translate }}
-  .row
-    .col-xs-12
-      calendar-configuration-tabs(
-        selected-tab = "$ctrl.selectedTab",
-        new-calendar= "$ctrl.newCalendar",
-        calendar = "$ctrl.calendar"
-      )
-      .card-body.calendar-configuration-body
-        form(ng-submit='$ctrl.submit()')
-          calendar-configuration-tab-main(
-            ng-if="$ctrl.calendar",
-            ng-show='$ctrl.selectedTab === "main"',
-            calendar = "$ctrl.calendar",
-            calendar-home-id = "$ctrl.calendarHomeId"
+.modal.center.full-screen(tabindex="-1", role="dialog", style="z-index: 1070; display: block")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button", ui-sref='{{ $ctrl.previousState }}') &times;
+        h4.modal-title.calendar-configuration-title {{ 'Calendar configuration' | translate }}
+      .modal-body.calendar-configuration
+        .col-xs-12
+          calendar-configuration-tabs(
+            selected-tab = "$ctrl.selectedTab",
             new-calendar= "$ctrl.newCalendar",
-            public-selection = "$ctrl.publicSelection"
+            calendar = "$ctrl.calendar"
           )
-          calendar-configuration-tab-delegation(
-            ng-if="$ctrl.calendarOwner",
-            ng-show='$ctrl.selectedTab === "delegation"',
-            delegations="$ctrl.delegations",
-            selected-sharee-right="$ctrl.selectedShareeRight",
-            new-users-groups= "$ctrl.newUsersGroups",
-            add-user-group = "$ctrl.addUserGroup",
-            remove-user-group = "$ctrl.removeUserGroup",
-            calendar-owner = "$ctrl.calendarOwner"
-          )
+          .card-body.calendar-configuration-body
+            form(ng-submit='$ctrl.submit()')
+              calendar-configuration-tab-main(
+                ng-if="$ctrl.calendar",
+                ng-show='$ctrl.selectedTab === "main"',
+                calendar="$ctrl.calendar",
+                calendar-home-id="$ctrl.calendarHomeId"
+                new-calendar="$ctrl.newCalendar",
+                public-selection="$ctrl.publicSelection"
+              )
+              calendar-configuration-tab-delegation(
+                ng-if="$ctrl.calendarOwner",
+                ng-show='$ctrl.selectedTab === "delegation"',
+                delegations="$ctrl.delegations",
+                selected-sharee-right="$ctrl.selectedShareeRight",
+                new-users-groups="$ctrl.newUsersGroups",
+                add-user-group="$ctrl.addUserGroup",
+                remove-user-group="$ctrl.removeUserGroup",
+                calendar-owner="$ctrl.calendarOwner"
+              )
+      .modal-footer.flex
+        .flex-vertical-centered.flex-start
+          .delete-button.settings-actions(ng-if="$ctrl.canDeleteCalendar")
+            button.btn.btn-link.btn-icon.color-danger.delete(type="button", ng-click="$ctrl.openDeleteConfirmationDialog()") 
+              i.mdi.mdi-delete(style='margin:0')
+        .flex-vertical-centered.flex-end
+          button.btn.btn-link.color-default.close-button(type='button', ui-sref='{{ $ctrl.previousState }}') {{ 'Close' | translate }}
+          button.btn.btn-primary.save.save-button(ng-click='$ctrl.submit()')
+            .vertical-centered(ng-if='!$ctrl.newCalendar') {{ 'Save' | translate }}
+            .vertical-centered(ng-if='$ctrl.newCalendar') {{ 'Create' | translate }}
