@@ -69,7 +69,6 @@
         controller: /* @ngInject */ function($scope) {
           angular.extend($scope, self);
         },
-        backdrop: 'static',
         placement: 'center'
       });
     }
