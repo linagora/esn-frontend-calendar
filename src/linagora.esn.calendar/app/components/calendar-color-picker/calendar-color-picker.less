@@ -1,4 +1,7 @@
 .calendar-color-picker {
+  .modal-dialog {
+    width: fit-content !important;
+  }
   .modal-body {
     .flex-horizontal-centered;
     .flex-flow(row wrap);
@@ -15,6 +18,11 @@
     border: 2px dashed #B5B5B5;
     padding: 1px;
   }
+
+  .square-box-color-picker:hover, .square-box:hover{
+    cursor: pointer;
+  }
+
   .color-box {
     width: 36px;
     height: 36px;
@@ -23,13 +31,10 @@
     border: 1px solid @m-red;
   }
   .calendar-theme-color-picker{
+    cursor: pointer;
     .all-centered;
     width: 36px;
     height: 36px;
-  }
-  
-  &:hover{
-    cursor: pointer;
   }
 
   input[type="color"] {
