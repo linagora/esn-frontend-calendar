@@ -9,6 +9,7 @@ describe('The CalEventFormController controller', function() {
   let $stateMock, calendarHomeServiceMock, calEventServiceMock, notificationFactoryMock, calendarServiceMock, calOpenEventFormMock, closeNotificationStub;
   let calAttendeesDenormalizerService, calAttendeeService, calEventFreeBusyConfirmationModalService, CAL_ICAL, calFreebusyService;
   let $rootScope, $modal, $controller, scope, calEventUtils, calUIAuthorizationService, session, CalendarShell, CAL_EVENT_FORM, CAL_EVENTS, CAL_ALARM_TRIGGER;
+  let VideoConfConfigurationServiceMock, $timeout;
 
   beforeEach(function() {
     eventTest = {};
@@ -182,6 +183,10 @@ describe('The CalEventFormController controller', function() {
 
     calFreebusyService = {};
 
+    VideoConfConfigurationServiceMock = {
+      getOpenPaasVideoconferenceAppUrl: sinon.stub().returns($q.when('some url'))
+    };
+
     angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
@@ -206,6 +211,7 @@ describe('The CalEventFormController controller', function() {
           setUpSearchProvider: function() {}
         };
       });
+      $provide.value('VideoConfConfigurationService', VideoConfConfigurationServiceMock);
     });
   });
 
@@ -220,7 +226,8 @@ describe('The CalEventFormController controller', function() {
     _CAL_EVENTS_,
     _CAL_ALARM_TRIGGER_,
     _CAL_EVENT_FORM_,
-    _CAL_ICAL_
+    _CAL_ICAL_,
+    _$timeout_
   ) {
     $rootScope = _$rootScope_;
     scope = $rootScope.$new();
@@ -234,6 +241,7 @@ describe('The CalEventFormController controller', function() {
     CAL_ALARM_TRIGGER = _CAL_ALARM_TRIGGER_;
     CAL_EVENT_FORM = _CAL_EVENT_FORM_;
     CAL_ICAL = _CAL_ICAL_;
+    $timeout = _$timeout_;
   }));
 
   beforeEach(function() {
@@ -2088,6 +2096,85 @@ describe('The CalEventFormController controller', function() {
         //expect(calFreebusyService.setBulkFreeBusyStatus).to.have.been.calledWith(sinon.match(function(attendees) {
         //  return attendees.length === 2;
         //}), newDate.start, newDate.end, scope.event);
+      });
+    });
+
+    describe('the duplicateEvent function', function() {
+      const eventSkeleton = {
+        start: moment('2018-05-01 10:30'),
+        end: moment('2018-05-01 14:30'),
+        attendees: [{
+          displayName: 'attendee1',
+          email: 'user1@test.com',
+          partstart: 'ACCEPTED'
+        }, {
+          displayName: 'attendee2',
+          email: 'user1@test.com',
+          partstart: 'ACCEPTED'
+        }],
+        sequence: 2, // A property to ignore when copying
+        xOpenpaasVideoconference: undefined // a non defined property
+      };
+
+      beforeEach(function() {
+        scope.event = CalendarShell.fromIncompleteShell(eventSkeleton);
+
+        initController();
+        scope.$digest();
+      });
+
+      it('should create a new copy of the event details correctly', function() {
+        const shellSpy = sinon.spy(CalendarShell, 'fromIncompleteShell');
+
+        scope.duplicateEvent();
+
+        const copiedEvent = shellSpy.firstCall.args[0];
+
+        expect(CalendarShell.fromIncompleteShell).to.have.been.called;
+        // Should ignore properties that cannot be edited in the form.
+        expect(copiedEvent.sequence).to.be.undefined;
+        // Should ignore properties with undefined values
+        expect(copiedEvent.xOpenpaasVideoconference).to.be.undefined;
+      });
+
+      it('should generate a new video conference link if the original event had one', function() {
+        scope.editedEvent = CalendarShell.fromIncompleteShell({
+          ...eventSkeleton,
+          xOpenpaasVideoconference: 'SOMETHING' // an event with a video conference link
+        });
+
+        scope.duplicateEvent();
+
+        expect(VideoConfConfigurationServiceMock.getOpenPaasVideoconferenceAppUrl).to.have.been.called;
+      });
+
+      it('should not generate a new video conference link if the original event didn\'t have one', function() {
+        scope.editedEvent = CalendarShell.fromIncompleteShell(eventSkeleton);
+
+        scope.duplicateEvent();
+
+        expect(VideoConfConfigurationServiceMock.getOpenPaasVideoconferenceAppUrl).to.not.have.been.called;
+      });
+
+      it('should close the previous event form and open a new event form after a brief delay', function() {
+        scope.cancel = sinon.spy();
+        scope.duplicateEvent();
+        $timeout.flush();
+
+        expect(scope.cancel).to.have.been.called;
+        expect(calOpenEventFormMock).to.have.been.called;
+      });
+
+      it('should reset the participation status for the attendees', function() {
+        const shellSpy = sinon.spy(CalendarShell, 'fromIncompleteShell');
+
+        scope.duplicateEvent();
+
+        const copiedEvent = shellSpy.firstCall.args[0];
+
+        copiedEvent.attendees.map(attendee => {
+          expect(attendee.partstat).to.eq('NEEDS-ACTION');
+        });
       });
     });
   });
