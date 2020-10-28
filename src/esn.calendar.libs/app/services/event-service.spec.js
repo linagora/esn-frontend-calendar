@@ -1508,7 +1508,7 @@ describe('The calEventService service', function() {
         const stubArgs = calOpenEventFormMock.firstCall.args;
 
         expect(calendarHomeServiceMock.getUserCalendarHomeId).to.have.been.called;
-        expect(stubArgs[0]).to.eq(1);
+        expect(calOpenEventFormMock).to.have.been.called;
         expect(stubArgs[1].etag).to.eq('"123123"');
       });
     });

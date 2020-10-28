@@ -36,8 +36,7 @@ function routesConfig($stateProvider) {
       url: '/participation',
       resolve: {
         event: function($log, $state, $location, notificationFactory, calEventService) {
-          const jwt = $location.search().jwt;
-          const eventUid = $location.search().eventUid;
+          const { jwt, eventUid } = $location.search();
 
           if (jwt && eventUid) {
             calEventService.changeParticipationFromLink(eventUid, jwt)

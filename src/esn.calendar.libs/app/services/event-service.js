@@ -546,15 +546,13 @@ function calEventService(
    * @param {Mixed}    jwt        jwt
    */
   function changeParticipationFromLink(eventUid, jwt) {
-    $http({ method: 'GET', url: getChangeParticipationUrl(jwt) })
+    return $http({ method: 'GET', url: getChangeParticipationUrl(jwt) })
       .then(() => calendarHomeService.getUserCalendarHomeId())
-      .then(calendarHomeId => {
-        getEventByUID(calendarHomeId, eventUid).then(event => {
-          calOpenEventForm(calendarHomeId, event);
-        });
-      }).catch(err => {
-        $log.error('Can not change participation', err);
-        notificationFactory.weakError(null, 'Event participation modification failed');
+      .then(calendarHomeId => getEventByUID(calendarHomeId, eventUid))
+      .then(event => calOpenEventForm(null, event))
+      .catch(err => {
+        $log.error('Can not display the requested event', err);
+        notificationFactory.weakError('Can not display the event');
       });
   }
 
