@@ -23,6 +23,7 @@ angular.module('esn.calendar.libs')
 function calEventService(
   $q,
   $http,
+  $log,
   $rootScope,
   ICAL,
   calCachedEventSource,
@@ -37,16 +38,20 @@ function calEventService(
   calMasterEventCache,
   calFreebusyHooksService,
   notificationFactory,
+  calOpenEventForm,
   esnI18nService,
+  calendarHomeService,
   CAL_GRACE_DELAY,
   CAL_GRACE_DELAY_IS_ACTIVE,
   CAL_EVENTS,
-  session
+  session,
+  httpConfigurer
 ) {
   var self = this;
   var oldEventStore = {};
 
   self.changeParticipation = changeParticipation;
+  self.changeParticipationFromLink = changeParticipationFromLink;
   self.sendCounter = sendCounter;
   self.getInvitedAttendees = getInvitedAttendees;
   self.getEvent = getEvent;
@@ -536,6 +541,22 @@ function calEventService(
   }
 
   /**
+   * Change the status of participation from external link
+   * @param {Mixed}    eventUid   the uid of event
+   * @param {Mixed}    jwt        jwt
+   */
+  function changeParticipationFromLink(eventUid, jwt) {
+    return $http({ method: 'GET', url: getChangeParticipationUrl(jwt) })
+      .then(() => calendarHomeService.getUserCalendarHomeId())
+      .then(calendarHomeId => getEventByUID(calendarHomeId, eventUid))
+      .then(event => calOpenEventForm(null, event))
+      .catch(err => {
+        $log.error('Can not display the requested event', err);
+        notificationFactory.weakError('Can not display the event');
+      });
+  }
+
+  /**
    * Answers to an invite with a counter proposal (suggesting another time)
    * @param  {CalendarShell}            suggestedEvent      the event in which we seek the attendees
    * See https://tools.ietf.org/html/rfc5546#page-86
@@ -574,5 +595,9 @@ function calEventService(
     return $http.get(url).then(function(response) {
       return new CalendarShell(ICAL.Component.fromString(response.data));
     });
+  }
+
+  function getChangeParticipationUrl(jwt) {
+    return `${httpConfigurer.getUrl('/calendar/api/calendars/event/participation')}?jwt=${jwt}`;
   }
 }

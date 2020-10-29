@@ -32,6 +32,23 @@ function routesConfig($stateProvider) {
         }
       }
     })
+    .state('calendar.main.participation', {
+      url: '/participation',
+      resolve: {
+        event: function($log, $state, $location, notificationFactory, calEventService) {
+          const { jwt, eventUid } = $location.search();
+
+          if (jwt && eventUid) {
+            calEventService.changeParticipationFromLink(eventUid, jwt)
+              .catch(err => {
+                $log.error('Can not display the requested event', err);
+                notificationFactory.weakError(null, 'Can not display the event');
+                $state.go('calendar.main');
+              });
+          }
+        }
+      }
+    })
     .state('calendar.main.planning', {
       url: '/planning',
       views: {
