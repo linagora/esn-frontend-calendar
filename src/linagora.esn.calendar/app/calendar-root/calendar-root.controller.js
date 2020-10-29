@@ -4,11 +4,16 @@
   angular.module('esn.calendar')
     .controller('CalCalendarRootController', CalCalendarRootController);
 
-  function CalCalendarRootController($scope, calendarService, calDefaultValue, calendarHomeId, businessHours) {
+  function CalCalendarRootController($rootScope, $scope, calendarService, calDefaultValue, calendarHomeId, businessHours, calendarSidebarService, CAL_SIDEBAR_VISIBILITY) {
     var CAL_DEFAULT_OLD_CALENDAR_ID = 'events';
 
     $scope.calendarHomeId = calendarHomeId;
     $scope.businessHours = businessHours;
+    $scope.isSidebarVisible = calendarSidebarService.getSidebarVisibility();
+
+    $rootScope.$on(CAL_SIDEBAR_VISIBILITY, function() {
+      $scope.isSidebarVisible = calendarSidebarService.getSidebarVisibility();
+    });
 
     calendarService.getCalendar(calendarHomeId, CAL_DEFAULT_OLD_CALENDAR_ID, true)
       .then(function(calendar) {

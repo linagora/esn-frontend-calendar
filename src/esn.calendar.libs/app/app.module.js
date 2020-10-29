@@ -150,6 +150,7 @@ require('./services/shells/valarm-shell.js');
 require('./services/shells/vfreebusy-shell.js');
 require('./services/timezone.js');
 require('./services/user-and-external-calendars.service.js');
+require('./services/sidebar-visibility.service.js');
 require('./core/date-to-moment.directive.js');
 require('./core/auto-size-and-update.directive.js');
 require('./components/freebusy/confirmation-modal/event-freebusy-confirmation-modal.service.js');

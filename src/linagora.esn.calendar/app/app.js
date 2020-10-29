@@ -161,6 +161,8 @@ require('./components/rights/shared/calendar-shared-rights-display.component.js'
 require('./components/rights/shared/calendar-shared-rights-display.controller.js');
 require('./components/show-planning-sidebar-button/show-planning-sidebar-button.component.js');
 require('./components/show-planning-sidebar-button/show-planning-sidebar-button.controller.js');
+require('./components/show-main-sidebar-button/show-main-sidebar-button.component.js');
+require('./components/show-main-sidebar-button/show-main-sidebar-button.controller.js');
 require('./core/calendar-date-indicator.directive.js');
 require('./core/calendar-view-translation.directive.js');
 require('./core/friendlify-end-date.directive.js');
