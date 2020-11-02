@@ -1,19 +1,8 @@
 // TODO: Revert to use the mixin here in case we can fix the translation issue. Refer to https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/42#issuecomment-672757911 for some suggestions.
-.modal.center.full-screen(tabindex="-1", role="dialog")
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button.close(type='button', ui-sref="calendar.main") &times;
-        h4.modal-title.calendar-configuration-title {{ 'Manage calendars' | translate }}
-      .modal-body.cal-settings
-        ul.esn-tab.configuration-header
-          li.btn-wave(ui-sref-active="active")
-            a(href="", ui-sref="calendar.main.settings.calendars", ui-sref-opts="{ location: 'replace' }") {{ "Calendars" | translate }}
-          li.btn-wave(ui-sref-active="active")
-            a(href="", ui-sref="calendar.main.settings.display", ui-sref-opts="{ location: 'replace' }") {{ "Display" | translate }}
-        ui-view.configuration-content(name="settings", noanimation="noanimation")
-      .modal-footer.flex
-        .flex-vertical-centered.flex-end.hide-sm.hide-xs
-          button.btn.btn-link.color-default.close-button(type='button', ui-sref="calendar.main") {{ 'Close' | translate }}
-        .flex-vertical-centered.flex-start.hide-gt-sm
-          button.btn.btn-link.color-default.close-button(type='button', ui-sref="calendar.main") {{ 'Close' | translate }}
+.cal-settings.card
+  ul.esn-tab.configuration-header
+    li.btn-wave(ui-sref-active="active")
+      a(href="", ui-sref="calendar.settings.calendars", ui-sref-opts="{ location: 'replace' }") {{ "Calendars" | translate }}
+    li.btn-wave(ui-sref-active="active")
+      a(href="", ui-sref="calendar.settings.display", ui-sref-opts="{ location: 'replace' }") {{ "Display" | translate }}
+  ui-view.configuration-content(name="settings", noanimation="noanimation")

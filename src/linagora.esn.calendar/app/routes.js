@@ -57,80 +57,55 @@ function routesConfig($stateProvider) {
         }
       }
     })
-    .state('calendar.main.settings', {
+    .state('calendar.settings', {
       url: '/settings',
       deepStateRedirect: {
-        default: 'calendar.main.settings.calendars',
+        default: 'calendar.settings.calendars',
         fn: function() {
-          return { state: 'calendar.main.settings.calendars' };
+          return { state: 'calendar.settings.calendars' };
         }
       },
-      resolve: {
-        modalInstance: function($modal) {
-          return $modal({
-            template: require('./settings/settings.pug'),
-            controller: 'CalSettingsIndexController',
-            backdrop: 'static',
-            keyboard: false
-          });
+      views: {
+        'content@calendar': {
+          template: require('./settings/settings.pug'),
+          controller: 'CalSettingsIndexController'
         }
-      },
-      onExit: function(modalInstance) {
-        modalInstance.hide();
       }
     })
-    .state('calendar.main.settings.calendars', {
+    .state('calendar.settings.calendars', {
       url: '/calendars',
       views: {
-        'settings@': {
+        settings: {
           template: '<cal-settings-calendars />'
         }
       }
     })
-    .state('calendar.main.settings.display', {
+    .state('calendar.settings.display', {
       url: '/display',
       views: {
-        'settings@': {
+        settings: {
           template: '<cal-settings-display />'
         }
-      },
-      onExit: function($timeout, $state) {
-        $timeout(function() {
-          $state.reload();
-        });
       }
     })
-    .state('calendar.main.edit', {
+    .state('calendar.edit', {
       url: '/edit/:calendarUniqueId',
       params: {
         addUsersFromDelegationState: null,
         previousState: null
       },
-      resolve: {
-        modalInstance: function($modal) {
-          return $modal({
-            template: '<calendar-configuration />',
-            keyboard: false,
-            backdrop: 'static'
-          });
+      views: {
+        content: {
+          template: '<calendar-configuration />'
         }
-      },
-      onExit: function(modalInstance) {
-        modalInstance.hide();
       }
     })
-    .state('calendar.main.add', {
+    .state('calendar.add', {
       url: '/add',
-      resolve: {
-        modalInstance: function($modal) {
-          return $modal({
-            template: '<calendar-configuration />',
-            keyboard: false
-          });
+      views: {
+        content: {
+          template: '<calendar-configuration />'
         }
-      },
-      onExit: function(modalInstance) {
-        modalInstance.hide();
       }
     })
     .state('calendar.external', {

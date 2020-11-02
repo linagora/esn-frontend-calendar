@@ -144,6 +144,7 @@ describe('The CalSettingsDisplayController', function() {
 
       controller.submit(form)
         .then(() => {
+          expect($state.go).to.have.been.calledWith('calendar.main');
           done();
         })
         .catch(err => done(err || new Error('should resolve')));
