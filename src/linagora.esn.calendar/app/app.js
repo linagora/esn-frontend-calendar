@@ -195,6 +195,7 @@ require('./search/form/search-form.controller.js');
 require('./search/search.run.js');
 require('./services/websocket/listener.run.js');
 require('./services/websocket/listener.service.js');
+require('./settings/settings.service');
 require('./settings/calendars/fab/create-calendar-menu-item/create-calendar-menu-item.component.js');
 require('./settings/calendars/fab/create-calendar-menu-item/create-calendar-menu-item.run.js');
 require('./settings/calendars/fab/import-calendar-menu-item/import-calendar-menu-item.component.js');

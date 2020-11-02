@@ -75,8 +75,32 @@ function routesConfig($stateProvider) {
           });
         }
       },
-      onExit: function(modalInstance) {
-        modalInstance.hide();
+      onEnter: function($rootScope, $state, calSettingsService, modalInstance) {
+        let isSettingUpdated = false;
+
+        calSettingsService.setForceUpdate(false);
+
+        const unregisterMe = $rootScope.$on('cal-settings:status:updated', function(event, newStatus) {
+          if (newStatus !== 'updated') return;
+
+          isSettingUpdated = true;
+        });
+
+        const unregisterMeToo = $rootScope.$on('$stateChangeSuccess',
+          function(event, toState) {
+            if (toState.name.includes('calendar.main.settings')) return;
+
+            unregisterMe();
+            unregisterMeToo();
+
+            modalInstance.hide();
+
+            if (isSettingUpdated) {
+              return $state.reload();
+            }
+
+            calSettingsService.setForceUpdate(true);
+          });
       }
     })
     .state('calendar.main.settings.calendars', {
@@ -93,11 +117,6 @@ function routesConfig($stateProvider) {
         'settings@': {
           template: '<cal-settings-display />'
         }
-      },
-      onExit: function($timeout, $state) {
-        $timeout(function() {
-          $state.reload();
-        });
       }
     })
     .state('calendar.main.edit', {

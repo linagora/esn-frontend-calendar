@@ -10,6 +10,7 @@ function CalSettingsDisplayController(
   asyncAction,
   calFullUiConfiguration,
   esnUserConfigurationService,
+  calSettingsService,
   CAL_USER_CONFIGURATION
 ) {
   var self = this;
@@ -50,9 +51,15 @@ function CalSettingsDisplayController(
       };
     });
 
+    calSettingsService.updateStatus('updating');
+
     return esnUserConfigurationService.set(configurationsArray, CAL_USER_CONFIGURATION.moduleName)
       .then(function() {
+        calSettingsService.updateStatus('updated');
         calFullUiConfiguration.setHiddenDeclinedEvents(self.configurations.hideDeclinedEvents);
+      })
+      .catch(() => {
+        calSettingsService.updateStatus('failed');
       });
   }
 }
