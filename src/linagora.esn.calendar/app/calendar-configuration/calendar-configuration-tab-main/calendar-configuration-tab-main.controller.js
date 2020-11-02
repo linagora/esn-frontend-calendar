@@ -25,6 +25,8 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
     var self = this;
 
     self.$onInit = $onInit;
+    self.openDeleteConfirmationDialog = openDeleteConfirmationDialog;
+    self.removeCalendar = removeCalendar;
     self.unsubscribe = unsubscribe;
 
     ///////////
@@ -47,6 +49,7 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       !self.newCalendar && performExternalCalendarOperations(isExternalCalendar());
       self.canModifyPublicSelection = _canModifyPublicSelection();
       self.canExportIcs = canExportIcs();
+      self.canDeleteCalendar = canDeleteCalendar();
       self.isResource = self.calendar.type === CAL_CALENDAR_TYPE.RESOURCE;
 
       if (!self.newCalendar && self.calendar) {
@@ -63,10 +66,24 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       return self.calendar.isShared(session.user._id) || self.calendar.isSubscription();
     }
 
+    function openDeleteConfirmationDialog() {
+      calCalendarDeleteConfirmationModalService(self.calendar, removeCalendar);
+    }
+
     function unsubscribe() {
       calendarService.unsubscribe(self.calendarHomeId, self.calendar).then(function() {
         $state.go('calendar.main');
       });
+    }
+
+    function removeCalendar() {
+      calendarService.removeCalendar(self.calendarHomeId, self.calendar).then(function() {
+        $state.go('calendar.main');
+      });
+    }
+
+    function canDeleteCalendar() {
+      return !self.newCalendar && calUIAuthorizationService.canDeleteCalendar(self.calendar, session.user._id);
     }
 
     function canExportIcs() {

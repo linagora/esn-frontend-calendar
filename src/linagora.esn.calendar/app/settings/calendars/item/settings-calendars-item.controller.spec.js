@@ -101,10 +101,10 @@ describe('The CalSettingsCalendarsItemController controller', function() {
       var stateSpy = sinon.spy($state, 'go');
       var controller = initController({ calendar: calendar });
 
-      controller.stateToGo = 'calendar.main.edit';
+      controller.stateToGo = 'calendar.edit';
       controller.goTo();
 
-      expect(stateSpy).to.have.been.calledWith(controller.stateToGo, { calendarUniqueId: calendar.uniqueId, previousState: 'calendar.main.settings' });
+      expect(stateSpy).to.have.been.calledWith(controller.stateToGo, { calendarUniqueId: calendar.uniqueId, previousState: 'calendar.settings.calendars' });
     });
   });
 });
