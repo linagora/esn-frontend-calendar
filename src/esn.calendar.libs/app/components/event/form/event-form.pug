@@ -32,7 +32,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     placeholder="{{ 'Title' | translate }}",
                     ng-readonly="!canModifyEvent",
                     auto-focus)
-            .col-xs-12(ng-if='displayParticipationButton')
+            .col-xs-12(ng-if='displayParticipationButton && !isNew(editedEvent)')
               .partstat
                 cal-partstat-buttons(event="event", change-partstat="changeParticipation(partstat)" show-date-suggestion="toggleSuggestedEvent()")
             .col-xs-12.suggestion-container(ng-if="suggestedEvent")
