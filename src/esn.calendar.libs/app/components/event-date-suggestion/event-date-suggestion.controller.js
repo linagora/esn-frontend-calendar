@@ -1,11 +1,12 @@
-require('../../services/fc-moment.js');
-
 'use strict';
+
+require('../../services/fc-moment.js');
+require('../../services/moment-date.service.js');
 
 angular.module('esn.calendar.libs')
   .controller('calEventDateSuggestionController', calEventDateSuggestionController);
 
-function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, esnDatetimeService, esnI18nService, detectUtils) {
+function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, calMomentDateService, esnDatetimeService, esnI18nService, detectUtils) {
   var self = this;
 
   self.$onInit = $onInit;
@@ -86,10 +87,7 @@ function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, e
 
   // Only fired when using the native mobile picker.
   function onStartDateTimeChange() {
-    self.event.start.set({
-      hour: self.startTime.getHours(),
-      minute: self.startTime.getMinutes()
-    });
+    self.event.start.set(calMomentDateService.getDateComponents(self.startTime));
 
     self.onStartDateChange();
     // Update the input fields to display the new time ( in case of any internal change like offset ).
@@ -98,10 +96,7 @@ function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, e
 
   // Only fired when using the native mobile picker.
   function onEndDateTimeChange() {
-    self.event.end.set({
-      hour: self.endTime.getHours(),
-      minute: self.endTime.getMinutes()
-    });
+    self.event.end.set(calMomentDateService.getDateComponents(self.endTime));
 
     self.onEndDateChange();
     // Update the input fields to display the new time ( in case of any internal change like offset ).
@@ -113,13 +108,8 @@ function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, e
       return;
     }
 
-    self.startTime = self.event.start.toDate();
-    self.endTime = self.event.end.toDate();
-
     // Set the hours to avoid the timzone issues when converting a moment object to Date.
-    self.startTime.setHours(self.event.start.hours());
-    self.startTime.setMinutes(self.event.start.minutes());
-    self.endTime.setHours(self.event.end.hours());
-    self.endTime.setMinutes(self.event.end.minutes());
+    self.startTime = calMomentDateService.momentToDate(self.event.start);
+    self.endTime = calMomentDateService.momentToDate(self.event.end);
   }
 }
