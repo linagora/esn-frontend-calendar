@@ -1706,7 +1706,7 @@ describe('The CalEventFormController controller', function() {
 
               expect(instance.getModifiedMaster).to.have.been.calledWith(true);
               expect($scope.$hide).to.have.been.calledOnce;
-              expect(calEventServiceMock.changeParticipation).to.have.been.calledWith(master.path, master, owner.emails, attendeeStatus);
+              expect(calEventServiceMock.changeParticipation).to.have.been.calledWith(master.path, master, [scope.calendarOwnerAsAttendee.email], attendeeStatus);
 
               return true;
             })),
@@ -1739,7 +1739,7 @@ describe('The CalEventFormController controller', function() {
 
               expect(instance.getModifiedMaster).to.not.have.been.called;
               expect($scope.$hide).to.have.been.calledOnce;
-              expect(calEventServiceMock.changeParticipation).to.have.been.calledWith(instance.path, instance, owner.emails, attendeeStatus);
+              expect(calEventServiceMock.changeParticipation).to.have.been.calledWith(instance.path, instance, [scope.calendarOwnerAsAttendee.email], attendeeStatus);
 
               return true;
             })),
