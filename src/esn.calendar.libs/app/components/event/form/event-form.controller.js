@@ -338,7 +338,7 @@ function CalEventFormController(
     var partstat = $scope.calendarOwnerAsAttendee.partstat;
 
     $scope.restActive = true;
-    calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, session.user.emails, partstat).then(function(response) {
+    calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, [$scope.calendarOwnerAsAttendee.email], partstat).then(function(response) {
       if (!response) {
         return;
       }
