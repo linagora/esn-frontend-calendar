@@ -296,7 +296,7 @@ describe('The calEventDateSuggestionController', function() {
   });
 
   describe('the onStartDateTimeChange function', function() {
-    it('should set the start time from the mobile input models', function() {
+    it('should set the start time an date from the mobile input models', function() {
       const bindings = {
         event: {
           start: startTestMoment,
@@ -306,16 +306,19 @@ describe('The calEventDateSuggestionController', function() {
       };
       const ctrl = initController(bindings);
 
-      ctrl.startTime = new Date('2020-02-08 11:33');
+      ctrl.startTime = new Date('2020-08-25 11:33');
       ctrl.onStartDateTimeChange();
 
       expect(ctrl.event.start.hours()).to.equal(11);
       expect(ctrl.event.start.minutes()).to.equal(33);
+      expect(ctrl.event.start.date()).to.equal(25);
+      expect(ctrl.event.start.month()).to.equal(7); // Month is zero based
+      expect(ctrl.event.start.year()).to.equal(2020);
     });
   });
 
   describe('the onEndDateTimeChange function', function() {
-    it('should set the end time from the mobile input models', function() {
+    it('should set the end time and date from the mobile input models', function() {
       const bindings = {
         event: {
           start: startTestMoment,
@@ -325,11 +328,14 @@ describe('The calEventDateSuggestionController', function() {
       };
       const ctrl = initController(bindings);
 
-      ctrl.endTime = new Date('2020-02-08 12:16');
+      ctrl.endTime = new Date('2020-05-20 12:16');
       ctrl.onEndDateTimeChange();
 
       expect(ctrl.event.end.hours()).to.equal(12);
       expect(ctrl.event.end.minutes()).to.equal(16);
+      expect(ctrl.event.end.date()).to.equal(20);
+      expect(ctrl.event.end.month()).to.equal(4); // Month is zero based
+      expect(ctrl.event.end.year()).to.equal(2020);
     });
 
     it('should ignore the mobile input if the end time is before the start time', function() {
@@ -342,13 +348,16 @@ describe('The calEventDateSuggestionController', function() {
       };
       const ctrl = initController(bindings);
 
-      ctrl.startTime = new Date('2020-02-08 9:00');
+      ctrl.startTime = new Date('2020-02-07 9:00');
       ctrl.onStartDateTimeChange();
-      ctrl.endTime = new Date('2020-02-08 8:15');
+      ctrl.endTime = new Date('2019-01-06 8:15');
       ctrl.onEndDateTimeChange();
 
       expect(ctrl.event.end.hours()).to.not.equal(8);
       expect(ctrl.event.end.minutes()).to.not.equal(15);
+      expect(ctrl.event.end.date()).to.not.equal(6);
+      expect(ctrl.event.end.month()).to.not.equal(0); // Month is zero based
+      expect(ctrl.event.end.year()).to.not.equal(2019);
     });
   });
 });
