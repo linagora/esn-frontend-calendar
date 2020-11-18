@@ -24,7 +24,8 @@ const _ = require('lodash');
       $rootScope.$on(CAL_EVENTS.CALENDARS.UPDATE, updateCalendar),
       $rootScope.$on(CAL_EVENTS.ITEM_ADD, rerenderCalendar),
       $rootScope.$on(CAL_EVENTS.ITEM_MODIFICATION, rerenderCalendar),
-      $rootScope.$on(CAL_EVENTS.ITEM_REMOVE, rerenderCalendar)
+      $rootScope.$on(CAL_EVENTS.ITEM_REMOVE, rerenderCalendar),
+      $rootScope.$on(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, onCalendarToggle)
     ];
 
     function $onDestroy() {
@@ -58,6 +59,7 @@ const _ = require('lodash');
         })
         .catch(displayCalendarError);
       windowJQuery.resize(resizeCalendarHeight);
+      fetchHiddenCalendars();
     }
 
     function addCalendar(event, calendar) {
@@ -133,9 +135,10 @@ const _ = require('lodash');
     }
 
     function eventRender(event, element, view) {
-      var eventCalendar = _.find(self.calendars, function(calendar) {
-        return calendar.getUniqueId() === event.calendarUniqueId;
-      });
+      // Check if the calendar is initially hidden. false means do not render.
+      if (self.hiddenCalendars[event.calendarUniqueId]) return false;
+
+      const eventCalendar = self.calendars.find(calendar => calendar.getUniqueId() === event.calendarUniqueId);
 
       return calFullCalendarPlanningRenderEventService(eventCalendar)(event, element, view);
     }
@@ -168,6 +171,28 @@ const _ = require('lodash');
 
     function _getTimeFormat() {
       return calFullUiConfiguration.configureTimeFormatForCalendar(CAL_UI_CONFIG).calendar.timeFormat;
+    }
+
+    function fetchHiddenCalendars() {
+      self.hiddenCalendars = {};
+
+      calendarVisibilityService.getHiddenCalendars().then(hiddenCalendarUids => {
+        hiddenCalendarUids.forEach(calUid => {
+          self.hiddenCalendars[calUid] = true;
+        });
+      });
+    }
+
+    function onCalendarToggle(event, { calendarUniqueId, hidden }) {
+      calendarPromise.then(function(cal) {
+        if (hidden) {
+          cal.fullCalendar('removeEventSource', eventSourcesMap[calendarUniqueId]);
+          self.hiddenCalendars[calendarUniqueId] = true;
+        } else {
+          cal.fullCalendar('addEventSource', eventSourcesMap[calendarUniqueId]);
+          delete self.hiddenCalendars[calendarUniqueId];
+        }
+      });
     }
   }
 })(angular);
