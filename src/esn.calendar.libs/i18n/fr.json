@@ -66,6 +66,7 @@
   "Can not subscribe to calendar": "Impossible de s'abonner au calendrier",
   "Can not subscribe to calendars": "Impossible de s'abonner aux calendriers",
   "Cannot access private event": "Vous n'avez pas accès à cet événement privé",
+  "Cannot display the event": "Impossible d'afficher l'événement",
   "Cannot go": "Je ne participe pas",
   "Cannot join the server, please try later": "Impossible de joindre le serveur, essayez plus tard",
   "Cannot retrieve attendee availability": "Impossible de récupérer la disponibilité du participant",

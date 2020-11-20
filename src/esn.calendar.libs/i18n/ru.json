@@ -66,6 +66,7 @@
   "Can not subscribe to calendar": "Невозможно подписаться на календарь",
   "Can not subscribe to calendars": "Невозможно подписаться на календари",
   "Cannot access private event": "Невозможно получить доступ к приватному событию",
+  "Cannot display the event": "Невозможно отобразить событие",
   "Cannot go": "Невозможно запустить",
   "Cannot join the server, please try later": "Не удается присоединиться к серверу, попробуйте позже",
   "Cannot retrieve attendee availability": "Не удалось получить данные о доступности участника",
