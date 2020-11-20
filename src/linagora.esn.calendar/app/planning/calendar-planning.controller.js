@@ -185,12 +185,14 @@ const _ = require('lodash');
 
     function onCalendarToggle(event, { calendarUniqueId, hidden }) {
       calendarPromise.then(function(cal) {
-        if (hidden) {
-          cal.fullCalendar('removeEventSource', eventSourcesMap[calendarUniqueId]);
-          self.hiddenCalendars[calendarUniqueId] = true;
-        } else {
+        // Always remove the event source calendar first, to prevent adding duplicates.
+        cal.fullCalendar('removeEventSource', eventSourcesMap[calendarUniqueId]);
+
+        if (!hidden) {
           cal.fullCalendar('addEventSource', eventSourcesMap[calendarUniqueId]);
           delete self.hiddenCalendars[calendarUniqueId];
+        } else {
+          self.hiddenCalendars[calendarUniqueId] = true;
         }
       });
     }
