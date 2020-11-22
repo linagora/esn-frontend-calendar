@@ -170,5 +170,24 @@ describe('The CalCalendarPlanningController', function() {
       expect(calendar.fullCalendar).to.have.been.calledWith('addEventSource');
       expect(ctrl.hiddenCalendars['calendars/456.json']).to.be.undefined;
     });
+
+    it('should attempt to remove the toggled \'on\' calendar from fullcalendar before adding it to avoid duplicated events', function() {
+      const scope = $rootScope.$new();
+      const ctrl = initController(scope);
+
+      $rootScope.$digest();
+
+      ctrl.calendarReady(calendar);
+
+      $rootScope.$broadcast(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {
+        calendarUniqueId: 'calendars/456.json',
+        hidden: false
+      });
+
+      $timeout.flush();
+
+      expect(calendar.fullCalendar).to.have.been.calledWith('removeEventSource');
+      expect(ctrl.hiddenCalendars['calendars/456.json']).to.be.undefined;
+    });
   });
 });
