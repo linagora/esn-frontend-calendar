@@ -139,6 +139,7 @@ require('./services/grace-period-response-handler.js');
 require('./services/http-response-handler.js');
 require('./services/ical.js');
 require('./services/master-event-cache.js');
+require('./services/partstat-jwt.service.js');
 require('./services/partstat-update-notification.service.js');
 require('./services/path-builder.js');
 require('./services/path-parser.service.js');

@@ -66,6 +66,7 @@
   "Can not subscribe to calendar": "Không thể đăng ký vào lịch",
   "Can not subscribe to calendars": "Không thể đăng ký vào lịch",
   "Cannot access private event": "Không thể truy cập sự kiện riêng tư",
+  "Cannot display the event": "Không thể hiển thị sự kiện",
   "Cannot go": "Không tham gia",
   "Cannot join the server, please try later": "Không thể kết nối tới server, vui lòng thử lại sau",
   "Cannot retrieve attendee availability": "Tính khả dụng của người tham dự không xác định",
