@@ -4,6 +4,7 @@ describe('The esnResourceAPIClient service', function() {
   var $httpBackend, esnResourceAPIClient;
 
   beforeEach(function() {
+    angular.mock.module('esn.http');
     angular.mock.module('esn.resource.libs');
   });
 
