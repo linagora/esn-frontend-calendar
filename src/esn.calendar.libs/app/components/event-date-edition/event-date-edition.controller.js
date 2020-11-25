@@ -1,12 +1,13 @@
+'use strict';
+
 require('../../services/fc-moment.js');
 require('../../services/event-utils.js');
-
-'use strict';
+require('../../services/moment-date.service.js');
 
 angular.module('esn.calendar.libs')
   .controller('calEventDateEditionController', calEventDateEditionController);
 
-function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeService, esnI18nService, calMoment, calEventUtils, detectUtils) {
+function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeService, esnI18nService, calMoment, calMomentDateService, calEventUtils, detectUtils) {
   var self = this;
   var previousStart;
   var previousEnd;
@@ -179,31 +180,17 @@ function calEventDateEditionController(esnI18nDateFormatService, esnDatetimeServ
   }
 
   function _initMobileTimeInputs() {
-    self.startTime = self.start.toDate();
-    self.endTime = self.end.toDate();
-
-    // Due to differences between moment and the Date object we need to handle the hours differences.
-    // The timezone has no meaning for Date object, the moment().toDate() converts the date to the browser timezone.
-    // So the hours and minutes differ between the same moment date and the resulting date of .toDate() which is not wanted.
-    self.startTime.setHours(self.start.hours());
-    self.startTime.setMinutes(self.start.minutes());
-    self.endTime.setHours(self.end.hours());
-    self.endTime.setMinutes(self.end.minutes());
+    self.startTime = calMomentDateService.momentToDate(self.start);
+    self.endTime = calMomentDateService.momentToDate(self.end);
   }
 
   // When the date object gets modified by the native mobile picker we just get the hours and minutes
   // and set them back into the moment object, this has no impact on the timezone or whatsoever.
   function _setStartDateFromMobileInput() {
-    self.start.set({
-      hour: self.startTime.getHours(),
-      minute: self.startTime.getMinutes()
-    });
+    self.start.set(calMomentDateService.getDateComponents(self.startTime));
   }
 
   function _setEndDateFromMobileInput() {
-    self.end.set({
-      hour: self.endTime.getHours(),
-      minute: self.endTime.getMinutes()
-    });
+    self.end.set(calMomentDateService.getDateComponents(self.endTime));
   }
 }

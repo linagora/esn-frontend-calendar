@@ -61,3 +61,6 @@
       span {{ 'Export your calendar to iCalendar format file (.ics) which you can import to other applications.' | translate }}
     .settings-actions
       a.btn.btn-primary.btn-sm(ng-href="{{::$ctrl.calendarIcsUrl}}") {{ 'Export' | translate }}
+.settings-actions(ng-if="$ctrl.canDeleteCalendar")
+  hr
+  span.delete-calendar-button(type="button", ng-click="$ctrl.openDeleteConfirmationDialog()") {{ 'Remove this calendar' | translate }}

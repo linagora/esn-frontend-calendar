@@ -1,5 +1,3 @@
-require('../components/modals/calendar-delete-confirmation/calendar-delete-confirmation-modal.service.js');
-
 'use strict';
 
 const _ = require('lodash');
@@ -25,10 +23,7 @@ function calendarConfigurationController(
   CAL_CALENDAR_PUBLIC_RIGHT,
   CAL_CALENDAR_SHARED_RIGHT,
   CalDelegationEditionHelper,
-  esnI18nService,
-  calCalendarDeleteConfirmationModalService,
-  session,
-  calUIAuthorizationService
+  esnI18nService
 ) {
   var self = this;
   var CaldelegationEditionHelperInstance = new CalDelegationEditionHelper();
@@ -39,8 +34,6 @@ function calendarConfigurationController(
   self.$onInit = $onInit;
   self.activate = activate;
   self.previousState = $stateParams.previousState || 'calendar.main';
-  self.openDeleteConfirmationDialog = openDeleteConfirmationDialog;
-  self.removeCalendar = removeCalendar;
 
   ////////////
 
@@ -87,7 +80,6 @@ function calendarConfigurationController(
     self.newUsersGroups = [];
     self.selectedTab = 'main';
     self.delegations = [];
-    self.canDeleteCalendar = canDeleteCalendar();
 
     angular.copy(self.calendar, self.oldCalendar);
 
@@ -132,7 +124,7 @@ function calendarConfigurationController(
     }
 
     if (self.newCalendar) {
-      $state.go(self.previousState)
+      $state.go('calendar.main')
         .then(function() {
           return calendarService.createCalendar(self.calendarHomeId, self.calendar);
         })
@@ -169,7 +161,7 @@ function calendarConfigurationController(
         if (matchmedia.is(ESN_MEDIA_QUERY_SM_XS)) {
           $state.go('calendar.settings');
         } else {
-          $state.go(self.previousState);
+          $state.go('calendar.main');
         }
 
         return;
@@ -191,7 +183,7 @@ function calendarConfigurationController(
 
       $q.all(updateActions).then(function() {
         notificationFactory.weakInfo('Calendar -', esnI18nService.translate('%s has been modified.', { name: self.calendar.name }));
-        $state.go(self.previousState);
+        $state.go('calendar.main');
       });
     }
   }
@@ -213,19 +205,5 @@ function calendarConfigurationController(
   function resetDelegationFields() {
     self.newUsersGroups = [];
     self.selectedShareeRight = CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ;
-  }
-
-  function openDeleteConfirmationDialog() {
-    calCalendarDeleteConfirmationModalService(self.calendar, removeCalendar);
-  }
-
-  function removeCalendar() {
-    calendarService.removeCalendar(self.calendarHomeId, self.calendar).then(function() {
-      $state.go('calendar.main');
-    });
-  }
-
-  function canDeleteCalendar() {
-    return !self.newCalendar && calUIAuthorizationService.canDeleteCalendar(self.calendar, session.user._id);
   }
 }

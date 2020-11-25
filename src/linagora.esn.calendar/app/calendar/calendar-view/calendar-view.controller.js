@@ -182,6 +182,10 @@ const _ = require('lodash');
 
       var newEvent = oldEvent.clone();
 
+      if (oldEvent.alarm) {
+        newEvent.alarm = oldEvent.alarm;
+      }
+
       if (drop) {
         newEvent.start = oldEvent.start.clone().add(delta);
       }

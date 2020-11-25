@@ -404,40 +404,65 @@ describe('The calEventDateEditionController', function() {
 
       // Those are random fake dates that are not taken into consideration.
       // just wanted to simulate they are going to change.
-      ctrl.startTime = new Date('2013-02-08 11:33');
-      ctrl.endTime = new Date('2013-02-08 11:40');
+      ctrl.startTime = new Date('2020-07-01 11:33');
+      ctrl.endTime = new Date('2020-08-02 11:40');
       ctrl.onEndDateChange();
 
-      expect(ctrl.startTime.getHours()).to.not.equal(11);
-      expect(ctrl.endTime.getHours()).to.not.equal(11);
+      // check if the start date input model is changed
       expect(ctrl.startTime.getMinutes()).to.not.equal(33);
+      expect(ctrl.startTime.getHours()).to.not.equal(11);
+      expect(ctrl.startTime.getDate()).to.not.equal(1);
+      expect(ctrl.startTime.getMonth()).to.not.equal(6);
+      expect(ctrl.startTime.getFullYear()).to.not.equal(2020);
+
+      // check if the end date input model is changed
       expect(ctrl.endTime.getMinutes()).to.not.equal(40);
+      expect(ctrl.endTime.getHours()).to.not.equal(11);
+      expect(ctrl.endTime.getDate()).to.not.equal(2);
+      expect(ctrl.endTime.getMonth()).to.not.equal(7);
+      expect(ctrl.endTime.getFullYear()).to.not.equal(2020);
+
+      // check if the start date input model is correctly set using the event.start
+      expect(ctrl.startTime.getMinutes()).to.equal(startTestMoment.minutes());
       expect(ctrl.startTime.getHours()).to.equal(startTestMoment.hours());
+      expect(ctrl.startTime.getDate()).to.equal(startTestMoment.date());
+      expect(ctrl.startTime.getMonth()).to.equal(startTestMoment.month());
+      expect(ctrl.startTime.getFullYear()).to.equal(startTestMoment.year());
+
+      // check if the start date input model is correctly set using the event.end
+      expect(ctrl.endTime.getMinutes()).to.equal(endTestMoment.minutes());
       expect(ctrl.endTime.getHours()).to.equal(endTestMoment.hours());
+      expect(ctrl.endTime.getDate()).to.equal(endTestMoment.date());
+      expect(ctrl.endTime.getMonth()).to.equal(endTestMoment.month());
+      expect(ctrl.endTime.getFullYear()).to.equal(endTestMoment.year());
     });
   });
 
   describe('the onStartDateTimeChange handler', function() {
-    it('should set the selected time from the native mobile picker into the event start date', function() {
+    it('should set the selected time and date from the native mobile picker into the event start date', function() {
       const bindings = {
         event: {
-          start: startTestMoment.clone(),
+          start: calMoment('2020-07-08 10:00:00Z').utc(),
           end: endTestMoment.clone()
         }
       };
 
       const ctrl = initController(bindings);
 
-      ctrl.startTime = new Date('2013-02-08 11:33');
+      ctrl.startTime = new Date('2020-05-04 11:33');
       ctrl.isMobile = true;
       ctrl.onStartDateTimeChange();
       expect(ctrl.start.hours()).to.equal(11);
       expect(ctrl.start.minutes()).to.equal(33);
+      expect(ctrl.start.date()).to.equal(4);
+      // Month value is zero based
+      expect(ctrl.start.month()).to.equal(4);
+      expect(ctrl.start.year()).to.equal(2020);
     });
   });
 
   describe('the onEndDateTimeChange handler', function() {
-    it('should set the selected time from the native mobile picker into the event end date', function() {
+    it('should set the selected time and date from the native mobile picker into the event end date', function() {
       const bindings = {
         event: {
           start: startTestMoment.clone(),
@@ -447,11 +472,15 @@ describe('The calEventDateEditionController', function() {
 
       const ctrl = initController(bindings);
 
-      ctrl.endTime = new Date('2013-02-08 10:27');
+      ctrl.endTime = new Date('2020-06-03 11:27');
       ctrl.isMobile = true;
       ctrl.onEndDateTimeChange();
-      expect(ctrl.end.hours()).to.equal(10);
+      expect(ctrl.end.hours()).to.equal(11);
       expect(ctrl.end.minutes()).to.equal(27);
+      expect(ctrl.end.date()).to.equal(3);
+      // Month value is zero based
+      expect(ctrl.end.month()).to.equal(5);
+      expect(ctrl.end.year()).to.equal(2020);
     });
 
     it('should ignore the native mobile input if not on mobile', function() {
@@ -464,11 +493,14 @@ describe('The calEventDateEditionController', function() {
 
       const ctrl = initController(bindings);
 
-      ctrl.endTime = new Date('2013-02-08 09:27');
+      ctrl.endTime = new Date('2020-06-03 09:27');
       ctrl.isMobile = false;
       ctrl.onEndDateTimeChange();
       expect(ctrl.end.hours()).to.not.equal(9);
       expect(ctrl.end.minutes()).to.not.equal(27);
+      expect(ctrl.end.date()).to.not.equal(3);
+      expect(ctrl.end.month()).to.not.equal(5);
+      expect(ctrl.end.year()).to.not.equal(2020);
     });
   });
 });

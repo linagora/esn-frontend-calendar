@@ -16,6 +16,7 @@ require('../../../services/partstat-update-notification.service.js');
 require('../../../app.constants.js');
 require('../../freebusy/freebusy.constants.js');
 require('../../../services/shells/calendar-shell.js');
+require('../../../services/event-duplicate.service.js');
 
 angular.module('esn.calendar.libs')
   .controller('CalEventFormController', CalEventFormController);
@@ -38,6 +39,7 @@ function CalEventFormController(
   calOpenEventForm,
   calUIAuthorizationService,
   calAttendeesDenormalizerService,
+  calEventDuplicateService,
   esnDatetimeService,
   session,
   calPathBuilder,
@@ -93,6 +95,7 @@ function CalEventFormController(
 
   function cancel() {
     calEventUtils.resetStoredEvents();
+    calEventDuplicateService.reset();
     _hideModal();
   }
 
@@ -156,9 +159,19 @@ function CalEventFormController(
 
       calendarService.listPersonalAndAcceptedDelegationCalendars($scope.calendarHomeId)
         .then(function(calendars) {
+          // Those are the calendars the user can create events within.
           $scope.calendars = calendars;
 
-          return calEventUtils.isNew($scope.editedEvent) ? _.find(calendars, 'selected') : _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
+          if (calEventUtils.isNew($scope.editedEvent)) {
+            // This only has a value right after duplicating an event.
+            const eventSourceCalendarId = calEventDuplicateService.getDuplicateEventSource();
+            const targetCalendar = calendars.find(({ id }) => id === eventSourceCalendarId);
+
+            // Check if the event is duplicated and the user owns the source calendar.
+            return eventSourceCalendarId && targetCalendar ? targetCalendar : _.find(calendars, 'selected');
+          }
+
+          return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
         })
         .then(function(selectedCalendar) {
           $scope.selectedCalendar = { uniqueId: selectedCalendar.getUniqueId() };
@@ -325,7 +338,7 @@ function CalEventFormController(
     var partstat = $scope.calendarOwnerAsAttendee.partstat;
 
     $scope.restActive = true;
-    calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, session.user.emails, partstat).then(function(response) {
+    calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, [$scope.calendarOwnerAsAttendee.email], partstat).then(function(response) {
       if (!response) {
         return;
       }
@@ -497,6 +510,8 @@ function CalEventFormController(
   }
 
   function onEventCreateUpdateResponse(success) {
+    calEventDuplicateService.reset();
+
     if (success) {
       calEventUtils.resetStoredEvents();
 
@@ -626,7 +641,8 @@ function CalEventFormController(
     $scope.cancel();
     // Open the duplicate event creation form after a short delay ( let the first modal finish hiding ).
     $timeout(function() {
-      calOpenEventForm($scope.event.calendarHomeId, event);
+      calEventDuplicateService.setDuplicateEventSource($scope.event.calendarId);
+      calOpenEventForm(session.user._id, event);
     }, CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION);
   }
 

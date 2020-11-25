@@ -7,7 +7,7 @@
         i.mdi.mdi-plus
       ul.dropdown-menu.dropdown-menu-right(dynamic-directive='calendar-add-anchorpoint')
         li
-          a(ui-sref='calendar.main.add') {{ 'New calendar' | translate }}
+          a(ui-sref='calendar.add') {{ 'New calendar' | translate }}
         li
           a(feature-flag="linagora.esn.calendar.features.isSharingCalendarEnabled", href="", esn-modal-launcher='/calendar/app/calendar-shared-configuration/calendar-shared-configuration.html', controller-as='$ctrl', controller='CalCalendarSharedConfigurationController') {{ 'Shared calendar' | translate }}
         li

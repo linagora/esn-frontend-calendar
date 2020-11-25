@@ -1,12 +1,15 @@
 // TODO: Revert to use the mixin here in case we can fix the translation issue. Refer to https://github.com/OpenPaaS-Suite/esn-frontend-calendar/issues/42#issuecomment-672757911 for some suggestions.
+sub-header
+  cal-settings-display-subheader(submit="ctrl.submit()", form="form")
+
 form(name="form")
   h3 {{ "Non-working days" | translate }}
   label.checkbox.checkbox-inline.flex
-    input(type="checkbox", ng-model="ctrl.configurations.workingDays", ng-change="ctrl.submit()")
+    input(type="checkbox", ng-model="ctrl.configurations.workingDays")
     i.input-helper
     span {{ "Hide non-working days" | translate }}
   h3 {{ 'Declined events' | translate }}
   label.checkbox.checkbox-inline.flex
-    input(type="checkbox", ng-model="ctrl.configurations.hideDeclinedEvents", ng-change="ctrl.submit()")
+    input(type="checkbox", ng-model="ctrl.configurations.hideDeclinedEvents")
     i.input-helper
     span {{ "Hide declined events" | translate }}

@@ -14,7 +14,7 @@
     }
 
     function onOptionClick() {
-      $state.go('calendar.main.edit', { calendarUniqueId: self.calendarId });
+      $state.go('calendar.edit', { calendarUniqueId: self.calendarId });
     }
   }
 })(angular);

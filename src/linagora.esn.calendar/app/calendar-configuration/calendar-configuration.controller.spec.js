@@ -8,7 +8,6 @@ describe('The calendar configuration controller', function() {
   var $controller,
     $rootScope,
     $scope,
-    $state,
     CalDelegationEditionHelperMock,
     calendarAPI,
     CalendarCollectionShell,
@@ -26,9 +25,7 @@ describe('The calendar configuration controller', function() {
     uuid4,
     ESN_MEDIA_QUERY_SM_XS,
     CAL_CALENDAR_PUBLIC_RIGHT,
-    CAL_CALENDAR_SHARED_RIGHT,
-    calCalendarDeleteConfirmationModalService,
-    calUIAuthorizationService;
+    CAL_CALENDAR_SHARED_RIGHT;
 
   var addUserGroup,
     addUserGroupResult,
@@ -161,8 +158,6 @@ describe('The calendar configuration controller', function() {
         getAllShareeRights: angular.noop
       };
     });
-
-    calCalendarDeleteConfirmationModalService = sinon.spy();
   });
 
   beforeEach(function() {
@@ -181,21 +176,18 @@ describe('The calendar configuration controller', function() {
       $provide.value('Cache', Cache);
       $provide.value('userUtils', userUtilsMock);
       $provide.value('CalendarRightShell', CalendarRightShellMock);
-      $provide.value('calCalendarDeleteConfirmationModalService', calCalendarDeleteConfirmationModalService);
     });
   });
 
   beforeEach(function() {
-    angular.mock.inject(function(_$rootScope_, _$controller_, _$state_, _CalendarCollectionShell_, _CAL_CALENDAR_PUBLIC_RIGHT_, _CAL_CALENDAR_SHARED_RIGHT_, _ESN_MEDIA_QUERY_SM_XS_, _calUIAuthorizationService_) {
+    angular.mock.inject(function(_$rootScope_, _$controller_, _CalendarCollectionShell_, _CAL_CALENDAR_PUBLIC_RIGHT_, _CAL_CALENDAR_SHARED_RIGHT_, _ESN_MEDIA_QUERY_SM_XS_) {
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       $controller = _$controller_;
-      $state = _$state_;
       CalendarCollectionShell = _CalendarCollectionShell_;
       CAL_CALENDAR_PUBLIC_RIGHT = _CAL_CALENDAR_PUBLIC_RIGHT_;
       CAL_CALENDAR_SHARED_RIGHT = _CAL_CALENDAR_SHARED_RIGHT_;
       ESN_MEDIA_QUERY_SM_XS = _ESN_MEDIA_QUERY_SM_XS_;
-      calUIAuthorizationService = _calUIAuthorizationService_;
     });
   });
 
@@ -337,9 +329,7 @@ describe('The calendar configuration controller', function() {
       calendarConfigurationController.calendar = {
         id: '123456789',
         rights: calendarRight,
-        isSubscription: angular.noop,
-        isOwner: angular.noop,
-        isShared: angular.noop
+        isSubscription: angular.noop
       };
 
       calendarConfigurationController.activate();
@@ -351,9 +341,7 @@ describe('The calendar configuration controller', function() {
       calendarConfigurationController.calendar = {
         id: '123456789',
         rights: calendarRight,
-        isSubscription: angular.noop,
-        isOwner: angular.noop,
-        isShared: angular.noop
+        isSubscription: angular.noop
       };
 
       calendarConfigurationController.activate();
@@ -383,9 +371,7 @@ describe('The calendar configuration controller', function() {
       calendarConfigurationController.calendar = {
         id: '123456789',
         rights: calendarRight,
-        isSubscription: angular.noop,
-        isOwner: angular.noop,
-        isShared: angular.noop
+        isSubscription: angular.noop
       };
 
       calendarConfigurationController.activate();
@@ -414,9 +400,7 @@ describe('The calendar configuration controller', function() {
       calendarConfigurationController.calendar = {
         href: 'data/data.json',
         rights: calendarRight,
-        isSubscription: angular.noop,
-        isOwner: angular.noop,
-        isShared: angular.noop
+        isSubscription: angular.noop
       };
 
       calendarConfigurationController.activate();
@@ -444,9 +428,7 @@ describe('The calendar configuration controller', function() {
       calendarConfigurationController.calendar = {
         id: '123456789',
         rights: calendarRight,
-        isSubscription: angular.noop,
-        isOwner: angular.noop,
-        isShared: angular.noop
+        isSubscription: angular.noop
       };
 
       calendarConfigurationController.activate();
@@ -463,9 +445,7 @@ describe('The calendar configuration controller', function() {
           id: '123456789',
           rights: { getPublicRight: sinon.spy() }
         },
-        isSubscription: angular.noop,
-        isOwner: angular.noop,
-        isShared: angular.noop
+        isSubscription: angular.noop
       };
 
       calendarConfigurationController.activate();
@@ -482,9 +462,7 @@ describe('The calendar configuration controller', function() {
           id: '123456789',
           rights: { getPublicRight: sinon.spy() }
         },
-        isSubscription: sinon.stub().returns(true),
-        isOwner: angular.noop,
-        isShared: angular.noop
+        isSubscription: sinon.stub().returns(true)
       };
 
       calendarConfigurationController.activate();
@@ -588,9 +566,7 @@ describe('The calendar configuration controller', function() {
           id: '123456789',
           href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json',
           rights: calendarRight,
-          isSubscription: angular.noop,
-          isOwner: angular.noop,
-          isShared: angular.noop
+          isSubscription: angular.noop
         };
 
         calendarConfigurationController.activate();
@@ -744,9 +720,7 @@ describe('The calendar configuration controller', function() {
             id: '123',
             href: 'blabla/id.json',
             rights: calendarRight,
-            isSubscription: angular.noop,
-            isOwner: angular.noop,
-            isShared: angular.noop
+            isSubscription: angular.noop
           };
           calendarConfigurationController.calendar.color = 'aColor';
           calendarConfigurationController.calendar.name = 'aName';
@@ -822,9 +796,7 @@ describe('The calendar configuration controller', function() {
           color: 'aColor',
           name: 'aName',
           rights: calendarRight,
-          isSubscription: angular.noop,
-          isOwner: angular.noop,
-          isShared: angular.noop
+          isSubscription: angular.noop
         };
         calendarConfigurationController.calendar.name = 'aName';
 
@@ -905,9 +877,7 @@ describe('The calendar configuration controller', function() {
       calendarConfigurationController.calendar = {
         id: '123456789',
         rights: calendarRight,
-        isSubscription: angular.noop,
-        isOwner: angular.noop,
-        isShared: angular.noop
+        isSubscription: angular.noop
       };
 
       calendarConfigurationController.activate();
@@ -916,83 +886,6 @@ describe('The calendar configuration controller', function() {
 
       expect(calendarConfigurationController.newUsersGroups).to.deep.equal;
       expect(calendarConfigurationController.selectedShareeRight).to.deep.equal(CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ);
-    });
-  });
-
-  describe('the openDeleteConfirmationDialog function', function() {
-    it('should call the modal confirmation service', function() {
-      calendarConfigurationController.openDeleteConfirmationDialog();
-
-      expect(calCalendarDeleteConfirmationModalService).to.have.been.calledWith(calendarConfigurationController.calendar, calendarConfigurationController.removeCalendar);
-    });
-  });
-
-  describe('the removeCalendar function', function() {
-    it('should call calendarService.removeCalendar before $state to go back on the main view when deleting', function() {
-      calendarConfigurationController.calendar = {
-        id: '123456789'
-      };
-      calendarConfigurationController.calendarHomeId = '12345';
-
-      calendarConfigurationController.removeCalendar();
-
-      expect($state.go).to.have.not.been.called;
-
-      $rootScope.$digest();
-
-      expect(calendarService.removeCalendar).to.have.been.calledWith(
-        calendarConfigurationController.calendarHomeId,
-        calendarConfigurationController.calendar
-      );
-
-      expect($state.go).to.have.been.calledWith('calendar.main');
-    });
-  });
-
-  describe('the canDeleteCalendar function', function() {
-    var canDeleteCalendarResult;
-
-    beforeEach(function() {
-      calendarConfigurationController.calendar = calendar;
-
-      sinon.stub(calUIAuthorizationService, 'canDeleteCalendar', function() {
-        return canDeleteCalendarResult;
-      });
-
-      calendarConfigurationController.calendar = {
-        id: '123456789',
-        rights: calendarRight,
-        isSubscription: angular.noop
-      };
-    });
-
-    it('should return true if newCalendar=false and calUIAuthorizationService.canDeleteCalendar= true', function() {
-      calendarConfigurationController.newCalendar = false;
-      canDeleteCalendarResult = true;
-
-      calendarConfigurationController.$onInit();
-      calendarConfigurationController.activate();
-
-      expect(calendarConfigurationController.canDeleteCalendar).to.be.true;
-    });
-
-    it('should return false if newCalendar=false and calUIAuthorizationService.canDeleteCalendar= false', function() {
-      calendarConfigurationController.newCalendar = false;
-      canDeleteCalendarResult = false;
-
-      calendarConfigurationController.$onInit();
-      calendarConfigurationController.activate();
-
-      expect(calendarConfigurationController.canDeleteCalendar).to.be.false;
-    });
-
-    it('should return false if newCalendar=true', function() {
-      calendarConfigurationController.newCalendar = true;
-
-      calendarConfigurationController.$onInit();
-      calendarConfigurationController.activate();
-
-      expect(calendarConfigurationController.canDeleteCalendar).to.be.false;
     });
   });
 });

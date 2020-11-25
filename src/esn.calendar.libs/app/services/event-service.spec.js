@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('The calEventService service', function() {
-  var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend;
+  var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend, calendarHomeServiceMock, calOpenEventFormMock;
   var self = this;
 
   beforeEach(function() {
@@ -74,6 +74,12 @@ describe('The calEventService service', function() {
       emitModifiedEvent: sinon.spy()
     };
 
+    calendarHomeServiceMock = {
+      getUserCalendarHomeId: sinon.stub().returns($q.when('1'))
+    };
+
+    calOpenEventFormMock = sinon.stub();
+
     angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.ical');
@@ -89,6 +95,8 @@ describe('The calEventService service', function() {
       $provide.value('calCachedEventSource', calCachedEventSourceMock);
       $provide.value('calendarEventEmitter', self.calendarEventEmitterMock);
       $provide.value('gracePeriodLiveNotificationService', { start: angular.noop });
+      $provide.value('calendarHomeService', calendarHomeServiceMock);
+      $provide.value('calOpenEventForm', calOpenEventFormMock);
       $provide.value('esnI18nService', {
         translate: function(input) { return input; }
       });

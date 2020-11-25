@@ -9,7 +9,7 @@ describe('The CalEventFormController controller', function() {
   let $stateMock, calendarHomeServiceMock, calEventServiceMock, notificationFactoryMock, calendarServiceMock, calOpenEventFormMock, closeNotificationStub;
   let calAttendeesDenormalizerService, calAttendeeService, calEventFreeBusyConfirmationModalService, CAL_ICAL, calFreebusyService;
   let $rootScope, $modal, $controller, scope, calEventUtils, calUIAuthorizationService, session, CalendarShell, CAL_EVENT_FORM, CAL_EVENTS, CAL_ALARM_TRIGGER;
-  let VideoConfConfigurationServiceMock, $timeout;
+  let VideoConfConfigurationServiceMock, $timeout, calEventDuplicateServiceMock;
 
   beforeEach(function() {
     eventTest = {};
@@ -187,6 +187,12 @@ describe('The CalEventFormController controller', function() {
       getOpenPaasVideoconferenceAppUrl: sinon.stub().returns($q.when('some url'))
     };
 
+    calEventDuplicateServiceMock = {
+      getDuplicateEventSource: sinon.stub().returns('123456'),
+      setDuplicateEventSource: sinon.spy(),
+      reset: sinon.spy()
+    };
+
     angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
@@ -212,6 +218,7 @@ describe('The CalEventFormController controller', function() {
         };
       });
       $provide.value('VideoConfConfigurationService', VideoConfConfigurationServiceMock);
+      $provide.value('calEventDuplicateService', calEventDuplicateServiceMock);
     });
   });
 
@@ -408,6 +415,28 @@ describe('The CalEventFormController controller', function() {
 
         expect(calEventServiceMock.createEvent).to.not.have.been.called;
         expect(calEventFreeBusyConfirmationModalService).to.have.been.called;
+      });
+
+      it('should call the calEventDuplicateService to reset the stored calendarId', function() {
+        scope.event = CalendarShell.fromIncompleteShell({
+          start: start,
+          end: end,
+          attendees: [{
+            displayName: 'attendee1',
+            email: 'attendee1@openpaas.org',
+            cutype: CAL_ICAL.cutype.individual
+          }, {
+            displayName: 'resource1',
+            email: 'resource1@openpaas.org',
+            cutype: CAL_ICAL.cutype.resource
+          }]
+        });
+
+        initController();
+        scope.submit();
+        $rootScope.$digest();
+
+        expect(calEventDuplicateServiceMock.reset).to.have.been.called;
       });
     });
 
@@ -680,6 +709,62 @@ describe('The CalEventFormController controller', function() {
         expect(fetchFullEvent).to.have.been.calledOnce;
         expect(scope.editedEvent.start.isSame(start)).to.be.true;
         expect(scope.editedEvent.end.isSame(end)).to.be.true;
+      });
+
+      it('should try to fetch the stored event source calendar id when opening a new event', function() {
+        scope.event = CalendarShell.fromIncompleteShell({
+          _id: '123456',
+          start: moment('2013-02-08 12:30'),
+          end: moment('2013-02-08 13:30'),
+          organizer: {
+            email: 'user2@test.com'
+          },
+          otherProperty: 'aString'
+        }); // <- a new event
+
+        initController();
+
+        expect(calEventDuplicateServiceMock.getDuplicateEventSource).to.have.been.called;
+      });
+
+      it('should use the default selected calendar if the stored event source calendar id is not owned by the user', function() {
+        scope.event = CalendarShell.fromIncompleteShell({
+          _id: '123456',
+          start: moment('2013-02-08 12:30'),
+          end: moment('2013-02-08 13:30'),
+          organizer: {
+            email: 'user2@test.com'
+          },
+          otherProperty: 'aString'
+        }); // <- a new event
+
+        calEventDuplicateServiceMock.getDuplicateEventSource = sinon.stub().returns('somethingnotownedbyuser');
+
+        initController();
+        scope.$digest();
+
+        expect(calEventDuplicateServiceMock.getDuplicateEventSource).to.have.been.called;
+        expect(scope.selectedCalendar.uniqueId).to.eq('/calendars/owner/id.json'); // the first selected: true calendar.
+      });
+
+      it('should use the stored event source calendar id if it is owned by the user', function() {
+        scope.event = CalendarShell.fromIncompleteShell({
+          _id: '123456',
+          start: moment('2013-02-08 12:30'),
+          end: moment('2013-02-08 13:30'),
+          organizer: {
+            email: 'user2@test.com'
+          },
+          otherProperty: 'aString'
+        }); // <- a new event
+
+        calEventDuplicateServiceMock.getDuplicateEventSource = sinon.stub().returns('id2');
+
+        initController();
+        scope.$digest();
+
+        expect(scope.selectedCalendar.uniqueId).to.eq('/calendars/owner/id2.json');
+        expect(calEventDuplicateServiceMock.getDuplicateEventSource).to.have.been.called;
       });
     });
 
@@ -1706,7 +1791,7 @@ describe('The CalEventFormController controller', function() {
 
               expect(instance.getModifiedMaster).to.have.been.calledWith(true);
               expect($scope.$hide).to.have.been.calledOnce;
-              expect(calEventServiceMock.changeParticipation).to.have.been.calledWith(master.path, master, owner.emails, attendeeStatus);
+              expect(calEventServiceMock.changeParticipation).to.have.been.calledWith(master.path, master, [scope.calendarOwnerAsAttendee.email], attendeeStatus);
 
               return true;
             })),
@@ -1739,7 +1824,7 @@ describe('The CalEventFormController controller', function() {
 
               expect(instance.getModifiedMaster).to.not.have.been.called;
               expect($scope.$hide).to.have.been.calledOnce;
-              expect(calEventServiceMock.changeParticipation).to.have.been.calledWith(instance.path, instance, owner.emails, attendeeStatus);
+              expect(calEventServiceMock.changeParticipation).to.have.been.calledWith(instance.path, instance, [scope.calendarOwnerAsAttendee.email], attendeeStatus);
 
               return true;
             })),
@@ -2175,6 +2260,13 @@ describe('The CalEventFormController controller', function() {
         copiedEvent.attendees.map(attendee => {
           expect(attendee.partstat).to.eq('NEEDS-ACTION');
         });
+      });
+
+      it('should store the original event\'s calendarId', function() {
+        scope.duplicateEvent();
+        $timeout.flush();
+
+        expect(calEventDuplicateServiceMock.setDuplicateEventSource).to.have.been.called;
       });
     });
   });

@@ -17,11 +17,12 @@
   "dependencies": {
     "esn-dav-import-client": "github:openpaas-suite/esn-dav-import-client#main",
     "esn-frontend-common-libs": "github:openpaas-suite/esn-frontend-common-libs#main",
+    "esn-frontend-group": "github:openpaas-suite/esn-frontend-group#main",
     "esn-frontend-mailto-handler": "github:openpaas-suite/esn-frontend-mailto-handler#main",
     "esn-frontend-videoconference-calendar": "github:openpaas-suite/esn-frontend-videoconference-calendar#main",
-    "esn-frontend-group": "github:openpaas-suite/esn-frontend-group#main",
     "fullcalendar": "3.9.0",
-    "jquery-ui": "1.12.1"
+    "jquery-ui": "1.12.1",
+    "jwt-decode": "3.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
@@ -37,6 +38,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "command-line-args": "^5.1.1",
     "copy-dir": "^1.3.0",
+    "copy-webpack-plugin": "^6.3.2",
     "css-loader": "^3.6.0",
     "dotenv-webpack": "^2.0.0",
     "eslint": "^7.8.1",
