@@ -136,7 +136,7 @@ describe('The calendar configuration tab delegation controller', function() {
 
       CalendarConfigurationTabMainController.$onInit();
 
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('/dav/api/calendars/homeId/id?export');
+      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('/calendars/homeId/id?export');
     });
 
     it('should be initialized with calendar source path if subscription', function() {
@@ -158,7 +158,7 @@ describe('The calendar configuration tab delegation controller', function() {
 
       CalendarConfigurationTabMainController.$onInit();
 
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('/dav/api/calendars/sourceHomeId/sourceId?export');
+      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('/calendars/sourceHomeId/sourceId?export');
     });
   });
 

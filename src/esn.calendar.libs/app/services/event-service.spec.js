@@ -7,6 +7,8 @@ var expect = chai.expect;
 describe('The calEventService service', function() {
   var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend, calendarHomeServiceMock, calOpenEventFormMock;
   var self = this;
+  let tokenAPIMock, calCalDAVURLServiceMock;
+  const REQUEST_HEADERS_BASE = { ESNToken: '123' };
 
   beforeEach(function() {
     self = this;
@@ -16,12 +18,15 @@ describe('The calEventService service', function() {
     dtstart = '2015-05-25T08:56:29+00:00';
     dtend = '2015-05-25T09:56:29+00:00';
 
-    self.tokenAPI = {
-      _token: '123',
+    tokenAPIMock = {
       getNewToken: function() {
-        var token = this._token;
+        return $q.when({ data: { token: '123' } });
+      }
+    };
 
-        return $q.when({ data: { token: token } });
+    calCalDAVURLServiceMock = {
+      getFrontendURL() {
+        return $q.when('/dav/api');
       }
     };
 
@@ -110,6 +115,8 @@ describe('The calEventService service', function() {
 
         return self.calMasterEventCache;
       });
+      $provide.value('tokenAPI', tokenAPIMock);
+      $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
     });
   });
 
@@ -784,6 +791,7 @@ describe('The calEventService service', function() {
 
     it('should send etag as If-Match header', function() {
       var requestHeaders = {
+        ...REQUEST_HEADERS_BASE,
         'Content-Type': 'application/calendar+json',
         Prefer: 'return=representation',
         'If-Match': 'etag',

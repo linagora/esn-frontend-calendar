@@ -14,6 +14,7 @@ describe('The calendarService service', function() {
     listCalendars,
     calendarsCacheMock,
     userUtilsMock;
+  let tokenAPIMock, calCalDAVURLServiceMock;
 
   beforeEach(function() {
     self = this;
@@ -41,12 +42,26 @@ describe('The calendarService service', function() {
     CalendarRightShellResult = {};
     CalendarRightShellMock = sinon.stub().returns(CalendarRightShellResult);
 
+    tokenAPIMock = {
+      getNewToken: function() {
+        return $q.when({ data: { token: '123' } });
+      }
+    };
+
+    calCalDAVURLServiceMock = {
+      getFrontendURL() {
+        return $q.when('/dav/api');
+      }
+    };
+
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
       $provide.value('CalendarCollectionShell', CalendarCollectionShellMock);
       $provide.value('CalendarRightShell', CalendarRightShellMock);
       $provide.value('calendarsCache', calendarsCacheMock);
       $provide.value('userUtils', userUtilsMock);
+      $provide.value('tokenAPI', tokenAPIMock);
+      $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
     });
   });
 
