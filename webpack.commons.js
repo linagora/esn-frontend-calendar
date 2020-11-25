@@ -91,7 +91,6 @@ module.exports = {
         '/user-status/api',
         '/contact/app',
         '/contact/images',
-        '/dav/api',
         '/unifiedinbox/views',
         '/unifiedinbox/app',
         '/unifiedinbox/api',
