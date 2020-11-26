@@ -3,11 +3,26 @@
 describe('The calCalendarSubscriptionApiService factory', function() {
 
   var calendarHomeId, subscriptionId, subscription;
+  let tokenAPIMock, calCalDAVURLServiceMock;
 
   beforeEach(function() {
+    tokenAPIMock = {
+      getNewToken: function() {
+        return $q.when({ data: { token: '123' } });
+      }
+    };
+
+    calCalDAVURLServiceMock = {
+      getFrontendURL() {
+        return $q.when('/dav/api');
+      }
+    };
+
     angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.value('Cache', function() {});
+      $provide.value('tokenAPI', tokenAPIMock);
+      $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
     });
 
     calendarHomeId = '123';

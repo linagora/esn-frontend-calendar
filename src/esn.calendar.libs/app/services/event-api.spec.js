@@ -6,14 +6,30 @@ var expect = chai.expect;
 
 describe('The calendar module apis', function() {
   var CAL_GRACE_DELAY_IS_ACTIVE;
+  const REQUEST_HEADERS_BASE = { ESNToken: '123' };
+  let tokenAPIMock, calCalDAVURLServiceMock;
 
   function headerContentTypeJsonChecker(header) {
     return header['Content-Type'] === 'application/json';
   }
 
   beforeEach(function() {
+    tokenAPIMock = {
+      getNewToken: function() {
+        return $q.when({ data: { token: '123' } });
+      }
+    };
+
+    calCalDAVURLServiceMock = {
+      getFrontendURL() {
+        return $q.when('');
+      }
+    };
+
     angular.mock.module('esn.calendar.libs', function($provide) {
       $provide.constant('CAL_GRACE_DELAY_IS_ACTIVE', CAL_GRACE_DELAY_IS_ACTIVE);
+      $provide.value('tokenAPI', tokenAPIMock);
+      $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
     });
 
     angular.mock.inject(function($httpBackend, calMoment, calendarAPI, calEventAPI, CALENDAR_CONTENT_TYPE_HEADER, CAL_ACCEPT_HEADER, CAL_GRACE_DELAY) {
@@ -48,9 +64,9 @@ describe('The calendar module apis', function() {
 
     describe('get request', function() {
       it('should return the http response if status is 200', function(done) {
-        this.$httpBackend.expectGET(/^\/dav\/api\/calendars\/test\?_=\d+$/, { Accept: this.CAL_ACCEPT_HEADER }).respond(200, 'aResponse');
+        this.$httpBackend.expectGET(/^\/calendars\/test\?_=\d+$/, { ...REQUEST_HEADERS_BASE, Accept: this.CAL_ACCEPT_HEADER }).respond(200, 'aResponse');
 
-        this.calEventAPI.get('/dav/api/calendars/test', this.vcalendar)
+        this.calEventAPI.get('/calendars/test', this.vcalendar)
           .then(function(response) {
             expect(response.data).to.deep.equal('aResponse');
             done();
@@ -60,9 +76,9 @@ describe('The calendar module apis', function() {
       });
 
       it('should return an Error if response.status is not 200', function(done) {
-        this.$httpBackend.expectGET(/^\/dav\/api\/calendars\/test\?_=\d+$/, { Accept: this.CAL_ACCEPT_HEADER }).respond(500, 'Error');
+        this.$httpBackend.expectGET(/^\/calendars\/test\?_=\d+$/, { ...REQUEST_HEADERS_BASE, Accept: this.CAL_ACCEPT_HEADER }).respond(500, 'Error');
 
-        this.calEventAPI.get('/dav/api/calendars/test', this.vcalendar)
+        this.calEventAPI.get('/calendars/test', this.vcalendar)
           .catch(function(err) {
             expect(err).to.exist;
             done();
@@ -76,9 +92,9 @@ describe('The calendar module apis', function() {
     describe('create request', function() {
 
       it('should return an id if status is 202 and graceperiod is true', function(done) {
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, this.vcalendar.toJSON()).respond(202, { id: 'anId' });
+        this.$httpBackend.expectPUT('/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, this.vcalendar.toJSON()).respond(202, { id: 'anId' });
 
-        this.calEventAPI.create('/dav/api/calendars/test.json', this.vcalendar, { graceperiod: true })
+        this.calEventAPI.create('/calendars/test.json', this.vcalendar, { graceperiod: true })
           .then(function(response) {
             expect(response).to.deep.equal('anId');
             done();
@@ -88,9 +104,9 @@ describe('The calendar module apis', function() {
       });
 
       it('should return an Error if response.status is not 202 and graceperiod is true', function(done) {
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, this.vcalendar.toJSON()).respond(500, 'Error');
+        this.$httpBackend.expectPUT('/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, this.vcalendar.toJSON()).respond(500, 'Error');
 
-        this.calEventAPI.create('/dav/api/calendars/test.json', this.vcalendar, { graceperiod: true })
+        this.calEventAPI.create('/calendars/test.json', this.vcalendar, { graceperiod: true })
           .catch(function(err) {
             expect(err).to.exist;
             done();
@@ -100,9 +116,9 @@ describe('The calendar module apis', function() {
       });
 
       it('should return a http response if status is 201 and graceperiod is false', function(done) {
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json', this.vcalendar.toJSON()).respond(201, 'aReponse');
+        this.$httpBackend.expectPUT('/calendars/test.json', this.vcalendar.toJSON()).respond(201, 'aReponse');
 
-        this.calEventAPI.create('/dav/api/calendars/test.json', this.vcalendar, { graceperiod: false })
+        this.calEventAPI.create('/calendars/test.json', this.vcalendar, { graceperiod: false })
           .then(function(response) {
             expect(response.data).to.equal('aReponse');
             done();
@@ -112,9 +128,9 @@ describe('The calendar module apis', function() {
       });
 
       it('should return an Error if response.status is not 201 and graceperiod is true', function(done) {
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json', this.vcalendar.toJSON()).respond(500, 'Error');
+        this.$httpBackend.expectPUT('/calendars/test.json', this.vcalendar.toJSON()).respond(500, 'Error');
 
-        this.calEventAPI.create('/dav/api/calendars/test.json', this.vcalendar, { graceperiod: false })
+        this.calEventAPI.create('/calendars/test.json', this.vcalendar, { graceperiod: false })
           .catch(function(err) {
             expect(err).to.exist;
             done();
@@ -126,9 +142,9 @@ describe('The calendar module apis', function() {
 
     describe('modify request', function() {
       it('should return an id if status is 202', function(done) {
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, this.vcalendar.toJSON()).respond(202, { id: 'anId' });
+        this.$httpBackend.expectPUT('/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, this.vcalendar.toJSON()).respond(202, { id: 'anId' });
 
-        this.calEventAPI.modify('/dav/api/calendars/test.json', this.vcalendar, 'etag')
+        this.calEventAPI.modify('/calendars/test.json', this.vcalendar, 'etag')
           .then(function(response) {
             expect(response).to.deep.equal('anId');
             done();
@@ -138,9 +154,9 @@ describe('The calendar module apis', function() {
       });
 
       it('should return an Error if response.status is not 202', function(done) {
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, this.vcalendar.toJSON()).respond(500, 'Error');
+        this.$httpBackend.expectPUT('/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, this.vcalendar.toJSON()).respond(500, 'Error');
 
-        this.calEventAPI.modify('/dav/api/calendars/test.json', this.vcalendar, 'etag')
+        this.calEventAPI.modify('/calendars/test.json', this.vcalendar, 'etag')
           .catch(function(err) {
             expect(err).to.exist;
             done();
@@ -160,7 +176,7 @@ describe('The calendar module apis', function() {
       });
 
       it('should return an Error if response.status is not 202', function() {
-        this.$httpBackend.expect('PROPFIND', '/dav/api/calendars/calendars/id.json', bodyRequest, headerContentTypeJsonChecker).respond(500, 'Error');
+        this.$httpBackend.expect('PROPFIND', '/calendars/calendars/id.json', bodyRequest, headerContentTypeJsonChecker).respond(500, 'Error');
 
         var catchSpy = sinon.spy();
 
@@ -172,7 +188,7 @@ describe('The calendar module apis', function() {
       });
 
       it('should return server body response if success', function() {
-        this.$httpBackend.expect('PROPFIND', '/dav/api/calendars/calendars/id.json', bodyRequest, headerContentTypeJsonChecker).respond(200, 'body');
+        this.$httpBackend.expect('PROPFIND', '/calendars/calendars/id.json', bodyRequest, headerContentTypeJsonChecker).respond(200, 'body');
 
         var catchSpy = sinon.spy();
 
@@ -193,7 +209,7 @@ describe('The calendar module apis', function() {
       it('should return an error if response.status is not 200', function() {
         var catchSpy = sinon.spy();
 
-        this.$httpBackend.expect('ACL', '/dav/api/calendars/homeId/calId.json', bodyRequest, headerContentTypeJsonChecker).respond(500, 'Error');
+        this.$httpBackend.expect('ACL', '/calendars/homeId/calId.json', bodyRequest, headerContentTypeJsonChecker).respond(500, 'Error');
         this.calendarAPI.modifyPublicRights('homeId', 'calId', bodyRequest).catch(catchSpy);
         this.$httpBackend.flush();
 
@@ -203,7 +219,7 @@ describe('The calendar module apis', function() {
       it('should return server body response if success', function() {
         var thenSpy = sinon.spy();
 
-        this.$httpBackend.expect('ACL', '/dav/api/calendars/homeId/calId.json', bodyRequest, headerContentTypeJsonChecker).respond(200, 'body');
+        this.$httpBackend.expect('ACL', '/calendars/homeId/calId.json', bodyRequest, headerContentTypeJsonChecker).respond(200, 'body');
         this.calendarAPI.modifyPublicRights('homeId', 'calId', bodyRequest).then(thenSpy);
         this.$httpBackend.flush();
 
@@ -221,7 +237,7 @@ describe('The calendar module apis', function() {
       it('should return an error if response.status is not 200', function() {
         var catchSpy = sinon.spy();
 
-        this.$httpBackend.expect('POST', '/dav/api/calendars/homeId/calId.json', bodyRequest).respond(500, 'Error');
+        this.$httpBackend.expect('POST', '/calendars/homeId/calId.json', bodyRequest).respond(500, 'Error');
         this.calendarAPI.modifyShares('homeId', 'calId', bodyRequest).catch(catchSpy);
         this.$httpBackend.flush();
 
@@ -231,7 +247,7 @@ describe('The calendar module apis', function() {
       it('should return server body response if success', function() {
         var thenSpy = sinon.spy();
 
-        this.$httpBackend.expect('POST', '/dav/api/calendars/homeId/calId.json', bodyRequest).respond(200, 'body');
+        this.$httpBackend.expect('POST', '/calendars/homeId/calId.json', bodyRequest).respond(200, 'body');
         this.calendarAPI.modifyShares('homeId', 'calId', bodyRequest).then(thenSpy);
         this.$httpBackend.flush();
 
@@ -241,9 +257,15 @@ describe('The calendar module apis', function() {
 
     describe('remove request', function() {
       it('should return an id if status is 202', function(done) {
-        this.$httpBackend.expectDELETE('/dav/api/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, { 'If-Match': 'etag', Accept: 'application/json, text/plain, */*' }).respond(202, { id: 'anId' });
+        this.$httpBackend
+          .expectDELETE('/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, {
+            ...REQUEST_HEADERS_BASE,
+            'If-Match': 'etag',
+            Accept: 'application/json, text/plain, */*'
+          })
+          .respond(202, { id: 'anId' });
 
-        this.calEventAPI.remove('/dav/api/calendars/test.json', 'etag')
+        this.calEventAPI.remove('/calendars/test.json', 'etag')
           .then(function(response) {
             expect(response).to.deep.equal('anId');
             done();
@@ -253,9 +275,15 @@ describe('The calendar module apis', function() {
       });
 
       it('should return an Error if response.status is not 202', function(done) {
-        this.$httpBackend.expectDELETE('/dav/api/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, { 'If-Match': 'etag', Accept: 'application/json, text/plain, */*' }).respond(500, 'Error');
+        this.$httpBackend
+          .expectDELETE('/calendars/test.json?graceperiod=' + this.CAL_GRACE_DELAY, {
+            ...REQUEST_HEADERS_BASE,
+            'If-Match': 'etag',
+            Accept: 'application/json, text/plain, */*'
+          })
+          .respond(500, 'Error');
 
-        this.calEventAPI.remove('/dav/api/calendars/test.json', 'etag')
+        this.calEventAPI.remove('/calendars/test.json', 'etag')
           .catch(function(err) {
             expect(err).to.exist;
             done();
@@ -267,9 +295,9 @@ describe('The calendar module apis', function() {
 
     describe('changeParticipation request', function() {
       it('should return a http response if status is 200', function(done) {
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json', this.vcalendar.toJSON()).respond(200, 'aResponse');
+        this.$httpBackend.expectPUT('/calendars/test.json', this.vcalendar.toJSON()).respond(200, 'aResponse');
 
-        this.calEventAPI.changeParticipation('/dav/api/calendars/test.json', this.vcalendar, 'etag')
+        this.calEventAPI.changeParticipation('/calendars/test.json', this.vcalendar, 'etag')
           .then(function(response) {
             expect(response.data).to.equal('aResponse');
             done();
@@ -279,9 +307,9 @@ describe('The calendar module apis', function() {
       });
 
       it('should return a http response if status is 204', function(done) {
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json', this.vcalendar.toJSON()).respond(204, 'aResponse');
+        this.$httpBackend.expectPUT('/calendars/test.json', this.vcalendar.toJSON()).respond(204, 'aResponse');
 
-        this.calEventAPI.changeParticipation('/dav/api/calendars/test.json', this.vcalendar, 'etag')
+        this.calEventAPI.changeParticipation('/calendars/test.json', this.vcalendar, 'etag')
           .then(function(response) {
             expect(response.data).to.equal('aResponse');
             done();
@@ -293,7 +321,7 @@ describe('The calendar module apis', function() {
       it('should return an Error if response.status is not 200 and not 204', function(done) {
         this.$httpBackend.expectPUT('', this.vcalendar.toJSON()).respond(500, 'Error');
 
-        this.calEventAPI.changeParticipation('/dav/api/calendars/test.json', this.vcalendar, 'etag')
+        this.calEventAPI.changeParticipation('/calendars/test.json', this.vcalendar, 'etag')
           .catch(function(err) {
             expect(err).to.exist;
             done();
@@ -304,7 +332,7 @@ describe('The calendar module apis', function() {
     });
 
     describe('sendCounter request', function() {
-      var eventPath = '/dav/api/calendars/test.json',
+      var eventPath = '/calendars/test.json',
         requestBody = 'UCantTouchThis';
 
       it('should return a http response if status is 200', function(done) {
@@ -362,9 +390,9 @@ describe('The calendar module apis', function() {
 
     describe('create', function() {
       it('should return a http response if graceperiod is false', function(done) {
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json', vcalendar.toJSON()).respond(201, 'aReponse');
+        this.$httpBackend.expectPUT('/calendars/test.json', vcalendar.toJSON()).respond(201, 'aReponse');
 
-        this.calEventAPI.create('/dav/api/calendars/test.json', vcalendar, { })
+        this.calEventAPI.create('/calendars/test.json', vcalendar, { })
           .then(function(response) {
             expect(response.data).to.equal('aReponse');
 
@@ -379,9 +407,9 @@ describe('The calendar module apis', function() {
       it('should return a http response if graceperiod is false', function(done) {
         var body = { id: 'anId' };
 
-        this.$httpBackend.expectPUT('/dav/api/calendars/test.json', vcalendar.toJSON()).respond(204, body);
+        this.$httpBackend.expectPUT('/calendars/test.json', vcalendar.toJSON()).respond(204, body);
 
-        this.calEventAPI.modify('/dav/api/calendars/test.json', vcalendar, 'etag')
+        this.calEventAPI.modify('/calendars/test.json', vcalendar, 'etag')
           .then(function(response) {
             expect(response.data).to.deep.equal(body);
 
@@ -396,9 +424,11 @@ describe('The calendar module apis', function() {
       it('should return a http response if graceperiod is false', function(done) {
         var body = { id: 'anId' };
 
-        this.$httpBackend.expectDELETE('/dav/api/calendars/test.json', { 'If-Match': 'etag', Accept: 'application/json, text/plain, */*' }).respond(204, body);
+        this.$httpBackend
+          .expectDELETE('/calendars/test.json', { ...REQUEST_HEADERS_BASE, 'If-Match': 'etag', Accept: 'application/json, text/plain, */*' })
+          .respond(204, body);
 
-        this.calEventAPI.remove('/dav/api/calendars/test.json', 'etag')
+        this.calEventAPI.remove('/calendars/test.json', 'etag')
           .then(function(response) {
             expect(response.data).to.deep.equal(body);
 

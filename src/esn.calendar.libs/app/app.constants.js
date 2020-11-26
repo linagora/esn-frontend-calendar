@@ -302,7 +302,7 @@
 
     .constant('CAL_AUTOCOMPLETE_DEFAULT_PLACEHOLDER', 'Search')
 
-    .constant('CAL_DAV_PATH', '/dav/api')
+    .constant('CAL_DAV_PATH', '')
 
     .constant('CAL_GRACE_DELAY', 10000)
 
