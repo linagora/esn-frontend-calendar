@@ -55,7 +55,7 @@ describe('The calendar configuration tab delegation controller', function() {
     calCalendarDeleteConfirmationModalService = sinon.spy();
 
     calCalDAVURLService = {
-      getCalendarURL: sinon.stub()
+      getFrontendURL: sinon.stub()
     };
 
     angular.mock.module('esn.calendar', function($provide) {
@@ -81,7 +81,7 @@ describe('The calendar configuration tab delegation controller', function() {
   });
 
   beforeEach(function() {
-    calCalDAVURLService.getCalendarURL.returns($q.when('http://localhost:8080'));
+    calCalDAVURLService.getFrontendURL.returns($q.when('https://sabre'));
     CalendarConfigurationTabMainController = initController();
     sinon.spy($state, 'go');
   });
@@ -135,8 +135,9 @@ describe('The calendar configuration tab delegation controller', function() {
       CalendarConfigurationTabMainController.calendar = calendar;
 
       CalendarConfigurationTabMainController.$onInit();
+      $rootScope.$apply();
 
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('/calendars/homeId/id?export');
+      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('https://sabre/calendars/homeId/id?export');
     });
 
     it('should be initialized with calendar source path if subscription', function() {
@@ -151,14 +152,22 @@ describe('The calendar configuration tab delegation controller', function() {
         source: {
           id: 'sourceId',
           calendarHomeId: 'sourceHomeId'
-        }
+        },
+        rights: {
+          getShareeRight: sinon.spy()
+        },
+        getOwner: () => ({
+          preferredEmail: 'preferredEmail'
+        })
       };
 
       CalendarConfigurationTabMainController.calendar = calendar;
 
       CalendarConfigurationTabMainController.$onInit();
+      $rootScope.$apply();
 
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('/calendars/sourceHomeId/sourceId?export');
+      expect(calCalDAVURLService.getFrontendURL).to.have.been.called;
+      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('https://sabre/calendars/sourceHomeId/sourceId?export');
     });
   });
 

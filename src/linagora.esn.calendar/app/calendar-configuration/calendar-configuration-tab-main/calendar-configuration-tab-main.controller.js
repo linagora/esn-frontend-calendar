@@ -53,12 +53,11 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       self.isResource = self.calendar.type === CAL_CALENDAR_TYPE.RESOURCE;
 
       if (!self.newCalendar && self.calendar) {
-        calCalDAVURLService.getCalendarURL(self.calendar).then(function(url) {
-          self.caldavurl = url;
-        });
-        var calendarToExport = self.calendar.isSubscription() ? self.calendar.source : self.calendar;
+        const calendarToExport = self.calendar.isSubscription() ? self.calendar.source : self.calendar;
 
-        self.calendarIcsUrl = CAL_DAV_PATH + calPathBuilder.forCalendarPath(calendarToExport.calendarHomeId, calendarToExport.id) + '?export';
+        calCalDAVURLService.getFrontendURL().then(url => {
+          self.calendarIcsUrl = `${url}${CAL_DAV_PATH}${calPathBuilder.forCalendarPath(calendarToExport.calendarHomeId, calendarToExport.id)}?export`;
+        });
       }
     }
 
