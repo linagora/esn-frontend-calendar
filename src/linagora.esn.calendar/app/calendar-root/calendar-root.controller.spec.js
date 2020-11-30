@@ -6,7 +6,7 @@ var expect = chai.expect;
 
 describe('The CalCalendarRootController controller', function() {
 
-  var $q, $controller, $rootScope, $scope, calendarService, calDefaultValue, businessHours, calendarHomeId, CAL_DEFAULT_OLD_CALENDAR_ID;
+  var $q, $controller, $rootScope, $scope, calendarService, calDefaultValue, businessHours, calendarHomeId, CAL_DEFAULT_OLD_CALENDAR_ID, calendarSidebarService;
 
   beforeEach(function() {
     angular.mock.module('esn.resource.libs');
@@ -20,12 +20,13 @@ describe('The CalCalendarRootController controller', function() {
     calendarHomeId = 123456;
   });
 
-  beforeEach(angular.mock.inject(function(_$q_, _$controller_, _$rootScope_, _calDefaultValue_, _calendarService_) {
+  beforeEach(angular.mock.inject(function(_$q_, _$controller_, _$rootScope_, _calDefaultValue_, _calendarService_, _calendarSidebarService_) {
     $q = _$q_;
     $controller = _$controller_;
     $rootScope = _$rootScope_;
     calDefaultValue = _calDefaultValue_;
     calendarService = _calendarService_;
+    calendarSidebarService = _calendarSidebarService_;
     $scope = $rootScope.$new();
   }));
 
@@ -43,10 +44,13 @@ describe('The CalCalendarRootController controller', function() {
         return $q.when({});
       });
 
+      sinon.spy(calendarSidebarService, 'getSidebarVisibility');
+
       initController();
 
       expect($scope.calendarHomeId).to.deep.equal(calendarHomeId);
       expect($scope.businessHours).to.deep.equal(businessHours);
+      expect($scope.isSidebarVisible).to.deep.equal(true);
       expect(calDefaultValue.get('calendarId')).to.deep.equal(CAL_DEFAULT_OLD_CALENDAR_ID);
     });
 

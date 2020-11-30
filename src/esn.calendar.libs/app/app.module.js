@@ -151,6 +151,7 @@ require('./services/shells/valarm-shell.js');
 require('./services/shells/vfreebusy-shell.js');
 require('./services/timezone.js');
 require('./services/user-and-external-calendars.service.js');
+require('./services/sidebar-visibility.service.js');
 require('./services/event-duplicate.service.js');
 require('./services/moment-date.service.js');
 require('./core/date-to-moment.directive.js');

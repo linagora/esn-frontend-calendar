@@ -596,5 +596,8 @@
       ALL_CALENDARS: 'allCalendars',
       MY_CALENDARS: 'myCalendars',
       SHARED_CALENDARS: 'sharedCalendars'
-    });
+    })
+
+    .constant('CAL_SIDEBAR_VISIBILITY', 'calendar:changeSidebarVisibility');
+
 })(angular);
