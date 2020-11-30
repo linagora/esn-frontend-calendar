@@ -194,5 +194,18 @@ describe('The calCalDAVURLService service', function() {
 
       $rootScope.$digest();
     });
+
+    it('should return the correct URL even when configuration one contains trailing slash', function(done) {
+      const trailingSlashUrl = url + '/';
+
+      esnUserConfigurationService.get.returns($q.when([{ name: 'davserver', value: { frontend: { url: trailingSlashUrl } } }]));
+
+      calCalDAVURLService.getFrontendURL().then(function(_url) {
+        expect(_url).to.equal(url);
+        done();
+      }, done);
+
+      $rootScope.$digest();
+    });
   });
 });
