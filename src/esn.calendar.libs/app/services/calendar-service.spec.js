@@ -14,7 +14,7 @@ describe('The calendarService service', function() {
     listCalendars,
     calendarsCacheMock,
     userUtilsMock;
-  let tokenAPIMock, calCalDAVURLServiceMock;
+  let tokenAPIMock, calCalDAVURLServiceMock, fileSaveMock, CAL_EXPORT_FILE_TYPE;
 
   beforeEach(function() {
     self = this;
@@ -54,6 +54,10 @@ describe('The calendarService service', function() {
       }
     };
 
+    fileSaveMock = {
+      saveAs: sinon.spy()
+    };
+
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
       $provide.value('CalendarCollectionShell', CalendarCollectionShellMock);
@@ -62,10 +66,11 @@ describe('The calendarService service', function() {
       $provide.value('userUtils', userUtilsMock);
       $provide.value('tokenAPI', tokenAPIMock);
       $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
+      $provide.value('FileSaver', fileSaveMock);
     });
   });
 
-  beforeEach(angular.mock.inject(function(calendarService, $httpBackend, $rootScope, calendarAPI, calCalendarSubscriptionApiService, calDefaultValue, CAL_EVENTS, CAL_CALENDAR_SHARED_INVITE_STATUS) {
+  beforeEach(angular.mock.inject(function(calendarService, $httpBackend, $rootScope, calendarAPI, calCalendarSubscriptionApiService, calDefaultValue, CAL_EVENTS, CAL_CALENDAR_SHARED_INVITE_STATUS, _CAL_EXPORT_FILE_TYPE_) {
     this.$httpBackend = $httpBackend;
     this.$rootScope = $rootScope;
     this.calendarService = calendarService;
@@ -74,6 +79,7 @@ describe('The calendarService service', function() {
     this.CAL_EVENTS = CAL_EVENTS;
     this.calDefaultValue = calDefaultValue;
     this.CAL_CALENDAR_SHARED_INVITE_STATUS = CAL_CALENDAR_SHARED_INVITE_STATUS;
+    CAL_EXPORT_FILE_TYPE = _CAL_EXPORT_FILE_TYPE_;
   }));
 
   beforeEach(function() {
@@ -1112,6 +1118,27 @@ describe('The calendarService service', function() {
       }).catch(function() { done(new Error('should not happen')); });
 
       this.$rootScope.$digest();
+    });
+  });
+
+  describe('the exportCalendar function', function() {
+    it('should call the calendarAPI.exportCalendar', function() {
+      this.calendarAPI.exportCalendar = sinon.stub().returns($q.when());
+      this.calendarService.exportCalendar('calendarHomeId', 'calendarId');
+
+      expect(this.calendarAPI.exportCalendar).to.have.been.calledWith('calendarHomeId', 'calendarId');
+    });
+
+    it('should attempt to save the exported calendar into a file', function() {
+      const expectedData = 'some calendar data';
+      const expectedBlob = new Blob([expectedData], { type: CAL_EXPORT_FILE_TYPE });
+
+      this.calendarAPI.exportCalendar = sinon.stub().returns($q.when(expectedData));
+      this.calendarService.exportCalendar('calendarHomeId', 'calendarId');
+
+      this.$rootScope.$digest();
+
+      expect(fileSaveMock.saveAs).to.have.calledWith(expectedBlob, 'calendarId.ics');
     });
   });
 });

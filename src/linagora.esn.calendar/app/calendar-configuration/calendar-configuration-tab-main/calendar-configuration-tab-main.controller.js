@@ -14,13 +14,11 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
     userUtils,
     CalCalendarRightsUtilsService,
     CAL_CALENDAR_PUBLIC_RIGHT,
-    CAL_CALENDAR_SHARED_RIGHT,
     CAL_CALENDAR_TYPE,
     CAL_DAV_PATH,
     calPathBuilder,
     calUIAuthorizationService,
-    calCalendarDeleteConfirmationModalService,
-    calCalDAVURLService
+    calCalendarDeleteConfirmationModalService
   ) {
     var self = this;
 
@@ -28,6 +26,7 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
     self.openDeleteConfirmationDialog = openDeleteConfirmationDialog;
     self.removeCalendar = removeCalendar;
     self.unsubscribe = unsubscribe;
+    self.exportCalendar = exportCalendar;
 
     ///////////
     function $onInit() {
@@ -53,11 +52,7 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       self.isResource = self.calendar.type === CAL_CALENDAR_TYPE.RESOURCE;
 
       if (!self.newCalendar && self.calendar) {
-        const calendarToExport = self.calendar.isSubscription() ? self.calendar.source : self.calendar;
-
-        calCalDAVURLService.getFrontendURL().then(url => {
-          self.calendarIcsUrl = `${url}${CAL_DAV_PATH}${calPathBuilder.forCalendarPath(calendarToExport.calendarHomeId, calendarToExport.id)}?export`;
-        });
+        self.calendarToExport = self.calendar.isSubscription() ? self.calendar.source : self.calendar;
       }
     }
 
@@ -110,6 +105,10 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
           self.displayNameOfSharedCalendarOwner = userUtils.displayNameOf(sharedCalendarOwner);
         })
         .catch(angular.noop);
+    }
+
+    function exportCalendar() {
+      calendarService.exportCalendar(self.calendarToExport.calendarHomeId, self.calendarToExport.id);
     }
   }
 })(angular);

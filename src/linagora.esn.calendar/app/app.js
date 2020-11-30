@@ -57,7 +57,8 @@ angular.module('esn.calendar', [
   'linagora.esn.videoconference',
   'linagora.esn.videoconference.calendar',
   'esn.calendar.libs',
-  'esn.api-client'
+  'esn.api-client',
+  'ngFileSaver'
 ]);
 
 require('esn-frontend-common-libs/src/frontend/js/modules/esn.router.js');

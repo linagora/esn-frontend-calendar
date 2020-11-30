@@ -17,7 +17,6 @@ describe('The calendar configuration tab delegation controller', function() {
     session,
     CalendarConfigurationTabMainController,
     calCalendarDeleteConfirmationModalService,
-    calCalDAVURLService,
     calFullUiConfiguration,
     CAL_CALENDAR_PUBLIC_RIGHT,
     CAL_CALENDAR_SHARED_RIGHT,
@@ -34,7 +33,8 @@ describe('The calendar configuration tab delegation controller', function() {
       }),
       unsubscribe: sinon.spy(function() {
         return $q.when();
-      })
+      }),
+      exportCalendar: sinon.spy()
     };
     calFullUiConfiguration = {
       get: sinon.spy(function() {
@@ -54,13 +54,8 @@ describe('The calendar configuration tab delegation controller', function() {
 
     calCalendarDeleteConfirmationModalService = sinon.spy();
 
-    calCalDAVURLService = {
-      getFrontendURL: sinon.stub()
-    };
-
     angular.mock.module('esn.calendar', function($provide) {
       $provide.value('calendarService', calendarService);
-      $provide.value('calCalDAVURLService', calCalDAVURLService);
       $provide.value('calCalendarDeleteConfirmationModalService', calCalendarDeleteConfirmationModalService);
       $provide.value('calFullUiConfiguration', calFullUiConfiguration);
     });
@@ -81,7 +76,6 @@ describe('The calendar configuration tab delegation controller', function() {
   });
 
   beforeEach(function() {
-    calCalDAVURLService.getFrontendURL.returns($q.when('https://sabre'));
     CalendarConfigurationTabMainController = initController();
     sinon.spy($state, 'go');
   });
@@ -109,7 +103,7 @@ describe('The calendar configuration tab delegation controller', function() {
     });
   });
 
-  describe('the calendarIcsUrl', function() {
+  describe('the calendarToExport', function() {
     beforeEach(function() {
       calendar = {
         isShared: sinon.stub().returns(false),
@@ -128,7 +122,7 @@ describe('The calendar configuration tab delegation controller', function() {
 
       CalendarConfigurationTabMainController.$onInit();
 
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.be.undefined;
+      expect(CalendarConfigurationTabMainController.calendarToExport).to.be.undefined;
     });
 
     it('should be initialized with calendar path if not subscription', function() {
@@ -137,7 +131,10 @@ describe('The calendar configuration tab delegation controller', function() {
       CalendarConfigurationTabMainController.$onInit();
       $rootScope.$apply();
 
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('https://sabre/calendars/homeId/id?export');
+      const { calendarHomeId, id } = CalendarConfigurationTabMainController.calendarToExport;
+
+      expect(calendarHomeId).to.eq('homeId');
+      expect(id).to.eq('id');
     });
 
     it('should be initialized with calendar source path if subscription', function() {
@@ -166,8 +163,10 @@ describe('The calendar configuration tab delegation controller', function() {
       CalendarConfigurationTabMainController.$onInit();
       $rootScope.$apply();
 
-      expect(calCalDAVURLService.getFrontendURL).to.have.been.called;
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('https://sabre/calendars/sourceHomeId/sourceId?export');
+      const { calendarHomeId, id } = CalendarConfigurationTabMainController.calendarToExport;
+
+      expect(calendarHomeId).to.eq('sourceHomeId');
+      expect(id).to.eq('sourceId');
     });
   });
 
@@ -469,6 +468,38 @@ describe('The calendar configuration tab delegation controller', function() {
       expect(userUtils.displayNameOf).to.have.been.called;
       expect(CalendarConfigurationTabMainController.sharedCalendarOwner).to.equal(getOwnerResult);
       expect(CalendarConfigurationTabMainController.displayNameOfSharedCalendarOwner).to.equal(userUtilsResult);
+    });
+  });
+
+  describe('the exportCalendar function', () => {
+    beforeEach(function() {
+      CalendarConfigurationTabMainController.calendar = {
+        isShared: sinon.stub().returns(false),
+        isAdmin: sinon.stub().returns(false),
+        isOwner: sinon.stub().returns(false),
+        isSubscription: sinon.stub().returns(true),
+        isReadable: sinon.stub().returns(true),
+        id: 'id',
+        calendarHomeId: 'homeId',
+        source: {
+          id: 'sourceId',
+          calendarHomeId: 'sourceHomeId'
+        },
+        rights: {
+          getShareeRight: sinon.spy()
+        },
+        getOwner: () => ({
+          preferredEmail: 'preferredEmail'
+        })
+      };
+    });
+
+    it('should call the calendarService.exportCalendar method', () => {
+      CalendarConfigurationTabMainController.$onInit();
+      CalendarConfigurationTabMainController.exportCalendar();
+      $rootScope.$digest();
+
+      expect(calendarService.exportCalendar).to.have.been.calledWith('sourceHomeId', 'sourceId');
     });
   });
 });

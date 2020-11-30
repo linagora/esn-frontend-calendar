@@ -632,6 +632,17 @@ describe('The calendar module apis', function() {
         this.$httpBackend.flush();
       });
     });
+
+    describe('the exportCalendar request', function() {
+      it('should get the calendar export path', function() {
+        const expectedResponse = 'some vcal stuff';
+
+        this.$httpBackend.expectGET('/calendars/homeId/calendarId?export').respond(expectedResponse);
+        this.calendarAPI.exportCalendar('homeId', 'calendarId');
+
+        this.$httpBackend.flush();
+      });
+    });
   });
 
 });

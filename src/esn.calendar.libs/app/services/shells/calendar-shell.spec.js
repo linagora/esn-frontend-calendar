@@ -6,6 +6,7 @@ var expect = chai.expect;
 
 describe('CalendarShell factory', function() {
   var CalendarShell, calMoment, calPathBuilder, ICAL, $rootScope, calEventService, esnDatetimeService;
+  let fileSaveMock;
 
   function loadICSFixtureAsCalendarShell(file, folder) {
     var path = 'src/linagora.esn.calendar/app/fixtures/calendar/' + (folder ? folder + '/' : '') + file;
@@ -68,6 +69,10 @@ describe('CalendarShell factory', function() {
       }
     };
 
+    fileSaveMock = {
+      saveAs: sinon.spy()
+    };
+
     angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
@@ -76,6 +81,7 @@ describe('CalendarShell factory', function() {
       $provide.value('calMasterEventCache', self.calMasterEventCache);
       $provide.value('jstz', self.jstzMock);
       $provide.value('esnDatetimeService', esnDatetimeService);
+      $provide.value('FileSaver', fileSaveMock);
     });
   });
 
