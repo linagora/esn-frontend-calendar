@@ -7,7 +7,7 @@ var expect = chai.expect;
 describe('The calEventService service', function() {
   var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend, calendarHomeServiceMock, calOpenEventFormMock;
   var self = this;
-  let tokenAPIMock, calCalDAVURLServiceMock;
+  let tokenAPIMock, calCalDAVURLServiceMock, fileSaveMock;
   const REQUEST_HEADERS_BASE = { ESNToken: '123' };
 
   beforeEach(function() {
@@ -85,6 +85,10 @@ describe('The calEventService service', function() {
 
     calOpenEventFormMock = sinon.stub();
 
+    fileSaveMock = {
+      saveAs: sinon.spy()
+    };
+
     angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.ical');
@@ -117,6 +121,7 @@ describe('The calEventService service', function() {
       });
       $provide.value('tokenAPI', tokenAPIMock);
       $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
+      $provide.value('FileSaver', fileSaveMock);
     });
   });
 

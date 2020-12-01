@@ -24,7 +24,8 @@ require('./http-response-handler.js');
     CAL_ACCEPT_HEADER,
     CAL_DAV_DATE_FORMAT,
     CALENDAR_PREFER_HEADER,
-    CALENDAR_CONTENT_TYPE_HEADER
+    CALENDAR_CONTENT_TYPE_HEADER,
+    CAL_ACCEPT_EXPORT_HEADER
   ) {
 
     return {
@@ -40,7 +41,8 @@ require('./http-response-handler.js');
       modifyCalendar: modifyCalendar,
       modifyShares: modifyShares,
       changeParticipation: changeParticipation,
-      modifyPublicRights: modifyPublicRights
+      modifyPublicRights: modifyPublicRights,
+      exportCalendar
     };
 
     ////////////
@@ -301,6 +303,18 @@ require('./http-response-handler.js');
 
       return calDavRequest('put', eventPath, headers, body)
         .then(calHttpResponseHandler([200, 204]));
+    }
+
+    /**
+     * GET request used to export a calendar
+     * @param {String} calendarHomeId   the calendar home id
+     * @param {String} calendarId       the calendar id
+     */
+    function exportCalendar(calendarHomeId, calendarId) {
+      const calendarPath = `${calPathBuilder.forCalendarPath(calendarHomeId, calendarId)}?export`;
+
+      return calDavRequest('get', calendarPath, { Accept: CAL_ACCEPT_EXPORT_HEADER })
+        .then(calHttpResponseHandler(200, _.property('data')));
     }
   }
 })(angular);

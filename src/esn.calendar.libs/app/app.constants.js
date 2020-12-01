@@ -598,6 +598,8 @@
       SHARED_CALENDARS: 'sharedCalendars'
     })
 
-    .constant('CAL_SIDEBAR_VISIBILITY', 'calendar:changeSidebarVisibility');
+    .constant('CAL_SIDEBAR_VISIBILITY', 'calendar:changeSidebarVisibility')
+    .constant('CAL_ACCEPT_EXPORT_HEADER', 'application/calendar')
+    .constant('CAL_EXPORT_FILE_TYPE', 'application/calendar;charset=utf-8');
 
 })(angular);

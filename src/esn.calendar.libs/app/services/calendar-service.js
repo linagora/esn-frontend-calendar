@@ -22,7 +22,9 @@ require('./calendar-cache.js');
     CAL_EVENTS,
     CalendarRightShell,
     calendarsCache,
-    userUtils
+    userUtils,
+    FileSaver,
+    CAL_EXPORT_FILE_TYPE
   ) {
     var defaultCalendarApiOptions = { withRights: true };
 
@@ -48,6 +50,7 @@ require('./calendar-cache.js');
     this.injectCalendarsWithOwnerName = injectCalendarsWithOwnerName;
     this.getOwnerDisplayName = getOwnerDisplayName;
     this.getResourceDescription = getResourceDescription;
+    this.exportCalendar = exportCalendar;
     ////////////
 
     /**
@@ -353,6 +356,19 @@ require('./calendar-cache.js');
     function getResourceDescription(calendar) {
       return calendar.getOwner().then(function(owner) {
         return owner.description;
+      });
+    }
+
+    /**
+     * fetch a calendar and download it.
+     * @param {String} calendarHomeId
+     * @param {String} calendarId
+     */
+    function exportCalendar(calendarHomeId, calendarId) {
+      calendarAPI.exportCalendar(calendarHomeId, calendarId).then(calendarData => {
+        const calendarBlob = new Blob([calendarData], { type: CAL_EXPORT_FILE_TYPE });
+
+        FileSaver.saveAs(calendarBlob, `${calendarId}.ics`);
       });
     }
   }

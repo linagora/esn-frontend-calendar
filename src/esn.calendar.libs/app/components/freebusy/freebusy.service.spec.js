@@ -7,7 +7,7 @@ var expect = chai.expect;
 describe('The calFreebusyService service', function() {
   var vfreebusy, $httpBackend, $rootScope, calFreebusyService, calMoment, CAL_ACCEPT_HEADER, CAL_DAV_DATE_FORMAT, CAL_FREEBUSY;
   var calAttendeeService, calFreebusyAPI;
-  let tokenAPIMock, calCalDAVURLServiceMock;
+  let tokenAPIMock, calCalDAVURLServiceMock, fileSaveMock;
   const REQUEST_HEADERS_BASE = { ESNToken: '123' };
 
   beforeEach(function() {
@@ -31,10 +31,15 @@ describe('The calFreebusyService service', function() {
       }
     };
 
+    fileSaveMock = {
+      saveAs: sinon.spy()
+    };
+
     angular.mock.module(function($provide) {
       $provide.value('calAttendeeService', calAttendeeService);
       $provide.value('tokenAPI', tokenAPIMock);
       $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
+      $provide.value('FileSaver', fileSaveMock);
     });
   });
 

@@ -6,12 +6,17 @@ var expect = chai.expect;
 
 describe('The CalPartstatButtonsController', function() {
   var $controller, $q, calEventService, session, shells = {}, CalendarShell, ICAL;
+  let fileSaveMock;
 
   function initCtrl() {
     return $controller('CalPartstatButtonsController', null, {});
   }
 
   beforeEach(function() {
+    fileSaveMock = {
+      saveAs: sinon.spy()
+    };
+
     angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
@@ -24,6 +29,7 @@ describe('The CalPartstatButtonsController', function() {
           return $q.when(shells.event);
         }
       });
+      $provide.value('FileSaver', fileSaveMock);
     });
   });
 
