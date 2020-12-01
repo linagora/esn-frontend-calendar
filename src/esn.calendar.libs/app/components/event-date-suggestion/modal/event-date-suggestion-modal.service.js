@@ -25,7 +25,7 @@ function calEventDateSuggestionModalFactory(
             return event.clone();
           }
         },
-        controller: function($scope, event) {
+        controller: /* @ngInject */ function($scope, event) {
           var _$hide = $scope.$hide;
 
           var unregister = $rootScope.$on(CAL_EVENTS.MODAL + '.hide', function() {
