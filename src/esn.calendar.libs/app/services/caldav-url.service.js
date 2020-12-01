@@ -48,7 +48,9 @@ require('./path-parser.service.js');
             return getDefaultURL();
           }
 
-          return davserver.value && davserver.value.frontend && davserver.value.frontend.url ? davserver.value.frontend.url : getDefaultURL();
+          return davserver.value && davserver.value.frontend && davserver.value.frontend.url ?
+            removeTrailingSlash(davserver.value.frontend.url) :
+            getDefaultURL();
         }, function(err) {
           $log.debug('Can not get davserver from configuration', err);
 
@@ -58,6 +60,10 @@ require('./path-parser.service.js');
 
     function getDefaultURL() {
       return $window.location.origin;
+    }
+
+    function removeTrailingSlash(url) {
+      return url.replace(/\/$/, '');
     }
 
   }
