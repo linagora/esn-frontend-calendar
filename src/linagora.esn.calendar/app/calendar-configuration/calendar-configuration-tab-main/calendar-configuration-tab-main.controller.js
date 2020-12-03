@@ -15,9 +15,9 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
     CalCalendarRightsUtilsService,
     CAL_CALENDAR_PUBLIC_RIGHT,
     CAL_CALENDAR_TYPE,
-    CAL_DAV_PATH,
-    calPathBuilder,
-    calUIAuthorizationService
+    calUIAuthorizationService,
+    calCalendarDeleteConfirmationModalService,
+    calCalDAVURLService
   ) {
     var self = this;
 
@@ -48,6 +48,11 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       self.isResource = self.calendar.type === CAL_CALENDAR_TYPE.RESOURCE;
 
       if (!self.newCalendar && self.calendar) {
+        // Used in the template to show the calendar DAV URL.
+        calCalDAVURLService.getCalendarURL(self.calendar).then(url => {
+          self.caldavurl = url;
+        });
+
         self.calendarToExport = self.calendar.isSubscription() ? self.calendar.source : self.calendar;
       }
     }
