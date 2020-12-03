@@ -122,7 +122,8 @@ describe('The CalEventFormController controller', function() {
       },
       sendCounter: sinon.spy(function() {
         return $q.when(true);
-      })
+      }),
+      removeEvent: sinon.stub().returns($q.when())
     };
 
     calendarHomeId = 'calendarHomeId';
@@ -2261,6 +2262,115 @@ describe('The CalEventFormController controller', function() {
         $timeout.flush();
 
         expect(calEventDuplicateServiceMock.setDuplicateEventSource).to.have.been.called;
+      });
+    });
+
+    describe('the deteteEventForAttendee function', function() {
+      let eventExample;
+
+      beforeEach(function() {
+        eventExample = {
+          path: 'path',
+          start: moment('2013-02-08 12:30'),
+          end: moment('2013-02-08 13:30'),
+          organizer: {
+            email: 'owner@test.com'
+          },
+          attendees: [{
+            email: 'owner@test.com'
+          }, {
+            email: 'user@test.com'
+          }]
+        };
+      });
+
+      it('should attempt to remove a non recurrent event', function() {
+        scope.event = CalendarShell.fromIncompleteShell(eventExample);
+
+        initController();
+        scope.deteteEventForAttendee();
+        $rootScope.$digest();
+
+        expect(calEventServiceMock.removeEvent).to.have.been.calledWith(scope.event.path, scope.event, scope.event.etag, false /* not all instances*/);
+      });
+
+      it('should attempt to remove an instance of a series of recurrent event if chosen so', function() {
+        const master = CalendarShell.fromIncompleteShell({
+          ...eventExample,
+          rrule: {
+            freq: 'DAILY',
+            interval: 2,
+            count: 3
+          }
+        });
+
+        scope.event = master.expand()[0];
+
+        initController();
+        scope.deteteEventForAttendee();
+
+        $rootScope.$digest();
+
+        expect($modal).to.have.been.calledWith(sinon.match({
+          template: require('./modals/delete-instance-or-series-modal.pug'),
+          controller: sinon.match.func.and(sinon.match(function(controller) {
+            const $scope = {
+              $hide: sinon.spy(),
+              $broadcast: sinon.spy()
+            };
+
+            controller($scope);
+
+            $scope.editChoice = 'this';
+
+            $scope.submit();
+            $rootScope.$digest();
+
+            expect(calEventServiceMock.removeEvent).to.have.been.calledWith(scope.event.path, scope.event, scope.event.etag, false /* not all instances*/);
+
+            return true;
+          })),
+          placement: 'center'
+        }));
+      });
+
+      it('should attempt to remove a recurrent event ( master event and all instances )', function() {
+        const master = CalendarShell.fromIncompleteShell({
+          ...eventExample,
+          rrule: {
+            freq: 'DAILY',
+            interval: 2,
+            count: 3
+          }
+        });
+
+        scope.event = master.expand()[0];
+
+        initController();
+        scope.deteteEventForAttendee();
+        $rootScope.$digest();
+
+        expect($modal).to.have.been.calledWith(sinon.match({
+          template: require('./modals/delete-instance-or-series-modal.pug'),
+          controller: sinon.match.func.and(sinon.match(function(controller) {
+            const $scope = {
+              $hide: sinon.spy(),
+              $broadcast: sinon.spy()
+            };
+
+            controller($scope);
+
+            $scope.editChoice = 'all';
+
+            $scope.submit();
+            $rootScope.$digest();
+
+            expect(calEventServiceMock.removeEvent).to.have.been.calledWith(scope.event.path, scope.event, scope.event.etag, true /*all instances*/);
+
+            return true;
+          })),
+          placement: 'center'
+        }));
       });
     });
   });

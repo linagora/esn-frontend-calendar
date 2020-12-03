@@ -73,6 +73,7 @@ function CalEventFormController(
   $scope.deleteEvent = deleteEvent;
   $scope.createEvent = createEvent;
   $scope.duplicateEvent = duplicateEvent;
+  $scope.deteteEventForAttendee = deteteEventForAttendee;
   $scope.isNew = $scope.event.fetchFullEvent ? function() { return false; } : calEventUtils.isNew;
   $scope.isInvolvedInATask = calEventUtils.isInvolvedInATask;
   $scope.updateAlarm = updateAlarm;
@@ -202,6 +203,7 @@ function CalEventFormController(
         }).then(function(uiAuthorizations) {
           $scope.canModifyEvent = uiAuthorizations[0];
           $scope.canModifyEventRecurrence = uiAuthorizations[1];
+          $scope.isAnAttendeeCalendar = calEventUtils.canSuggestChanges($scope.editedEvent, session.user) && !$scope.canModifyEvent;
           setExcludeCurrentUser();
 
           return calAttendeeService.splitAttendeesFromTypeWithResourceDetails($scope.editedEvent.attendees);
@@ -300,11 +302,11 @@ function CalEventFormController(
     }
   }
 
-  function deleteEvent() {
+  function deleteEvent(shouldRemoveAllInstances = false) {
     $scope.restActive = true;
     _hideModal();
 
-    calEventService.removeEvent($scope.event.path, $scope.event, $scope.event.etag).finally(function() {
+    calEventService.removeEvent($scope.event.path, $scope.event, $scope.event.etag, shouldRemoveAllInstances).finally(function() {
       $scope.restActive = false;
     });
   }
@@ -682,5 +684,27 @@ function CalEventFormController(
     setTimeout(() => {
       $('md-backdrop').css({ 'z-index': '1999' });
     }, 0);
+  }
+
+  function deteteEventForAttendee() {
+    if (!$scope.editedEvent.isInstance()) return deleteEvent();
+
+    $modal({
+      template: require('./modals/delete-instance-or-series-modal.pug'),
+      controller: /* @ngInject */ function($scope) {
+        $scope.editChoice = 'this';
+
+        $scope.submit = function() {
+          $scope.$hide();
+
+          ($scope.editChoice === 'this' ? deleteEvent : deleteAllInstances)();
+        };
+
+        function deleteAllInstances() {
+          deleteEvent(true);
+        }
+      },
+      placement: 'center'
+    });
   }
 }
