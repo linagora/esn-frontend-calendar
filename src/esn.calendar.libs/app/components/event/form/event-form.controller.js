@@ -87,6 +87,7 @@ function CalEventFormController(
   $scope.toggleSuggestedEvent = toggleSuggestedEvent;
   $scope.submitSuggestion = submitSuggestion;
   $scope.onDateChange = onDateChange;
+  $scope.changeBackdropZIndex = changeBackdropZIndex;
   $scope.hideEventForm = true;
 
   // Initialize the scope of the form. It creates a scope.editedEvent which allows us to
@@ -674,5 +675,11 @@ function CalEventFormController(
 
       return attendee;
     });
+  }
+
+  function changeBackdropZIndex() {
+    setTimeout(() => {
+      $('md-backdrop').css({ 'z-index': '1999' });
+    }, 0);
   }
 }
