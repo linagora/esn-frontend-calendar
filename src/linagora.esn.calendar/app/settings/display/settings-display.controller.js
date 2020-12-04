@@ -10,7 +10,9 @@ function CalSettingsDisplayController(
   asyncAction,
   calFullUiConfiguration,
   esnUserConfigurationService,
-  CAL_USER_CONFIGURATION
+  calSettingsService,
+  CAL_USER_CONFIGURATION,
+  CAL_SETTINGS_STATUS
 ) {
   var self = this;
 
@@ -50,11 +52,15 @@ function CalSettingsDisplayController(
       };
     });
 
+    calSettingsService.updateStatus(CAL_SETTINGS_STATUS.UPDATING);
+
     return esnUserConfigurationService.set(configurationsArray, CAL_USER_CONFIGURATION.moduleName)
       .then(function() {
+        calSettingsService.updateStatus(CAL_SETTINGS_STATUS.UPDATED);
         calFullUiConfiguration.setHiddenDeclinedEvents(self.configurations.hideDeclinedEvents);
-
-        $state.go('calendar.main');
+      })
+      .catch(() => {
+        calSettingsService.updateStatus(CAL_SETTINGS_STATUS.FAILED);
       });
   }
 }

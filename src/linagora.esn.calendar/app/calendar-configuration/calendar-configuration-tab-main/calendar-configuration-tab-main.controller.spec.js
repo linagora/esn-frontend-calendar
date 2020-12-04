@@ -170,36 +170,6 @@ describe('The calendar configuration tab delegation controller', function() {
     });
   });
 
-  describe('the openDeleteConfirmationDialog function', function() {
-    it('should call the modal confirmation service', function() {
-      CalendarConfigurationTabMainController.openDeleteConfirmationDialog();
-
-      expect(calCalendarDeleteConfirmationModalService).to.have.been.calledWith(CalendarConfigurationTabMainController.calendar, CalendarConfigurationTabMainController.removeCalendar);
-    });
-  });
-
-  describe('the removeCalendar function', function() {
-    it('should call calendarService.removeCalendar before $state to go back on the main view when deleting', function() {
-      CalendarConfigurationTabMainController.calendar = {
-        id: '123456789'
-      };
-      CalendarConfigurationTabMainController.calendarHomeId = '12345';
-
-      CalendarConfigurationTabMainController.removeCalendar();
-
-      expect($state.go).to.have.not.been.called;
-
-      $rootScope.$digest();
-
-      expect(calendarService.removeCalendar).to.have.been.calledWith(
-        CalendarConfigurationTabMainController.calendarHomeId,
-        CalendarConfigurationTabMainController.calendar
-      );
-
-      expect($state.go).to.have.been.calledWith('calendar.main');
-    });
-  });
-
   describe('the unsubscribe function', function() {
     it('should call calendarService.unsubscribe before $state to go back on the main view when unsubscribing', function() {
       CalendarConfigurationTabMainController.calendar = {
@@ -219,44 +189,6 @@ describe('The calendar configuration tab delegation controller', function() {
       );
 
       expect($state.go).to.have.been.calledWith('calendar.main');
-    });
-  });
-
-  describe('the canDeleteCalendar function', function() {
-    var canDeleteCalendarResult;
-
-    beforeEach(function() {
-      CalendarConfigurationTabMainController.calendar = calendar;
-
-      sinon.stub(calUIAuthorizationService, 'canDeleteCalendar', function() {
-        return canDeleteCalendarResult;
-      });
-    });
-
-    it('should return true if newCalendar=false and calUIAuthorizationService.canDeleteCalendar= true', function() {
-      CalendarConfigurationTabMainController.newCalendar = false;
-      canDeleteCalendarResult = true;
-
-      CalendarConfigurationTabMainController.$onInit();
-
-      expect(CalendarConfigurationTabMainController.canDeleteCalendar).to.be.true;
-    });
-
-    it('should return false if newCalendar=false and calUIAuthorizationService.canDeleteCalendar= false', function() {
-      CalendarConfigurationTabMainController.newCalendar = false;
-      canDeleteCalendarResult = false;
-
-      CalendarConfigurationTabMainController.$onInit();
-
-      expect(CalendarConfigurationTabMainController.canDeleteCalendar).to.be.false;
-    });
-
-    it('should return false if newCalendar=true', function() {
-      CalendarConfigurationTabMainController.newCalendar = true;
-
-      CalendarConfigurationTabMainController.$onInit();
-
-      expect(CalendarConfigurationTabMainController.canDeleteCalendar).to.be.false;
     });
   });
 

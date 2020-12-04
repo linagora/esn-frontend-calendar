@@ -8,7 +8,7 @@ var expect = chai.expect;
 describe('The CalSettingsDisplayController', function() {
 
   var $controller, $rootScope, $httpBackend, $scope, $state;
-  var esnUserConfigurationService, moduleName, moduleConfiguration, configResponse;
+  var esnUserConfigurationService, moduleName, moduleConfiguration, configResponse, calSettingsService;
 
   beforeEach(angular.mock.module(function($provide) {
     $provide.value('asyncAction', sinon.spy(function(message, action) {
@@ -31,13 +31,15 @@ describe('The CalSettingsDisplayController', function() {
       _$controller_,
       _$rootScope_,
       _$httpBackend_,
-      _esnUserConfigurationService_
+      _esnUserConfigurationService_,
+      _calSettingsService_
     ) {
       $state = _$state_;
       $controller = _$controller_;
       $rootScope = _$rootScope_;
       $httpBackend = _$httpBackend_;
       esnUserConfigurationService = _esnUserConfigurationService_;
+      calSettingsService = _calSettingsService_;
     });
   });
 
@@ -98,6 +100,7 @@ describe('The CalSettingsDisplayController', function() {
 
     it('should call esnUserConfigurationService.set to save configuration', function(done) {
       esnUserConfigurationService.get = sinon.stub().returns($q.when(configResponse));
+      calSettingsService.updateStatus = sinon.spy();
 
       var controller = initController();
       var updatedConfigs = {
@@ -118,6 +121,7 @@ describe('The CalSettingsDisplayController', function() {
       esnUserConfigurationService.set = sinon.stub().returns($q.when(configResponse));
 
       controller.submit(form).then(function() {
+        expect(calSettingsService.updateStatus).to.have.been.calledWith('updating');
         expect(esnUserConfigurationService.set).to.have.been.calledWith(expectedConfigs);
 
         done();
@@ -127,6 +131,8 @@ describe('The CalSettingsDisplayController', function() {
     });
 
     it('should redirect users to the calendar main page after saving configuration successfully', function(done) {
+      calSettingsService.updateStatus = sinon.spy();
+
       esnUserConfigurationService.get = () => $q.when(configResponse);
       $state.go = sinon.stub();
 
@@ -144,10 +150,14 @@ describe('The CalSettingsDisplayController', function() {
 
       controller.submit(form)
         .then(() => {
-          expect($state.go).to.have.been.calledWith('calendar.main');
+          expect(calSettingsService.updateStatus).to.have.been.calledWith('updating');
+          expect(calSettingsService.updateStatus).to.have.been.calledWith('updated');
           done();
         })
-        .catch(err => done(err || new Error('should resolve')));
+        .catch(err => {
+          expect(calSettingsService.updateStatus).to.have.been.calledWith('failed');
+          done(err || new Error('should resolve'));
+        });
 
       $scope.$digest();
     });

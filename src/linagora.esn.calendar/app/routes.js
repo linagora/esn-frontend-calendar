@@ -50,55 +50,97 @@ function routesConfig($stateProvider) {
         }
       }
     })
-    .state('calendar.settings', {
+    .state('calendar.main.settings', {
       url: '/settings',
       deepStateRedirect: {
-        default: 'calendar.settings.calendars',
+        default: 'calendar.main.settings.calendars',
         fn: function() {
-          return { state: 'calendar.settings.calendars' };
+          return { state: 'calendar.main.settings.calendars' };
         }
       },
-      views: {
-        'content@calendar': {
-          template: require('./settings/settings.pug'),
-          controller: 'CalSettingsIndexController'
+      resolve: {
+        modalInstance: function($modal) {
+          return $modal({
+            template: require('./settings/settings.pug'),
+            controller: 'CalSettingsIndexController',
+            backdrop: 'static',
+            keyboard: false
+          });
         }
+      },
+      onEnter: function($rootScope, $state, calSettingsService, modalInstance, UPDATE_CAL_SETTINGS, CAL_SETTINGS_STATUS) {
+        let isSettingUpdated = false;
+
+        calSettingsService.setForceUpdate(false);
+
+        const unregisterCalSettingsUpdate = $rootScope.$on(UPDATE_CAL_SETTINGS, function(event, newStatus) {
+          if (newStatus !== CAL_SETTINGS_STATUS.UPDATED) return;
+
+          isSettingUpdated = true;
+        });
+
+        const unregisterStateChange = $rootScope.$on('$stateChangeSuccess',
+          function(event, toState) {
+            if (toState.name.includes('calendar.main.settings')) return;
+
+            unregisterCalSettingsUpdate();
+            unregisterStateChange();
+
+            modalInstance.hide();
+
+            if (isSettingUpdated) {
+              return $state.reload();
+            }
+
+            calSettingsService.setForceUpdate(true);
+          });
       }
     })
-    .state('calendar.settings.calendars', {
+    .state('calendar.main.settings.calendars', {
       url: '/calendars',
       views: {
-        settings: {
+        'settings@': {
           template: '<cal-settings-calendars />'
         }
       }
     })
-    .state('calendar.settings.display', {
+    .state('calendar.main.settings.display', {
       url: '/display',
       views: {
-        settings: {
+        'settings@': {
           template: '<cal-settings-display />'
         }
       }
     })
-    .state('calendar.edit', {
+    .state('calendar.main.edit', {
       url: '/edit/:calendarUniqueId',
       params: {
         addUsersFromDelegationState: null,
         previousState: null
       },
-      views: {
-        content: {
-          template: '<calendar-configuration />'
-        }
+      onEnter: function($rootScope, $modal) {
+        $rootScope.editCalendarModal = $modal({
+          template: '<calendar-configuration />',
+          keyboard: false,
+          backdrop: 'static'
+        });
+      },
+      onExit: function($rootScope) {
+        $rootScope.editCalendarModal.hide();
       }
     })
-    .state('calendar.add', {
+    .state('calendar.main.add', {
       url: '/add',
-      views: {
-        content: {
-          template: '<calendar-configuration />'
+      resolve: {
+        modalInstance: function($modal) {
+          return $modal({
+            template: '<calendar-configuration />',
+            keyboard: false
+          });
         }
+      },
+      onExit: function(modalInstance) {
+        modalInstance.hide();
       }
     })
     .state('calendar.external', {

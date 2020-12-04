@@ -29,7 +29,7 @@
     }
 
     function goTo() {
-      $state.go(self.stateToGo, { calendarUniqueId: self.calendar.uniqueId, previousState: 'calendar.settings.calendars' });
+      $state.go(self.stateToGo, { calendarUniqueId: self.calendar.uniqueId, previousState: 'calendar.main.settings' });
     }
 
     function remove() {
