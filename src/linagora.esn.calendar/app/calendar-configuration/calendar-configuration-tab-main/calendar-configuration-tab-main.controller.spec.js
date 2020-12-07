@@ -22,6 +22,8 @@ describe('The calendar configuration tab delegation controller', function() {
     CAL_CALENDAR_SHARED_RIGHT,
     calendar;
 
+  let calCalDAVURLServiceMock;
+
   function initController(bindings) {
     return $controller('CalendarConfigurationTabMainController', { $scope: $scope }, bindings);
   }
@@ -54,10 +56,15 @@ describe('The calendar configuration tab delegation controller', function() {
 
     calCalendarDeleteConfirmationModalService = sinon.spy();
 
+    calCalDAVURLServiceMock = {
+      getCalendarURL: sinon.stub()
+    };
+
     angular.mock.module('esn.calendar', function($provide) {
       $provide.value('calendarService', calendarService);
       $provide.value('calCalendarDeleteConfirmationModalService', calCalendarDeleteConfirmationModalService);
       $provide.value('calFullUiConfiguration', calFullUiConfiguration);
+      $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
     });
 
     angular.mock.inject(function(_$rootScope_, _$controller_, _$state_, _$q_, _session_, _userUtils_, _CalCalendarRightsUtilsService_, _CAL_CALENDAR_PUBLIC_RIGHT_, _CAL_CALENDAR_SHARED_RIGHT_, _calUIAuthorizationService_) {
@@ -76,6 +83,7 @@ describe('The calendar configuration tab delegation controller', function() {
   });
 
   beforeEach(function() {
+    calCalDAVURLServiceMock.getCalendarURL.returns($q.when('/some/url'));
     CalendarConfigurationTabMainController = initController();
     sinon.spy($state, 'go');
   });
@@ -100,6 +108,40 @@ describe('The calendar configuration tab delegation controller', function() {
       CalendarConfigurationTabMainController.$onInit();
 
       expect(CalendarConfigurationTabMainController.publicRights).to.deep.equal(publicRightsExpected);
+    });
+  });
+
+  describe('the caldavurl', function() {
+    beforeEach(function() {
+      calendar = {
+        isShared: sinon.stub().returns(false),
+        isAdmin: sinon.stub().returns(false),
+        isOwner: sinon.stub().returns(false),
+        isSubscription: sinon.stub().returns(false),
+        isReadable: sinon.stub().returns(true),
+        id: 'id',
+        calendarHomeId: 'homeId'
+      };
+    });
+
+    it('should not be initialized if it\'s a new calendar', function() {
+      CalendarConfigurationTabMainController.calendar = calendar;
+      CalendarConfigurationTabMainController.newCalendar = true;
+
+      CalendarConfigurationTabMainController.$onInit();
+      $rootScope.$apply();
+
+      expect(CalendarConfigurationTabMainController.caldavurl).to.be.undefined;
+    });
+
+    it('should be initialized in case of an already created calendar', function() {
+      CalendarConfigurationTabMainController.calendar = calendar;
+      CalendarConfigurationTabMainController.newCalendar = false;
+
+      CalendarConfigurationTabMainController.$onInit();
+      $rootScope.$apply();
+
+      expect(CalendarConfigurationTabMainController.caldavurl).to.eq('/some/url');
     });
   });
 
