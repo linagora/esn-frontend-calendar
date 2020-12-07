@@ -10,4 +10,5 @@ function registerTimezones(calRegisterTimezones) {
 
 function addTemplateCache($templateCache) {
   $templateCache.put('/calendar/app/components/entities-autocomplete-input/entities-autocomplete-input-tag.html', require('./components/entities-autocomplete-input/entities-autocomplete-input-tag.pug'));
+  $templateCache.put('/calendar/app/components/entities-autocomplete-input/entities-autocomplete-input-freebusy-tag.html', require('./components/entities-autocomplete-input/entities-autocomplete-input-freebusy-tag.pug'));
 }
