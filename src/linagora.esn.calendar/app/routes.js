@@ -143,7 +143,7 @@ function routesConfig($stateProvider) {
         modalInstance.hide();
       }
     })
-    .state('calendar.external', {
+    .state('calendar.main.external', {
       url: '/external',
       deepStateRedirect: {
         default: 'calendar.main',
@@ -152,15 +152,22 @@ function routesConfig($stateProvider) {
         }
       }
     })
-    .state('calendar.external.shared', {
+    .state('calendar.main.external.shared', {
       url: '/shared/:calendarUniqueId',
       params: {
-        previousState: null
+        previousState: 'calendar.main'
       },
-      views: {
-        'content@calendar': {
-          template: '<calendar-configuration />'
+      resolve: {
+        modalInstance: function($modal) {
+          return $modal({
+            template: '<calendar-configuration />',
+            backdrop: 'static',
+            keyboard: false
+          });
         }
+      },
+      onExit: function(modalInstance) {
+        modalInstance.hide();
       }
     })
     .state('calendar.event', {
