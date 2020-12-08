@@ -9,7 +9,7 @@
             input.input.form-control.date(
               type="text",
               size="10",
-              ng-model="ctrl.event.start",
+              ng-model="ctrl.start",
               data-autoclose="1",
               data-start-week="1",
               data-date-format="{{::ctrl.dateFormat}}",
@@ -30,7 +30,7 @@
             )
           .fg-line(ng-if='!ctrl.full24HoursDay')
             time-select(
-              date="ctrl.event.start",
+              date="ctrl.start",
               on-time-change="ctrl.onStartDateChange",
               locale="{{ ::ctrl.locale }}",
               time-format="{{ ::ctrl.timeFormat }}"
@@ -51,7 +51,7 @@
               type="text",
               size="10",
               class="form-control",
-              ng-model="ctrl.event.end",
+              ng-model="ctrl.end",
               data-autoclose="1",
               data-start-week="1",
               data-date-format="{{::ctrl.dateFormat}}",
@@ -75,7 +75,7 @@
             )
           .fg-line(ng-if='!ctrl.full24HoursDay')
             time-select(
-              date="ctrl.event.end",
+              date="ctrl.end",
               on-time-change="ctrl.onEndDateChange",
               locale="{{ ::ctrl.locale }}",
               time-format="{{ ::ctrl.timeFormat }}"
