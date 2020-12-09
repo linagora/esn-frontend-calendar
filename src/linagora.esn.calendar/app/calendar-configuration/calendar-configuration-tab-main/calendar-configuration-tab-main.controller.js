@@ -17,12 +17,14 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
     CAL_CALENDAR_TYPE,
     calUIAuthorizationService,
     calCalendarDeleteConfirmationModalService,
-    calCalDAVURLService
+    calCalDAVURLService,
+    calCalendarSecretAddressConfirmationModalService
   ) {
     var self = this;
 
     self.$onInit = $onInit;
     self.unsubscribe = unsubscribe;
+    self.openGetSecretLinkConfirmationDialog = openGetSecretLinkConfirmationDialog;
     self.exportCalendar = exportCalendar;
 
     ///////////
@@ -92,6 +94,23 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
           self.displayNameOfSharedCalendarOwner = userUtils.displayNameOf(sharedCalendarOwner);
         })
         .catch(angular.noop);
+    }
+
+    function openGetSecretLinkConfirmationDialog() {
+      calCalendarSecretAddressConfirmationModalService(self.calendar, createSecretLinkWithToken);
+    }
+
+    function createSecretLinkWithToken() {
+      const jwtPayload = {
+        calendarHomeId: self.calendarHomeId,
+        calendarId: self.calendar.id,
+        userId: session.user._id
+      };
+
+      calendarService.generateTokenForSecretLink(jwtPayload)
+        .then(token => {
+          self.calendarSecretLink = `${window.location.origin}/calendar/api/calendars/secretLink?jwt=${token}`;
+        });
     }
 
     function exportCalendar() {

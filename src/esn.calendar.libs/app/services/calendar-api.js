@@ -42,7 +42,8 @@ require('./http-response-handler.js');
       modifyShares: modifyShares,
       changeParticipation: changeParticipation,
       modifyPublicRights: modifyPublicRights,
-      exportCalendar
+      exportCalendar,
+      generateToken
     };
 
     ////////////
@@ -315,6 +316,20 @@ require('./http-response-handler.js');
 
       return calDavRequest('get', calendarPath, { Accept: CAL_ACCEPT_EXPORT_HEADER })
         .then(calHttpResponseHandler(200, _.property('data')));
+    }
+    /**
+     * POST resuest used to generate token for secret link to download ics calendar
+     * @param {Object} jwtPayload   paylod to generate token
+     */
+    function generateToken(jwtPayload) {
+
+      return calendarRestangular.one('calendars').one('generateJWTforSecretLink').customPOST(jwtPayload)
+        .then(calHttpResponseHandler(200, _.property('data')))
+        .catch(function(error) {
+          notificationFactory.weakError('Failed to generate token for secret', 'Cannot join the server, please try later');
+
+          return $q.reject(error);
+        });
     }
   }
 })(angular);

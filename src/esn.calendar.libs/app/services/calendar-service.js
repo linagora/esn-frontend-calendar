@@ -51,6 +51,7 @@ require('./calendar-cache.js');
     this.getOwnerDisplayName = getOwnerDisplayName;
     this.getResourceDescription = getResourceDescription;
     this.exportCalendar = exportCalendar;
+    this.generateTokenForSecretLink = generateTokenForSecretLink;
     ////////////
 
     /**
@@ -370,6 +371,15 @@ require('./calendar-cache.js');
 
         FileSaver.saveAs(calendarBlob, `${calendarId}.ics`);
       });
+    }
+
+    /**
+     * Get the generated token for the secret link
+     * @param {Object} jwtPayload The jwtPayload that contains the information to generate token
+     * @return {String} a generated token with calendarHomeId and calendar id payload
+     */
+    function generateTokenForSecretLink(jwtPayload) {
+      return calendarAPI.generateToken(jwtPayload).then(({ token }) => token);
     }
   }
 })(angular);

@@ -1141,4 +1141,22 @@ describe('The calendarService service', function() {
       expect(fileSaveMock.saveAs).to.have.calledWith(expectedBlob, 'calendarId.ics');
     });
   });
+
+  describe('the generateTokenForSecretLink function', function() {
+    it('should call calendarAPI.getToken to generate a token with correct params', function() {
+      const jwtPayload = {
+        calendarHomeId: 'calendarHomeId',
+        calendarId: 'calendarId',
+        userId: 'userId'
+      };
+      const token = '123';
+
+      this.calendarAPI.generateToken = sinon.stub().returns($q.when(token));
+      this.calendarService.generateTokenForSecretLink(jwtPayload).then(function(result) {
+        expect(result).to.deep.equal(token);
+      });
+
+      expect(this.calendarAPI.generateToken).to.have.been.calledWith(jwtPayload);
+    });
+  });
 });
