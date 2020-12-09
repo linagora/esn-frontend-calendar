@@ -11,5 +11,13 @@
   .rights
     cal-shared-rights-display(ng-if="$ctrl.item.type === 'public'", public="$ctrl.item.calendar.rights.getPublicRight()")
     cal-shared-rights-display(ng-if="$ctrl.item.type === 'delegation'", delegation="$ctrl.item.calendar.rights.getShareeRight($ctrl.user.id)")
+  .color
+    .form-group
+      .color-picker-container(calendar-color-picker-toggler, color="$ctrl.item.calendar.color")
+        // .select > .form-control is mandatory here for the select-like behavior
+        // of material-admin
+        .select
+          .form-control
+        i.color-picker-value(ng-style="{'background-color': $ctrl.item.calendar.color}")
   .actions
     toggle-switch(ng-model='$ctrl.item.isSelected')
