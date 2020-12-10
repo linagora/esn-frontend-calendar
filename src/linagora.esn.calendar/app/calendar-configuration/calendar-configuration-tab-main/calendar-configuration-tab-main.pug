@@ -52,6 +52,17 @@
       span {{ 'CalDAV URL' | translate }}
     .settings-value
       esn-clipboard-url(url="$ctrl.caldavurl")
+  .calendar-link
+    hr
+    .settings-label
+      i.mdi.mdi-link
+      span {{ 'Secret address in iCal format' | translate }}
+    .settings-value
+      esn-clipboard-url(ng-if="$ctrl.calendarSecretLink", url="$ctrl.calendarSecretLink")
+    .settings-text
+      span {{ 'Use the following button to get the address to access the iCalendar format file (.ics). Warning: It allows anyone with the address to view your calendar and all of its events.' | translate }}
+    .settings-actions
+      a.btn.btn-primary.btn-sm(ng-click="$ctrl.openGetSecretLinkConfirmationDialog()") {{ 'Get secret address' | translate }}    
   .calendar-link(ng-if="$ctrl.canExportIcs")
     hr
     .settings-label

@@ -126,6 +126,8 @@
   "Free": "Free",
   "Free/Busy": "Free/Busy",
   "Going": "Going",
+  "Get secret address": "Get secret address",
+  "Get a new secret address?": "Get a new secret address?",
   "has accepted this invitation": "has accepted this invitation",
   "has canceled a meeting": "has canceled a meeting",
   "has changed his participation": "has changed his participation",
@@ -253,6 +255,7 @@
   "This message contains some resource reservation information. Please wait while we fetch the event details...": "This message contains some resource reservation information. Please wait while we fetch the event details...",
   "This will remove the \"%s\" calendar and all events it contains.": "This will remove the {{ calendarName }} calendar and all events it contains.",
   "This will unsubscribe you from the \"%s\" calendar.": "This will unsubscribe you from the {{ calendarName }} calendar.",
+  "This will make the current secret address invalid (if any). Are you sure want to generate a new secret address?": "This will make the current secret address invalid (if any).Are you sure want to generate a new secret address?",
   "Time": "Time",
   "Today": "Today",
   "Undecided": "Undecided",
@@ -261,6 +264,7 @@
   "Unsubscribe from this calendar": "Unsubscribe from this calendar",
   "Update the recurrent event": "Update the recurrent event",
   "User requested to book the resource": "User requested to book the resource",
+  "Use the following button to get the address to access the iCalendar format file (.ics). Warning: It allows anyone with the address to view your calendar and all of its events.": "Use the following button to get the address to access the iCalendar format file (.ics). Warning: It allows anyone with the address to view your calendar and all of its events.",
   "Week": "Week",
   "week": "week",
   "weeks": "weeks",
@@ -288,5 +292,7 @@
   "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.": "Forwarding this invitation could allow any recipient to send a response to the organizer and be added to the guest list, or invite others regardless of their own invitation status, or to modify your RSVP.",
   "Saving configuration...": "Saving configuration...",
   "Configuration saved": "Configuration saved",
-  "Failed to save configuration": "Failed to save configuration"
+  "Failed to save configuration": "Failed to save configuration",
+  "Secret address in iCal format": "Secret address in iCal format"
 }
+

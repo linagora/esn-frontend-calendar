@@ -17,6 +17,7 @@ describe('The calendar configuration tab delegation controller', function() {
     session,
     CalendarConfigurationTabMainController,
     calCalendarDeleteConfirmationModalService,
+    calCalendarSecretAddressConfirmationModalService,
     calFullUiConfiguration,
     CAL_CALENDAR_PUBLIC_RIGHT,
     CAL_CALENDAR_SHARED_RIGHT,
@@ -29,6 +30,8 @@ describe('The calendar configuration tab delegation controller', function() {
   }
 
   beforeEach(function() {
+    const responseToken = 'token';
+
     calendarService = {
       removeCalendar: sinon.spy(function() {
         return $q.when();
@@ -36,8 +39,12 @@ describe('The calendar configuration tab delegation controller', function() {
       unsubscribe: sinon.spy(function() {
         return $q.when();
       }),
-      exportCalendar: sinon.spy()
+      exportCalendar: sinon.spy(),
+      generateTokenForSecretLink: sinon.spy(function() {
+        return $q.when(responseToken);
+      })
     };
+
     calFullUiConfiguration = {
       get: sinon.spy(function() {
         return $q.when();
@@ -55,6 +62,7 @@ describe('The calendar configuration tab delegation controller', function() {
     };
 
     calCalendarDeleteConfirmationModalService = sinon.spy();
+    calCalendarSecretAddressConfirmationModalService = sinon.spy();
 
     calCalDAVURLServiceMock = {
       getCalendarURL: sinon.stub()
@@ -64,6 +72,7 @@ describe('The calendar configuration tab delegation controller', function() {
       $provide.value('calendarService', calendarService);
       $provide.value('calCalendarDeleteConfirmationModalService', calCalendarDeleteConfirmationModalService);
       $provide.value('calFullUiConfiguration', calFullUiConfiguration);
+      $provide.value('calCalendarSecretAddressConfirmationModalService', calCalendarSecretAddressConfirmationModalService);
       $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
     });
 
@@ -231,6 +240,54 @@ describe('The calendar configuration tab delegation controller', function() {
       );
 
       expect($state.go).to.have.been.calledWith('calendar.main');
+    });
+  });
+
+  describe('the openGetSecretLinkConfirmationDialog function ', () => {
+    beforeEach(function() {
+      CalendarConfigurationTabMainController.calendar = {
+        isShared: sinon.stub().returns(false),
+        isAdmin: sinon.stub().returns(false),
+        isOwner: sinon.stub().returns(false),
+        isSubscription: sinon.stub().returns(true),
+        isReadable: sinon.stub().returns(true),
+        id: 'id',
+        calendarHomeId: 'homeId',
+        source: {
+          id: 'sourceId',
+          calendarHomeId: 'sourceHomeId'
+        },
+        rights: {
+          getShareeRight: sinon.spy()
+        },
+        getOwner: () => ({
+          preferredEmail: 'preferredEmail'
+        })
+      };
+    });
+
+    it('should open the confirmation modalto create secret link with token to download ics of the calendar', function(done) {
+      CalendarConfigurationTabMainController.$onInit();
+      CalendarConfigurationTabMainController.openGetSecretLinkConfirmationDialog();
+
+      expect(calCalendarSecretAddressConfirmationModalService).to.have.been.calledOnce;
+      expect(calCalendarSecretAddressConfirmationModalService.getCall(0).args[0]).to.equal(CalendarConfigurationTabMainController.calendar);
+
+      const createSecretLinkWithToken = calCalendarSecretAddressConfirmationModalService.getCall(0).args[1];
+
+      createSecretLinkWithToken();
+
+      $rootScope.$digest();
+
+      const jwtPayload = {
+        calendarHomeId: CalendarConfigurationTabMainController.calendarHomeId,
+        calendarId: CalendarConfigurationTabMainController.calendar.id,
+        userId: session.user._id
+      };
+
+      expect(calendarService.generateTokenForSecretLink).to.have.been.calledWith(jwtPayload);
+      expect(CalendarConfigurationTabMainController.calendarSecretLink).to.equal('http://localhost:9876/calendar/api/calendars/secretLink?jwt=token');
+      done();
     });
   });
 

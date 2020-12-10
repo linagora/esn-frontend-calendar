@@ -643,6 +643,37 @@ describe('The calendar module apis', function() {
         this.$httpBackend.flush();
       });
     });
+
+    describe('the generate token for secret link request', function() {
+      it('should get the calendar export path', function(done) {
+        const expectedResponse = { data: { token: '123' } };
+        const jwtPayload = {
+          calendarHomeId: 'calendarHomeId',
+          calendarId: 'calendarId',
+          userId: 'userId'
+        };
+
+        this.$httpBackend.expectPOST('/calendar/api/calendars/generateJWTforSecretLink').respond(expectedResponse);
+        this.calendarAPI.generateToken(jwtPayload).then(function(result) {
+          expect(result.data).to.deep.equal(expectedResponse.data);
+          done();
+        });
+
+        this.$httpBackend.flush();
+      });
+
+      it('should return an Error if response.status is not 200', function(done) {
+        this.$httpBackend.expectPOST('/calendar/api/calendars/generateJWTforSecretLink').respond(500, 'Error');
+
+        this.calendarAPI.generateToken('test')
+          .catch(function(err) {
+            expect(err).to.exist;
+            done();
+          });
+
+        this.$httpBackend.flush();
+      });
+    });
   });
 
 });
