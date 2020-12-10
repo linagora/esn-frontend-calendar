@@ -168,8 +168,10 @@ function CalEventFormController(
             const eventSourceCalendarId = calEventDuplicateService.getDuplicateEventSource();
             const targetCalendar = calendars.find(({ id }) => id === eventSourceCalendarId);
 
-            // Check if the event is duplicated and the user owns the source calendar.
-            return eventSourceCalendarId && targetCalendar ? targetCalendar : _.find(calendars, 'selected');
+            // Check if the event is duplicated and the user owns the source calendar or has delegated write permission
+            return eventSourceCalendarId && targetCalendar && targetCalendar.isWritable(session.user._id) ?
+              targetCalendar :
+              _.find(calendars, 'selected');
           }
 
           return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);

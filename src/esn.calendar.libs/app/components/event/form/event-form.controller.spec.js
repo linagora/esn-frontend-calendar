@@ -69,7 +69,7 @@ describe('The CalEventFormController controller', function() {
         href: 'href2',
         id: 'id2',
         color: 'color2',
-        isWritable: angular.noop,
+        isWritable: () => true,
         isSubscription: function() { return false; },
         isOwner: sinon.stub().returns(true),
         getOwner: function() {
@@ -92,7 +92,7 @@ describe('The CalEventFormController controller', function() {
           return '/calendars/' + owner._id + '/calId.json';
         },
         isSubscription: function() { return true; },
-        isWritable: angular.noop,
+        isWritable: () => false,
         source: {
           id: 'calId',
           href: 'href4',
@@ -764,6 +764,26 @@ describe('The CalEventFormController controller', function() {
         scope.$digest();
 
         expect(scope.selectedCalendar.uniqueId).to.eq('/calendars/owner/id2.json');
+        expect(calEventDuplicateServiceMock.getDuplicateEventSource).to.have.been.called;
+      });
+
+      it('should use the default calendar if the stored event source calendar is not writable', function() {
+        scope.event = CalendarShell.fromIncompleteShell({
+          _id: '123456',
+          start: moment('2013-02-08 12:30'),
+          end: moment('2013-02-08 13:30'),
+          organizer: {
+            email: 'user2@test.com'
+          },
+          otherProperty: 'aString'
+        }); // <- a new event
+
+        calEventDuplicateServiceMock.getDuplicateEventSource = sinon.stub().returns('id3'); // Non writable calendar.
+
+        initController();
+        scope.$digest();
+
+        expect(scope.selectedCalendar.uniqueId).to.eq('/calendars/owner/id.json');
         expect(calEventDuplicateServiceMock.getDuplicateEventSource).to.have.been.called;
       });
     });
