@@ -49,9 +49,43 @@
   .rights {
     .flex-grow;
     .flex-horizontal-centered;
+    padding-left: 20px
+  }
+
+  .color {
+    .flex-grow;
+    .flex-horizontal-centered;
+
+    .form-group {
+      margin-bottom: 0;
+    }
   }
 
   .actions {
     .flex-grow;
+  }
+
+  .color-picker-container {
+    .select {
+      cursor: pointer;
+    }
+
+    &.pointer-events-none {
+      pointer-events: none;
+    }
+
+    margin-top: 10px;
+    width: 50px;
+    position: relative;
+
+    .color-picker-value {
+      cursor: pointer;
+      width: 25px;
+      height: 25px;
+      border-radius: 2px;
+      position: absolute;
+      top: 0px;
+      z-index: 5;
+    }
   }
 }
