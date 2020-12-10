@@ -193,7 +193,6 @@ function CalEventFormController(
 
           $scope.displayParticipationButton = displayParticipationButton();
           $scope.displayCalMailToAttendeesButton = displayCalMailToAttendeesButton;
-          $scope.canModifyEventAttendees = calUIAuthorizationService.canModifyEventAttendees(selectedCalendar, $scope.editedEvent, session.user._id);
           $scope.$watch('selectedCalendar.uniqueId', setExcludeCurrentUser);
 
           return $q.all([
