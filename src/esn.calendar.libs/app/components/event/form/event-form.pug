@@ -52,7 +52,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
             cal-event-date-edition(event="editedEvent", disabled='!canModifyEvent', use-24hour-format='use24hourFormat', on-date-change='onDateChange')
             cal-entities-autocomplete-input.cal-user-autocomplete-input(
               exclude-current-user='excludeCurrentUserFromSuggestedAttendees',
-              ng-hide='!canModifyEventAttendees',
+              ng-hide='!canModifyEvent',
               types='[CAL_ATTENDEE_OBJECT_TYPE.user, CAL_ATTENDEE_OBJECT_TYPE.group, CAL_ATTENDEE_OBJECT_TYPE.contact, CAL_ATTENDEE_OBJECT_TYPE.ldap]',
               input-type="email"
               original-entities='attendees.users',
@@ -63,7 +63,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
               template='/calendar/app/components/entities-autocomplete-input/entities-autocomplete-input-freebusy-tag.html'
             )
             cal-entities-autocomplete-input.cal-resource-autocomplete-input(
-              ng-hide='!canModifyEventAttendees',
+              ng-hide='!canModifyEvent',
               types='[CAL_ATTENDEE_OBJECT_TYPE.resource]',
               input-type="text"
               original-entities='attendees.resources',
@@ -94,14 +94,14 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                 ng-show="selectedTab === 'resources'",
                 ng-if="attendees.resources.length > 0",
                 resources="attendees.resources",
-                can-modify-resources="::canModifyEventAttendees",
+                can-modify-resources="::canModifyEvent",
                 on-resource-removed="onResourceAttendeeRemoved(resource)")
               .message(ng-show="selectedTab === 'resources'", ng-if="attendees.resources.length === 0") {{ 'No resource' | translate }}
               cal-attendee-list(
                 ng-show="selectedTab === 'attendees'",
                 ng-if="attendees.users.length > 0",
                 attendees="attendees.users",
-                can-modify-attendees="::canModifyEventAttendees",
+                can-modify-attendees="::canModifyEvent",
                 organizer="::editedEvent.organizer",
                 on-attendee-removed="onUserAttendeeRemoved(attendee)")
             .col-xs-12(ng-if="editedEvent.organizer")

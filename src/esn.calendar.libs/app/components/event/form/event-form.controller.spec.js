@@ -268,10 +268,6 @@ describe('The CalEventFormController controller', function() {
       return $q.when(canModifyEventResult);
     });
 
-    sinon.stub(calUIAuthorizationService, 'canModifyEventAttendees', function() {
-      return true;
-    });
-
     sinon.stub(calAttendeeService, 'splitAttendeesFromTypeWithResourceDetails', function(attendees) {
       return $q.when({
         users: _.filter(attendees, { cutype: CAL_ICAL.cutype.individual }),
@@ -535,28 +531,6 @@ describe('The CalEventFormController controller', function() {
         expect(scope.canModifyEvent).to.equal(true);
       });
 
-      it('should leverage calUIAuthorizationService.canModifyEventAttendees to set canModifyEventAttendees', function() {
-        scope.event = CalendarShell.fromIncompleteShell({
-          _id: '123456',
-          start: moment('2013-02-08 12:30'),
-          end: moment('2013-02-08 13:30'),
-          organizer: {
-            email: 'user2@test.com'
-          },
-          otherProperty: 'aString'
-        });
-
-        initController();
-
-        $rootScope.$digest();
-
-        expect(calUIAuthorizationService.canModifyEventAttendees).to.have.been.calledWith(
-          sinon.match(function(calendar) { return calendar.getUniqueId() === scope.selectedCalendar.uniqueId; }),
-          scope.editedEvent,
-          session.user._id
-        );
-      });
-
       it('should leverage calUIAuthorizationService.canModifyEvent to set canModifyEvent', function() {
         scope.event = CalendarShell.fromIncompleteShell({
           _id: '123456',
@@ -570,7 +544,7 @@ describe('The CalEventFormController controller', function() {
 
         initController();
 
-        expect(calUIAuthorizationService.canModifyEventAttendees).to.have.been.calledWith(
+        expect(calUIAuthorizationService.canModifyEvent).to.have.been.calledWith(
           sinon.match(function(calendar) { return calendar.getUniqueId() === scope.selectedCalendar.uniqueId; }),
           scope.editedEvent,
           session.user._id
