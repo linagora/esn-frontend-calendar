@@ -82,6 +82,8 @@ function routesConfig($stateProvider) {
         const unregisterStateChange = $rootScope.$on('$stateChangeSuccess',
           function(event, toState) {
             if (toState.name.includes('calendar.main.settings')) return;
+            if (toState.name.includes('calendar.main.edit')) return;
+            if (toState.name.includes('calendar.main.external')) return;
 
             unregisterCalSettingsUpdate();
             unregisterStateChange();
