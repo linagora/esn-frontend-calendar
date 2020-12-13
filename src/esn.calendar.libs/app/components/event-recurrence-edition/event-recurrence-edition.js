@@ -129,7 +129,7 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, CAL_RECUR_F
   }
 
   function setDefaultUntilDate(freq) {
-    if (self.event.rrule.until) {
+    if (!self.canModifyEventRecurrence || self.event.rrule.until) {
       return;
     }
 
