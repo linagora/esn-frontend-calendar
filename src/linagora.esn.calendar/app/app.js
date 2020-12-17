@@ -121,6 +121,7 @@ require('./calendar-root/calendar-root.controller.js');
 require('./calendar-shared-configuration/calendar-shared-configuration.component.js');
 require('./calendar-shared-configuration/calendar-shared-configuration.controller.js');
 require('./calendar-shared-configuration/item/calendar-shared-configuration-item.component.js');
+require('./calendar-shared-configuration/subscribed-item/calendar-shared-configuration-subscribed-item.component.js');
 require('./calendar/calendar-header/calendar-sub-header.controller.js');
 require('./calendar/calendar-header/calendar-sub-header.directive.js');
 require('./calendar/calendar-view/calendar-view.controller.js');

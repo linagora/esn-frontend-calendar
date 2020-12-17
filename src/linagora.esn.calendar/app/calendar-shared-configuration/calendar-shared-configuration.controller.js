@@ -27,6 +27,7 @@ const _ = require('lodash');
     var self = this;
     var noResponseDelegationCalendars;
 
+    self.userSubscribedCalendar = [];
     self.calendarsPerUser = [];
     self.users = [];
     self.getSelectedCalendars = getSelectedCalendars;
@@ -56,6 +57,17 @@ const _ = require('lodash');
         return noResponseDelegationCalendar.user.id === user.id;
       });
     };
+
+    function getUserSubcribedCalendars() {
+      return calendarService.listPersonalAndAcceptedDelegationCalendars(session.user._id).then(function(calendars) {
+        return userAndExternalCalendars(calendars).publicCalendars.map(function(calendar) {
+          return {
+            calendar: calendar,
+            isSelected: true
+          };
+        });
+      });
+    }
 
     function filterSubscribedCalendars(userCalendars) {
       return getSubscribedCalendarsForCurrentUser().then(function(subscribedCalendars) {
@@ -126,6 +138,10 @@ const _ = require('lodash');
         return;
       }
 
+      getUserSubcribedCalendars().then(function(calendars) {
+        self.userSubscribedCalendar = self.userSubscribedCalendar.concat(calendars);
+      });
+
       getPublicCalendarsForUser(user)
         .then(function(publicCalendars) {
           return (publicCalendars || []).concat(noResponseDelegationCalendars.getCalendarsForUser(user));
@@ -178,6 +194,19 @@ const _ = require('lodash');
         });
     }
 
+    function remove(calendars) {
+      return calendarHomeService
+        .getUserCalendarHomeId()
+        .then(function(calendarHomeId) {
+          return $q.all(calendars.map(function(calendar) {
+            return calendarService.removeCalendar(calendarHomeId, calendar);
+          }));
+        })
+        .then(function() {
+          $state.go('calendar.main', {}, { reload: true });
+        });
+    }
+
     function acceptInvitation(calendars) {
       return calendarHomeService.getUserCalendarHomeId().then(function(calendarHomeId) {
         return $q.all(calendars.map(function(calendar) {
@@ -215,6 +244,12 @@ const _ = require('lodash');
       return selectedCalendars.length && subscribe(selectedCalendars);
     }
 
+    function updateSubscribedCalendars() {
+      const notSelectedCalendars = getNotSelectedCalendars(self.userSubscribedCalendar);
+
+      return notSelectedCalendars.length && remove(notSelectedCalendars);
+    }
+
     function acceptInvitationToSelectedCalendars() {
       var selectedCalendars = getSelectedCalendars(_getDelegationCalendars(self.calendarsPerUser));
 
@@ -224,6 +259,15 @@ const _ = require('lodash');
     function getSelectedCalendars(calendars) {
       return _(calendars)
         .filter('isSelected')
+        .map(function(selected) {
+          return selected.calendar;
+        })
+        .value();
+    }
+
+    function getNotSelectedCalendars(calendars) {
+      return _(calendars)
+        .filter(calendar => calendar.isSelected == false)
         .map(function(selected) {
           return selected.calendar;
         })
@@ -241,6 +285,7 @@ const _ = require('lodash');
     function addSharedCalendars() {
       $q.all([
         subscribeToSelectedCalendars(),
+        updateSubscribedCalendars(),
         acceptInvitationToSelectedCalendars()
       ])
         .then(function() {

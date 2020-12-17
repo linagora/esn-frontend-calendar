@@ -1,0 +1,91 @@
+.cal-calendar-shared-configuration-item {
+  .flex-vertical-centered;
+  .flex-space-between;
+
+  margin: 4px;
+
+  .meta {
+    .flex-row;
+    .flex-shorthand(1, 0, 40%);
+
+    esn-avatar {
+      margin-right: 8px;
+
+      & img {
+        .esn-avatar;
+      }
+    }
+
+    cal-resource-avatar {
+      .all-centered;
+      .avatar(35px);
+
+      font-size: 25px;
+      margin-right: 8px;
+      font-size: 35px;
+      height: 35px;
+      line-height: 35px;
+
+      .avatar i {
+        color: @m-white;
+      }
+    }
+
+    .title {
+      .flex-column;
+
+      .name {
+        font-weight: 600;
+      }
+
+      .owner {
+        .ellipsis;
+
+        color: @secondaryTextColor;
+      }
+    }
+  }
+
+  .rights {
+    .flex-grow;
+    .flex-horizontal-centered;
+    padding-left: 20px
+  }
+
+  .color {
+    .flex-grow;
+    .flex-horizontal-centered;
+
+    .form-group {
+      margin-bottom: 0;
+    }
+  }
+
+  .actions {
+    .flex-grow;
+  }
+
+  .color-picker-container {
+    .select {
+      cursor: pointer;
+    }
+
+    &.pointer-events-none {
+      pointer-events: none;
+    }
+
+    margin-top: 10px;
+    width: 50px;
+    position: relative;
+
+    .color-picker-value {
+      cursor: pointer;
+      width: 25px;
+      height: 25px;
+      border-radius: 2px;
+      position: absolute;
+      top: 0px;
+      z-index: 5;
+    }
+  }
+}

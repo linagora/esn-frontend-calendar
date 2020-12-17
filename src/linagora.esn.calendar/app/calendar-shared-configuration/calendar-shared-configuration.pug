@@ -21,9 +21,21 @@
               )
 
           .calendar-list
-            .empty(ng-if='!$ctrl.calendarsPerUser.length')
-              span {{ 'Search for users and resources to subscribe to their calendars' | translate }}
-
+            .empty(ng-if='$ctrl.calendarsPerUser.length + $ctrl.userSubscribedCalendar.length == 0')
+              span {{ 'None of the users and/or resources above have shared their calendars. Search for users and resources to subscribe to their calendars' | translate }}
+            span(ng-if='$ctrl.userSubscribedCalendar.length') {{ 'Subscribed calendars' | translate }}
+            .header(ng-if='$ctrl.userSubscribedCalendar.length')
+              .name
+                span {{ 'Name' | translate }}
+              .rights
+                span {{ 'Rights' | translate }}
+              .color
+                span {{ 'Color' | translate }}
+              .actions
+                span {{ 'Add' | translate }}
+            cal-calendar-shared-configuration-subscribed-item(item="item", user="$ctrl.sessionUser", ng-repeat="item in $ctrl.userSubscribedCalendar")
+            br
+            span(ng-if='$ctrl.calendarsPerUser.length') {{ 'Searched calendars' | translate }}
             .header(ng-if='$ctrl.calendarsPerUser.length')
               .name
                 span {{ 'Name' | translate }}
@@ -34,7 +46,8 @@
               .actions
                 span {{ 'Add' | translate }}
             cal-calendar-shared-configuration-item(item="item", user="$ctrl.sessionUser", ng-repeat="item in $ctrl.calendarsPerUser")
+
       .modal-footer
         button.btn.btn-default(type="button", ng-click="$hide()") {{ 'Cancel' | translate }}
-        button.btn.btn-primary(type='button', ng-disabled='!$ctrl.getSelectedCalendars($ctrl.calendarsPerUser).length', ng-click='$ctrl.addSharedCalendars(); $hide()') {{ 'Save' | translate }}
+        button.btn.btn-primary(type='button', ng-click='$ctrl.addSharedCalendars(); $hide()') {{ 'Save' | translate }}
 
