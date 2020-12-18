@@ -150,7 +150,7 @@ function calendarConfigurationController(
           }
         })
         .then(function() {
-          notificationFactory.weakInfo('New calendar -', esnI18nService.translate('%s has been created', { name: self.calendar.name }));
+          notificationFactory.weakInfo('New calendar -', esnI18nService.translate('%s has been created', { name: self.calendar.name }, true));
         });
     } else {
       CaldelegationEditionHelperInstance.getAllRemovedUsersId().map(function(removedUserId) {
@@ -191,7 +191,7 @@ function calendarConfigurationController(
       }
 
       $q.all(updateActions).then(function() {
-        notificationFactory.weakInfo('Calendar -', esnI18nService.translate('%s has been modified.', { name: self.calendar.name }));
+        notificationFactory.weakInfo('Calendar -', esnI18nService.translate('%s has been modified.', { name: self.calendar.name }, true));
         $state.go(self.previousState);
       });
     }

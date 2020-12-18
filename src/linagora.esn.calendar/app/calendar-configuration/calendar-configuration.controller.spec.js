@@ -38,6 +38,8 @@ describe('The calendar configuration controller', function() {
     getAllRemovedUsersId,
     removeUserGroup;
 
+  let esnI18nService;
+
   function initController() {
     return $controller('calendarConfigurationController', { $scope: $scope });
   }
@@ -186,7 +188,7 @@ describe('The calendar configuration controller', function() {
   });
 
   beforeEach(function() {
-    angular.mock.inject(function(_$rootScope_, _$controller_, _$state_, _CalendarCollectionShell_, _CAL_CALENDAR_PUBLIC_RIGHT_, _CAL_CALENDAR_SHARED_RIGHT_, _ESN_MEDIA_QUERY_SM_XS_, _calUIAuthorizationService_) {
+    angular.mock.inject(function(_$rootScope_, _$controller_, _$state_, _CalendarCollectionShell_, _CAL_CALENDAR_PUBLIC_RIGHT_, _CAL_CALENDAR_SHARED_RIGHT_, _ESN_MEDIA_QUERY_SM_XS_, _calUIAuthorizationService_, _esnI18nService_) {
       $rootScope = _$rootScope_;
       $scope = $rootScope.$new();
       $controller = _$controller_;
@@ -196,6 +198,7 @@ describe('The calendar configuration controller', function() {
       CAL_CALENDAR_SHARED_RIGHT = _CAL_CALENDAR_SHARED_RIGHT_;
       ESN_MEDIA_QUERY_SM_XS = _ESN_MEDIA_QUERY_SM_XS_;
       calUIAuthorizationService = _calUIAuthorizationService_;
+      esnI18nService = _esnI18nService_;
     });
   });
 
@@ -536,6 +539,7 @@ describe('The calendar configuration controller', function() {
 
       it('should call createCalendar', function() {
         calendarConfigurationController.publicSelection = undefined;
+        esnI18nService.translate = sinon.spy();
 
         calendarConfigurationController.submit();
 
@@ -544,6 +548,7 @@ describe('The calendar configuration controller', function() {
         expect(notificationFactoryMock.weakInfo).to.have.been.called;
         expect(stateMock.go).to.have.been.called;
         expect(calendarAPI.modifyPublicRights).to.not.have.been.called;
+        expect(esnI18nService.translate).to.have.been.calledWith(sinon.match.any, sinon.match.any, true); /* ignore the sanitize strategy */
       });
 
       it('should call createCalendar and calendarAPI.modifyPublicRights when publicSelection is set to read', function() {
@@ -649,6 +654,7 @@ describe('The calendar configuration controller', function() {
         stateMock.go = sinon.spy(function(path) {
           expect(path).to.equal('calendar.main');
         });
+        esnI18nService.translate = sinon.spy();
 
         calendarConfigurationController.calendar = {
           href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json',
@@ -691,6 +697,7 @@ describe('The calendar configuration controller', function() {
           href: '/calendars/12345/00000000-0000-4000-a000-000000000000.json',
           name: modifiedName
         }));
+        expect(esnI18nService.translate).to.have.been.calledWith(sinon.match.any, sinon.match.any, true); /* ignore the sanitize strategy */
       });
 
       it('should call modifyRight and not modifyCalendar nor modifyPublicRights if only right has been changed', function() {
