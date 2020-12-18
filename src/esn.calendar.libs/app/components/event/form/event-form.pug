@@ -141,6 +141,9 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
           .delete-button(ng-if="canModifyEvent && (isInvolvedInATask(editedEvent) || !isNew(editedEvent))")
             button.btn.btn-link.btn-icon.color-danger.delete(type='button', ng-click="deleteEvent()", ng-disabled="!canPerformCall()")
               i.mdi.mdi-delete
+          .delete-for-attendee-button(ng-if="isAnAttendeeCalendar && !hideEventForm && !isNew(editedEvent)")
+            button.btn.btn-link.btn-icon.color-danger(type='button', ng-click="deteteEventForAttendee()", title="{{ 'Remove this event from my calendar' | translate }}")
+              i.mdi.mdi-delete-forever
           .duplicate-button(ng-if="!hideEventForm && !isNew(editedEvent)")
             button.btn.btn-link.btn-icon.color-default(type='button', ng-click="duplicateEvent()", title="{{ 'Duplicate this event' | translate }}")
               i.mdi.mdi-library-plus
