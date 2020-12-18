@@ -244,6 +244,7 @@
   "Submitting importing calendar request": "Отправка запроса на импорт календаря...",
   "Successfully subscribed to calendar": "Успешно подписан на календарь",
   "Successfully subscribed to calendars": "Успешно подписан на календари",
+  "Successfully added shared calendar": "Общий календарь добавлен",
   "Tentative": "Предварительный",
   "Tentatively accepted: %s (%s)": "Предварительно принято:%s (%s)",
   "The reservation of resource {{name}} has been accepted": "Резервирование ресурса {{name}} принято",

@@ -243,6 +243,7 @@
   "Submitting importing calendar request": "Submitting importing calendar request...",
   "Successfully subscribed to calendar": "Successfully subscribed to calendar",
   "Successfully subscribed to calendars": "Successfully subscribed to calendars",
+  "Successfully added shared calendar": "Shared calendar added successfully",
   "Tentative": "Tentative",
   "Tentatively accepted: %s (%s)": "Tentatively accepted: %s (%s)",
   "The reservation of resource {{name}} has been accepted": "The reservation of resource {{name}} has been accepted",

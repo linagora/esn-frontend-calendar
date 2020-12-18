@@ -243,6 +243,7 @@
   "Submitting importing calendar request": "Gửi yêu cầu lịch nhập...",
   "Successfully subscribed to calendar": "Đăng ký vào lịch thành công",
   "Successfully subscribed to calendars": "Đăng ký vào lịch thành công",
+  "Successfully added shared calendar": "Đã thêm thành công lịch được chia sẻ",
   "Tentative": "dự kiến",
   "Tentatively accepted: %s (%s)": "Chấp nhận tạm thời %s (%s)",
   "The reservation of resource {{name}} has been accepted": "Việc đặt trước tài nguyên {{name}} đã được chấp nhận",

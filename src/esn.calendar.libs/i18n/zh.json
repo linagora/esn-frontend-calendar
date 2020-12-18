@@ -243,6 +243,7 @@
   "Submitting importing calendar request": "提交导入日历请求...",
   "Successfully subscribed to calendar": "成功订阅日历",
   "Successfully subscribed to calendars": "成功订阅日历组",
+  "Successfully added shared calendar": "成功添加共享日历",
   "Tentative": "拟接受",
   "Tentatively accepted: %s (%s)": "拟接受：%s (%s)",
   "The reservation of resource {{name}} has been accepted": "{{name}} 资源预定被接受",
