@@ -244,6 +244,7 @@
   "Submitting importing calendar request": "Envoi d'une demande d'importation de calendrier...",
   "Successfully subscribed to calendar": "Inscription réussie au calendrier",
   "Successfully subscribed to calendars": "Inscription réussie aux calendriers",
+  "Successfully added shared calendar": "Calendrier partagé ajouté avec succès",
   "Tentative": "Provisoire",
   "Tentatively accepted: %s (%s)": "Provisoirement accepté: %s (%s)",
   "The reservation of resource {{name}} has been accepted": "La réservation de la ressource {{name}} a été acceptée",
