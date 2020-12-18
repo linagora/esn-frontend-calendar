@@ -52,7 +52,7 @@
       span {{ 'CalDAV URL' | translate }}
     .settings-value
       esn-clipboard-url(url="$ctrl.caldavurl")
-  .calendar-link
+  .calendar-link(ng-if="$ctrl.canGenerateSecretLink")
     hr
     .settings-label
       i.mdi.mdi-link

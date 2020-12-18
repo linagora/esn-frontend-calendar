@@ -320,7 +320,8 @@ describe('The calendar configuration tab delegation controller', function() {
         isAdmin: sinon.stub().returns(true),
         isShared: sinon.stub().returns(false),
         isSubscription: sinon.stub().returns(false),
-        isReadable: sinon.stub().returns(true)
+        isReadable: sinon.stub().returns(true),
+        isOwner: sinon.spy()
       };
 
       CalendarConfigurationTabMainController.$onInit();
@@ -391,7 +392,8 @@ describe('The calendar configuration tab delegation controller', function() {
         },
         getOwner: sinon.spy(function() {
           return getOwnerResult;
-        })
+        }),
+        isOwner: sinon.spy()
       };
     });
 
@@ -435,7 +437,8 @@ describe('The calendar configuration tab delegation controller', function() {
         },
         getOwner: sinon.spy(function() {
           return getOwnerResult;
-        })
+        }),
+        isOwner: sinon.spy()
       };
 
       CalendarConfigurationTabMainController.$onInit();
