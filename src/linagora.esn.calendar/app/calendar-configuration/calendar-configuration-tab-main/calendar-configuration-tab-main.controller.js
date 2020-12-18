@@ -48,6 +48,7 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       self.canModifyPublicSelection = _canModifyPublicSelection();
       self.canExportIcs = canExportIcs();
       self.isResource = self.calendar.type === CAL_CALENDAR_TYPE.RESOURCE;
+      self.canGenerateSecretLink = canGenerateSecretLink();
 
       if (!self.newCalendar && self.calendar) {
         // Used in the template to show the calendar DAV URL.
@@ -115,6 +116,10 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
 
     function exportCalendar() {
       calendarService.exportCalendar(self.calendarToExport.calendarHomeId, self.calendarToExport.id);
+    }
+
+    function canGenerateSecretLink() {
+      return !self.newCalendar && calUIAuthorizationService.canModifyCalendarProperties(self.calendar, session.user._id);
     }
   }
 })(angular);
