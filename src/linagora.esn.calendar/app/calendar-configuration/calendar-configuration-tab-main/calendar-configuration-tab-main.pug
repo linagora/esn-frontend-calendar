@@ -71,4 +71,4 @@
     .settings-text
       span {{ 'Export your calendar to iCalendar format file (.ics) which you can import to other applications.' | translate }}
     .settings-actions
-      a.btn.btn-primary.btn-sm(ng-href="{{::$ctrl.calendarIcsUrl}}") {{ 'Export' | translate }}
+      a.btn.btn-primary.btn-sm(ng-click="$ctrl.exportCalendar()") {{ 'Export' | translate }}
