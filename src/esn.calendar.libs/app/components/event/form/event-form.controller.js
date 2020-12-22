@@ -90,6 +90,7 @@ function CalEventFormController(
   $scope.onDateChange = onDateChange;
   $scope.changeBackdropZIndex = changeBackdropZIndex;
   $scope.hideEventForm = true;
+  $scope.isValidURL = isValidURL;
 
   // Initialize the scope of the form. It creates a scope.editedEvent which allows us to
   // rollback to scope.event in case of a Cancel.
@@ -215,6 +216,15 @@ function CalEventFormController(
           $scope.hideEventForm = false;
         });
     }
+  }
+
+  function isValidURL(locationString) {
+    if (!locationString) {
+      return;
+    }
+
+    // eslint-disable-next-line no-useless-escape
+    return locationString.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) !== null;
   }
 
   function setExcludeCurrentUser() {
