@@ -149,12 +149,23 @@ require('./calendar-cache.js');
      * @return {[CalendarCollectionShell]}  an array of CalendarCollectionShell
      */
     function listPersonalAndAcceptedDelegationCalendars(calendarHomeId) {
+      const calendarCollectionShellsFromCache = calendarsCache.getList(calendarHomeId);
+
+      if (calendarCollectionShellsFromCache && Object.keys(calendarCollectionShellsFromCache).length > 0) {
+        return $q.resolve(Object.values(calendarCollectionShellsFromCache));
+      }
+
       return listCalendarsAsCollectionShell(calendarHomeId, {
         withRights: true,
         personal: true,
         sharedPublicSubscription: true,
         sharedDelegationStatus: 'accepted'
-      });
+      })
+        .then(calendarCollectionShells => {
+          calendarsCache.setList(calendarCollectionShells);
+
+          return calendarCollectionShells;
+        });
     }
 
     /**

@@ -504,24 +504,8 @@ describe('The calendarService service', function() {
       homeId = 'TheHomeId';
     });
 
-    it('should call calendarAPI.listCalendars with the correspondent options', function() {
-      this.calendarAPI.listCalendars = sinon.spy(function() {
-        return $q.when();
-      });
-
-      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId);
-
-      expect(self.calendarAPI.listCalendars).to.be.calledWith(homeId, {
-        withRights: true,
-        personal: true,
-        sharedPublicSubscription: true,
-        sharedDelegationStatus: 'accepted'
-      });
-    });
-
-    it('should return an array of CalendarCollectionShell', function(done) {
-      var calendarCollection = { id: this.calDefaultValue.get('calendarId') };
-      var calendars = [
+    it('should return an array of CalendarCollectionShell from cache', function(done) {
+      const fakeCalendars = [
         {
           _links: {
             self: {
@@ -536,21 +520,70 @@ describe('The calendarService service', function() {
         }
       ];
 
-      CalendarCollectionShellFuncMock = sinon.spy(function() {
-        return calendarCollection;
-      });
+      calendarsCacheMock.getList = sinon.stub().returns({ events: fakeCalendars[0] });
+      this.calendarAPI.listCalendars = sinon.stub();
 
+      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId)
+        .then(calendars => {
+          expect(self.calendarAPI.listCalendars).to.not.have.been.called;
+          expect(calendarsCacheMock.getList).to.have.been.calledWith(homeId);
+          expect(calendars).to.deep.equal(fakeCalendars);
+          done();
+        })
+        .catch(err => done(err || new Error('should resolve')));
+
+      this.$rootScope.$digest();
+    });
+
+    it('should call calendarAPI.listCalendars with the correspondent options when there is no cache', function() {
       this.calendarAPI.listCalendars = sinon.spy(function() {
-        return $q.when(calendars);
+        return $q.when();
       });
 
-      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId).then(function(result) {
-        expect(result).to.be.an('array').to.have.lengthOf(calendars.length);
-        expect(result[0]).to.deep.equals(calendarCollection);
-        expect(CalendarCollectionShellFuncMock).to.have.been.calledOnce;
-        expect(CalendarCollectionShellFuncMock).to.have.been.calledWith(calendars[0]);
-        done();
-      }, done);
+      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId);
+
+      expect(self.calendarAPI.listCalendars).to.be.calledWith(homeId, {
+        withRights: true,
+        personal: true,
+        sharedPublicSubscription: true,
+        sharedDelegationStatus: 'accepted'
+      });
+    });
+
+    it('should return an array of CalendarCollectionShell and cache it when there is no cache', function(done) {
+      const calendarCollection = { id: this.calDefaultValue.get('calendarId') };
+      const calendars = [
+        {
+          _links: {
+            self: {
+              href: '/calendars/' + homeId + '/events.json'
+            }
+          },
+          'dav:name': null,
+          'caldav:description': null,
+          'calendarserver:ctag': 'http://sabre.io/ns/sync/3',
+          'apple:color': null,
+          'apple:order': null
+        }
+      ];
+
+      calendarsCacheMock.getList = sinon.stub().returns({});
+
+      CalendarCollectionShellFuncMock = sinon.stub().returns(calendarCollection);
+
+      this.calendarAPI.listCalendars = sinon.stub().returns($q.when(calendars));
+
+      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId)
+        .then(result => {
+          expect(result).to.be.an('array').to.have.lengthOf(calendars.length);
+          expect(result[0]).to.deep.equals(calendarCollection);
+          expect(calendarsCacheMock.getList).to.have.been.calledWith(homeId);
+          expect(calendarsCacheMock.setList).to.have.been.calledWith(result);
+          expect(CalendarCollectionShellFuncMock).to.have.been.calledOnce;
+          expect(CalendarCollectionShellFuncMock).to.have.been.calledWith(calendars[0]);
+          done();
+        })
+        .catch(err => done(err || new Error('should resolve')));
 
       this.$rootScope.$digest();
     });
