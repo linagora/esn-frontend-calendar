@@ -31,7 +31,6 @@ function calSettingsService($rootScope, $state, UPDATE_CAL_SETTINGS) {
     $rootScope.$broadcast(UPDATE_CAL_SETTINGS, self.status, options);
 
     if (self.forceUpdate) {
-      console.log(self.forceUpdate);
       $state.reload();
     }
   }
