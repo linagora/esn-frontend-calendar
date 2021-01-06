@@ -761,6 +761,26 @@ describe('The CalEventFormController controller', function() {
         expect(scope.selectedCalendar.uniqueId).to.eq('/calendars/owner/id.json');
         expect(calEventDuplicateServiceMock.getDuplicateEventSource).to.have.been.called;
       });
+
+      it('should set the edited event alarm from the original event', () => {
+        scope.event = CalendarShell.fromIncompleteShell({
+          _id: '123456',
+          start: moment('2013-02-08 12:30'),
+          end: moment('2013-02-08 13:30'),
+          organizer: {
+            email: 'user2@test.com'
+          },
+          alarm: {
+            trigger: CAL_ALARM_TRIGGER[1].value,
+            attendee: 'user2@test.com'
+          }
+        }); // <- a new event
+
+        initController();
+        scope.$digest();
+
+        expect(scope.editedEvent.alarm).to.not.be.undefined;
+      });
     });
 
     describe('displayParticipation function', function() {

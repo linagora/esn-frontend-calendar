@@ -160,6 +160,10 @@ function CalEventFormController(
       $scope.canSuggestTime = calEventUtils.canSuggestChanges($scope.editedEvent, session.user);
       $scope.inputSuggestions = _.filter($scope.relatedEvents, { type: CAL_RELATED_EVENT_TYPES.COUNTER });
 
+      if ($scope.event.alarm) {
+        $scope.editedEvent.alarm = $scope.event.alarm;
+      }
+
       calendarService.listPersonalAndAcceptedDelegationCalendars($scope.calendarHomeId)
         .then(function(calendars) {
           // Those are the calendars the user can create events within.
