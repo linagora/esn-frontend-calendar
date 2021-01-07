@@ -115,6 +115,17 @@ describe('the calTimeSelectController', function() {
 
       expect(ctrl.selectedTime).to.equal('2:00 дня');
     });
+
+    it('should use the correct locale', () => {
+      const ctrl = initCtrl(
+        {
+          timeFormat: 'h:mm A',
+          locale: 'zh'
+        }
+      );
+
+      expect(ctrl.locale).to.eq('zh-cn');
+    });
   });
 
   describe('the onTimeInputChange event handler', function() {

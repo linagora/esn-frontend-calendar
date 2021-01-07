@@ -5,7 +5,7 @@ require('../../services/fc-moment.js');
 angular.module('esn.calendar.libs')
   .controller('calTimeSelectController', calTimeSelectController);
 
-function calTimeSelectController($scope, $element, calMoment) {
+function calTimeSelectController($scope, $element, calMoment, ESN_I18N_SUPPORTED_MOMENT_LOCALES_MAPPING) {
   const self = this;
 
   self.$onInit = onInit;
@@ -15,6 +15,7 @@ function calTimeSelectController($scope, $element, calMoment) {
   self.onInputKeydown = onInputKeydown;
 
   function onInit() {
+    self.locale = ESN_I18N_SUPPORTED_MOMENT_LOCALES_MAPPING[self.locale] || 'en';
     self.timeOptions = getTimeOptions();
     self.isInputValid = true;
     self.selectedTime = this.date.locale(self.locale).format(self.timeFormat);
