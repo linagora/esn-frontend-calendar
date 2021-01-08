@@ -7,6 +7,7 @@ var expect = chai.expect;
 describe('The cal-event-search-card component', function() {
 
   beforeEach(function() {
+    angular.mock.module('esn.i18n');
     angular.mock.module('esn.calendar');
   });
 
