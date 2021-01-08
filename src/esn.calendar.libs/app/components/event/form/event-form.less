@@ -39,7 +39,13 @@ body  {
     vertical-align: middle;
   }
 
-  .modal-header, .modal-footer{
+  @media (max-width: @screen-sm-min) {
+    .modal-dialog.ui-draggable {
+      position: fixed !important;
+    }
+  }  
+
+  .modal-header, .modal-footer {
     cursor: grabbing;
   }
 
@@ -299,11 +305,5 @@ body  {
 @media (min-width: @screen-sm-min) {
   .event-subelement-flex-container {
     margin-left: 50px;
-  }
-}
-
-@media (max-width: @screen-sm-min) {
-  .modal-dialog {
-    position: absolute !important;
   }
 }
