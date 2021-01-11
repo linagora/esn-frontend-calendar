@@ -248,7 +248,7 @@ function calEventService(
           successText: 'Event created'
         }).then(_.constant(true), onTaskCancel);
       }, function(err) {
-        notificationFactory.weakError('Event creation failed', 'Event creation failed. Please refresh your calendar');
+        calendarUtils.notifyErrorWithRefreshCalendarButton('Event creation failed. Please refresh your calendar');
 
         return $q.reject(err);
       })
@@ -336,7 +336,7 @@ function calEventService(
             return false;
           });
         }, function(err) {
-          notificationFactory.weakError('Event deletion failed', 'Event deletion failed. Please refresh your calendar');
+          calendarUtils.notifyErrorWithRefreshCalendarButton('Event deletion failed. Please refresh your calendar');
 
           return $q.reject(err);
         })
@@ -463,7 +463,7 @@ function calEventService(
           return false;
         });
       }, function(err) {
-        notificationFactory.weakError('Event modification failed', 'Event modification failed. Please refresh your calendar');
+        calendarUtils.notifyErrorWithRefreshCalendarButton('Event modification failed. Please refresh your calendar');
 
         return $q.reject(err);
       })
