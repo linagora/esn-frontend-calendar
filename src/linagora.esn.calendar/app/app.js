@@ -161,6 +161,7 @@ require('./components/modals/calendar-delete-confirmation/calendar-delete-confir
 require('./components/modals/calendar-secret-address-confirmation/calendar-secret-address-confirmation-modal.service.js');
 require('./components/rights/shared/calendar-shared-rights-display.component.js');
 require('./components/rights/shared/calendar-shared-rights-display.controller.js');
+require('./components/refresh-calendar-button/refresh-calendar-button.component.js');
 require('./components/show-planning-sidebar-button/show-planning-sidebar-button.component.js');
 require('./components/show-planning-sidebar-button/show-planning-sidebar-button.controller.js');
 require('./components/show-main-sidebar-button/show-main-sidebar-button.component.js');

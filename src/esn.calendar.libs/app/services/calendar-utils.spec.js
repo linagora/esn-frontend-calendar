@@ -2,10 +2,12 @@
 
 /* global chai, sinon, _: false */
 
-var expect = chai.expect;
+const { expect } = chai;
 
 describe('The calendarUtils service', function() {
-  var self = this;
+  let self = this;
+  let $rootScope, CAL_EVENTS;
+  let notificationFactoryMock, setCancelActionStub, calCachedEventSourceMock;
 
   beforeEach(function() {
     self = this;
@@ -14,18 +16,33 @@ describe('The calendarUtils service', function() {
     angular.mock.module('esn.ical');
     self.calMomentMock = null;
 
+    setCancelActionStub = sinon.stub();
+    notificationFactoryMock = {
+      strongError: sinon.stub().returns({
+        setCancelAction: setCancelActionStub
+      })
+    };
+
+    calCachedEventSourceMock = {
+      resetCache: sinon.stub()
+    };
+
     angular.mock.module(function($provide) {
       $provide.decorator('calMoment', function($delegate) {
         return function() {
           return (self.calMomentMock || $delegate).apply(this, arguments);
         };
       });
+      $provide.value('notificationFactory', notificationFactoryMock);
+      $provide.value('calCachedEventSource', calCachedEventSourceMock);
     });
   });
 
-  beforeEach(angular.mock.inject(function(calendarUtils, calMoment) {
+  beforeEach(angular.mock.inject(function(_$rootScope_, _CAL_EVENTS_, calendarUtils, calMoment) {
     self.calendarUtils = calendarUtils;
     self.calMoment = calMoment;
+    $rootScope = _$rootScope_;
+    CAL_EVENTS = _CAL_EVENTS_;
   }));
 
   describe('the getDateOnCalendarSelect function', function() {
@@ -96,4 +113,25 @@ describe('The calendarUtils service', function() {
     });
   });
 
+  describe('the notifyErrorWithRefreshCalendarButton function', function() {
+    it('should display an error notification with the button to refresh calendar', function() {
+      const message = 'Something went wrong';
+
+      $rootScope.$broadcast = sinon.stub();
+
+      self.calendarUtils.notifyErrorWithRefreshCalendarButton(message);
+
+      expect(notificationFactoryMock.strongError).to.have.been.calledWith('', message);
+      expect(setCancelActionStub).to.have.been.calledOnce;
+
+      const setCancelActionArg = setCancelActionStub.getCall(0).args[0];
+
+      expect(setCancelActionArg.linkText).to.deep.equal('Refresh calendar');
+
+      setCancelActionArg.action();
+
+      expect(calCachedEventSourceMock.resetCache).to.have.been.calledOnce;
+      expect($rootScope.$broadcast).to.have.been.calledWith(CAL_EVENTS.CALENDAR_REFRESH);
+    });
+  });
 });

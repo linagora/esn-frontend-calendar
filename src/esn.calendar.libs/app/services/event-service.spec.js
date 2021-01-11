@@ -7,7 +7,7 @@ var expect = chai.expect;
 describe('The calEventService service', function() {
   var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend, calendarHomeServiceMock, calOpenEventFormMock;
   var self = this;
-  let tokenAPIMock, calCalDAVURLServiceMock, fileSaveMock;
+  let tokenAPIMock, calCalDAVURLServiceMock, fileSaveMock, calendarUtils;
   const REQUEST_HEADERS_BASE = { ESNToken: '123' };
 
   beforeEach(function() {
@@ -125,7 +125,7 @@ describe('The calEventService service', function() {
     });
   });
 
-  beforeEach(inject(function(calEventService, $httpBackend, $rootScope, _ICAL_, CalendarShell, calMoment, CAL_EVENTS, CAL_GRACE_DELAY, $window, esnI18nService, calEventAPI, calendarAPI, esnDatetimeService) {
+  beforeEach(inject(function(calEventService, $httpBackend, $rootScope, _ICAL_, _calendarUtils_, CalendarShell, calMoment, CAL_EVENTS, CAL_GRACE_DELAY, $window, esnI18nService, calEventAPI, calendarAPI, esnDatetimeService) {
     self.$httpBackend = $httpBackend;
     self.$rootScope = $rootScope;
     self.calEventService = calEventService;
@@ -144,6 +144,9 @@ describe('The calEventService service', function() {
     };
 
     self.CAL_GRACE_DELAY_IS_ACTIVE_MOCK = true;
+    calendarUtils = _calendarUtils_;
+
+    calendarUtils.notifyErrorWithRefreshCalendarButton = sinon.stub();
   }));
 
   function getEventPath(home, id) {
@@ -533,7 +536,7 @@ describe('The calEventService service', function() {
         .then(() => done(new Error('should not resolve')))
         .catch(err => {
           expect(err).to.exist;
-          expect(self.notificationFactoryMock.weakError).to.have.been.calledWith('Event creation failed', 'Event creation failed. Please refresh your calendar');
+          expect(calendarUtils.notifyErrorWithRefreshCalendarButton).to.have.been.calledWith('Event creation failed. Please refresh your calendar');
           done();
         });
 
@@ -919,7 +922,7 @@ describe('The calEventService service', function() {
         .then(() => done(new Error('should not resolve')))
         .catch(err => {
           expect(err).to.exist;
-          expect(self.notificationFactoryMock.weakError).to.have.been.calledWith('Event modification failed', 'Event modification failed. Please refresh your calendar');
+          expect(calendarUtils.notifyErrorWithRefreshCalendarButton).to.have.been.calledWith('Event modification failed. Please refresh your calendar');
           done();
         });
 
@@ -1080,7 +1083,7 @@ describe('The calEventService service', function() {
         .then(() => done(new Error('should not resolve')))
         .catch(err => {
           expect(err).to.exist;
-          expect(self.notificationFactoryMock.weakError).to.have.been.calledWith('Event deletion failed', 'Event deletion failed. Please refresh your calendar');
+          expect(calendarUtils.notifyErrorWithRefreshCalendarButton).to.have.been.calledWith('Event deletion failed. Please refresh your calendar');
           done();
         });
 
