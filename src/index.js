@@ -1,4 +1,5 @@
 require('jquery-ui/ui/widgets/draggable.js');
+require('jquery-ui/ui/position.js');
 require('fullcalendar/dist/fullcalendar.js');
 require('fullcalendar/dist/locale-all.js');
 

@@ -1,0 +1,59 @@
+.event-preview-popover-toolbar-container
+  button.btn.btn-link.btn-icon.waves-notransition.waves-effect.waves-light.waves-circle(ng-click="$ctrl.openEventForm()", ng-if="$ctrl.canModifyEvent", title="{{ 'Edit event' | translate }}", bs-tooltip)
+    i.mdi.mdi-pencil
+  button.btn.btn-link.btn-icon.waves-notransition.waves-effect.waves-light.waves-circle(ng-click="$ctrl.openEventForm()", ng-if="!$ctrl.canModifyEvent", title="{{ 'View event' | translate }}", bs-tooltip)
+    i.mdi.mdi-eye
+  button.btn.btn-link.btn-icon.waves-notransition.waves-effect.waves-light.waves-circle(ng-click="$ctrl.deleteEvent()", ng-if="!$ctrl.isReadOnly", title="{{ 'Remove event' | translate }}", bs-tooltip)
+    i.mdi.mdi-delete
+  md-menu(md-offset="10 40")
+    button.btn.btn-link.btn-icon.waves-notransition.waves-effect.waves-light.waves-circle(ng-click="$mdMenu.open($event)", title="{{ 'More options' | translate }}", bs-tooltip)
+      i.mdi.mdi-dots-vertical
+    md-menu-content
+      md-menu-item.event-preview-popover-action-menu-item
+        button.btn.btn-link.waves-light(ng-click="$ctrl.duplicateEvent()")
+          i.mdi.mdi-library-plus
+          | {{ 'Duplicate this event' | translate }}
+      md-menu-item.event-preview-popover-action-menu-item(ng-if="$ctrl.attendees.length > 1")
+        button.btn.btn-link.waves-light(ng-href="mailto:{{$ctrl.attendeeEmailAddresses}}", op-inbox-compose)
+          i.mdi.mdi-email
+          | {{ 'Mail to attendees' | translate }}
+  button.btn.btn-link.btn-icon.waves-notransition.waves-effect.waves-light.waves-circle(ng-click="$ctrl.closeEventPreviewPopover()", title="{{ 'Close' | translate }}", bs-tooltip)
+    i.mdi.mdi-close
+.event-preview-popover-body-container
+  h1.event-summary {{ $ctrl.event.summary }}
+  p.event-date-time {{ [$ctrl.event.start, $ctrl.event.end] | eventDateTimeFormat }}
+  .info-row.video-conference-row(ng-if="$ctrl.event.xOpenpaasVideoconference")
+    i.mdi.mdi-video
+    a.btn.btn-primary(ng-href="{{ $ctrl.event.xOpenpaasVideoconference }}", target="_blank", rel="noopener noreferrer") {{ 'Join the video conference' | translate }}
+  .info-row(ng-if="$ctrl.event.location")
+    i.mdi.mdi-map-marker
+    span(ng-if="!$ctrl.isLocationAWebURL") {{ $ctrl.event.location }}
+    a(ng-if="$ctrl.isLocationAWebURL && $ctrl.isLocationAnAbsoluteURL", ng-href="{{ $ctrl.event.location }}", target="_blank", rel="noopener noreferrer") {{ $ctrl.event.location }}
+    a(ng-if="$ctrl.isLocationAWebURL && !$ctrl.isLocationAnAbsoluteURL", ng-href="//{{ $ctrl.event.location }}", target="_blank", rel="noopener noreferrer") {{ $ctrl.event.location }}
+  .info-row(ng-if="$ctrl.attendees.length > 1")
+    i.mdi.mdi-account-multiple
+    div.attendee-section
+      span {{ $ctrl.attendees.length }} {{ 'attendees' | translate }}
+      span.secondary-description-text {{ $ctrl.attendees | attendeePartStatText }}
+      .attendee-list
+        .attendee-item(ng-repeat="attendee in $ctrl.attendees | limitTo: 5")
+          cal-attendee-avatar(attendee='attendee')
+          .attendee-item-meta
+            .name
+              span {{ ::attendee.displayName }}
+            .details(ng-if="attendee.email === $ctrl.event.organizer.email")
+              span.organizer {{ 'Organizer' | translate }}
+      span.secondary-description-text(ng-if="$ctrl.attendees.length > 5") {{ $ctrl.attendees.length - 5 }} {{ 'more attendees...' | translate }}
+  .info-row(ng-if="$ctrl.resources.length > 0") 
+    i.mdi.mdi-monitor-multiple
+    span {{ $ctrl.resources | commaSeparatedResourceList }}
+  .info-row(ng-if="$ctrl.event.description")
+    i.mdi.mdi-calendar-text
+    span {{ $ctrl.event.description }}
+  .info-row(ng-if="$ctrl.calendar.id")
+    i.mdi.mdi-calendar
+    i.mdi.mdi-checkbox-blank-circle.calendar-color-icon(ng-style="{ color: $ctrl.calendar.color }")  
+    span {{ $ctrl.calendar.name }}
+.participation-action-container(ng-if="!$ctrl.isReadOnly")
+  span {{ 'Will you attend?' | translate }}
+  cal-partstat-buttons(event="$ctrl.event", change-partstat="$ctrl.changeParticipation(partstat)", should-hide-date-suggestion="true")
