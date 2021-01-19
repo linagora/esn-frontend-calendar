@@ -8,7 +8,7 @@ describe('The calEventService service', function() {
   var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend, calendarHomeServiceMock, calOpenEventFormMock;
   var self = this;
   let tokenAPIMock, calCalDAVURLServiceMock, fileSaveMock, calendarUtils;
-  const REQUEST_HEADERS_BASE = { ESNToken: '123' };
+  const REQUEST_HEADERS_BASE = { ESNToken: '123', Authorization: 'Bearer jwt' };
 
   beforeEach(function() {
     self = this;
@@ -21,6 +21,9 @@ describe('The calEventService service', function() {
     tokenAPIMock = {
       getNewToken: function() {
         return $q.when({ data: { token: '123' } });
+      },
+      getWebToken() {
+        return $q.when({ data: 'jwt' });
       }
     };
 

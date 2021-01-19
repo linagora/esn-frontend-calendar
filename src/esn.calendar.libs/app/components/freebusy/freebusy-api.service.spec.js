@@ -28,6 +28,9 @@ describe('The calFreebusyAPI service', function() {
   const tokenAPIMock = {
     getNewToken: function() {
       return $q.when({ data: { token: '123' } });
+    },
+    getWebToken() {
+      return $q.when({ data: 'jwt' });
     }
   };
 
