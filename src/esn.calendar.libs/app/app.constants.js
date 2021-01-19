@@ -16,6 +16,7 @@
         defaultTimedEventDuration: '00:30:00',
         forceEventDuration: true,
         weekNumbers: true,
+        weekNumberCalculation: 'ISO',
         firstDay: 1,
         header: {
           left: 'agendaDay, agendaWeek, month',
