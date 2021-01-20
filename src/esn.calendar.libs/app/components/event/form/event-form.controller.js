@@ -92,6 +92,27 @@ function CalEventFormController(
   $scope.hideEventForm = true;
   $scope.isValidURL = isValidURL;
 
+  $scope.attachments = [
+    {
+      id: 0,
+      name: 'demo-screenshot-1.png',
+      extension: 'png',
+      size: '39.4KB'
+    },
+    {
+      id: 1,
+      name: 'cosoft-slide-calendar-w1.pptx',
+      extension: 'pptx',
+      size: '344.9KB'
+    },
+    {
+      id: 1,
+      name: 'additional-document.odp',
+      extension: 'odp',
+      size: '44.2KB'
+    }
+  ];
+
   // Initialize the scope of the form. It creates a scope.editedEvent which allows us to
   // rollback to scope.event in case of a Cancel.
   $scope.initFormData();

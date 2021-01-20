@@ -138,6 +138,20 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     i.mdi.mdi-calendar-text
                   .fg-line
                     textarea.form-control(cal-auto-size-and-update, type="text", ng-model='editedEvent.description', placeholder="{{ 'Notes...' | translate }}", ng-readonly="!canModifyEvent")
+            .col-xs-12(style="display: flex; align-items: center;")
+              i.mdi.mdi-paperclip(style="font-size: 24px; color: #555; margin-right: 20px;")
+              button.btn.btn-primary(style="display: flex;align-items: center;")
+                i.mdi.mdi-upload(style="font-size: 16px; margin-right: 4px;")
+                span {{ 'Upload attachment' | translate }}
+            .col-xs-12(style="margin-top: 8px; display: flex; flex-wrap: wrap;")
+              .attachment(ng-repeat="attachment in attachments", bs-tooltip, title="{{ attachment.name }}", style="display: flex; max-width: 188px; margin-right: 8px; margin-bottom: 8px; align-items: center;padding: 8px;border-radius: 4px;box-shadow: 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12), 0 1px 3px 0 rgba(0,0,0,0.2);")
+                .icon(style="margin-right: 4px;")
+                  img(ng-src="/images/file-icons/{{ attachment.extension }}.png", style="width: 32px; height: 32px;")
+                .metadata(style="user-select: none; color: #444; display: flex; flex-direction: column; max-width: 104px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;")
+                  strong(style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;") {{ ::attachment.name }}
+                  span(style="font-size: 12px;") {{ ::attachment.size }}
+                button.btn.btn-link.btn-icon(style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin-left: 4px;")
+                  i.mdi.mdi-close(style="font-size: 20px;")
 
       .modal-footer.flex
         .flex-vertical-centered.flex-start
