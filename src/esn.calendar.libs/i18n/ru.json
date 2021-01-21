@@ -264,6 +264,7 @@
   "This will make the current secret address invalid (if any). Are you sure want to generate a new secret address?": "Это сделает текущий секретный адрес недействительным (если он есть). Вы действительно хотите создать новый секретный адрес?",
   "Time": "Время",
   "Today": "Сегодня",
+  "Toggle sidebar": "Переключить боковую панель",
   "Undecided": "Нерешенный",
   "Unsubscribe": "Отписаться",
   "Unsubscribe from calendar?": "Отписаться от календаря?",

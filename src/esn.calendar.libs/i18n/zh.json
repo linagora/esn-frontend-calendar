@@ -263,6 +263,7 @@
   "This will make the current secret address invalid (if any). Are you sure want to generate a new secret address?": "这将使当前的秘密地址无效（如果有）。确定要生成新的秘密地址吗?",
   "Time": "时间",
   "Today": "今天",
+  "Toggle sidebar": "切换侧栏",
   "Undecided": "待定",
   "Unsubscribe": "取消订阅",
   "Unsubscribe from calendar?": "解除订阅日历？",
