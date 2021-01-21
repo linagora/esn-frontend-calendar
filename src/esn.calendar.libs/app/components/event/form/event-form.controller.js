@@ -160,7 +160,7 @@ function CalEventFormController(
       $scope.canSuggestTime = calEventUtils.canSuggestChanges($scope.editedEvent, session.user);
       $scope.inputSuggestions = _.filter($scope.relatedEvents, { type: CAL_RELATED_EVENT_TYPES.COUNTER });
 
-      if ($scope.event.alarm) {
+      if ($scope.event.alarm && $scope.event.alarm.attendee && $scope.event.alarm.trigger) {
         $scope.editedEvent.alarm = $scope.event.alarm;
       }
 
