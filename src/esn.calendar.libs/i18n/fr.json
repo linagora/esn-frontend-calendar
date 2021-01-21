@@ -264,6 +264,7 @@
   "This will make the current secret address invalid (if any). Are you sure want to generate a new secret address?": "Cela rendra l'adresse secrète actuelle invalide (le cas échéant). Voulez-vous vraiment générer une nouvelle adresse secrète?",
   "Time": "Heure",
   "Today": "Aujourd'hui",
+  "Toggle sidebar": "Activer/Désactiver la barre latérale",
   "Undecided": "Indécis",
   "Unsubscribe": "Se désabonner",
   "Unsubscribe from calendar?": "Se désinscrire du calendrier?",
