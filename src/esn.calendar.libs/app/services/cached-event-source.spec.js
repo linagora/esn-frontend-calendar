@@ -16,7 +16,8 @@ describe('The calCachedEventSource service', function() {
     self.calendar = {
       getUniqueId: function() {
         return self.calendarUniqueId;
-      }
+      },
+      isOwner: sinon.stub()
     };
 
     self.eventSource = function(start, end, timezone, callback) { // eslint-disable-line
@@ -706,6 +707,8 @@ describe('The calCachedEventSource service', function() {
     });
 
     it('should return all event when user is an attendee and has not declined event', function() {
+      self.calendar.isOwner = sinon.stub().returns(true);
+
       var attrs = {
         id: 2,
         title: 'With attendees',
@@ -747,8 +750,25 @@ describe('The calCachedEventSource service', function() {
         self.CAL_ICAL.partstat.tentative
       ].forEach(expectedEvents);
     });
+    it('should return all events when user he is not the owner of calendar', function() {
+      self.calendar.isOwner = sinon.stub().returns(false);
+      var attrs = {
+        id: 2,
+        title: 'is not owner of calendar',
+        attendees: []
+      };
+      var anEvent = newEvent(attrs);
+
+      self.eventsMock.push(anEvent);
+
+      getWrapEventSource(self.eventsMock);
+      self.$rootScope.$digest();
+
+      expect(self.originalCallback).to.have.been.calledWith(self.eventsMock);
+    });
 
     it('should not return event where user is attendee and declined the event', function() {
+      self.calendar.isOwner = sinon.stub().returns(true);
       var attrs = {
         id: 2,
         title: 'With attendees',
