@@ -11,6 +11,7 @@
 
     self.$onInit = $onInit;
     self.onAddingUser = onAddingUser;
+    self.changeBackdropZIndex = changeBackdropZIndex;
 
     ///////////
 
@@ -38,6 +39,20 @@
       });
 
       return canBeAdded;
+    }
+
+    function changeBackdropZIndex() {
+      const mutationObserver = new MutationObserver((mutations, observer) => {
+        mutations.forEach(mutation => {
+          if (!mutation.addedNodes.length || mutation.addedNodes[0].nodeName.toLowerCase() !== 'md-backdrop') return;
+
+          mutation.addedNodes[0].style = 'z-index: 1999;';
+
+          observer.disconnect();
+        });
+      });
+
+      mutationObserver.observe(document.body, { childList: true });
     }
   }
 })(angular);

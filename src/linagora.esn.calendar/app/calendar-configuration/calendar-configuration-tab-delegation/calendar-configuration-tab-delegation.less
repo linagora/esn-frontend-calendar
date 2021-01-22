@@ -1,4 +1,13 @@
 calendar-configuration-tab-delegation {
+  .delegation-section-title {
+    font-size: 16px;
+    color: #444;
+  }
+
+  md-select {
+    margin: 0;
+    height: 35px;
+  }
 
   .add-delegation-users {
     .all-centered;
@@ -10,9 +19,18 @@ calendar-configuration-tab-delegation {
       .flex-grow(2);
 
       .user-autocomplete {
-        .flex-shorthand(1, 0, 30%);
+        display: flex;
+        align-items: center;
+        width: 50%;
+        margin-right: 12px;
 
-        min-width: 350px;
+        users-autocomplete-input {
+          width: 100%;
+
+          .col-xs-12 {
+            padding: 0;
+          }
+        }
       }
 
       .select-delegation {
@@ -21,18 +39,30 @@ calendar-configuration-tab-delegation {
         margin-right: 12px;
         align-self: center;
       }
-    }
 
-    @media (min-width: @screen-xl-min) {
-      width: max-content;
-    }
-
-    @media (max-width: @screen-md-min) {
       .delegation-actions {
-        .flex-end;
-        .flex-grow;
+        .btn {
+          width: 100%;
+        }
+      }
 
-        padding-right: 12px;
+      @media (max-width: @screen-md-min) {
+        flex-direction: column;
+
+        .user-autocomplete {
+          width: 100%;
+          margin: 0 0 12px 0;
+        }
+
+        .select-delegation {
+          width: 100%;
+          margin: 0 0 12px 0;
+        }
+
+        .delegation-actions {
+          .flex-end;
+          .flex-grow;
+        }
       }
     }
   }
@@ -45,29 +75,44 @@ calendar-configuration-tab-delegation {
     .user {
       .flex;
       .flex-shorthand(1, 0, 30%);
+      align-items: center;
 
       .user-avatar {
-        margin-right: 15px;
+        margin-right: 8px;
 
         img {
-          .esn-avatar;
+          border-radius: 50%;
+          width: 28px;
+          min-width: 28px;
+          height: 28px;
         }
       }
 
       .user-name {
-        align-self: flex-start;
-        font-size: 14px;
+        word-break: break-all;
       }
     }
 
     .select-delegation {
       .flex-grow;
+
+      width: 40%;
     }
 
     .delegation-actions {
       .flex-vertical-centered;
 
-      padding-left: 10px;
+      margin-left: 8px;
+
+      .btn.btn-icon {
+        .all-centered;
+        width: 36px;
+        height: 36px;
+
+        i.mdi {
+          font-size: 20px;
+        }
+      }
     }
 
     .mdi-delete {
@@ -75,4 +120,8 @@ calendar-configuration-tab-delegation {
       font-size: 1.5em;
     }
   }
+}
+
+.cal-delegation-type-dropdown {
+  z-index: 2000;
 }
