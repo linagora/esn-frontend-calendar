@@ -27,6 +27,7 @@ function CalEventFormController(
   $state,
   $log,
   $modal,
+  $window,
   $q,
   calEventFreeBusyConfirmationModalService,
   calendarService,
@@ -91,6 +92,7 @@ function CalEventFormController(
   $scope.changeBackdropZIndex = changeBackdropZIndex;
   $scope.hideEventForm = true;
   $scope.isValidURL = isValidURL;
+  $scope.openLocationLink = openLocationLink;
 
   // Initialize the scope of the form. It creates a scope.editedEvent which allows us to
   // rollback to scope.event in case of a Cancel.
@@ -601,6 +603,10 @@ function CalEventFormController(
     });
 
     return $scope.attendees.users.concat(attendees, $scope.attendees.resources, resources);
+  }
+
+  function openLocationLink(location) {
+    $window.open(location.startsWith('http') ? location : `//${location}`, '_blank', 'noopener');
   }
 
   function toggleSuggestedEvent() {
