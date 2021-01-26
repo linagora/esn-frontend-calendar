@@ -209,6 +209,13 @@ function routesConfig($stateProvider) {
           });
         }
       }
+    })
+    .state('home', {
+      onEnter: function($state, $timeout) {
+        $timeout(() => {
+          $state.go('calendar.main');
+        });
+      }
     });
 }
 
