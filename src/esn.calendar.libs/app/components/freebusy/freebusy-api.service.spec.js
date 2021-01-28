@@ -25,17 +25,32 @@ describe('The calFreebusyAPI service', function() {
     };
   }
 
+  const tokenAPIMock = {
+    getNewToken: function() {
+      return $q.when({ data: { token: '123' } });
+    }
+  };
+
+  const calCalDAVURLServiceMock = {
+    getFrontendURL() {
+      return $q.when('');
+    }
+  };
+
   beforeEach(function() {
     angular.mock.module('esn.calendar.libs');
 
     angular.mock.module(function($provide) {
       $provide.value('notificationFactory', notificationFactoryMock);
+      $provide.value('tokenAPI', tokenAPIMock);
+      $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
     });
 
-    angular.mock.inject(function($httpBackend, calMoment, calFreebusyAPI) {
+    angular.mock.inject(function($httpBackend, calMoment, calFreebusyAPI, _CAL_DAV_PATH_) {
       this.$httpBackend = $httpBackend;
       this.calMoment = calMoment;
       this.calFreebusyAPI = calFreebusyAPI;
+      this.CAL_DAV_PATH = _CAL_DAV_PATH_;
     });
 
     var davDateFormat = 'YYYYMMDD[T]HHmmss';
@@ -56,7 +71,7 @@ describe('The calFreebusyAPI service', function() {
 
     davItem = {
       _links: {
-        self: { href: '/dav/api/calendars/test/events.json' }
+        self: { href: '/calendars/test/events.json' }
       },
       etag: '"123123"',
       data: [
@@ -71,9 +86,9 @@ describe('The calFreebusyAPI service', function() {
 
   describe('The report function', function() {
     it('should request the correct path and return an array of items included in data', function(done) {
-      this.$httpBackend.expect('REPORT', '/dav/api/calendars/test/events.json', this.data, headerContentTypeJsonChecker).respond(davItemsResponse(davItems));
+      this.$httpBackend.expect('REPORT', '/calendars/test/events.json', this.data, headerContentTypeJsonChecker).respond(davItemsResponse(davItems));
 
-      this.calFreebusyAPI.report('/dav/api/calendars/test/events.json', this.start, this.end)
+      this.calFreebusyAPI.report('/calendars/test/events.json', this.start, this.end)
         .then(function(data) {
           expect(data).to.deep.equal(davItems);
           done();
@@ -83,8 +98,8 @@ describe('The calFreebusyAPI service', function() {
     });
 
     it('should return an empty array if response.data is not defined', function(done) {
-      this.$httpBackend.expect('REPORT', '/dav/api/calendars/test/events.json', this.data, headerContentTypeJsonChecker).respond(null);
-      this.calFreebusyAPI.report('/dav/api/calendars/test/events.json', this.start, this.end)
+      this.$httpBackend.expect('REPORT', '/calendars/test/events.json', this.data, headerContentTypeJsonChecker).respond(null);
+      this.calFreebusyAPI.report('/calendars/test/events.json', this.start, this.end)
         .then(function(data) {
           expect(data).to.deep.equal([]);
           done();
@@ -94,14 +109,14 @@ describe('The calFreebusyAPI service', function() {
     });
 
     it('should return an empty array if response.data.data is not defined', function(done) {
-      this.$httpBackend.expect('REPORT', '/dav/api/calendars/test/events.json', this.data, headerContentTypeJsonChecker).respond({
+      this.$httpBackend.expect('REPORT', '/calendars/test/events.json', this.data, headerContentTypeJsonChecker).respond({
         _links: {
-          self: { href: '/dav/api/calendars/test/events.json' }
+          self: { href: '/calendars/test/events.json' }
         },
         data: null
       });
 
-      this.calFreebusyAPI.report('/dav/api/calendars/test/events.json', this.start, this.end)
+      this.calFreebusyAPI.report('/calendars/test/events.json', this.start, this.end)
         .then(function(data) {
           expect(data).to.deep.equal([]);
           done();
@@ -110,8 +125,8 @@ describe('The calFreebusyAPI service', function() {
     });
 
     it('should return an Error if response.status is not 200', function(done) {
-      this.$httpBackend.expect('REPORT', '/dav/api/calendars/test/events.json', this.data, headerContentTypeJsonChecker).respond(500, 'Error');
-      this.calFreebusyAPI.report('/dav/api/calendars/test/events.json', this.start, this.end)
+      this.$httpBackend.expect('REPORT', '/calendars/test/events.json', this.data, headerContentTypeJsonChecker).respond(500, 'Error');
+      this.calFreebusyAPI.report('/calendars/test/events.json', this.start, this.end)
         .catch(function(err) {
           expect(err).to.exist;
           done();
@@ -124,7 +139,7 @@ describe('The calFreebusyAPI service', function() {
     var bulkRequest, users, freeBusyEndpoint, davDateFormat;
 
     beforeEach(function() {
-      freeBusyEndpoint = '/dav/api/calendars/freebusy';
+      freeBusyEndpoint = `${this.CAL_DAV_PATH}/calendars/freebusy`;
       davDateFormat = 'YYYYMMDD[T]HHmmss';
       users = [1, 2];
       bulkRequest = {

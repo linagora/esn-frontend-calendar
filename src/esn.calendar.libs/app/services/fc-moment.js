@@ -15,10 +15,10 @@ require('./event-utils.js');
    * Even if we set the fullcalendar's timezone option to local, allday events are always
    * returned as UTC. See {https://github.com/fullcalendar/fullcalendar/issues/2477}
    */
-  angular.module('esn.calMoment', ['angularMoment'])
+  angular.module('esn.calMoment', ['angularMoment', 'esn.i18n'])
     .factory('calMoment', calMoment);
 
-  function calMoment($window, ICAL, calEventUtils, esnDatetimeService) {
+  function calMoment($log, $window, ICAL, calEventUtils, esnDatetimeService, ESN_I18N_SUPPORTED_MOMENT_LOCALES_MAPPING) {
     function _calMoment(time) {
       if (time && (time instanceof ICAL.Time)) {
         var m = $window.$.fullCalendar.moment(time.toJSDate());
@@ -34,6 +34,14 @@ require('./event-utils.js');
 
       return $window.$.fullCalendar.moment.apply(this, arguments);
     }
+
+    Object.values(ESN_I18N_SUPPORTED_MOMENT_LOCALES_MAPPING).map(locale => {
+      try {
+        require(`moment/locale/${locale}`);
+      } catch (err) {
+        $log.error(`failed to load the ${locale} moment locale`);
+      }
+    });
 
     angular.extend(_calMoment, moment);
 

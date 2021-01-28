@@ -5,8 +5,10 @@
 var expect = chai.expect;
 
 describe('The calEventService service', function() {
-  var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend;
+  var ICAL, calCachedEventSourceMock, calendarHomeId, calendarId, eventUUID, dtstart, dtend, calendarHomeServiceMock, calOpenEventFormMock;
   var self = this;
+  let tokenAPIMock, calCalDAVURLServiceMock, fileSaveMock, calendarUtils;
+  const REQUEST_HEADERS_BASE = { ESNToken: '123' };
 
   beforeEach(function() {
     self = this;
@@ -16,12 +18,15 @@ describe('The calEventService service', function() {
     dtstart = '2015-05-25T08:56:29+00:00';
     dtend = '2015-05-25T09:56:29+00:00';
 
-    self.tokenAPI = {
-      _token: '123',
+    tokenAPIMock = {
       getNewToken: function() {
-        var token = this._token;
+        return $q.when({ data: { token: '123' } });
+      }
+    };
 
-        return $q.when({ data: { token: token } });
+    calCalDAVURLServiceMock = {
+      getFrontendURL() {
+        return $q.when('/dav/api');
       }
     };
 
@@ -46,10 +51,13 @@ describe('The calEventService service', function() {
       }
     };
 
+    self.closeNotificationMock = sinon.stub();
+
     self.notificationFactoryMock = {
       weakInfo: sinon.spy(),
       weakError: sinon.spy(),
-      weakSuccess: sinon.spy()
+      weakSuccess: sinon.spy(),
+      strongInfo: sinon.stub().returns({ close: self.closeNotificationMock })
     };
 
     self.jstz = {
@@ -71,6 +79,16 @@ describe('The calEventService service', function() {
       emitModifiedEvent: sinon.spy()
     };
 
+    calendarHomeServiceMock = {
+      getUserCalendarHomeId: sinon.stub().returns($q.when('1'))
+    };
+
+    calOpenEventFormMock = sinon.stub();
+
+    fileSaveMock = {
+      saveAs: sinon.spy()
+    };
+
     angular.mock.module('esn.resource.libs');
     angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.ical');
@@ -86,6 +104,8 @@ describe('The calEventService service', function() {
       $provide.value('calCachedEventSource', calCachedEventSourceMock);
       $provide.value('calendarEventEmitter', self.calendarEventEmitterMock);
       $provide.value('gracePeriodLiveNotificationService', { start: angular.noop });
+      $provide.value('calendarHomeService', calendarHomeServiceMock);
+      $provide.value('calOpenEventForm', calOpenEventFormMock);
       $provide.value('esnI18nService', {
         translate: function(input) { return input; }
       });
@@ -99,10 +119,13 @@ describe('The calEventService service', function() {
 
         return self.calMasterEventCache;
       });
+      $provide.value('tokenAPI', tokenAPIMock);
+      $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
+      $provide.value('FileSaver', fileSaveMock);
     });
   });
 
-  beforeEach(inject(function(calEventService, $httpBackend, $rootScope, _ICAL_, CalendarShell, calMoment, CAL_EVENTS, CAL_GRACE_DELAY, $window, esnI18nService, calEventAPI, calendarAPI, esnDatetimeService) {
+  beforeEach(inject(function(calEventService, $httpBackend, $rootScope, _ICAL_, _calendarUtils_, CalendarShell, calMoment, CAL_EVENTS, CAL_GRACE_DELAY, $window, esnI18nService, calEventAPI, calendarAPI, esnDatetimeService) {
     self.$httpBackend = $httpBackend;
     self.$rootScope = $rootScope;
     self.calEventService = calEventService;
@@ -121,6 +144,9 @@ describe('The calEventService service', function() {
     };
 
     self.CAL_GRACE_DELAY_IS_ACTIVE_MOCK = true;
+    calendarUtils = _calendarUtils_;
+
+    calendarUtils.notifyErrorWithRefreshCalendarButton = sinon.stub();
   }));
 
   function getEventPath(home, id) {
@@ -489,6 +515,34 @@ describe('The calEventService service', function() {
       expect(self.calendarEventEmitterMock.emitRemovedEvent).to.have.been.called;
     });
 
+    it('should display an error notification when the request to create the event fails', function(done) {
+      var vcalendar = new ICAL.Component('vcalendar');
+      var vevent = new ICAL.Component('vevent');
+
+      vevent.addPropertyWithValue('uid', eventUUID);
+      vevent.addPropertyWithValue('dtstart', dtstart);
+      vevent.addPropertyWithValue('dtend', dtend);
+      vcalendar.addSubcomponent(vevent);
+
+      var event = new self.CalendarShell(vcalendar);
+
+      self.gracePeriodService.grace = function() {
+        return $q.resolve();
+      };
+
+      self.$httpBackend.expectPUT(getEventPath() + '?graceperiod=' + self.CAL_GRACE_DELAY).respond(500);
+
+      self.calEventService.createEvent(calendar, event, { graceperiod: true })
+        .then(() => done(new Error('should not resolve')))
+        .catch(err => {
+          expect(err).to.exist;
+          expect(calendarUtils.notifyErrorWithRefreshCalendarButton).to.have.been.calledWith('Event creation failed. Please refresh your calendar');
+          done();
+        });
+
+      self.$httpBackend.flush();
+    });
+
     it('should call calCachedEventSource.registerAdd', function() {
       var vcalendar = new ICAL.Component('vcalendar');
       var vevent = new ICAL.Component('vevent');
@@ -671,7 +725,7 @@ describe('The calEventService service', function() {
       self.$httpBackend.flush();
       expect(self.gracePeriodService.grace).to.have.been.calledWith(sinon.match({
         gracePeriodFail: {
-          text: 'Event modification failed, please refresh your calendar',
+          text: 'Event modification failed. Please refresh your calendar',
           actionText: 'Refresh calendar',
           delay: -1,
           hideCross: true,
@@ -745,6 +799,7 @@ describe('The calEventService service', function() {
 
     it('should send etag as If-Match header', function() {
       var requestHeaders = {
+        ...REQUEST_HEADERS_BASE,
         'Content-Type': 'application/calendar+json',
         Prefer: 'return=representation',
         'If-Match': 'etag',
@@ -856,6 +911,22 @@ describe('The calEventService service', function() {
 
       expect(onCancel).to.have.been.calledOnce;
       expect(self.calendarEventEmitterMock.emitModifiedEvent).to.have.been.calledOnce;
+    });
+
+    it('should display an error notification when the request to modify the event fails', function(done) {
+      self.gracePeriodService.grace = () => $q.resolve();
+
+      self.$httpBackend.expectPUT('/dav/api/path/to/calendar/uid.ics?graceperiod=' + self.CAL_GRACE_DELAY).respond(500);
+
+      self.calEventService.modifyEvent('/path/to/calendar/uid.ics', self.event, self.event, 'etag')
+        .then(() => done(new Error('should not resolve')))
+        .catch(err => {
+          expect(err).to.exist;
+          expect(calendarUtils.notifyErrorWithRefreshCalendarButton).to.have.been.calledWith('Event modification failed. Please refresh your calendar');
+          done();
+        });
+
+      self.$httpBackend.flush();
     });
 
     it('should call calCachedEventSource.registerUpdate', function() {
@@ -1003,6 +1074,20 @@ describe('The calEventService service', function() {
       self.$httpBackend.flush();
 
       expect(errorSpy).to.have.been.calledWith(sinon.match({ status: 201 }));
+    });
+
+    it('should display an error notification when the request to remove the event fails', function(done) {
+      self.$httpBackend.expectDELETE(`/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics?graceperiod=${self.CAL_GRACE_DELAY}`).respond(500);
+
+      self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', self.event, 'etag')
+        .then(() => done(new Error('should not resolve')))
+        .catch(err => {
+          expect(err).to.exist;
+          expect(calendarUtils.notifyErrorWithRefreshCalendarButton).to.have.been.calledWith('Event deletion failed. Please refresh your calendar');
+          done();
+        });
+
+      self.$httpBackend.flush();
     });
 
     it('should cancel the task if there is no etag and if it is not a recurring', function() {
@@ -1369,6 +1454,37 @@ describe('The calEventService service', function() {
       expect(errorSpy).to.have.been.calledOnce;
     });
 
+    it('should call the event setOrganizerPartStat function when the organizer is trying to change his status', function() {
+      const emails = ['organize@example.com'];
+      const promiseSpy = sinon.spy();
+
+      self.calEventAPI.changeParticipation = sinon.stub().returns($q.when({}));
+      self.event.setOrganizerPartStat = sinon.spy();
+      self.event.changeParticipation = sinon.spy();
+      self.event.organizer = { email: 'organize@example.com' };
+      self.calEventService.changeParticipation('/path/to/uid.ics', self.event, emails, 'DECLINED').then(promiseSpy);
+      self.$rootScope.$apply();
+
+      expect(self.event.setOrganizerPartStat).to.have.been.called;
+      expect(self.event.changeParticipation).to.not.have.been.called;
+      expect(self.calEventAPI.changeParticipation).to.have.been.called;
+    });
+
+    it('should not call the event setOrganizerPartStat function when a non organizer is trying to change his status', function() {
+      const emails = ['somethingelse@example.com'];
+      const promiseSpy = sinon.spy();
+
+      self.calEventAPI.changeParticipation = sinon.stub().returns($q.when({}));
+      self.event.setOrganizerPartStat = sinon.spy();
+      self.event.changeParticipation = sinon.spy();
+      self.event.organizer = { email: 'organize@example.com' };
+      self.calEventService.changeParticipation('/path/to/uid.ics', self.event, emails, 'DECLINED').then(promiseSpy);
+      self.$rootScope.$apply();
+
+      expect(self.event.setOrganizerPartStat).to.not.have.been.called;
+      expect(self.event.changeParticipation).to.have.been.called;
+    });
+
     // Everything else is covered by the modify fn
   });
 
@@ -1502,6 +1618,67 @@ describe('The calEventService service', function() {
         self.$httpBackend.expectPUT(getEventPath()).respond(201, { id: '123456789' });
       });
 
+      it('should display a notification when the request to create an event is being processed and close it when the request succeeds', function(done) {
+        const vcalendar = new ICAL.Component('vcalendar');
+        const vevent = new ICAL.Component('vevent');
+
+        vevent.addPropertyWithValue('uid', eventUUID);
+        vevent.addPropertyWithValue('dtstart', dtstart);
+        vevent.addPropertyWithValue('dtend', dtend);
+        vevent.addPropertyWithValue('summary', 'test event');
+        vcalendar.addSubcomponent(vevent);
+
+        const path = getEventPath();
+        const etag = 'ETAG';
+        const calendarShell = new self.CalendarShell(vcalendar, {
+          path: path,
+          etag: etag
+        });
+
+        self.calEventAPI.create = () => $q.resolve();
+
+        self.calEventService.createEvent(calendar, calendarShell)
+          .then(() => {
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          })
+          .catch(err => done(err || new Error('should resolve')));
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event creation', 'Saving event...');
+        self.$rootScope.$digest();
+      });
+
+      it('should display a notification when the request to create an event is being processed and close it when the request fails', function(done) {
+        const vcalendar = new ICAL.Component('vcalendar');
+        const vevent = new ICAL.Component('vevent');
+
+        vevent.addPropertyWithValue('uid', eventUUID);
+        vevent.addPropertyWithValue('dtstart', dtstart);
+        vevent.addPropertyWithValue('dtend', dtend);
+        vevent.addPropertyWithValue('summary', 'test event');
+        vcalendar.addSubcomponent(vevent);
+
+        const path = getEventPath();
+        const etag = 'ETAG';
+        const calendarShell = new self.CalendarShell(vcalendar, {
+          path: path,
+          etag: etag
+        });
+
+        self.calEventAPI.create = () => $q.reject(new Error('Request failed'));
+
+        self.calEventService.createEvent(calendar, calendarShell)
+          .then(() => done(new Error('should not resolve')))
+          .catch(err => {
+            expect(err).to.exist;
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          });
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event creation', 'Saving event...');
+        self.$rootScope.$digest();
+      });
+
       it('should not call calCachedEventSource.registerAdd', function() {
         self.calEventService.createEvent(calendar, event, {});
 
@@ -1560,6 +1737,35 @@ describe('The calEventService service', function() {
         self.$httpBackend.expectDELETE('/dav/api/path/to/00000000-0000-4000-a000-000000000000.ics').respond(204, { id: '123456789' });
       });
 
+      it('should display a notification when the request to remove the event is being processed and close it when the request succeeds', function(done) {
+        self.calEventAPI.remove = () => $q.resolve();
+
+        self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', event, 'etag')
+          .then(() => {
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          })
+          .catch(err => done(err || new Error('should resolve')));
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event removal', 'Removing event...');
+        self.$rootScope.$digest();
+      });
+
+      it('should display a notification when the request to remove the event is being processed and close it when the request fails', function(done) {
+        self.calEventAPI.remove = () => $q.reject(new Error('Request failed'));
+
+        self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', event, 'etag')
+          .then(() => done(new Error('should not resolve')))
+          .catch(err => {
+            expect(err).to.exist;
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          });
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event removal', 'Removing event...');
+        self.$rootScope.$digest();
+      });
+
       it('should not call calCachedEventSource.registerDelete', function() {
         self.calEventService.removeEvent('/path/to/00000000-0000-4000-a000-000000000000.ics', event, 'etag');
 
@@ -1601,6 +1807,7 @@ describe('The calEventService service', function() {
           { emails: ['user1@lng.com'], partstat: 'ACCEPTED' },
           { emails: ['user2@lng.com'], partstat: 'NEEDS-ACTION' }
         ];
+
         var vcalendar = new ICAL.Component('vcalendar');
         var vevent = new ICAL.Component('vevent');
 
@@ -1629,6 +1836,35 @@ describe('The calEventService service', function() {
         sinon.spy(self.gracePeriodService, 'grace');
 
         self.$httpBackend.expectPUT('/dav/api/path/to/uid.ics').respond(204, { id: '123456789' });
+      });
+
+      it('should display a notification while the request to modify the event is being processed and close it when the request succeeds', function(done) {
+        self.calEventAPI.modify = () => $q.when();
+
+        self.calEventService.modifyEvent('/path/to/uid.ics', event, event, 'etag', angular.noop)
+          .then(() => {
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          })
+          .catch(err => done(err || new Error('should resolve')));
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event modification', 'Saving event...');
+        self.$rootScope.$digest();
+      });
+
+      it('should display a notification while the request to modify the event is being processed and close it when the request fails', function(done) {
+        self.calEventAPI.modify = () => $q.reject(new Error('Request failed'));
+
+        self.calEventService.modifyEvent('/path/to/uid.ics', event, event, 'etag', angular.noop)
+          .then(() => done(new Error('should not resolve')))
+          .catch(err => {
+            expect(err).to.exist;
+            expect(self.closeNotificationMock).to.have.been.calledOnce;
+            done();
+          });
+
+        expect(self.notificationFactoryMock.strongInfo).to.have.been.calledWith('Event modification', 'Saving event...');
+        self.$rootScope.$digest();
       });
 
       it('should not call calendarEventEmitterMock.emitModifiedEvent', function() {

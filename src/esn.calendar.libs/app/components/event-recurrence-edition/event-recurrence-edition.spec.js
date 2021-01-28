@@ -208,7 +208,15 @@ describe('The event-recurrence-edition component', function() {
       };
     });
 
+    it('should not update event date when canModifyEventRecurrence is false', function() {
+      this.eleScope.vm.canModifyEventRecurrence = false;
+      this.eleScope.vm.setDefaultUntilDate(null);
+      expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
+      expect(this.eleScope.vm.event.rrule.until).to.be.undefined;
+    });
+
     it('should set until is next day if the frequency is "DAILY"', function() {
+      this.eleScope.vm.canModifyEventRecurrence = true;
       dateCheck.setDate(dateCurrent.getDate() + 1);
       this.eleScope.vm.setDefaultUntilDate('DAILY');
       expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
@@ -216,6 +224,7 @@ describe('The event-recurrence-edition component', function() {
     });
 
     it('should set until is next week if the frequency is "WEEKLY"', function() {
+      this.eleScope.vm.canModifyEventRecurrence = true;
       dateCheck.setDate(dateCurrent.getDate() + 7);
       this.eleScope.vm.setDefaultUntilDate('WEEKLY');
       expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
@@ -223,6 +232,7 @@ describe('The event-recurrence-edition component', function() {
     });
 
     it('should set until is next month if the frequency is "MONTHLY"', function() {
+      this.eleScope.vm.canModifyEventRecurrence = true;
       dateCheck.setMonth(dateCurrent.getMonth() + 1);
       this.eleScope.vm.setDefaultUntilDate('MONTHLY');
       expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
@@ -230,6 +240,7 @@ describe('The event-recurrence-edition component', function() {
     });
 
     it('should set until is next year if the frequency is "YEARLY"', function() {
+      this.eleScope.vm.canModifyEventRecurrence = true;
       dateCheck.setFullYear(dateCurrent.getFullYear() + 1);
       this.eleScope.vm.setDefaultUntilDate('YEARLY');
       expect(this.eleScope.vm.event.rrule.count).to.be.undefined;

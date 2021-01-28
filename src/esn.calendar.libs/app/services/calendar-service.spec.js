@@ -14,6 +14,7 @@ describe('The calendarService service', function() {
     listCalendars,
     calendarsCacheMock,
     userUtilsMock;
+  let tokenAPIMock, calCalDAVURLServiceMock, fileSaveMock, CAL_EXPORT_FILE_TYPE;
 
   beforeEach(function() {
     self = this;
@@ -41,16 +42,35 @@ describe('The calendarService service', function() {
     CalendarRightShellResult = {};
     CalendarRightShellMock = sinon.stub().returns(CalendarRightShellResult);
 
+    tokenAPIMock = {
+      getNewToken: function() {
+        return $q.when({ data: { token: '123' } });
+      }
+    };
+
+    calCalDAVURLServiceMock = {
+      getFrontendURL() {
+        return $q.when('/dav/api');
+      }
+    };
+
+    fileSaveMock = {
+      saveAs: sinon.spy()
+    };
+
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
       $provide.value('CalendarCollectionShell', CalendarCollectionShellMock);
       $provide.value('CalendarRightShell', CalendarRightShellMock);
       $provide.value('calendarsCache', calendarsCacheMock);
       $provide.value('userUtils', userUtilsMock);
+      $provide.value('tokenAPI', tokenAPIMock);
+      $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
+      $provide.value('FileSaver', fileSaveMock);
     });
   });
 
-  beforeEach(angular.mock.inject(function(calendarService, $httpBackend, $rootScope, calendarAPI, calCalendarSubscriptionApiService, calDefaultValue, CAL_EVENTS, CAL_CALENDAR_SHARED_INVITE_STATUS) {
+  beforeEach(angular.mock.inject(function(calendarService, $httpBackend, $rootScope, calendarAPI, calCalendarSubscriptionApiService, calDefaultValue, CAL_EVENTS, CAL_CALENDAR_SHARED_INVITE_STATUS, _CAL_EXPORT_FILE_TYPE_) {
     this.$httpBackend = $httpBackend;
     this.$rootScope = $rootScope;
     this.calendarService = calendarService;
@@ -59,6 +79,7 @@ describe('The calendarService service', function() {
     this.CAL_EVENTS = CAL_EVENTS;
     this.calDefaultValue = calDefaultValue;
     this.CAL_CALENDAR_SHARED_INVITE_STATUS = CAL_CALENDAR_SHARED_INVITE_STATUS;
+    CAL_EXPORT_FILE_TYPE = _CAL_EXPORT_FILE_TYPE_;
   }));
 
   beforeEach(function() {
@@ -483,24 +504,8 @@ describe('The calendarService service', function() {
       homeId = 'TheHomeId';
     });
 
-    it('should call calendarAPI.listCalendars with the correspondent options', function() {
-      this.calendarAPI.listCalendars = sinon.spy(function() {
-        return $q.when();
-      });
-
-      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId);
-
-      expect(self.calendarAPI.listCalendars).to.be.calledWith(homeId, {
-        withRights: true,
-        personal: true,
-        sharedPublicSubscription: true,
-        sharedDelegationStatus: 'accepted'
-      });
-    });
-
-    it('should return an array of CalendarCollectionShell', function(done) {
-      var calendarCollection = { id: this.calDefaultValue.get('calendarId') };
-      var calendars = [
+    it('should return an array of CalendarCollectionShell from cache', function(done) {
+      const fakeCalendars = [
         {
           _links: {
             self: {
@@ -515,21 +520,70 @@ describe('The calendarService service', function() {
         }
       ];
 
-      CalendarCollectionShellFuncMock = sinon.spy(function() {
-        return calendarCollection;
-      });
+      calendarsCacheMock.getList = sinon.stub().returns({ events: fakeCalendars[0] });
+      this.calendarAPI.listCalendars = sinon.stub();
 
+      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId)
+        .then(calendars => {
+          expect(self.calendarAPI.listCalendars).to.not.have.been.called;
+          expect(calendarsCacheMock.getList).to.have.been.calledWith(homeId);
+          expect(calendars).to.deep.equal(fakeCalendars);
+          done();
+        })
+        .catch(err => done(err || new Error('should resolve')));
+
+      this.$rootScope.$digest();
+    });
+
+    it('should call calendarAPI.listCalendars with the correspondent options when there is no cache', function() {
       this.calendarAPI.listCalendars = sinon.spy(function() {
-        return $q.when(calendars);
+        return $q.when();
       });
 
-      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId).then(function(result) {
-        expect(result).to.be.an('array').to.have.lengthOf(calendars.length);
-        expect(result[0]).to.deep.equals(calendarCollection);
-        expect(CalendarCollectionShellFuncMock).to.have.been.calledOnce;
-        expect(CalendarCollectionShellFuncMock).to.have.been.calledWith(calendars[0]);
-        done();
-      }, done);
+      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId);
+
+      expect(self.calendarAPI.listCalendars).to.be.calledWith(homeId, {
+        withRights: true,
+        personal: true,
+        sharedPublicSubscription: true,
+        sharedDelegationStatus: 'accepted'
+      });
+    });
+
+    it('should return an array of CalendarCollectionShell and cache it when there is no cache', function(done) {
+      const calendarCollection = { id: this.calDefaultValue.get('calendarId') };
+      const calendars = [
+        {
+          _links: {
+            self: {
+              href: '/calendars/' + homeId + '/events.json'
+            }
+          },
+          'dav:name': null,
+          'caldav:description': null,
+          'calendarserver:ctag': 'http://sabre.io/ns/sync/3',
+          'apple:color': null,
+          'apple:order': null
+        }
+      ];
+
+      calendarsCacheMock.getList = sinon.stub().returns({});
+
+      CalendarCollectionShellFuncMock = sinon.stub().returns(calendarCollection);
+
+      this.calendarAPI.listCalendars = sinon.stub().returns($q.when(calendars));
+
+      this.calendarService.listPersonalAndAcceptedDelegationCalendars(homeId)
+        .then(result => {
+          expect(result).to.be.an('array').to.have.lengthOf(calendars.length);
+          expect(result[0]).to.deep.equals(calendarCollection);
+          expect(calendarsCacheMock.getList).to.have.been.calledWith(homeId);
+          expect(calendarsCacheMock.setList).to.have.been.calledWith(result);
+          expect(CalendarCollectionShellFuncMock).to.have.been.calledOnce;
+          expect(CalendarCollectionShellFuncMock).to.have.been.calledWith(calendars[0]);
+          done();
+        })
+        .catch(err => done(err || new Error('should resolve')));
 
       this.$rootScope.$digest();
     });
@@ -1097,6 +1151,45 @@ describe('The calendarService service', function() {
       }).catch(function() { done(new Error('should not happen')); });
 
       this.$rootScope.$digest();
+    });
+  });
+
+  describe('the exportCalendar function', function() {
+    it('should call the calendarAPI.exportCalendar', function() {
+      this.calendarAPI.exportCalendar = sinon.stub().returns($q.when());
+      this.calendarService.exportCalendar('calendarHomeId', 'calendarId');
+
+      expect(this.calendarAPI.exportCalendar).to.have.been.calledWith('calendarHomeId', 'calendarId');
+    });
+
+    it('should attempt to save the exported calendar into a file', function() {
+      const expectedData = 'some calendar data';
+      const expectedBlob = new Blob([expectedData], { type: CAL_EXPORT_FILE_TYPE });
+
+      this.calendarAPI.exportCalendar = sinon.stub().returns($q.when(expectedData));
+      this.calendarService.exportCalendar('calendarHomeId', 'calendarId');
+
+      this.$rootScope.$digest();
+
+      expect(fileSaveMock.saveAs).to.have.calledWith(expectedBlob, 'calendarId.ics');
+    });
+  });
+
+  describe('the generateTokenForSecretLink function', function() {
+    it('should call calendarAPI.getToken to generate a token with correct params', function() {
+      const jwtPayload = {
+        calendarHomeId: 'calendarHomeId',
+        calendarId: 'calendarId',
+        userId: 'userId'
+      };
+      const token = '123';
+
+      this.calendarAPI.generateToken = sinon.stub().returns($q.when(token));
+      this.calendarService.generateTokenForSecretLink(jwtPayload).then(function(result) {
+        expect(result).to.deep.equal(token);
+      });
+
+      expect(this.calendarAPI.generateToken).to.have.been.calledWith(jwtPayload);
     });
   });
 });

@@ -4,10 +4,10 @@
 /*global sinon:false*/
 /*global _:false*/
 
-var expect = chai.expect;
+const { expect } = chai;
 
 describe('The CalEventMessageEditionController controller', function() {
-  var self = this;
+  const self = this;
 
   beforeEach(function() {
     angular.mock.module('esn.calendar', 'linagora.esn.graceperiod');
@@ -23,7 +23,8 @@ describe('The CalEventMessageEditionController controller', function() {
       }),
       getNewEndDate: sinon.spy(function() {
         return self.end;
-      })
+      }),
+      notifyErrorWithRefreshCalendarButton: sinon.stub()
     };
 
     self.calEventServiceMock = {
@@ -175,14 +176,14 @@ describe('The CalEventMessageEditionController controller', function() {
       expect(controller.restActive).to.be.false;
     });
 
-    it('should call notificationFactory.weakError if calEventService.createEvent fail', function() {
+    it('should display an error notification if calEventService.createEvent fail', function() {
       self.calEventServiceMock.createEvent = function() {
         return self.$q.reject({});
       };
       controller.submit();
       self.$rootScope.$digest();
 
-      expect(self.notificationFactoryMock.weakError).to.have.been.called;
+      expect(self.calendarUtilsMock.notifyErrorWithRefreshCalendarButton).to.have.been.called;
     });
 
     it('should call $parent.show if creating the event success', function() {

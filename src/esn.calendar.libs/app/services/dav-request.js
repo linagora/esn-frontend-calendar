@@ -1,46 +1,38 @@
 require('../app.constants.js');
 
-(function(angular) {
-  'use strict';
+angular.module('esn.calendar.libs')
+  .factory('calDavRequest', calDavRequest);
 
-  angular.module('esn.calendar.libs')
-    .factory('calDavRequest', calDavRequest);
+function calDavRequest($http, $q, tokenAPI, calCalDAVURLService, CAL_GRACE_DELAY_IS_ACTIVE) {
+  let davServerUrlPromise = null;
 
-  function calDavRequest($http, $q, httpConfigurer, CAL_DAV_PATH, CAL_GRACE_DELAY_IS_ACTIVE) {
-    return request;
+  return (method, path, headers, body, params) => _configureRequest(method, path, headers, body, params).then($http);
 
-    ////////////
-
-    function request(method, path, headers, body, params) {
-      return _configureRequest(method, path, headers, body, params).then($http);
+  function _configureRequest(method, path, headers = {}, body, params) {
+    if (!CAL_GRACE_DELAY_IS_ACTIVE && params) {
+      delete params.graceperiod;
     }
 
-    function _ensurePathToProxy(path) {
-      return path.substring(path.indexOf('/calendars'), path.length);
-    }
+    return $q.all([tokenAPI.getNewToken(), _getDavServerUrl()])
+      .then(([{ data }, serverBaseUrl]) => {
+        const config = {
+          url: `${serverBaseUrl}${path}`,
+          headers: { ...headers, ESNToken: data.token },
+          method,
+          params
+        };
 
-    function _configureRequest(method, path, headers, body, params) {
-      var url = CAL_DAV_PATH;
+        if (body) {
+          config.data = body;
+        }
 
-      if (!CAL_GRACE_DELAY_IS_ACTIVE) {
-        params && delete params.graceperiod;
-      }
-
-      headers = headers || {};
-
-      var config = {
-        url: httpConfigurer.getUrl(url + _ensurePathToProxy(path)),
-        method: method,
-        headers: headers,
-        params: params
-      };
-
-      if (body) {
-        config.data = body;
-      }
-
-      return $q.when(config);
-    }
+        return config;
+      });
   }
 
-})(angular);
+  function _getDavServerUrl() {
+    davServerUrlPromise = davServerUrlPromise || calCalDAVURLService.getFrontendURL();
+
+    return davServerUrlPromise;
+  }
+}

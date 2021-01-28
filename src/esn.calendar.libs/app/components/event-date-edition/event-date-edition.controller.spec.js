@@ -19,7 +19,8 @@ describe('The calEventDateEditionController', function() {
         src._ambigTime = !!ambigTime;
 
         return src;
-      }
+      },
+      getTimeFormat: () => 'H:mm'
     };
 
     angular.mock.module('esn.calendar.libs', function($provide) {
@@ -121,6 +122,21 @@ describe('The calEventDateEditionController', function() {
 
       expect(ctrl.start.isSame(bindings.event.start, 'day')).to.be.true;
       expect(calEventUtils.stripTimeWithTz(ctrl.end.clone().add(1, 'days')).isSame(bindings.event.end, 'day')).to.be.true;
+    });
+
+    it('should set the startTime and EndTime correctly for the native mobile picker', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        }
+      };
+      const ctrl = initController(bindings);
+
+      expect(ctrl.startTime instanceof Date).to.be.true;
+      expect(ctrl.endTime instanceof Date).to.be.true;
+      expect(ctrl.start.hours()).to.equal(ctrl.startTime.getHours());
+      expect(ctrl.end.hours()).to.equal(ctrl.endTime.getHours());
     });
   });
 
@@ -281,6 +297,30 @@ describe('The calEventDateEditionController', function() {
         expect(bindings.event.end.isSame(ctrl.end)).to.be.true;
       }, this);
     });
+
+    it('should refresh the time inputs to the newly selected time', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        },
+        onDateChange: sinon.spy()
+      };
+      const ctrl = initController(bindings);
+
+      // Those are random fake dates that are not taken into consideration.
+      // just wanted to simulate they are going to change.
+      ctrl.startTime = new Date('2013-02-08 11:33');
+      ctrl.endTime = new Date('2013-02-08 11:40');
+      ctrl.onStartDateChange();
+
+      expect(ctrl.startTime.getHours()).to.not.equal(11);
+      expect(ctrl.endTime.getHours()).to.not.equal(11);
+      expect(ctrl.startTime.getMinutes()).to.not.equal(33);
+      expect(ctrl.endTime.getMinutes()).to.not.equal(40);
+      expect(ctrl.startTime.getHours()).to.equal(startTestMoment.hours());
+      expect(ctrl.endTime.getHours()).to.equal(endTestMoment.hours());
+    });
   });
 
   describe('The onEndDateChange function', function() {
@@ -350,6 +390,117 @@ describe('The calEventDateEditionController', function() {
       checkEventDateTimeSync(ctrl);
 
       expect(bindings.onDateChange).to.have.been.calledOnce;
+    });
+
+    it('should refresh the time inputs to the newly selected time', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        },
+        onDateChange: sinon.spy()
+      };
+      const ctrl = initController(bindings);
+
+      // Those are random fake dates that are not taken into consideration.
+      // just wanted to simulate they are going to change.
+      ctrl.startTime = new Date('2020-07-01 11:33');
+      ctrl.endTime = new Date('2020-08-02 11:40');
+      ctrl.onEndDateChange();
+
+      // check if the start date input model is changed
+      expect(ctrl.startTime.getMinutes()).to.not.equal(33);
+      expect(ctrl.startTime.getHours()).to.not.equal(11);
+      expect(ctrl.startTime.getDate()).to.not.equal(1);
+      expect(ctrl.startTime.getMonth()).to.not.equal(6);
+      expect(ctrl.startTime.getFullYear()).to.not.equal(2020);
+
+      // check if the end date input model is changed
+      expect(ctrl.endTime.getMinutes()).to.not.equal(40);
+      expect(ctrl.endTime.getHours()).to.not.equal(11);
+      expect(ctrl.endTime.getDate()).to.not.equal(2);
+      expect(ctrl.endTime.getMonth()).to.not.equal(7);
+      expect(ctrl.endTime.getFullYear()).to.not.equal(2020);
+
+      // check if the start date input model is correctly set using the event.start
+      expect(ctrl.startTime.getMinutes()).to.equal(startTestMoment.minutes());
+      expect(ctrl.startTime.getHours()).to.equal(startTestMoment.hours());
+      expect(ctrl.startTime.getDate()).to.equal(startTestMoment.date());
+      expect(ctrl.startTime.getMonth()).to.equal(startTestMoment.month());
+      expect(ctrl.startTime.getFullYear()).to.equal(startTestMoment.year());
+
+      // check if the start date input model is correctly set using the event.end
+      expect(ctrl.endTime.getMinutes()).to.equal(endTestMoment.minutes());
+      expect(ctrl.endTime.getHours()).to.equal(endTestMoment.hours());
+      expect(ctrl.endTime.getDate()).to.equal(endTestMoment.date());
+      expect(ctrl.endTime.getMonth()).to.equal(endTestMoment.month());
+      expect(ctrl.endTime.getFullYear()).to.equal(endTestMoment.year());
+    });
+  });
+
+  describe('the onStartDateTimeChange handler', function() {
+    it('should set the selected time and date from the native mobile picker into the event start date', function() {
+      const bindings = {
+        event: {
+          start: calMoment('2020-07-08 10:00:00Z').utc(),
+          end: endTestMoment.clone()
+        }
+      };
+
+      const ctrl = initController(bindings);
+
+      ctrl.startTime = new Date('2020-05-04 11:33');
+      ctrl.isMobile = true;
+      ctrl.onStartDateTimeChange();
+      expect(ctrl.start.hours()).to.equal(11);
+      expect(ctrl.start.minutes()).to.equal(33);
+      expect(ctrl.start.date()).to.equal(4);
+      // Month value is zero based
+      expect(ctrl.start.month()).to.equal(4);
+      expect(ctrl.start.year()).to.equal(2020);
+    });
+  });
+
+  describe('the onEndDateTimeChange handler', function() {
+    it('should set the selected time and date from the native mobile picker into the event end date', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        }
+      };
+
+      const ctrl = initController(bindings);
+
+      ctrl.endTime = new Date('2020-06-03 11:27');
+      ctrl.isMobile = true;
+      ctrl.onEndDateTimeChange();
+      expect(ctrl.end.hours()).to.equal(11);
+      expect(ctrl.end.minutes()).to.equal(27);
+      expect(ctrl.end.date()).to.equal(3);
+      // Month value is zero based
+      expect(ctrl.end.month()).to.equal(5);
+      expect(ctrl.end.year()).to.equal(2020);
+    });
+
+    it('should ignore the native mobile input if not on mobile', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment.clone(),
+          end: endTestMoment.clone()
+        }
+      };
+
+      const ctrl = initController(bindings);
+
+      ctrl.endTime = new Date('2020-06-03 09:27');
+      ctrl.isMobile = false;
+      ctrl.onEndDateTimeChange();
+      expect(ctrl.end.hours()).to.not.equal(9);
+      expect(ctrl.end.minutes()).to.not.equal(27);
+      expect(ctrl.end.date()).to.not.equal(3);
+      expect(ctrl.end.month()).to.not.equal(5);
+      expect(ctrl.end.year()).to.not.equal(2020);
     });
   });
 });

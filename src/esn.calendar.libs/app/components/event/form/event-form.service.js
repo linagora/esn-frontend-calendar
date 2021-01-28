@@ -28,11 +28,13 @@ function calEventFormServiceFactory($rootScope, $modal, calendarService, calUIAu
         return notificationFactory.weakInfo('Private event', 'Cannot access private event');
       }
 
-      if (!calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id) || !event.isInstance()) {
-        return _openNormalModal(calendar, event, relatedEvents);
-      }
+      calUIAuthorizationService.canModifyEvent(calendar, event, session.user._id).then(canModifyEvent => {
+        if (!canModifyEvent || !event.isInstance()) {
+          return _openNormalModal(calendar, event, relatedEvents);
+        }
 
-      _openRecurringModal(calendar, event, relatedEvents);
+        return _openRecurringModal(calendar, event, relatedEvents);
+      });
     });
   }
 

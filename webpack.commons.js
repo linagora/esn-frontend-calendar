@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 // default: we are building an SPA
@@ -55,7 +56,19 @@ module.exports = {
       template: './assets/index.pug',
       filename: './index.html'
     }),
-    new FaviconsWebpackPlugin('./src/linagora.esn.calendar/images/calendar-icon.svg')
+    new FaviconsWebpackPlugin('./src/linagora.esn.calendar/images/calendar-icon.svg'),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'node_modules', 'openpaas-auth-client', 'src', 'assets'),
+          to: 'auth'
+        },
+        {
+          from: path.resolve(__dirname, 'node_modules', 'oidc-client', 'dist', 'oidc-client.min.js'),
+          to: 'auth'
+        }
+      ]
+    })
   ],
   devServer: {
     contentBase: [path.join(__dirname, 'dist'), path.resolve(__dirname, 'node_modules', 'esn-frontend-login', 'dist')],
@@ -78,7 +91,6 @@ module.exports = {
         '/user-status/api',
         '/contact/app',
         '/contact/images',
-        '/dav/api',
         '/unifiedinbox/views',
         '/unifiedinbox/app',
         '/unifiedinbox/api',
@@ -182,7 +194,10 @@ module.exports = {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
-            loader: 'file-loader'
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]'
+            }
           }
         ]
       },

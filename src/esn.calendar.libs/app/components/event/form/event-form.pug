@@ -32,7 +32,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     placeholder="{{ 'Title' | translate }}",
                     ng-readonly="!canModifyEvent",
                     auto-focus)
-            .col-xs-12(ng-if='displayParticipationButton')
+            .col-xs-12(ng-if='displayParticipationButton && !isNew(editedEvent)')
               .partstat
                 cal-partstat-buttons(event="event", change-partstat="changeParticipation(partstat)" show-date-suggestion="toggleSuggestedEvent()")
             .col-xs-12.suggestion-container(ng-if="suggestedEvent")
@@ -45,14 +45,14 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                   span.input-group-addon
                     i.mdi.mdi-calendar-multiple
                   .fg-line.select
-                    md-input-container
-                      md-select(ng-disabled="!isNew(editedEvent) || !canModifyEvent", ng-model="selectedCalendar.uniqueId", md-container-class="cal-event-edition-select-dropdown")
+                    md-input-container(ng-click="changeBackdropZIndex()")
+                      md-select(ng-disabled="!isNew(editedEvent) || !canModifyEvent", ng-model="selectedCalendar.uniqueId", md-container-class="cal-select-dropdown")
                         md-option(ng-value="calendar.getUniqueId()" ng-repeat="calendar in calendars | filter: (isNew(editedEvent) || canModifyEvent) ? { readOnly: false } : {}")
                           cal-select-calendar-item(calendar="calendar")
             cal-event-date-edition(event="editedEvent", disabled='!canModifyEvent', use-24hour-format='use24hourFormat', on-date-change='onDateChange')
             cal-entities-autocomplete-input.cal-user-autocomplete-input(
               exclude-current-user='excludeCurrentUserFromSuggestedAttendees',
-              ng-hide='!canModifyEventAttendees',
+              ng-hide='!canModifyEvent',
               types='[CAL_ATTENDEE_OBJECT_TYPE.user, CAL_ATTENDEE_OBJECT_TYPE.group, CAL_ATTENDEE_OBJECT_TYPE.contact, CAL_ATTENDEE_OBJECT_TYPE.ldap]',
               input-type="email"
               original-entities='attendees.users',
@@ -62,8 +62,8 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
               on-entity-added='onUserAttendeesAdded',
               template='/calendar/app/components/entities-autocomplete-input/entities-autocomplete-input-freebusy-tag.html'
             )
-            cal-entities-autocomplete-input(
-              ng-hide='!canModifyEventAttendees',
+            cal-entities-autocomplete-input.cal-resource-autocomplete-input(
+              ng-hide='!canModifyEvent',
               types='[CAL_ATTENDEE_OBJECT_TYPE.resource]',
               input-type="text"
               original-entities='attendees.resources',
@@ -81,9 +81,12 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                   span.input-group-addon
                     i.mdi.mdi-map-marker
                   .fg-line
-                    input.input.location.form-control(type="text", ng-model='editedEvent.location', ng-model-options="{getterSetter: true, debounce: 500}", maxlength="{{::CAL_EVENT_FORM.location.maxlength}}", placeholder="{{ 'Location' | translate }}", ng-readonly="!canModifyEvent")
+                    .flex-vertical-centered.flex-start
+                      input.input.location.form-control(type="text", ng-model='editedEvent.location', ng-model-options="{getterSetter: true, debounce: 500}", maxlength="{{::CAL_EVENT_FORM.location.maxlength}}", placeholder="{{ 'Location' | translate }}", ng-readonly="!canModifyEvent")
+                      a.btn.btn-link(ng-if="isValidURL(editedEvent.location)", ng-href="{{::editedEvent.location}}", target="_blank", title="{{ 'Open link' | translate }}")
+                       i.mdi.mdi-open-in-new
             .col-xs-12
-              calendar-videoconference-form(event="editedEvent", can-modify-event="canModifyEvent")
+              calendar-videoconference-form(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event="canModifyEvent")
             .col-xs-12(dynamic-directive='calendar-map')
             .col-xs-12
               cal-attendee-tabs(
@@ -94,14 +97,14 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                 ng-show="selectedTab === 'resources'",
                 ng-if="attendees.resources.length > 0",
                 resources="attendees.resources",
-                can-modify-resources="::canModifyEventAttendees",
+                can-modify-resources="::canModifyEvent",
                 on-resource-removed="onResourceAttendeeRemoved(resource)")
               .message(ng-show="selectedTab === 'resources'", ng-if="attendees.resources.length === 0") {{ 'No resource' | translate }}
               cal-attendee-list(
                 ng-show="selectedTab === 'attendees'",
                 ng-if="attendees.users.length > 0",
                 attendees="attendees.users",
-                can-modify-attendees="::canModifyEventAttendees",
+                can-modify-attendees="::canModifyEvent",
                 organizer="::editedEvent.organizer",
                 on-attendee-removed="onUserAttendeeRemoved(attendee)")
             .col-xs-12(ng-if="editedEvent.organizer")
@@ -116,16 +119,18 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     span.separator -
                     span.email {{::editedEvent.organizer.email}}
             .col-xs-12
-              event-recurrence-edition(event="editedEvent", can-modify-event-recurrence='canModifyEventRecurrence')
+              event-recurrence-edition(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event-recurrence='canModifyEventRecurrence')
             .col-xs-12
-              cal-event-alarm-edition(event="editedEvent", can-modify-event= "canModifyEvent")
+              cal-event-alarm-edition(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event= "canModifyEvent")
             .col-xs-12
               .form-group
                 .input-group
                   span.input-group-addon
                     i.mdi.mdi-lock
                   .fg-line.select
-                    select.form-control(ng-disabled="!canModifyEvent", ng-model='editedEvent.class', ng-options="class.value as (class.label | esnI18n) for class in CAL_EVENT_FORM.class.values")
+                    md-input-container(ng-click="changeBackdropZIndex()")
+                      md-select(ng-disabled="!canModifyEvent", ng-model='editedEvent.class', md-container-class="cal-select-dropdown")
+                        md-option(ng-value='class.value', ng-repeat="class in CAL_EVENT_FORM.class.values") {{class.label | translate}} 
             .col-xs-12
               .form-group
                 .input-group
@@ -139,6 +144,12 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
           .delete-button(ng-if="canModifyEvent && (isInvolvedInATask(editedEvent) || !isNew(editedEvent))")
             button.btn.btn-link.btn-icon.color-danger.delete(type='button', ng-click="deleteEvent()", ng-disabled="!canPerformCall()")
               i.mdi.mdi-delete
+          .delete-for-attendee-button(ng-if="isAnAttendeeCalendar && !hideEventForm && !isNew(editedEvent)")
+            button.btn.btn-link.btn-icon.color-danger(type='button', ng-click="deteteEventForAttendee()", title="{{ 'Remove this event from my calendar' | translate }}")
+              i.mdi.mdi-delete-forever
+          .duplicate-button(ng-if="!hideEventForm && !isNew(editedEvent)")
+            button.btn.btn-link.btn-icon.color-default(type='button', ng-click="duplicateEvent()", title="{{ 'Duplicate this event' | translate }}")
+              i.mdi.mdi-library-plus
         .flex-vertical-centered.flex-end
-          button.btn.btn-link.color-default.close-button(type='button', ng-click="cancel()") {{ 'Cancel' | translate }}
+          button.btn.btn-link.color-default.close-button(type='button', ng-click="cancel()") {{ 'Close' | translate }}
           button.btn.btn-primary.save.save-button(ng-if='canModifyEvent' type='submit', ng-disabled="!canPerformCall()") {{ 'Save' | translate }}

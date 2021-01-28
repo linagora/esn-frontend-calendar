@@ -1,19 +1,15 @@
 .modal.calendar-color-picker
   .modal-dialog
     .modal-content
-      .modal-header
-        h4.modal-title {{ 'Pick a color' | translate }}
       .modal-body
-        .square-box(ng-repeat="color in colorKeys", class="{{color}}", ng-class="{selected: isSelected(color)}", ng-click="select(color)")
+        .square-box(ng-repeat="color in colorKeys", class="{{color}}", ng-class="{selected: isSelected(color)}", ng-click="select(color); set()")
           .color-box(ng-style="{'background-color': CAL_LIST_OF_COLORS[color]}")
-        .square-box-color-picker(ng-click="select(colorValue)", ng-class="{selected: isSelected(colorValue)}")
+        .square-box-color-picker(ng-click="select(colorValue); set()", ng-class="{selected: isSelected(colorValue)}")
           input.calendar-theme-color-picker(
             type="color",
             ng-model="colorValue",
             ng-change="select(colorValue)",
+            ng-blur="set()",
             ng-init="colorValue = color",
           ) 
           i.mdi.mdi-plus(ng-style="{'color': colorValue}")
-      .modal-footer
-        button.btn.btn-link(type="button", ng-click="$hide()") {{ 'Cancel' | translate }}
-        button.btn.btn-primary(type="button", ng-click="set(); $hide()") {{ 'Set' | translate }}

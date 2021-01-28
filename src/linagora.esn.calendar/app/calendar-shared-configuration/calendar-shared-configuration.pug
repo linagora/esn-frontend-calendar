@@ -29,6 +29,8 @@
                 span {{ 'Name' | translate }}
               .rights
                 span {{ 'Rights' | translate }}
+              .color
+                span {{ 'Color' | translate }}
               .actions
                 span {{ 'Add' | translate }}
             cal-calendar-shared-configuration-item(item="item", user="$ctrl.sessionUser", ng-repeat="item in $ctrl.calendarsPerUser")

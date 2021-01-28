@@ -8,10 +8,9 @@ angular.module('esn.calendar.libs')
   .service('calUIAuthorizationService', calUIAuthorizationService);
 
 function calUIAuthorizationService(
+  $q,
   calEventUtils,
-  calDefaultValue,
-  CAL_CALENDAR_PUBLIC_RIGHT,
-  CAL_CALENDAR_SHARED_RIGHT
+  calDefaultValue
 ) {
 
   return {
@@ -21,7 +20,6 @@ function calUIAuthorizationService(
     canImportCalendarIcs,
     canModifyCalendarProperties,
     canModifyEvent,
-    canModifyEventAttendees,
     canModifyEventRecurrence,
     canModifyPublicSelection,
     canShowDelegationTab
@@ -48,37 +46,18 @@ function calUIAuthorizationService(
 
   function canModifyEvent(calendar, event, userId) {
     if (!!event && calEventUtils.isNew(event)) {
-      return true;
+      return $q.when(true);
     }
 
     return _canModifyEvent(calendar, event, userId);
   }
 
-  /**
-   * @name canModifyEventAttendees
-   * @description Check user permission to modify (add/remove) attendees of an event
-   *  To modify the attendees of an event list, a user must be satisfied with one of three conditions:
-   *  - User is the owner of a calendar and the organizer of the event on the calendar
-   *  - User is the sharee of the calendar and has the write permission
-   *  - The calendar is published with write permission and the user subscribes to the calendar
-   * @param  {CalendarCollectionShell}    calendar     a shell that wraps caldav calendar component
-   * @param  {CalendarShell}              event        a shell that wraps an ical.js VEVENT component
-   * @param  {string}                     userId       id of the user who needs to be checked
-   * @return {Boolean}                    true if the user can modify attendees of the provided event, otherwise, return false.
-   */
-
-  function canModifyEventAttendees(calendar, event, userId) {
-    var canModifyAsOwnerAndOrganizer = !!event && _isOrganizerAndOwner(calendar, event, userId);
-
-    if (canModifyAsOwnerAndOrganizer) return true;
-
-    var canModifySubscribedCalendar = (calendar.isShared(userId) || calendar.isSubscription()) && calendar.isWritable(userId);
-
-    return canModifySubscribedCalendar;
-  }
-
   function canModifyEventRecurrence(calendar, event, userId) {
-    return _canModifyEvent(calendar, event, userId) && !!event && !event.isInstance();
+    if (!event || event.isInstance()) {
+      return $q.when(false);
+    }
+
+    return _canModifyEvent(calendar, event, userId);
   }
 
   function canModifyPublicSelection(calendar, userId) {
@@ -99,24 +78,18 @@ function calUIAuthorizationService(
     return !!calendar && calendar.isAdmin(userId) && !calendar.isSubscription();
   }
 
-  function _isOrganizerAndOwner(calendar, event, userId) {
-    return calendar.isOwner(userId) && calEventUtils.isOrganizer(event);
+  function _isOwnerOrganizer(calendar, event) {
+    return calendar.getOwner().then(function(owner) {
+      return calEventUtils.isOrganizer(event, owner);
+    });
   }
 
   function _canModifyEvent(calendar, event, userId) {
-    var publicRight, sharedRight, isOrganizerAndOwner;
-
     if (!!calendar && !!event) {
-      sharedRight = calendar.rights.getShareeRight(userId);
-      publicRight = calendar.rights.getPublicRight();
-      isOrganizerAndOwner = _isOrganizerAndOwner(calendar, event, userId);
-
-      return isOrganizerAndOwner ||
-        sharedRight === CAL_CALENDAR_SHARED_RIGHT.SHAREE_READ_WRITE ||
-        sharedRight === CAL_CALENDAR_SHARED_RIGHT.SHAREE_ADMIN ||
-        (!isOrganizerAndOwner && publicRight === CAL_CALENDAR_PUBLIC_RIGHT.READ_WRITE);
+      return _isOwnerOrganizer(calendar, event)
+        .then(isEventOrganiser => isEventOrganiser && calendar.isWritable(userId));
     }
 
-    return false;
+    return $q.when(false);
   }
 }

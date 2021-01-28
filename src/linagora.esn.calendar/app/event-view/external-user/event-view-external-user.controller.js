@@ -6,7 +6,7 @@ const _ = require('lodash');
   angular.module('esn.calendar')
     .controller('CalEventViewExternalUserController', CalEventViewExternalUserController);
 
-  function CalEventViewExternalUserController($http, notificationFactory, esnI18nService) {
+  function CalEventViewExternalUserController($http, $rootScope, notificationFactory, esnI18nService, CAL_EVENTS) {
     var self = this;
 
     self.$onInit = $onInit;
@@ -25,6 +25,7 @@ const _ = require('lodash');
     }
 
     function changeParticipation(partstat) {
+      $rootScope.$emit(CAL_EVENTS.UPDATE_ACTION_EXCAL, self.linksMapping[partstat]);
       self.userAsAttendee.partstat = partstat;
       self.usersAttendeesList = self.usersAttendeesList.map(function(user) {
         if (user.email === self.externalAttendee.email) {
@@ -35,9 +36,10 @@ const _ = require('lodash');
       });
 
       $http({ method: 'GET', url: self.linksMapping[partstat] }).then(function() {
-        var participation = partstat.charAt(0).toUpperCase() + partstat.slice(1).toLowerCase();
+        const participation = partstat.charAt(0).toUpperCase() + partstat.slice(1).toLowerCase();
+        const translatedParticipation = esnI18nService.translate(participation);
 
-        notificationFactory.weakInfo('Participation', esnI18nService.translate('Participation updated: %s', { participation }));
+        notificationFactory.weakInfo('Participation', esnI18nService.translate('Participation updated to:').toString().concat(translatedParticipation));
       });
     }
   }

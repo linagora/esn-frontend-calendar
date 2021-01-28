@@ -70,7 +70,7 @@ describe('The calEventFormService', function() {
         return canAccessEventDetail;
       });
       sinon.stub(calUIAuthorizationService, 'canModifyEvent', function() {
-        return canModifyEvent;
+        return $q.when(canModifyEvent);
       });
 
     });

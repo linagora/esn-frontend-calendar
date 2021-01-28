@@ -57,7 +57,8 @@ angular.module('esn.calendar', [
   'linagora.esn.videoconference',
   'linagora.esn.videoconference.calendar',
   'esn.calendar.libs',
-  'esn.api-client'
+  'esn.api-client',
+  'ngFileSaver'
 ]);
 
 require('esn-frontend-common-libs/src/frontend/js/modules/esn.router.js');
@@ -107,7 +108,6 @@ require('esn-frontend-common-libs/src/frontend/js/modules/esn.api-client.js');
 require('esn-frontend-mailto-handler/src/index.js');
 require('../../esn.calendar.libs/app/app.module.js');
 
-require('./app.config.js');
 require('./calendar-configuration/calendar-configuration-header/calendar-configuration-header.directive.js');
 require('./calendar-configuration/calendar-configuration-tab-delegation/calendar-configuration-tab-delegation.component.js');
 require('./calendar-configuration/calendar-configuration-tab-delegation/calendar-configuration-tab-delegation.controller.js');
@@ -158,10 +158,14 @@ require('./components/mini-calendar/mini-calendar.controller.js');
 require('./components/mini-calendar/mini-calendar.directive.js');
 require('./components/mini-calendar/mini-calendar.service.js');
 require('./components/modals/calendar-delete-confirmation/calendar-delete-confirmation-modal.service.js');
+require('./components/modals/calendar-secret-address-confirmation/calendar-secret-address-confirmation-modal.service.js');
 require('./components/rights/shared/calendar-shared-rights-display.component.js');
 require('./components/rights/shared/calendar-shared-rights-display.controller.js');
+require('./components/refresh-calendar-button/refresh-calendar-button.component.js');
 require('./components/show-planning-sidebar-button/show-planning-sidebar-button.component.js');
 require('./components/show-planning-sidebar-button/show-planning-sidebar-button.controller.js');
+require('./components/show-main-sidebar-button/show-main-sidebar-button.component.js');
+require('./components/show-main-sidebar-button/show-main-sidebar-button.controller.js');
 require('./core/calendar-date-indicator.directive.js');
 require('./core/calendar-view-translation.directive.js');
 require('./core/friendlify-end-date.directive.js');
@@ -196,6 +200,7 @@ require('./search/form/search-form.controller.js');
 require('./search/search.run.js');
 require('./services/websocket/listener.run.js');
 require('./services/websocket/listener.service.js');
+require('./settings/settings.service');
 require('./settings/calendars/fab/create-calendar-menu-item/create-calendar-menu-item.component.js');
 require('./settings/calendars/fab/create-calendar-menu-item/create-calendar-menu-item.run.js');
 require('./settings/calendars/fab/import-calendar-menu-item/import-calendar-menu-item.component.js');

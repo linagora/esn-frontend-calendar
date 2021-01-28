@@ -23,6 +23,10 @@ body  {
   }
 }
 
+.cal-select-dropdown {
+  z-index: 2000;
+}
+
 .event-form {
   .calendar-event-form();
 
@@ -33,6 +37,16 @@ body  {
   .input-group-addon .mdi {
     font-size: 1.9em;
     vertical-align: middle;
+  }
+
+  @media (max-width: @screen-sm-min) {
+    .modal-dialog.ui-draggable {
+      position: fixed !important;
+    }
+  }  
+
+  .modal-header, .modal-footer {
+    cursor: grabbing;
   }
 
   .modal-body {
@@ -50,6 +64,12 @@ body  {
     }
 
     .cal-user-autocomplete-input {
+      tags-input {
+        z-index: 4;
+      }
+    }
+
+    .cal-resource-autocomplete-input {
       tags-input {
         z-index: 3;
       }

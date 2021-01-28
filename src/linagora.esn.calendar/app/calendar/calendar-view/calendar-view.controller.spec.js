@@ -792,6 +792,10 @@ describe('The calendarViewController', function() {
         actualEvent.end.isSame(expectedEvent.end);
     }
 
+    function assertEqualEventAlarms(event, expectedEvent) {
+      return _.isEqual(event.alarm, expectedEvent.alarm);
+    }
+
     it('should call calendarService.checkAndUpdateEvent with the correct argument if resize', function() {
       var oldEvent = {
         path: 'aPath',
@@ -1105,6 +1109,60 @@ describe('The calendarViewController', function() {
       this.rootScope.$broadcast(this.CAL_EVENTS.MINI_CALENDAR.DATE_CHANGE, this.calMoment('2015-01-13'));
       this.scope.calendarReady(this.calendar);
       this.scope.$digest();
+    });
+
+    it('should keep the alarm when drag and dropping an event', function() {
+      this.calEventUtilsMock.stripTimeWithTz = sinon.stub().returnsArg(0);
+
+      const oldEvent = {
+        path: 'aPath',
+        etag: 'anEtag',
+        start: this.calMoment('2016-01-01 09:00'),
+        end: this.calMoment('2016-01-01 10:00'),
+        alarm: {
+          action: 'EMAIL',
+          summary: 'summary',
+          description: 'description',
+          trigger: '-PT15M',
+          attendee: 'attendee'
+        },
+        clone: function() {
+          return _.assign({}, this);
+        }
+      };
+
+      const event = {
+        path: 'aPath',
+        etag: 'anEtag',
+        start: this.calMoment('2016-01-01 09:00'),
+        end: this.calMoment('2016-01-01 10:00'),
+        clone: function() {
+          return _.assign({}, oldEvent);
+        }
+      };
+
+      const newEvent = {
+        path: 'aPath',
+        etag: 'anEtag',
+        start: this.calMoment('2016-01-01 11:00'),
+        end: this.calMoment('2016-01-01 12:00'),
+        alarm: {
+          action: 'EMAIL',
+          summary: 'summary',
+          description: 'description',
+          trigger: '-PT15M',
+          attendee: 'attendee'
+        }
+      };
+
+      const delta = this.calMoment.duration(2, 'hours');
+
+      this.controller('calendarViewController', { $scope: this.scope });
+      this.scope.eventDropAndResize(true, event, delta);
+      expect(this.calEventServiceMock.checkAndUpdateEvent).to.have.been.calledWith(sinon.match(function(actualNewEvent) {
+
+        return assertEqualEventAlarms(actualNewEvent, newEvent);
+      }), sinon.match.func, sinon.match.func, sinon.match.func);
     });
   });
 

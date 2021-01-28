@@ -16,6 +16,7 @@
         defaultTimedEventDuration: '00:30:00',
         forceEventDuration: true,
         weekNumbers: true,
+        weekNumberCalculation: 'ISO',
         firstDay: 1,
         header: {
           left: 'agendaDay, agendaWeek, month',
@@ -302,7 +303,7 @@
 
     .constant('CAL_AUTOCOMPLETE_DEFAULT_PLACEHOLDER', 'Search')
 
-    .constant('CAL_DAV_PATH', '/dav/api')
+    .constant('CAL_DAV_PATH', '')
 
     .constant('CAL_GRACE_DELAY', 10000)
 
@@ -333,6 +334,11 @@
     .constant('CAL_ALARM_MODIFY_COMPARE_KEYS', ['action', 'attendee', 'description', 'summary', 'trigger'])
 
     /**
+     * When duplicating an event, the JSON keys on the event will be copied.
+     */
+    .constant('CAL_EVENT_DUPLICATE_KEYS', ['attendees', 'title', 'start', 'end', 'location', 'description', 'xOpenpaasVideoconference', 'class'])
+
+    /**
      * see RFC 5546 https://tools.ietf.org/html/rfc5546#page-11
      */
     .constant('CAL_SIGNIFICANT_CHANGE_KEYS', ['start', 'end', 'duration', 'due', 'rrule', 'rdate', 'exdate', 'status'])
@@ -341,7 +347,7 @@
 
     .constant('CAL_MASTER_EVENT_CACHE_TTL', 300000)
 
-    .constant('CAL_SPINNER_TIMEOUT_DURATION', 2000)
+    .constant('CAL_SPINNER_TIMEOUT_DURATION', 500)
 
     .constant('CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION', 500)
 
@@ -370,7 +376,8 @@
         TOGGLE: 'calendar:mini:toggle',
         VIEW_CHANGE: 'calendar:mini:viewchange'
       },
-      MODAL: 'calendar:modal'
+      MODAL: 'calendar:modal',
+      UPDATE_ACTION_EXCAL: 'calendar:jwt:update'
     })
 
     .constant('CAL_MAX_DURATION_OF_SMALL_EVENT', {
@@ -590,5 +597,16 @@
       ALL_CALENDARS: 'allCalendars',
       MY_CALENDARS: 'myCalendars',
       SHARED_CALENDARS: 'sharedCalendars'
+    })
+
+    .constant('CAL_SIDEBAR_VISIBILITY', 'calendar:changeSidebarVisibility')
+    .constant('CAL_ACCEPT_EXPORT_HEADER', 'application/calendar')
+    .constant('CAL_EXPORT_FILE_TYPE', 'application/calendar;charset=utf-8')
+    .constant('UPDATE_CAL_SETTINGS', 'cal-settings:status:updated')
+    .constant('CAL_SETTINGS_STATUS', {
+      UPDATING: 'updating',
+      UPDATED: 'updated',
+      FAILED: 'failed'
     });
+
 })(angular);

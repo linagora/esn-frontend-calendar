@@ -17,25 +17,34 @@ describe('The calendar configuration tab delegation controller', function() {
     session,
     CalendarConfigurationTabMainController,
     calCalendarDeleteConfirmationModalService,
-    calCalDAVURLService,
+    calCalendarSecretAddressConfirmationModalService,
     calFullUiConfiguration,
     CAL_CALENDAR_PUBLIC_RIGHT,
     CAL_CALENDAR_SHARED_RIGHT,
     calendar;
+
+  let calCalDAVURLServiceMock;
 
   function initController(bindings) {
     return $controller('CalendarConfigurationTabMainController', { $scope: $scope }, bindings);
   }
 
   beforeEach(function() {
+    const responseToken = 'token';
+
     calendarService = {
       removeCalendar: sinon.spy(function() {
         return $q.when();
       }),
       unsubscribe: sinon.spy(function() {
         return $q.when();
+      }),
+      exportCalendar: sinon.spy(),
+      generateTokenForSecretLink: sinon.spy(function() {
+        return $q.when(responseToken);
       })
     };
+
     calFullUiConfiguration = {
       get: sinon.spy(function() {
         return $q.when();
@@ -53,16 +62,18 @@ describe('The calendar configuration tab delegation controller', function() {
     };
 
     calCalendarDeleteConfirmationModalService = sinon.spy();
+    calCalendarSecretAddressConfirmationModalService = sinon.spy();
 
-    calCalDAVURLService = {
+    calCalDAVURLServiceMock = {
       getCalendarURL: sinon.stub()
     };
 
     angular.mock.module('esn.calendar', function($provide) {
       $provide.value('calendarService', calendarService);
-      $provide.value('calCalDAVURLService', calCalDAVURLService);
       $provide.value('calCalendarDeleteConfirmationModalService', calCalendarDeleteConfirmationModalService);
       $provide.value('calFullUiConfiguration', calFullUiConfiguration);
+      $provide.value('calCalendarSecretAddressConfirmationModalService', calCalendarSecretAddressConfirmationModalService);
+      $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
     });
 
     angular.mock.inject(function(_$rootScope_, _$controller_, _$state_, _$q_, _session_, _userUtils_, _CalCalendarRightsUtilsService_, _CAL_CALENDAR_PUBLIC_RIGHT_, _CAL_CALENDAR_SHARED_RIGHT_, _calUIAuthorizationService_) {
@@ -81,7 +92,7 @@ describe('The calendar configuration tab delegation controller', function() {
   });
 
   beforeEach(function() {
-    calCalDAVURLService.getCalendarURL.returns($q.when('http://localhost:8080'));
+    calCalDAVURLServiceMock.getCalendarURL.returns($q.when('/some/url'));
     CalendarConfigurationTabMainController = initController();
     sinon.spy($state, 'go');
   });
@@ -109,7 +120,41 @@ describe('The calendar configuration tab delegation controller', function() {
     });
   });
 
-  describe('the calendarIcsUrl', function() {
+  describe('the caldavurl', function() {
+    beforeEach(function() {
+      calendar = {
+        isShared: sinon.stub().returns(false),
+        isAdmin: sinon.stub().returns(false),
+        isOwner: sinon.stub().returns(false),
+        isSubscription: sinon.stub().returns(false),
+        isReadable: sinon.stub().returns(true),
+        id: 'id',
+        calendarHomeId: 'homeId'
+      };
+    });
+
+    it('should not be initialized if it\'s a new calendar', function() {
+      CalendarConfigurationTabMainController.calendar = calendar;
+      CalendarConfigurationTabMainController.newCalendar = true;
+
+      CalendarConfigurationTabMainController.$onInit();
+      $rootScope.$apply();
+
+      expect(CalendarConfigurationTabMainController.caldavurl).to.be.undefined;
+    });
+
+    it('should be initialized in case of an already created calendar', function() {
+      CalendarConfigurationTabMainController.calendar = calendar;
+      CalendarConfigurationTabMainController.newCalendar = false;
+
+      CalendarConfigurationTabMainController.$onInit();
+      $rootScope.$apply();
+
+      expect(CalendarConfigurationTabMainController.caldavurl).to.eq('/some/url');
+    });
+  });
+
+  describe('the calendarToExport', function() {
     beforeEach(function() {
       calendar = {
         isShared: sinon.stub().returns(false),
@@ -128,15 +173,19 @@ describe('The calendar configuration tab delegation controller', function() {
 
       CalendarConfigurationTabMainController.$onInit();
 
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.be.undefined;
+      expect(CalendarConfigurationTabMainController.calendarToExport).to.be.undefined;
     });
 
     it('should be initialized with calendar path if not subscription', function() {
       CalendarConfigurationTabMainController.calendar = calendar;
 
       CalendarConfigurationTabMainController.$onInit();
+      $rootScope.$apply();
 
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('/dav/api/calendars/homeId/id?export');
+      const { calendarHomeId, id } = CalendarConfigurationTabMainController.calendarToExport;
+
+      expect(calendarHomeId).to.eq('homeId');
+      expect(id).to.eq('id');
     });
 
     it('should be initialized with calendar source path if subscription', function() {
@@ -151,44 +200,24 @@ describe('The calendar configuration tab delegation controller', function() {
         source: {
           id: 'sourceId',
           calendarHomeId: 'sourceHomeId'
-        }
+        },
+        rights: {
+          getShareeRight: sinon.spy()
+        },
+        getOwner: () => ({
+          preferredEmail: 'preferredEmail'
+        })
       };
 
       CalendarConfigurationTabMainController.calendar = calendar;
 
       CalendarConfigurationTabMainController.$onInit();
+      $rootScope.$apply();
 
-      expect(CalendarConfigurationTabMainController.calendarIcsUrl).to.equals('/dav/api/calendars/sourceHomeId/sourceId?export');
-    });
-  });
+      const { calendarHomeId, id } = CalendarConfigurationTabMainController.calendarToExport;
 
-  describe('the openDeleteConfirmationDialog function', function() {
-    it('should call the modal confirmation service', function() {
-      CalendarConfigurationTabMainController.openDeleteConfirmationDialog();
-
-      expect(calCalendarDeleteConfirmationModalService).to.have.been.calledWith(CalendarConfigurationTabMainController.calendar, CalendarConfigurationTabMainController.removeCalendar);
-    });
-  });
-
-  describe('the removeCalendar function', function() {
-    it('should call calendarService.removeCalendar before $state to go back on the main view when deleting', function() {
-      CalendarConfigurationTabMainController.calendar = {
-        id: '123456789'
-      };
-      CalendarConfigurationTabMainController.calendarHomeId = '12345';
-
-      CalendarConfigurationTabMainController.removeCalendar();
-
-      expect($state.go).to.have.not.been.called;
-
-      $rootScope.$digest();
-
-      expect(calendarService.removeCalendar).to.have.been.calledWith(
-        CalendarConfigurationTabMainController.calendarHomeId,
-        CalendarConfigurationTabMainController.calendar
-      );
-
-      expect($state.go).to.have.been.calledWith('calendar.main');
+      expect(calendarHomeId).to.eq('sourceHomeId');
+      expect(id).to.eq('sourceId');
     });
   });
 
@@ -214,41 +243,51 @@ describe('The calendar configuration tab delegation controller', function() {
     });
   });
 
-  describe('the canDeleteCalendar function', function() {
-    var canDeleteCalendarResult;
-
+  describe('the openGetSecretLinkConfirmationDialog function ', () => {
     beforeEach(function() {
-      CalendarConfigurationTabMainController.calendar = calendar;
-
-      sinon.stub(calUIAuthorizationService, 'canDeleteCalendar', function() {
-        return canDeleteCalendarResult;
-      });
+      CalendarConfigurationTabMainController.calendar = {
+        isShared: sinon.stub().returns(false),
+        isAdmin: sinon.stub().returns(false),
+        isOwner: sinon.stub().returns(false),
+        isSubscription: sinon.stub().returns(true),
+        isReadable: sinon.stub().returns(true),
+        id: 'id',
+        calendarHomeId: 'homeId',
+        source: {
+          id: 'sourceId',
+          calendarHomeId: 'sourceHomeId'
+        },
+        rights: {
+          getShareeRight: sinon.spy()
+        },
+        getOwner: () => ({
+          preferredEmail: 'preferredEmail'
+        })
+      };
     });
 
-    it('should return true if newCalendar=false and calUIAuthorizationService.canDeleteCalendar= true', function() {
-      CalendarConfigurationTabMainController.newCalendar = false;
-      canDeleteCalendarResult = true;
-
+    it('should open the confirmation modalto create secret link with token to download ics of the calendar', function(done) {
       CalendarConfigurationTabMainController.$onInit();
+      CalendarConfigurationTabMainController.openGetSecretLinkConfirmationDialog();
 
-      expect(CalendarConfigurationTabMainController.canDeleteCalendar).to.be.true;
-    });
+      expect(calCalendarSecretAddressConfirmationModalService).to.have.been.calledOnce;
+      expect(calCalendarSecretAddressConfirmationModalService.getCall(0).args[0]).to.equal(CalendarConfigurationTabMainController.calendar);
 
-    it('should return false if newCalendar=false and calUIAuthorizationService.canDeleteCalendar= false', function() {
-      CalendarConfigurationTabMainController.newCalendar = false;
-      canDeleteCalendarResult = false;
+      const createSecretLinkWithToken = calCalendarSecretAddressConfirmationModalService.getCall(0).args[1];
 
-      CalendarConfigurationTabMainController.$onInit();
+      createSecretLinkWithToken();
 
-      expect(CalendarConfigurationTabMainController.canDeleteCalendar).to.be.false;
-    });
+      $rootScope.$digest();
 
-    it('should return false if newCalendar=true', function() {
-      CalendarConfigurationTabMainController.newCalendar = true;
+      const jwtPayload = {
+        calendarHomeId: CalendarConfigurationTabMainController.calendarHomeId,
+        calendarId: CalendarConfigurationTabMainController.calendar.id,
+        userId: session.user._id
+      };
 
-      CalendarConfigurationTabMainController.$onInit();
-
-      expect(CalendarConfigurationTabMainController.canDeleteCalendar).to.be.false;
+      expect(calendarService.generateTokenForSecretLink).to.have.been.calledWith(jwtPayload);
+      expect(CalendarConfigurationTabMainController.calendarSecretLink).to.equal('http://localhost:9876/calendar/api/calendars/secretLink?jwt=token');
+      done();
     });
   });
 
@@ -281,7 +320,8 @@ describe('The calendar configuration tab delegation controller', function() {
         isAdmin: sinon.stub().returns(true),
         isShared: sinon.stub().returns(false),
         isSubscription: sinon.stub().returns(false),
-        isReadable: sinon.stub().returns(true)
+        isReadable: sinon.stub().returns(true),
+        isOwner: sinon.spy()
       };
 
       CalendarConfigurationTabMainController.$onInit();
@@ -352,7 +392,8 @@ describe('The calendar configuration tab delegation controller', function() {
         },
         getOwner: sinon.spy(function() {
           return getOwnerResult;
-        })
+        }),
+        isOwner: sinon.spy()
       };
     });
 
@@ -396,7 +437,8 @@ describe('The calendar configuration tab delegation controller', function() {
         },
         getOwner: sinon.spy(function() {
           return getOwnerResult;
-        })
+        }),
+        isOwner: sinon.spy()
       };
 
       CalendarConfigurationTabMainController.$onInit();
@@ -460,6 +502,38 @@ describe('The calendar configuration tab delegation controller', function() {
       expect(userUtils.displayNameOf).to.have.been.called;
       expect(CalendarConfigurationTabMainController.sharedCalendarOwner).to.equal(getOwnerResult);
       expect(CalendarConfigurationTabMainController.displayNameOfSharedCalendarOwner).to.equal(userUtilsResult);
+    });
+  });
+
+  describe('the exportCalendar function', () => {
+    beforeEach(function() {
+      CalendarConfigurationTabMainController.calendar = {
+        isShared: sinon.stub().returns(false),
+        isAdmin: sinon.stub().returns(false),
+        isOwner: sinon.stub().returns(false),
+        isSubscription: sinon.stub().returns(true),
+        isReadable: sinon.stub().returns(true),
+        id: 'id',
+        calendarHomeId: 'homeId',
+        source: {
+          id: 'sourceId',
+          calendarHomeId: 'sourceHomeId'
+        },
+        rights: {
+          getShareeRight: sinon.spy()
+        },
+        getOwner: () => ({
+          preferredEmail: 'preferredEmail'
+        })
+      };
+    });
+
+    it('should call the calendarService.exportCalendar method', () => {
+      CalendarConfigurationTabMainController.$onInit();
+      CalendarConfigurationTabMainController.exportCalendar();
+      $rootScope.$digest();
+
+      expect(calendarService.exportCalendar).to.have.been.calledWith('sourceHomeId', 'sourceId');
     });
   });
 });

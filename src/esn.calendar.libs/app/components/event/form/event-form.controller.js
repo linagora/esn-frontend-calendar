@@ -1,3 +1,5 @@
+'use strict';
+
 const _ = require('lodash');
 
 require('../../freebusy/confirmation-modal/event-freebusy-confirmation-modal.service.js');
@@ -13,8 +15,8 @@ require('../../freebusy/freebusy.service.js');
 require('../../../services/partstat-update-notification.service.js');
 require('../../../app.constants.js');
 require('../../freebusy/freebusy.constants.js');
-
-'use strict';
+require('../../../services/shells/calendar-shell.js');
+require('../../../services/event-duplicate.service.js');
 
 angular.module('esn.calendar.libs')
   .controller('CalEventFormController', CalEventFormController);
@@ -32,10 +34,12 @@ function CalEventFormController(
   calEventService,
   calAttendeeService,
   calEventUtils,
+  CalendarShell,
   notificationFactory,
   calOpenEventForm,
   calUIAuthorizationService,
   calAttendeesDenormalizerService,
+  calEventDuplicateService,
   esnDatetimeService,
   session,
   calPathBuilder,
@@ -43,13 +47,16 @@ function CalEventFormController(
   usSpinnerService,
   calFreebusyService,
   calPartstatUpdateNotificationService,
+  VideoConfConfigurationService,
+  uuid4,
   CAL_ATTENDEE_OBJECT_TYPE,
   CAL_RELATED_EVENT_TYPES,
   CAL_EVENTS,
   CAL_EVENT_FORM,
   CAL_ICAL,
   CAL_FREEBUSY,
-  CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION
+  CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION,
+  CAL_EVENT_DUPLICATE_KEYS
 ) {
   var initialUserAttendeesRemoved = [];
   var initialResourceAttendeesRemoved = [];
@@ -65,6 +72,8 @@ function CalEventFormController(
   $scope.modifyEvent = modifyEvent;
   $scope.deleteEvent = deleteEvent;
   $scope.createEvent = createEvent;
+  $scope.duplicateEvent = duplicateEvent;
+  $scope.deteteEventForAttendee = deteteEventForAttendee;
   $scope.isNew = $scope.event.fetchFullEvent ? function() { return false; } : calEventUtils.isNew;
   $scope.isInvolvedInATask = calEventUtils.isInvolvedInATask;
   $scope.updateAlarm = updateAlarm;
@@ -79,7 +88,9 @@ function CalEventFormController(
   $scope.toggleSuggestedEvent = toggleSuggestedEvent;
   $scope.submitSuggestion = submitSuggestion;
   $scope.onDateChange = onDateChange;
+  $scope.changeBackdropZIndex = changeBackdropZIndex;
   $scope.hideEventForm = true;
+  $scope.isValidURL = isValidURL;
 
   // Initialize the scope of the form. It creates a scope.editedEvent which allows us to
   // rollback to scope.event in case of a Cancel.
@@ -87,6 +98,7 @@ function CalEventFormController(
 
   function cancel() {
     calEventUtils.resetStoredEvents();
+    calEventDuplicateService.reset();
     _hideModal();
   }
 
@@ -120,7 +132,7 @@ function CalEventFormController(
   }
 
   function _displayNotification(notificationFactoryFunction, title, content, z_index) {
-    notificationFactoryFunction(title, content, z_index);
+    return notificationFactoryFunction(title, content, z_index);
   }
 
   function initFormData() {
@@ -148,11 +160,27 @@ function CalEventFormController(
       $scope.canSuggestTime = calEventUtils.canSuggestChanges($scope.editedEvent, session.user);
       $scope.inputSuggestions = _.filter($scope.relatedEvents, { type: CAL_RELATED_EVENT_TYPES.COUNTER });
 
+      if ($scope.event.alarm && $scope.event.alarm.attendee && $scope.event.alarm.trigger) {
+        $scope.editedEvent.alarm = $scope.event.alarm;
+      }
+
       calendarService.listPersonalAndAcceptedDelegationCalendars($scope.calendarHomeId)
         .then(function(calendars) {
+          // Those are the calendars the user can create events within.
           $scope.calendars = calendars;
 
-          return calEventUtils.isNew($scope.editedEvent) ? _.find(calendars, 'selected') : _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
+          if (calEventUtils.isNew($scope.editedEvent)) {
+            // This only has a value right after duplicating an event.
+            const eventSourceCalendarId = calEventDuplicateService.getDuplicateEventSource();
+            const targetCalendar = calendars.find(({ id }) => id === eventSourceCalendarId);
+
+            // Check if the event is duplicated and the user owns the source calendar or has delegated write permission
+            return eventSourceCalendarId && targetCalendar && targetCalendar.isWritable(session.user._id) ?
+              targetCalendar :
+              _.find(calendars, 'selected');
+          }
+
+          return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
         })
         .then(function(selectedCalendar) {
           $scope.selectedCalendar = { uniqueId: selectedCalendar.getUniqueId() };
@@ -169,18 +197,23 @@ function CalEventFormController(
             $scope.editedEvent.class = CAL_EVENT_FORM.class.default;
           }
 
-          $scope.canModifyEvent = _canModifyEvent();
           $scope.displayParticipationButton = displayParticipationButton();
           $scope.displayCalMailToAttendeesButton = displayCalMailToAttendeesButton;
-          $scope.canModifyEventAttendees = calUIAuthorizationService.canModifyEventAttendees(selectedCalendar, $scope.editedEvent, session.user._id);
-          $scope.canModifyEventRecurrence = calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id);
-          $scope.excludeCurrentUserFromSuggestedAttendees = excludeCurrentUser();
-          $scope.$watch('selectedCalendar.uniqueId', onCalendarUpdated);
+          $scope.$watch('selectedCalendar.uniqueId', setExcludeCurrentUser);
+
+          return $q.all([
+            _canModifyEvent(),
+            calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id)
+          ]);
+        }).then(function(uiAuthorizations) {
+          $scope.canModifyEvent = uiAuthorizations[0];
+          $scope.canModifyEventRecurrence = uiAuthorizations[1];
+          $scope.isAnAttendeeCalendar = calEventUtils.canSuggestChanges($scope.editedEvent, session.user) && !$scope.canModifyEvent;
+          setExcludeCurrentUser();
 
           return calAttendeeService.splitAttendeesFromTypeWithResourceDetails($scope.editedEvent.attendees);
         }).then(function(attendeesWithResourceDetails) {
           $scope.attendees = _.assign({}, $scope.attendees, attendeesWithResourceDetails);
-        }).then(function() {
           calFreebusyService.setBulkFreeBusyStatus(getAttendees(), $scope.event.start, $scope.event.end, [$scope.event]);
           $timeout.cancel(spinnerTimeoutPromise);
           usSpinnerService.stop(spinnerKey);
@@ -189,12 +222,19 @@ function CalEventFormController(
     }
   }
 
-  function onCalendarUpdated() {
-    $scope.excludeCurrentUserFromSuggestedAttendees = excludeCurrentUser();
+  function isValidURL(locationString) {
+    if (!locationString) {
+      return;
+    }
+
+    // eslint-disable-next-line no-useless-escape
+    return locationString.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) !== null;
   }
 
-  function excludeCurrentUser() {
-    return _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).isOwner(session.user._id) ? true : !_canModifyEvent();
+  function setExcludeCurrentUser() {
+    return _canModifyEvent().then(function(canModifyEvent) {
+      $scope.excludeCurrentUserFromSuggestedAttendees = _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).isOwner(session.user._id) ? true : !canModifyEvent;
+    });
   }
 
   function setOrganizer() {
@@ -256,6 +296,7 @@ function CalEventFormController(
     if (selectedCalendar) {
       $scope.restActive = true;
       _hideModal();
+
       $scope.editedEvent.attendees = getAttendees();
       setOrganizer()
         .then(cacheAttendees)
@@ -275,19 +316,47 @@ function CalEventFormController(
     }
   }
 
-  function deleteEvent() {
+  function deleteEvent(shouldRemoveAllInstances = false) {
     $scope.restActive = true;
     _hideModal();
-    calEventService.removeEvent($scope.event.path, $scope.event, $scope.event.etag).finally(function() {
+
+    calEventService.removeEvent($scope.event.path, $scope.event, $scope.event.etag, shouldRemoveAllInstances).finally(function() {
       $scope.restActive = false;
     });
+  }
+
+  function _changeOrganizerParticipation(status) {
+    const eventPayload = $scope.event.clone();
+
+    eventPayload.setOrganizerPartStat(status);
+    $scope.restActive = true;
+
+    calEventService.changeParticipation(eventPayload.path, eventPayload, [eventPayload.organizer.email], status, eventPayload.etag)
+      .then(({ etag }) => {
+        if (!etag) {
+          return notificationFactory.weakError('', 'Event participation modification failed');
+        }
+
+        calPartstatUpdateNotificationService(status);
+
+        // Set the new Etag to avoid 412 precondition failed
+        $scope.event.etag = etag;
+        $scope.editedEvent.etag = etag;
+      })
+      .catch(err => {
+        $log.error('Organizer event participation update failed', err);
+        notificationFactory.weakError('Event participation modification failed', 'Please refresh your calendar');
+      })
+      .finally(() => {
+        $scope.restActive = false;
+      });
   }
 
   function _changeParticipationAsAttendee(event) {
     var partstat = $scope.calendarOwnerAsAttendee.partstat;
 
     $scope.restActive = true;
-    calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, session.user.emails, partstat).then(function(response) {
+    calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, [$scope.calendarOwnerAsAttendee.email], partstat).then(function(response) {
       if (!response) {
         return;
       }
@@ -389,6 +458,7 @@ function CalEventFormController(
       if (status !== $scope.editedEvent.getOrganizerPartStat()) {
         $scope.editedEvent.setOrganizerPartStat(status);
         $scope.$broadcast(CAL_EVENTS.EVENT_ATTENDEES_UPDATE);
+        _changeOrganizerParticipation(status);
       }
     } else if ($scope.editedEvent.isInstance()) {
       $modal({
@@ -458,6 +528,8 @@ function CalEventFormController(
   }
 
   function onEventCreateUpdateResponse(success) {
+    calEventDuplicateService.reset();
+
     if (success) {
       calEventUtils.resetStoredEvents();
 
@@ -553,6 +625,100 @@ function CalEventFormController(
   function _getCalendarByUniqueId(uniqueId) {
     return _.find($scope.calendars, function(calendar) {
       return calendar.getUniqueId() === uniqueId;
+    });
+  }
+
+  function duplicateEvent() {
+    // Build an event copy based on the currently edited event.
+    const duplicate = _generateEditedEventCopy();
+
+    // Set the alarm if there was any
+    // alarm can't be set with CalendarShell.fromIncompleteShell because the event needs to be created or cloned first.
+    if ($scope.editedEvent.alarm) {
+      duplicate.alarm = $scope.editedEvent.alarm;
+    }
+
+    // Reset the partstat from the original event.
+    _resetAttendeesParticipation(duplicate);
+
+    // Check and set a new video conference link if needed.
+    if (duplicate && duplicate.xOpenpaasVideoconference) {
+      // Wait for the VideoConfConfigurationService to generate a link.
+      return _generateVideoConferenceUrl().then(url => {
+        duplicate.xOpenpaasVideoconference = url;
+        _showDuplicateEventForm(duplicate);
+      });
+    }
+
+    _showDuplicateEventForm(duplicate);
+  }
+
+  function _showDuplicateEventForm(event) {
+    if (!event) return;
+    // Close the currently opened event form.
+    $scope.cancel();
+    // Open the duplicate event creation form after a short delay ( let the first modal finish hiding ).
+    $timeout(function() {
+      calEventDuplicateService.setDuplicateEventSource($scope.event.calendarId);
+      calOpenEventForm(session.user._id, event);
+    }, CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION);
+  }
+
+  function _generateEditedEventCopy() {
+    const details = CAL_EVENT_DUPLICATE_KEYS
+      .reduce((details, key) => ($scope.editedEvent[key] ? { [key]: $scope.editedEvent[key], ...details } : details), {});
+
+    return CalendarShell.fromIncompleteShell(details);
+  }
+
+  function _generateVideoConferenceUrl() {
+
+    return VideoConfConfigurationService.getOpenPaasVideoconferenceAppUrl()
+      .then(openPaasVideoconferenceAppUrl => `${openPaasVideoconferenceAppUrl}${uuid4.generate()}`)
+      .catch(err => {
+        $log.error('Cannot generate a new video conference URL', err);
+        _displayNotification(notificationFactory.weakError, null, 'Failed to create a new video conference room');
+      });
+  }
+
+  function _resetAttendeesParticipation(event) {
+    if (!event || !event.attendees) return;
+
+    event.attendees = event.attendees.map(attendee => {
+      // Ignore resources
+      if (attendee && attendee.cutype !== CAL_ICAL.cutype.resource) {
+        return { ...attendee, partstat: CAL_ICAL.partstat.needsaction };
+      }
+
+      return attendee;
+    });
+  }
+
+  function changeBackdropZIndex() {
+    setTimeout(() => {
+      $('md-backdrop').css({ 'z-index': '1999' });
+    }, 0);
+  }
+
+  function deteteEventForAttendee() {
+    if (!$scope.editedEvent.isInstance()) return deleteEvent();
+
+    $modal({
+      template: require('./modals/delete-instance-or-series-modal.pug'),
+      controller: /* @ngInject */ function($scope) {
+        $scope.editChoice = 'this';
+
+        $scope.submit = function() {
+          $scope.$hide();
+
+          ($scope.editChoice === 'this' ? deleteEvent : deleteAllInstances)();
+        };
+
+        function deleteAllInstances() {
+          deleteEvent(true);
+        }
+      },
+      placement: 'center'
     });
   }
 }

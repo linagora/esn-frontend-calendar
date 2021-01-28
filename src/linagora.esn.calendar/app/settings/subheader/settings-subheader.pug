@@ -1,7 +1,7 @@
 extends /modules/subheader/responsive-subheader.pug
 
 block left
-  button.btn.btn-link(ui-sref="calendar.main")
-    .flex-vertical-centered.flex-space-between
-      i.mdi.mdi-close
-      .hidden-xs.vertical-centered {{ 'Cancel' | translate }}
+  button.btn.btn-link.btn-icon(ui-sref="calendar.main")
+    i.mdi.mdi-arrow-left
+  .title
+    | {{ 'Manage calendars' | translate }}

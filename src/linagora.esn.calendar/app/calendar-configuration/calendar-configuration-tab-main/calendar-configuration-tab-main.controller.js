@@ -14,20 +14,18 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
     userUtils,
     CalCalendarRightsUtilsService,
     CAL_CALENDAR_PUBLIC_RIGHT,
-    CAL_CALENDAR_SHARED_RIGHT,
     CAL_CALENDAR_TYPE,
-    CAL_DAV_PATH,
-    calPathBuilder,
     calUIAuthorizationService,
     calCalendarDeleteConfirmationModalService,
-    calCalDAVURLService
+    calCalDAVURLService,
+    calCalendarSecretAddressConfirmationModalService
   ) {
     var self = this;
 
     self.$onInit = $onInit;
-    self.openDeleteConfirmationDialog = openDeleteConfirmationDialog;
-    self.removeCalendar = removeCalendar;
     self.unsubscribe = unsubscribe;
+    self.openGetSecretLinkConfirmationDialog = openGetSecretLinkConfirmationDialog;
+    self.exportCalendar = exportCalendar;
 
     ///////////
     function $onInit() {
@@ -49,16 +47,16 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       !self.newCalendar && performExternalCalendarOperations(isExternalCalendar());
       self.canModifyPublicSelection = _canModifyPublicSelection();
       self.canExportIcs = canExportIcs();
-      self.canDeleteCalendar = canDeleteCalendar();
       self.isResource = self.calendar.type === CAL_CALENDAR_TYPE.RESOURCE;
+      self.canGenerateSecretLink = canGenerateSecretLink();
 
       if (!self.newCalendar && self.calendar) {
-        calCalDAVURLService.getCalendarURL(self.calendar).then(function(url) {
+        // Used in the template to show the calendar DAV URL.
+        calCalDAVURLService.getCalendarURL(self.calendar).then(url => {
           self.caldavurl = url;
         });
-        var calendarToExport = self.calendar.isSubscription() ? self.calendar.source : self.calendar;
 
-        self.calendarIcsUrl = CAL_DAV_PATH + calPathBuilder.forCalendarPath(calendarToExport.calendarHomeId, calendarToExport.id) + '?export';
+        self.calendarToExport = self.calendar.isSubscription() ? self.calendar.source : self.calendar;
       }
     }
 
@@ -66,24 +64,10 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       return self.calendar.isShared(session.user._id) || self.calendar.isSubscription();
     }
 
-    function openDeleteConfirmationDialog() {
-      calCalendarDeleteConfirmationModalService(self.calendar, removeCalendar);
-    }
-
     function unsubscribe() {
       calendarService.unsubscribe(self.calendarHomeId, self.calendar).then(function() {
         $state.go('calendar.main');
       });
-    }
-
-    function removeCalendar() {
-      calendarService.removeCalendar(self.calendarHomeId, self.calendar).then(function() {
-        $state.go('calendar.main');
-      });
-    }
-
-    function canDeleteCalendar() {
-      return !self.newCalendar && calUIAuthorizationService.canDeleteCalendar(self.calendar, session.user._id);
     }
 
     function canExportIcs() {
@@ -111,6 +95,31 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
           self.displayNameOfSharedCalendarOwner = userUtils.displayNameOf(sharedCalendarOwner);
         })
         .catch(angular.noop);
+    }
+
+    function openGetSecretLinkConfirmationDialog() {
+      calCalendarSecretAddressConfirmationModalService(self.calendar, createSecretLinkWithToken);
+    }
+
+    function createSecretLinkWithToken() {
+      const jwtPayload = {
+        calendarHomeId: self.calendarHomeId,
+        calendarId: self.calendar.id,
+        userId: session.user._id
+      };
+
+      calendarService.generateTokenForSecretLink(jwtPayload)
+        .then(token => {
+          self.calendarSecretLink = `${window.location.origin}/calendar/api/calendars/secretLink?jwt=${token}`;
+        });
+    }
+
+    function exportCalendar() {
+      calendarService.exportCalendar(self.calendarToExport.calendarHomeId, self.calendarToExport.id);
+    }
+
+    function canGenerateSecretLink() {
+      return !self.newCalendar && calUIAuthorizationService.canModifyCalendarProperties(self.calendar, session.user._id);
     }
   }
 })(angular);

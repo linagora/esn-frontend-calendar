@@ -76,4 +76,12 @@ describe('The cal-event-form Angular module directives', function() {
 
     expect(event.defaultPrevented).to.be.false;
   });
+
+  it('.dialog box elements should have correct draggable class', function() {
+    var element = this.initDirective(this.$scope);
+
+    expect(element.children().hasClass('ui-draggable')).to.be.true;
+    expect(element.find('.modal-body').hasClass('ui-draggable-handle')).to.be.false;
+    expect(element.find('.modal-header,.modal-footer').hasClass('ui-draggable-handle')).to.be.true;
+  });
 });

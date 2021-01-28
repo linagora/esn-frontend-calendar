@@ -1,5 +1,8 @@
 extends /modules/subheader/responsive-subheader.pug
 
+block farLeft
+  cal-show-main-sidebar-button
+
 block left
   .calendar-sub-header.hidden-md
     .calendar-controls
@@ -11,6 +14,7 @@ block left
 block right
   .calendar-sub-header.flex-vertical-centered
     .calendar-controls
+      cal-refresh-calendar-button
       button.btn.btn-link.btn-icon.hidden-md(calendar-view-translation='prev')
         i.mdi.mdi-chevron-left
       a.hidden-md(cal-toggle-today)

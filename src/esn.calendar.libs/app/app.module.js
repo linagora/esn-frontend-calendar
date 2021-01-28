@@ -47,7 +47,8 @@ angular.module('esn.calendar.libs', [
   'esn.scroll',
   'ngTagsInput',
   'esn.member',
-  'mp.autoFocus'
+  'mp.autoFocus',
+  'linagora.esn.videoconference'
 ]);
 
 require('esn-frontend-common-libs/src/frontend/js/modules/esn.router.js');
@@ -91,6 +92,7 @@ require('esn-frontend-common-libs/src/frontend/js/modules/widget-helper.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/onscroll/on-scroll.module.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/localstorage.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/scroll.js');
+require('esn-frontend-videoconference-calendar/src/linagora.esn.videoconference/app/videoconference.module.js');
 
 require('../../esn.resource.libs/app/app.module.js');
 
@@ -137,6 +139,7 @@ require('./services/grace-period-response-handler.js');
 require('./services/http-response-handler.js');
 require('./services/ical.js');
 require('./services/master-event-cache.js');
+require('./services/partstat-jwt.service.js');
 require('./services/partstat-update-notification.service.js');
 require('./services/path-builder.js');
 require('./services/path-parser.service.js');
@@ -148,6 +151,9 @@ require('./services/shells/valarm-shell.js');
 require('./services/shells/vfreebusy-shell.js');
 require('./services/timezone.js');
 require('./services/user-and-external-calendars.service.js');
+require('./services/sidebar-visibility.service.js');
+require('./services/event-duplicate.service.js');
+require('./services/moment-date.service.js');
 require('./core/date-to-moment.directive.js');
 require('./core/auto-size-and-update.directive.js');
 require('./components/freebusy/confirmation-modal/event-freebusy-confirmation-modal.service.js');
@@ -199,6 +205,9 @@ require('./components/partstat/icon/partstat-icon.controller.js');
 require('./components/event-recurrence-edition/event-recurrence-edition.js');
 require('./components/event-alarm-edition/event-alarm-edition.component.js');
 require('./components/event-alarm-edition/event-alarm-edition.controller.js');
+require('./components/time-select/time-select.component');
+require('./components/time-select/time-select.controller');
+require('./components/time-select/time-select-scroll.directive');
+require('./components/time-select/time-select-menu-close.directive');
 require('./app.run.js');
 require('./app.config.js');
-

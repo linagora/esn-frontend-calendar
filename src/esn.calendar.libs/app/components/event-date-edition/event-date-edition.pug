@@ -16,20 +16,34 @@
               date-format="{{::ctrl.dateFormat}}",
               autoclose="1",
               start-week="1",
-              custom-attributes="{'cal-date-to-moment': 'cal-date-to-moment'}")
+              custom-attributes="{'cal-date-to-moment': 'cal-date-to-moment'}"
+              ng-if="!ctrl.isMobile"
+            )
+            input.input.form-control(
+              type="date",
+              ng-model="ctrl.startTime"
+              ng-disabled="ctrl.disabled",
+              ng-change="ctrl.onStartDateTimeChange()"
+              ng-if="ctrl.isMobile"
+            )
           .form-group
             .fg-line(ng-if='!ctrl.full24HoursDay')
-              input.input.form-control(type="text",
-                size="10",
-                ng-model="ctrl.start",
-                data-autoclose="0",
-                placeholder="{{ 'Time' | translate }}",
+              time-select(
+                date="ctrl.start",
+                on-time-change="ctrl.onStartDateTimeChange",
+                locale="{{ ::ctrl.locale }}",
+                time-format="{{ ::ctrl.timeFormat }}",
+                disabled="ctrl.disabled",
+                ng-if="!ctrl.isMobile"
+              )
+              input.input.form-control(
+                type="time",
+                ng-model="ctrl.startTime",
                 ng-change="ctrl.onStartDateTimeChange()",
                 ng-blur="ctrl.dateOnBlurFn()",
-                lng-clockpicker,
-                lng-clockpicker-options="{twelvehour: !ctrl.use24hourFormat}",
-                aria-expanded="false",
-                ng-disabled="ctrl.full24HoursDay || ctrl.disabled")
+                ng-disabled="ctrl.disabled",
+                ng-if="ctrl.isMobile"
+              )
         .col-xs-12.col-md-4
           .fg-line
             esn-date-picker(
@@ -44,20 +58,34 @@
               min-date="ctrl.minEndDate",
               autoclose="1",
               start-week="1",
-              custom-attributes="{'cal-date-to-moment': 'cal-date-to-moment'}")
+              custom-attributes="{'cal-date-to-moment': 'cal-date-to-moment'}"
+              ng-if="!ctrl.isMobile"
+            )
+            input.input.form-control(
+              type="date",
+              ng-model="ctrl.endTime"
+              ng-disabled="ctrl.disabled",
+              ng-change="ctrl.onEndDateTimeChange()"
+              ng-if="ctrl.isMobile"
+            )
           .form-group
             .fg-line(ng-if='!ctrl.full24HoursDay')
-              input.input.form-control(type="text",
-                size="10",
-                ng-model="ctrl.end",
-                data-autoclose="0",
-                placeholder="{{ 'Time' | translate }}",
+              time-select(
+                date="ctrl.end",
+                on-time-change="ctrl.onEndDateTimeChange",
+                locale="{{ ::ctrl.locale }}",
+                time-format="{{ ::ctrl.timeFormat }}",
+                disabled="ctrl.disabled",
+                ng-if="!ctrl.isMobile"
+              )
+              input.input.form-control(
+                type="time",
+                ng-model="ctrl.endTime",
                 ng-change="ctrl.onEndDateTimeChange()",
-                aria-expanded="false",
-                ng-disabled="ctrl.full24HoursDay || ctrl.disabled",
                 ng-blur="ctrl.dateOnBlurFn()",
-                lng-clockpicker,
-                lng-clockpicker-options="{twelvehour: !ctrl.use24hourFormat}")
+                ng-disabled="ctrl.disabled",
+                ng-if="ctrl.isMobile"
+              )
         .col-xs-12.col-md-4.hidden-xs
           .form-group.text-center
             .fg-line.nopadding

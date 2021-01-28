@@ -1,25 +1,25 @@
+h2.delegation-section-title {{ 'Add delegated users' | translate }}
+
 .add-delegation-users
   .user-delegation-form
-    .user-autocomplete
+    .user-autocomplete.fg-line
       users-autocomplete-input(mutable-users='$ctrl.newUsersGroups', ignored-users='$ctrl.ignoredUsers', on-adding-user='$ctrl.onAddingUser')
     .select-delegation
-      select.addDelegation.form-control(ng-model='$ctrl.selectedShareeRight')
-        option(ng-repeat="delegationType in ::$ctrl.delegationTypes" value="{{delegationType.value}}" ng-selected="delegationType.value === $ctrl.selectedShareeRight") {{delegationType.name | esnI18n}}
-  .delegation-actions
-    .btn.btn-primary.btn-sm(ng-click="$ctrl.addUserGroup()") {{ 'Add' | translate }}
+      md-select(ng-model='$ctrl.selectedShareeRight', md-container-class="cal-delegation-type-dropdown", md-on-open="$ctrl.changeBackdropZIndex()")
+        md-option(ng-repeat="delegationType in $ctrl.delegationTypes" ng-value="delegationType.value") {{ delegationType.name | translate }}
+    .delegation-actions
+      button.btn.btn-primary(ng-click="$ctrl.addUserGroup()") {{ 'Add' | translate }}
 
-hr
-
+h2.delegation-section-title(ng-if="$ctrl.delegations.length > 0") {{ 'List of delegated users' | translate }}
 .delegation-line(ng-repeat="delegation in $ctrl.delegations")
   .user
-    a.user-avatar(href="", ng-attr-title='delegation.user.displayName')
+    .user-avatar(title="{{ delegation.user.displayName }}")
       esn-avatar(user-id="delegation.user.id", user-email="delegation.user.preferredEmail")
     .user-name
       a(ng-href="mailto:{{::delegation.user.preferredEmail}}" op-inbox-compose op-inbox-compose-users="[delegation.user]") {{ delegation.user.displayName }}
   .select-delegation
-    .select
-      select.form-control(ng-model='delegation.selection')
-        option(ng-repeat="delegationType in ::$ctrl.delegationTypes" value="{{delegationType.value}}" ng-selected="delegationType.value === delegation.selection") {{delegationType.name | esnI18n}}
+    md-select(ng-model='delegation.selection', md-container-class="cal-delegation-type-dropdown", md-on-open="$ctrl.changeBackdropZIndex()")
+      md-option(ng-repeat="delegationType in ::$ctrl.delegationTypes" ng-value="delegationType.value") {{ delegationType.name | translate }}
   .delegation-actions
-    a(href="", ng-click='$ctrl.removeUserGroup(delegation)')
-      i.mdi.mdi-delete
+    button.btn.btn-link.btn-icon(ng-click='$ctrl.removeUserGroup(delegation)')
+      i.mdi.mdi-close

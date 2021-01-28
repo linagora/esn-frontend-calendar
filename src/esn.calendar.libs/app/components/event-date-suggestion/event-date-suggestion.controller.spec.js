@@ -67,7 +67,7 @@ describe('The calEventDateSuggestionController', function() {
     });
 
     describe('The setEventDates function', function() {
-      it('should stripTime scope.event.allDay is true and add a day', function() {
+      it('should stripTime when scope.full24HoursDay is true and add a day', function() {
         var bindings = {
           event: {
             start: startTestMoment,
@@ -84,6 +84,10 @@ describe('The calEventDateSuggestionController', function() {
 
         expect(ctrl.event.end.format('YYYY-MM-DD')).to.equal('2013-02-09');
         expect(ctrl.event.end.hasTime()).to.be.false;
+
+        // Check the input display (FULL DAY EVENT from 2013-02-08 to 2013-02-08)
+        expect(ctrl.start.format('YYYY-MM-DD')).to.equal('2013-02-08');
+        expect(ctrl.end.format('YYYY-MM-DD')).to.equal('2013-02-08');
       });
 
       it('should set the time of start and end to next hour and set back utc flag to false', function() {
@@ -149,6 +153,8 @@ describe('The calEventDateSuggestionController', function() {
         expect(ctrl.event.end.format('YYYY-MM-DD HH:mm:ss')).to.equal('2013-02-08 10:30:00');
         expect(ctrl.event.end.hasTime()).to.be.true;
         expect(ctrl.diff).to.equal(1 * HOUR);
+        expect(ctrl.start.format('YYYY-MM-DD HH:mm:ss')).to.equal('2013-02-08 09:30:00');
+        expect(ctrl.end.format('YYYY-MM-DD HH:mm:ss')).to.equal('2013-02-08 10:30:00');
 
         ctrl.full24HoursDay = true;
         ctrl.setEventDates();
@@ -159,6 +165,9 @@ describe('The calEventDateSuggestionController', function() {
         expect(ctrl.event.end.hasTime()).to.be.false;
         expect(ctrl.diff).to.equal(24 * HOUR);
 
+        expect(ctrl.start.format('YYYY-MM-DD')).to.equal('2013-02-08');
+        expect(ctrl.end.format('YYYY-MM-DD')).to.equal('2013-02-08');
+
         ctrl.full24HoursDay = false;
         ctrl.setEventDates();
 
@@ -167,6 +176,8 @@ describe('The calEventDateSuggestionController', function() {
         expect(ctrl.event.end.format('YYYY-MM-DD HH:mm:ss')).to.equal('2013-02-08 10:30:00');
         expect(ctrl.event.end.hasTime()).to.be.true;
         expect(ctrl.diff).to.equal(1 * HOUR);
+        expect(ctrl.start.format('YYYY-MM-DD HH:mm:ss')).to.equal('2013-02-08 09:30:00');
+        expect(ctrl.end.format('YYYY-MM-DD HH:mm:ss')).to.equal('2013-02-08 10:30:00');
       });
     });
 
@@ -292,6 +303,72 @@ describe('The calEventDateSuggestionController', function() {
           expect(isSame).to.be.true;
         }, this);
       });
+    });
+  });
+
+  describe('the onStartDateTimeChange function', function() {
+    it('should set the start time an date from the mobile input models', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment,
+          end: endTestMoment,
+          full24HoursDay: false
+        }
+      };
+      const ctrl = initController(bindings);
+
+      ctrl.startTime = new Date('2020-08-25 11:33');
+      ctrl.onStartDateTimeChange();
+
+      expect(ctrl.event.start.hours()).to.equal(11);
+      expect(ctrl.event.start.minutes()).to.equal(33);
+      expect(ctrl.event.start.date()).to.equal(25);
+      expect(ctrl.event.start.month()).to.equal(7); // Month is zero based
+      expect(ctrl.event.start.year()).to.equal(2020);
+    });
+  });
+
+  describe('the onEndDateTimeChange function', function() {
+    it('should set the end time and date from the mobile input models', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment,
+          end: endTestMoment,
+          full24HoursDay: false
+        }
+      };
+      const ctrl = initController(bindings);
+
+      ctrl.endTime = new Date('2020-05-20 12:16');
+      ctrl.onEndDateTimeChange();
+
+      expect(ctrl.event.end.hours()).to.equal(12);
+      expect(ctrl.event.end.minutes()).to.equal(16);
+      expect(ctrl.event.end.date()).to.equal(20);
+      expect(ctrl.event.end.month()).to.equal(4); // Month is zero based
+      expect(ctrl.event.end.year()).to.equal(2020);
+    });
+
+    it('should ignore the mobile input if the end time is before the start time', function() {
+      const bindings = {
+        event: {
+          start: startTestMoment,
+          end: endTestMoment,
+          full24HoursDay: false
+        }
+      };
+      const ctrl = initController(bindings);
+
+      ctrl.startTime = new Date('2020-02-07 9:00');
+      ctrl.onStartDateTimeChange();
+      ctrl.endTime = new Date('2019-01-06 8:15');
+      ctrl.onEndDateTimeChange();
+
+      expect(ctrl.event.end.hours()).to.not.equal(8);
+      expect(ctrl.event.end.minutes()).to.not.equal(15);
+      expect(ctrl.event.end.date()).to.not.equal(6);
+      expect(ctrl.event.end.month()).to.not.equal(0); // Month is zero based
+      expect(ctrl.event.end.year()).to.not.equal(2019);
     });
   });
 });

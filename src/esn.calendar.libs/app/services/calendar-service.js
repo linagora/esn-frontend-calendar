@@ -22,7 +22,9 @@ require('./calendar-cache.js');
     CAL_EVENTS,
     CalendarRightShell,
     calendarsCache,
-    userUtils
+    userUtils,
+    FileSaver,
+    CAL_EXPORT_FILE_TYPE
   ) {
     var defaultCalendarApiOptions = { withRights: true };
 
@@ -48,6 +50,8 @@ require('./calendar-cache.js');
     this.injectCalendarsWithOwnerName = injectCalendarsWithOwnerName;
     this.getOwnerDisplayName = getOwnerDisplayName;
     this.getResourceDescription = getResourceDescription;
+    this.exportCalendar = exportCalendar;
+    this.generateTokenForSecretLink = generateTokenForSecretLink;
     ////////////
 
     /**
@@ -145,12 +149,23 @@ require('./calendar-cache.js');
      * @return {[CalendarCollectionShell]}  an array of CalendarCollectionShell
      */
     function listPersonalAndAcceptedDelegationCalendars(calendarHomeId) {
+      const calendarCollectionShellsFromCache = calendarsCache.getList(calendarHomeId);
+
+      if (calendarCollectionShellsFromCache && Object.keys(calendarCollectionShellsFromCache).length > 0) {
+        return $q.resolve(Object.values(calendarCollectionShellsFromCache));
+      }
+
       return listCalendarsAsCollectionShell(calendarHomeId, {
         withRights: true,
         personal: true,
         sharedPublicSubscription: true,
         sharedDelegationStatus: 'accepted'
-      });
+      })
+        .then(calendarCollectionShells => {
+          calendarsCache.setList(calendarCollectionShells);
+
+          return calendarCollectionShells;
+        });
     }
 
     /**
@@ -354,6 +369,28 @@ require('./calendar-cache.js');
       return calendar.getOwner().then(function(owner) {
         return owner.description;
       });
+    }
+
+    /**
+     * fetch a calendar and download it.
+     * @param {String} calendarHomeId
+     * @param {String} calendarId
+     */
+    function exportCalendar(calendarHomeId, calendarId) {
+      calendarAPI.exportCalendar(calendarHomeId, calendarId).then(calendarData => {
+        const calendarBlob = new Blob([calendarData], { type: CAL_EXPORT_FILE_TYPE });
+
+        FileSaver.saveAs(calendarBlob, `${calendarId}.ics`);
+      });
+    }
+
+    /**
+     * Get the generated token for the secret link
+     * @param {Object} jwtPayload The jwtPayload that contains the information to generate token
+     * @return {String} a generated token with calendarHomeId and calendar id payload
+     */
+    function generateTokenForSecretLink(jwtPayload) {
+      return calendarAPI.generateToken(jwtPayload).then(({ token }) => token);
     }
   }
 })(angular);

@@ -7,7 +7,7 @@ require('./fc-moment.js');
   angular.module('esn.calendar.libs')
     .factory('calendarUtils', calendarUtils);
 
-  function calendarUtils(calMoment, esnI18nService, CAL_TRANSLATED_DEFAULT_NAME) {
+  function calendarUtils($rootScope, calMoment, esnI18nService, calCachedEventSource, notificationFactory, CAL_TRANSLATED_DEFAULT_NAME, CAL_EVENTS) {
     var service = {
       prependMailto: prependMailto,
       removeMailto: removeMailto,
@@ -15,7 +15,8 @@ require('./fc-moment.js');
       getNewStartDate: getNewStartDate,
       getNewEndDate: getNewEndDate,
       getDateOnCalendarSelect: getDateOnCalendarSelect,
-      getTranslatedDefaultName: getTranslatedDefaultName
+      getTranslatedDefaultName: getTranslatedDefaultName,
+      notifyErrorWithRefreshCalendarButton: notifyErrorWithRefreshCalendarButton
     };
 
     return service;
@@ -81,6 +82,17 @@ require('./fc-moment.js');
 
     function getTranslatedDefaultName() {
       return esnI18nService.translate(CAL_TRANSLATED_DEFAULT_NAME).toString();
+    }
+
+    function notifyErrorWithRefreshCalendarButton(message) {
+      notificationFactory.strongError('', message)
+        .setCancelAction({
+          linkText: 'Refresh calendar',
+          action: function() {
+            calCachedEventSource.resetCache();
+            $rootScope.$broadcast(CAL_EVENTS.CALENDAR_REFRESH);
+          }
+        });
     }
   }
 

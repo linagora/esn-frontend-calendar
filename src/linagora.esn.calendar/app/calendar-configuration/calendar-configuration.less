@@ -1,4 +1,6 @@
 .calendar-configuration {
+  min-height: 400px;
+
   .calendar-configuration-title {
     margin-bottom: 25px;
     margin-top: 30px;
@@ -20,5 +22,23 @@
 
   .calendar-configuration-body {
     margin-top: 25px;
+  }
+}
+
+.delete-button {
+  .mdi-delete {
+    margin-right: 5px;
+    font-size: 1.5em;
+  }
+}
+
+
+@media (max-width: @screen-md-min){
+  .modal-footer {
+    padding: 5px;
+  }
+
+  .modal-backdrop {
+    z-index: -1 !important;
   }
 }

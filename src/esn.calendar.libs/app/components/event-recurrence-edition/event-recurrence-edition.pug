@@ -5,11 +5,9 @@
         span.input-group-addon
           i.mdi.mdi-repeat
         .fg-line.select
-          select.form-control(
-            ng-model="vm.freq",
-            ng-options="item.value as (item.label | esnI18n) for item in vm.CAL_RECUR_FREQ",
-            ng-change="vm.setRRULE()",
-            ng-disabled="!vm.canModifyEventRecurrence")
+          md-input-container
+            md-select(ng-disabled="!vm.canModifyEventRecurrence", ng-model="vm.freq", ng-change="vm.setRRULE()", md-container-class="cal-event-edition-select-dropdown")
+              md-option(ng-value="item.value", ng-repeat="item in vm.CAL_RECUR_FREQ") {{ item.label | translate }}
     .form-group.event-recurrence-flex-container.event-subelement-flex-container(ng-if="vm.freq")
       .interval
         span.col-xs-3 {{ 'Interval' | translate }}:
