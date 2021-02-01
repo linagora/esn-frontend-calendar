@@ -8,7 +8,9 @@ var expect = chai.expect;
 describe('The cal-event-form Angular module directives', function() {
   beforeEach(function() {
     angular.mock.module('esn.calendar.libs');
-    this.calEventUtilsMock = {};
+    this.calEventUtilsMock = {
+      getEmailAddressesFromAttendeesExcludingCurrentUser: () => ''
+    };
     this.calEventFormControllerMock = function($scope) {
       $scope.initFormData = function() {};
     };

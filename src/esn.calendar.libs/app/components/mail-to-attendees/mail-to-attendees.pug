@@ -1,10 +1,9 @@
 .cal-mail-to-attendees
   button.btn.btn-link.btn-icon(
-    ng-if="ctrl.getEmailAddressesFromUsers(ctrl.event.attendees)",
-    ng-href="mailto:{{ctrl.getEmailAddressesFromUsers(ctrl.event.attendees)}}",
+    ng-if="ctrl.emailAddressesFromAttendees",
+    ng-href="mailto:{{ctrl.emailAddressesFromAttendees}}",
     op-inbox-compose
-    op-inbox-compose-users="ctrl.event.attendees"
   )
-    md-tooltip(md-direction="bottom" md-z-index="10000")
+    md-tooltip(md-direction="bottom", md-z-index="10000")
       span {{ 'Mail to attendees' | translate }}
     i.mdi.mdi-email
