@@ -35,7 +35,6 @@ function CalEventFormController(
   calEventService,
   calAttendeeService,
   calEventUtils,
-  CalendarShell,
   notificationFactory,
   calOpenEventForm,
   calUIAuthorizationService,
@@ -48,16 +47,13 @@ function CalEventFormController(
   usSpinnerService,
   calFreebusyService,
   calPartstatUpdateNotificationService,
-  VideoConfConfigurationService,
-  uuid4,
   CAL_ATTENDEE_OBJECT_TYPE,
   CAL_RELATED_EVENT_TYPES,
   CAL_EVENTS,
   CAL_EVENT_FORM,
   CAL_ICAL,
   CAL_FREEBUSY,
-  CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION,
-  CAL_EVENT_DUPLICATE_KEYS
+  CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION
 ) {
   var initialUserAttendeesRemoved = [];
   var initialResourceAttendeesRemoved = [];
@@ -635,69 +631,21 @@ function CalEventFormController(
   }
 
   function duplicateEvent() {
-    // Build an event copy based on the currently edited event.
-    const duplicate = _generateEditedEventCopy();
-
-    // Set the alarm if there was any
-    // alarm can't be set with CalendarShell.fromIncompleteShell because the event needs to be created or cloned first.
-    if ($scope.editedEvent.alarm) {
-      duplicate.alarm = $scope.editedEvent.alarm;
-    }
-
-    // Reset the partstat from the original event.
-    _resetAttendeesParticipation(duplicate);
-
-    // Check and set a new video conference link if needed.
-    if (duplicate && duplicate.xOpenpaasVideoconference) {
-      // Wait for the VideoConfConfigurationService to generate a link.
-      return _generateVideoConferenceUrl().then(url => {
-        duplicate.xOpenpaasVideoconference = url;
+    calEventDuplicateService.duplicateEvent($scope.editedEvent)
+      .then(duplicate => {
         _showDuplicateEventForm(duplicate);
       });
-    }
-
-    _showDuplicateEventForm(duplicate);
   }
 
   function _showDuplicateEventForm(event) {
     if (!event) return;
     // Close the currently opened event form.
     $scope.cancel();
-    // Open the duplicate event creation form after a short delay ( let the first modal finish hiding ).
+    // Open the duplicate event creation form after a short delay (let the first modal finish hiding).
     $timeout(function() {
       calEventDuplicateService.setDuplicateEventSource($scope.event.calendarId);
       calOpenEventForm(session.user._id, event);
     }, CAL_EVENT_FORM_SPINNER_TIMEOUT_DURATION);
-  }
-
-  function _generateEditedEventCopy() {
-    const details = CAL_EVENT_DUPLICATE_KEYS
-      .reduce((details, key) => ($scope.editedEvent[key] ? { [key]: $scope.editedEvent[key], ...details } : details), {});
-
-    return CalendarShell.fromIncompleteShell(details);
-  }
-
-  function _generateVideoConferenceUrl() {
-
-    return VideoConfConfigurationService.getOpenPaasVideoconferenceAppUrl()
-      .then(openPaasVideoconferenceAppUrl => `${openPaasVideoconferenceAppUrl}${uuid4.generate()}`)
-      .catch(err => {
-        $log.error('Cannot generate a new video conference URL', err);
-        _displayNotification(notificationFactory.weakError, null, 'Failed to create a new video conference room');
-      });
-  }
-
-  function _resetAttendeesParticipation(event) {
-    if (!event || !event.attendees) return;
-
-    event.attendees = event.attendees.map(attendee => {
-      // Ignore resources
-      if (attendee && attendee.cutype !== CAL_ICAL.cutype.resource) {
-        return { ...attendee, partstat: CAL_ICAL.partstat.needsaction };
-      }
-
-      return attendee;
-    });
   }
 
   function changeBackdropZIndex() {
