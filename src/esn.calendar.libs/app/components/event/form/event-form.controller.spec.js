@@ -8,8 +8,8 @@ describe('The CalEventFormController controller', function() {
   let Cache, calendarTest, calendars, canModifyEventResult, eventTest, owner, user, start, end, calendarHomeId, initController;
   let $stateMock, calendarHomeServiceMock, calEventServiceMock, notificationFactoryMock, calendarServiceMock, calOpenEventFormMock, closeNotificationStub;
   let calAttendeesDenormalizerService, calAttendeeService, calEventFreeBusyConfirmationModalService, CAL_ICAL, calFreebusyService;
-  let $rootScope, $modal, $controller, scope, calEventUtils, calUIAuthorizationService, session, CalendarShell, CAL_EVENT_FORM, CAL_EVENTS, CAL_ALARM_TRIGGER;
-  let VideoConfConfigurationServiceMock, $timeout, calEventDuplicateServiceMock;
+  let $rootScope, $modal, $window, $controller, scope, calEventUtils, calUIAuthorizationService, session, CalendarShell, CAL_EVENT_FORM, CAL_EVENTS, CAL_ALARM_TRIGGER;
+  let VideoConfConfigurationServiceMock, $timeout, calEventDuplicateServiceMock, openStub;
 
   beforeEach(function() {
     eventTest = {};
@@ -60,7 +60,7 @@ describe('The CalEventFormController controller', function() {
       isWritable: angular.noop
     };
 
-    calAttendeesDenormalizerService = function(attendees) {return $q.when(attendees);};
+    calAttendeesDenormalizerService = function(attendees) { return $q.when(attendees); };
     calEventFreeBusyConfirmationModalService = sinon.spy();
 
     calendars = [
@@ -235,11 +235,13 @@ describe('The CalEventFormController controller', function() {
     _CAL_ALARM_TRIGGER_,
     _CAL_EVENT_FORM_,
     _CAL_ICAL_,
-    _$timeout_
+    _$timeout_,
+    _$window_
   ) {
     $rootScope = _$rootScope_;
     scope = $rootScope.$new();
     $controller = _$controller_;
+    $window = _$window_;
     calAttendeeService = _calAttendeeService_;
     calEventUtils = _calEventUtils_;
     calUIAuthorizationService = _calUIAuthorizationService_;
@@ -2000,6 +2002,58 @@ describe('The CalEventFormController controller', function() {
         initController();
 
         expect(scope.isValidURL(scope.event.location)).to.be.false;
+      });
+    });
+
+    describe('the updateLocationLink method', function() {
+      beforeEach(function() {
+        openStub = sinon.stub($window, 'open');
+      });
+
+      afterEach(function() {
+        openStub.restore();
+      });
+
+      it('should add // when the location link does not start with http', function() {
+        scope.event = CalendarShell.fromIncompleteShell({
+          title: 'title',
+          path: '/calendars/' + owner._id + '/' + calendarTest.id + '/eventID',
+          start: moment('2016-12-08 12:30'),
+          end: moment('2016-12-08 13:30'),
+          location: 'link.com',
+          etag: '123456',
+          alarm: {
+            trigger: '-PT1M',
+            attendee: 'test@open-paas.org'
+          }
+        });
+
+        initController();
+
+        scope.openLocationLink(scope.event.location);
+
+        expect(openStub).to.have.been.calledWith('//link.com', '_blank', 'noopener');
+      });
+
+      it('should not add // when the location start with http', function() {
+        scope.event = CalendarShell.fromIncompleteShell({
+          title: 'title',
+          path: '/calendars/' + owner._id + '/' + calendarTest.id + '/eventID',
+          start: moment('2016-12-08 12:30'),
+          end: moment('2016-12-08 13:30'),
+          location: 'http://link.com',
+          etag: '123456',
+          alarm: {
+            trigger: '-PT1M',
+            attendee: 'test@open-paas.org'
+          }
+        });
+
+        initController();
+
+        scope.openLocationLink(scope.event.location);
+
+        expect(openStub).to.have.been.calledWith('http://link.com', '_blank', 'noopener');
       });
     });
 
