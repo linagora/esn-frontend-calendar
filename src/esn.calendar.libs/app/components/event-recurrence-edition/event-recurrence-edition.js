@@ -47,7 +47,7 @@ function eventRecurrenceEdition() {
   }
 }
 
-function EventRecurrenceEditionController(esnI18nService, calMoment, CAL_RECUR_FREQ, CAL_WEEK_DAYS, CAL_MAX_RRULE_COUNT) {
+function EventRecurrenceEditionController(esnI18nService, calMoment, detectUtils, CAL_RECUR_FREQ, CAL_WEEK_DAYS, CAL_MAX_RRULE_COUNT) {
   var self = this;
 
   self.event = self._event;
@@ -59,6 +59,8 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, CAL_RECUR_F
   self.resetCount = resetCount;
   self.setRRULE = setRRULE;
   self.CAL_MAX_RRULE_COUNT = CAL_MAX_RRULE_COUNT;
+  self.isMobile = detectUtils.isMobile();
+  self.onMobileUntilDateChange = onMobileUntilDateChange;
   activate();
 
   ////////////
@@ -76,6 +78,10 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, CAL_RECUR_F
       self.event = master;
       self.freq = self.event.rrule ? self.event.rrule.freq : undefined;
       self.days = generateDays();
+
+      if (self.event.rrule && self.event.rrule.until && self.event.rrule.until._isAMomentObject) {
+        self.eventUntil = self.event.rrule.until.toDate();
+      }
     });
   }
 
@@ -122,6 +128,7 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, CAL_RECUR_F
 
   function resetUntil() {
     self.event.rrule.until = undefined;
+    self.eventUntil = undefined;
   }
 
   function resetCount() {
@@ -154,7 +161,8 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, CAL_RECUR_F
     }
     }
     resetCount();
-    self.event.rrule.until = until;
+    self.event.rrule.until = until; // this assignment converts the date object to a moment Object
+    self.eventUntil = until; // so we can't use the event object, instead we use a dedicated model
   }
 
   function setRRULE() {
@@ -166,5 +174,13 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, CAL_RECUR_F
         interval: self.event.rrule && self.event.rrule.interval || 1
       };
     }
+  }
+
+  function onMobileUntilDateChange() {
+    // check if we have a valid Date
+    if (self.eventUntil instanceof Date === false || Number.isNaN(self.eventUntil.valueOf())) return;
+
+    // set the event until date using the selected date from the mobile input
+    self.event.rrule.until = self.eventUntil;
   }
 }

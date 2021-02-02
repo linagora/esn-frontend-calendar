@@ -2032,7 +2032,7 @@ describe('The CalEventFormController controller', function() {
 
         scope.openLocationLink(scope.event.location);
 
-        expect(openStub).to.have.been.calledWith('//link.com', '_blank');
+        expect(openStub).to.have.been.calledWith('//link.com', '_blank', 'noopener');
       });
 
       it('should not add // when the location start with http', function() {
