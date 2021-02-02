@@ -58,4 +58,15 @@
                   start-week="1",
                   ng-click="vm.setDefaultUntilDate(vm.event.rrule.freq)"
                   custom-attributes="{'cal-date-to-moment': 'cal-date-to-moment'}"
+                  ng-if="!vm.isMobile"
+                )
+                input.input.form-control.end-on-input(
+                  type="date",
+                  ng-model="vm.eventUntil",
+                  min="{{vm.getMinDate()}}",
+                  ng-disabled="!vm.canModifyEventRecurrence",
+                  ng-change="vm.onMobileUntilDateChange()"
+                  ng-focus="selectEndRadioButton(2)",
+                  ng-click="vm.setDefaultUntilDate(vm.event.rrule.freq)"
+                  ng-if="vm.isMobile"
                 )

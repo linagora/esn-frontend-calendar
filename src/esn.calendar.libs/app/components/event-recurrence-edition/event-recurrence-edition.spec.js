@@ -72,6 +72,29 @@ describe('The event-recurrence-edition component', function() {
         { value: 'SU', selected: true }
       ]);
     });
+
+    it('should initialize the mobile input field using the event rrule.until', function() {
+      const currentDate = calMoment();
+      const dateObject = currentDate.toDate();
+
+      this.$scope.event.rrule = {
+        freq: 'DAILY',
+        until: currentDate
+      };
+      this.initDirective(this.$scope);
+
+      expect(this.eleScope.vm.eventUntil.toString()).to.eq(dateObject.toString());
+    });
+
+    it('should ignore initializing the mobile input field if the event rrule.until is not a moment object', function() {
+      this.$scope.event.rrule = {
+        freq: 'DAILY',
+        until: new Date() // a regular Date object
+      };
+      this.initDirective(this.$scope);
+
+      expect(this.eleScope.vm.eventUntil).to.be.undefined;
+    });
   });
 
   describe('scope.toggleWeekdays', function() {
@@ -245,6 +268,87 @@ describe('The event-recurrence-edition component', function() {
       this.eleScope.vm.setDefaultUntilDate('YEARLY');
       expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
       expect(this.eleScope.vm.event.rrule.until.getDate()).to.be.equals(dateCheck.getDate());
+    });
+
+    it('should set the value of the mobile input according to the event rrule.until', function() {
+      // we can modify the event recurrence
+      this.eleScope.vm.canModifyEventRecurrence = true;
+      this.eleScope.vm.setDefaultUntilDate('DAILY');
+      expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
+      expect(this.eleScope.vm.event.rrule.until.getDate()).to.be.equals(dateCurrent.getDate() + 1);
+      expect(this.eleScope.vm.eventUntil.getDate()).to.be.equals(dateCurrent.getDate() + 1);
+    });
+  });
+
+  describe('the onMobileUntilDateChange method', function() {
+    let currentDate;
+
+    beforeEach(function() {
+      this.initDirective(this.$scope);
+      currentDate = new Date();
+
+      this.eleScope.vm.event = {
+        rrule: {
+        }
+      };
+    });
+
+    it('should not accept unvalid Date objects', function() {
+      // we can modify the event occurence
+      this.eleScope.vm.canModifyEventRecurrence = true;
+      // init the until field
+      this.eleScope.vm.setDefaultUntilDate('DAILY');
+      // put something invalid in the mobile input
+      this.eleScope.vm.eventUntil = 'HELLO';
+      // attempt to update the event rrule.until
+      this.eleScope.vm.onMobileUntilDateChange();
+      expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
+      expect(this.eleScope.vm.event.rrule.until).to.not.be.undefined;
+      expect(this.eleScope.vm.event.rrule.until.getDate()).to.equal(currentDate.getDate() + 1); // the default until date is today +1 day
+    });
+
+    it('should update the event.rrule.until using the date selected in the native mobile input', function() {
+      // we can modify the event occurence
+      this.eleScope.vm.canModifyEventRecurrence = true;
+      // init the until field
+      this.eleScope.vm.setDefaultUntilDate('DAILY');
+      // put something invalid in the mobile input ( clone the current date )
+      this.eleScope.vm.eventUntil = new Date(currentDate.valueOf());
+      // add 3 days to it
+      this.eleScope.vm.eventUntil.setDate(currentDate.getDate() + 3);
+      // attempt to update the event rrule.until
+      this.eleScope.vm.onMobileUntilDateChange();
+      expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
+      expect(this.eleScope.vm.event.rrule.until).to.not.be.undefined;
+      expect(this.eleScope.vm.event.rrule.until.getDate()).to.equal(currentDate.getDate() + 3);
+    });
+  });
+
+  describe('the resetUntil method', function() {
+    it('should reset mobile input field', function() {
+      this.$scope.event.rrule = {
+        freq: 'DAILY',
+        until: calMoment()
+      };
+      this.initDirective(this.$scope);
+      // should be initialized at first
+      expect(this.eleScope.vm.eventUntil).to.not.be.undefined;
+      this.eleScope.vm.resetUntil();
+      // should be reset
+      expect(this.eleScope.vm.eventUntil).to.be.undefined;
+    });
+
+    it('should reset the event rrule.until', function() {
+      this.$scope.event.rrule = {
+        freq: 'DAILY',
+        until: calMoment()
+      };
+      this.initDirective(this.$scope);
+      // should be initialized at first
+      expect(this.eleScope.vm.event.rrule.until).to.not.be.undefined;
+      this.eleScope.vm.resetUntil();
+      // should be reset
+      expect(this.eleScope.vm.event.rrule.until).to.be.undefined;
     });
   });
 });
