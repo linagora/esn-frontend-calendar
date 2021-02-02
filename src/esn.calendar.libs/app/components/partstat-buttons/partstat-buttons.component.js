@@ -7,7 +7,8 @@ angular.module('esn.calendar.libs').component('calPartstatButtons', {
     changePartstat: '&?',
     onParticipationChangeSuccess: '&',
     onParticipationChangeError: '&',
-    showDateSuggestion: '&'
+    showDateSuggestion: '&',
+    shouldHideDateSuggestion: '<'
   },
   controller: 'CalPartstatButtonsController',
   controllerAs: 'ctrl'
