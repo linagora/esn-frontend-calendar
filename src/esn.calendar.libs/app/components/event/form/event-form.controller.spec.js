@@ -1958,48 +1958,6 @@ describe('The CalEventFormController controller', function() {
       });
     });
 
-    describe('the isValidURL method', function() {
-      it('should return true if the location is valid', function() {
-
-        scope.event = CalendarShell.fromIncompleteShell({
-          title: 'title',
-          path: '/calendars/' + owner._id + '/' + calendarTest.id + '/eventID',
-          start: moment('2016-12-08 12:30'),
-          end: moment('2016-12-08 13:30'),
-          location: 'http://123.com',
-          etag: '123456',
-          alarm: {
-            trigger: '-PT1M',
-            attendee: 'test@open-paas.org'
-          }
-        });
-
-        initController();
-
-        expect(scope.isValidURL('http://123.com')).to.be.true;
-      });
-
-      it('should return false if the location is not valid', function() {
-
-        scope.event = CalendarShell.fromIncompleteShell({
-          title: 'title',
-          path: '/calendars/' + owner._id + '/' + calendarTest.id + '/eventID',
-          start: moment('2016-12-08 12:30'),
-          end: moment('2016-12-08 13:30'),
-          location: '//123',
-          etag: '123456',
-          alarm: {
-            trigger: '-PT1M',
-            attendee: 'test@open-paas.org'
-          }
-        });
-
-        initController();
-
-        expect(scope.isValidURL(scope.event.location)).to.be.false;
-      });
-    });
-
     describe('the updateLocationLink method', function() {
       beforeEach(function() {
         openStub = sinon.stub($window, 'open');
