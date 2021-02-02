@@ -1958,7 +1958,7 @@ describe('The CalEventFormController controller', function() {
       });
     });
 
-    describe('the updateLocationLink method', function() {
+    describe('the openLocationLink method', function() {
       beforeEach(function() {
         openStub = sinon.stub($window, 'open');
       });
