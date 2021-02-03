@@ -9,7 +9,7 @@ describe('The CalEventFormController controller', function() {
   let $stateMock, calendarHomeServiceMock, calEventServiceMock, notificationFactoryMock, calendarServiceMock, calOpenEventFormMock, closeNotificationStub;
   let calAttendeesDenormalizerService, calAttendeeService, calEventFreeBusyConfirmationModalService, CAL_ICAL, calFreebusyService;
   let $rootScope, $modal, $window, $controller, scope, calEventUtils, calUIAuthorizationService, session, CalendarShell, CAL_EVENT_FORM, CAL_EVENTS, CAL_ALARM_TRIGGER;
-  let VideoConfConfigurationServiceMock, $timeout, calEventDuplicateServiceMock, openStub;
+  let $timeout, calEventDuplicateServiceMock, openStub;
 
   beforeEach(function() {
     eventTest = {};
@@ -184,10 +184,6 @@ describe('The CalEventFormController controller', function() {
 
     calFreebusyService = {};
 
-    VideoConfConfigurationServiceMock = {
-      getOpenPaasVideoconferenceAppUrl: sinon.stub().returns($q.when('some url'))
-    };
-
     calEventDuplicateServiceMock = {
       getDuplicateEventSource: sinon.stub().returns('123456'),
       setDuplicateEventSource: sinon.spy(),
@@ -218,7 +214,6 @@ describe('The CalEventFormController controller', function() {
           setUpSearchProvider: function() {}
         };
       });
-      $provide.value('VideoConfConfigurationService', VideoConfConfigurationServiceMock);
       $provide.value('calEventDuplicateService', calEventDuplicateServiceMock);
     });
   });
@@ -1963,49 +1958,7 @@ describe('The CalEventFormController controller', function() {
       });
     });
 
-    describe('the isValidURL method', function() {
-      it('should return true if the location is valid', function() {
-
-        scope.event = CalendarShell.fromIncompleteShell({
-          title: 'title',
-          path: '/calendars/' + owner._id + '/' + calendarTest.id + '/eventID',
-          start: moment('2016-12-08 12:30'),
-          end: moment('2016-12-08 13:30'),
-          location: 'http://123.com',
-          etag: '123456',
-          alarm: {
-            trigger: '-PT1M',
-            attendee: 'test@open-paas.org'
-          }
-        });
-
-        initController();
-
-        expect(scope.isValidURL('http://123.com')).to.be.true;
-      });
-
-      it('should return false if the location is not valid', function() {
-
-        scope.event = CalendarShell.fromIncompleteShell({
-          title: 'title',
-          path: '/calendars/' + owner._id + '/' + calendarTest.id + '/eventID',
-          start: moment('2016-12-08 12:30'),
-          end: moment('2016-12-08 13:30'),
-          location: '//123',
-          etag: '123456',
-          alarm: {
-            trigger: '-PT1M',
-            attendee: 'test@open-paas.org'
-          }
-        });
-
-        initController();
-
-        expect(scope.isValidURL(scope.event.location)).to.be.false;
-      });
-    });
-
-    describe('the updateLocationLink method', function() {
+    describe('the openLocationLink method', function() {
       beforeEach(function() {
         openStub = sinon.stub($window, 'open');
       });
@@ -2302,82 +2255,38 @@ describe('The CalEventFormController controller', function() {
         attendees: [{
           displayName: 'attendee1',
           email: 'user1@test.com',
-          partstart: 'ACCEPTED'
+          partstat: 'ACCEPTED'
         }, {
           displayName: 'attendee2',
           email: 'user1@test.com',
-          partstart: 'ACCEPTED'
+          partstat: 'ACCEPTED'
         }],
         sequence: 2, // A property to ignore when copying
-        xOpenpaasVideoconference: undefined // a non defined property
+        xOpenpaasVideoconference: undefined
       };
+      const duplicatedEvent = { id: 'fake_event_duplicate', summary: 'A fake event' };
 
       beforeEach(function() {
         scope.event = CalendarShell.fromIncompleteShell(eventSkeleton);
+        scope.editedEvent = { id: 'fake_event', summary: 'A fake event' };
+
+        calEventDuplicateServiceMock.duplicateEvent = sinon.stub().returns($q.when(duplicatedEvent));
 
         initController();
         scope.$digest();
       });
 
-      it('should create a new copy of the event details correctly', function() {
-        const shellSpy = sinon.spy(CalendarShell, 'fromIncompleteShell');
-
-        scope.duplicateEvent();
-
-        const copiedEvent = shellSpy.firstCall.args[0];
-
-        expect(CalendarShell.fromIncompleteShell).to.have.been.called;
-        // Should ignore properties that cannot be edited in the form.
-        expect(copiedEvent.sequence).to.be.undefined;
-        // Should ignore properties with undefined values
-        expect(copiedEvent.xOpenpaasVideoconference).to.be.undefined;
-      });
-
-      it('should generate a new video conference link if the original event had one', function() {
-        scope.editedEvent = CalendarShell.fromIncompleteShell({
-          ...eventSkeleton,
-          xOpenpaasVideoconference: 'SOMETHING' // an event with a video conference link
-        });
-
-        scope.duplicateEvent();
-
-        expect(VideoConfConfigurationServiceMock.getOpenPaasVideoconferenceAppUrl).to.have.been.called;
-      });
-
-      it('should not generate a new video conference link if the original event didn\'t have one', function() {
-        scope.editedEvent = CalendarShell.fromIncompleteShell(eventSkeleton);
-
-        scope.duplicateEvent();
-
-        expect(VideoConfConfigurationServiceMock.getOpenPaasVideoconferenceAppUrl).to.not.have.been.called;
-      });
-
-      it('should close the previous event form and open a new event form after a brief delay', function() {
+      it('should close the previous event form and open a new event form after a brief delay and store the original event\'s calendarId', function() {
         scope.cancel = sinon.spy();
         scope.duplicateEvent();
+
+        $rootScope.$digest();
         $timeout.flush();
 
+        expect(calEventDuplicateServiceMock.duplicateEvent).to.have.been.calledWith(scope.editedEvent);
         expect(scope.cancel).to.have.been.called;
-        expect(calOpenEventFormMock).to.have.been.called;
-      });
-
-      it('should reset the participation status for the attendees', function() {
-        const shellSpy = sinon.spy(CalendarShell, 'fromIncompleteShell');
-
-        scope.duplicateEvent();
-
-        const copiedEvent = shellSpy.firstCall.args[0];
-
-        copiedEvent.attendees.map(attendee => {
-          expect(attendee.partstat).to.eq('NEEDS-ACTION');
-        });
-      });
-
-      it('should store the original event\'s calendarId', function() {
-        scope.duplicateEvent();
-        $timeout.flush();
-
-        expect(calEventDuplicateServiceMock.setDuplicateEventSource).to.have.been.called;
+        expect(calOpenEventFormMock).to.have.been.calledWith(session.user._id, duplicatedEvent);
+        expect(calEventDuplicateServiceMock.setDuplicateEventSource).to.have.been.calledWith(scope.event.calendarId);
       });
     });
 
