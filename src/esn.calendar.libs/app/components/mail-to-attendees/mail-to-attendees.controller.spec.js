@@ -1,37 +1,25 @@
 'use strict';
 
-/* global chai: false */
+/* global sinon, chai */
 
-var expect = chai.expect;
+const { expect } = chai;
 
 describe('The calMailToAttendeesController', function() {
-  var $controller, ctrl, attendeesTest, attendeesMailTest, CAL_ICAL;
+  var $controller, ctrl, calEventUtilsMock;
 
   beforeEach(function() {
-    attendeesTest = [
-      { email: 'other1@example.com', partstat: 'NEEDS-ACTION', clicked: false },
-      { email: 'other2@example.com', partstat: 'ACCEPTED', clicked: true },
-      { email: 'other3@example.com', partstat: 'DECLINED', clicked: false }
-    ];
-
-    attendeesMailTest = 'other2@example.com,other3@example.com';
+    calEventUtilsMock = {
+      getEmailAddressesFromAttendeesExcludingCurrentUser: sinon.stub()
+    };
 
     angular.mock.module('esn.calendar.libs');
 
     angular.mock.module(function($provide) {
-      $provide.factory('session', function() {
-        return {
-          user: {
-            preferredEmail: 'other1@example.com'
-          },
-          ready: $q.when({})
-        };
-      });
+      $provide.value('calEventUtils', calEventUtilsMock);
     });
 
-    angular.mock.inject(function(_$controller_, _CAL_ICAL_) {
+    angular.mock.inject(function(_$controller_) {
       $controller = _$controller_;
-      CAL_ICAL = _CAL_ICAL_;
     });
 
     ctrl = initController();
@@ -41,26 +29,12 @@ describe('The calMailToAttendeesController', function() {
     return $controller('calMailToAttendeesController');
   }
 
-  describe('The getEmailAddressesFromUsers function', function() {
+  describe('The $onInit function', function() {
+    it('should get email list from event attendees', function() {
+      ctrl.event = { attendees: [{ email: 'attendee1@test.example' }] };
+      ctrl.$onInit();
 
-    it('should initialize mail-to-attendees without the current user', function() {
-      expect(ctrl.getEmailAddressesFromUsers(attendeesTest)).to.equal(attendeesMailTest);
-    });
-
-    it('should initialize mail-to-attendees without duplicates', function() {
-      var attendees = angular.copy(attendeesTest);
-
-      attendees.push(attendeesTest[1]);
-
-      expect(ctrl.getEmailAddressesFromUsers(attendees)).to.equal(attendeesMailTest);
-    });
-
-    it('should not add resource attendee', function() {
-      attendeesTest.push({
-        email: 'aresource@example.com', partstat: 'ACCEPTED', clicked: false, cutype: CAL_ICAL.cutype.resource
-      });
-
-      expect(ctrl.getEmailAddressesFromUsers(attendeesTest)).to.equal(attendeesMailTest);
+      expect(calEventUtilsMock.getEmailAddressesFromAttendeesExcludingCurrentUser).to.have.been.calledWith(ctrl.event.attendees);
     });
   });
 });

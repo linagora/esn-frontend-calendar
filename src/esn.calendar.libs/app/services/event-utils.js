@@ -14,7 +14,8 @@ require('../app.constants');
     esnI18nService,
     CAL_DEFAULT_EVENT_COLOR,
     CAL_SIGNIFICANT_CHANGE_KEYS,
-    CAL_EVENT_FORM
+    CAL_EVENT_FORM,
+    CAL_ICAL
   ) {
     var editedEvent = null;
     var newAttendees = [];
@@ -39,7 +40,8 @@ require('../app.constants');
       getUserAttendee: getUserAttendee,
       getEventTitle: getEventTitle,
       canSuggestChanges: canSuggestChanges,
-      stripTimeWithTz: stripTimeWithTz
+      stripTimeWithTz: stripTimeWithTz,
+      getEmailAddressesFromAttendeesExcludingCurrentUser
     };
 
     return service;
@@ -161,6 +163,18 @@ require('../app.constants');
       timeStrippedMoment._ambigTime = true;
 
       return timeStrippedMoment;
+    }
+
+    function getEmailAddressesFromAttendeesExcludingCurrentUser(attendees) {
+      return _.chain(attendees).reject(_removeResources).map('email').uniq().reject(_removeCurrentUser).join().value();
+
+      function _removeCurrentUser(email) {
+        return email === session.user.preferredEmail;
+      }
+
+      function _removeResources(attendee) {
+        return attendee.cutype && attendee.cutype === CAL_ICAL.cutype.resource;
+      }
     }
   }
 

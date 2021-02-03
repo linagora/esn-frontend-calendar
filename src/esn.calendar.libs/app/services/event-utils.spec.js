@@ -23,7 +23,8 @@ describe('The calEventUtils service', function() {
       user: {
         _id: '123456',
         emails: [userEmail],
-        emailMap: emailMap
+        preferredEmail: userEmail,
+        emailMap
       },
       domain: {
         company_name: 'test'
@@ -540,6 +541,42 @@ describe('The calEventUtils service', function() {
 
       expect(timeStrippedCalMoment.isSame(calMomentDate)).to.be.true;
       expect(timeStrippedCalMoment.hasTime()).to.be.false;
+    });
+  });
+
+  describe('The getEmailAddressesFromAttendeesExcludingCurrentUser function', function() {
+    let attendeesTest, attendeesMailTest;
+
+    beforeEach(function() {
+      attendeesTest = [
+        { email: 'other1@example.com', partstat: 'NEEDS-ACTION' },
+        { email: 'other2@example.com', partstat: 'ACCEPTED' },
+        { email: 'other3@example.com', partstat: 'DECLINED' }
+      ];
+
+      attendeesMailTest = 'other1@example.com,other2@example.com,other3@example.com';
+    });
+
+    it('should not include duplicated emails', function() {
+      attendeesTest.push(attendeesTest[1]);
+
+      expect(this.calEventUtils.getEmailAddressesFromAttendeesExcludingCurrentUser(attendeesTest)).to.equal(attendeesMailTest);
+    });
+
+    it('should not include current user', function() {
+      attendeesTest.push({
+        email: this.session.user.emails[0], partstat: 'NEEDS-ACTION'
+      });
+
+      expect(this.calEventUtils.getEmailAddressesFromAttendeesExcludingCurrentUser(attendeesTest)).to.equal(attendeesMailTest);
+    });
+
+    it('should not include resource attendees', function() {
+      attendeesTest.push({
+        email: 'aresource@example.com', partstat: 'ACCEPTED', cutype: this.CAL_ICAL.cutype.resource
+      });
+
+      expect(this.calEventUtils.getEmailAddressesFromAttendeesExcludingCurrentUser(attendeesTest)).to.equal(attendeesMailTest);
     });
   });
 });

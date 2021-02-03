@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 require('../../app.constants.js');
 
 'use strict';
@@ -7,20 +5,10 @@ require('../../app.constants.js');
 angular.module('esn.calendar.libs')
   .controller('calMailToAttendeesController', calMailToAttendeesController);
 
-function calMailToAttendeesController(session, CAL_ICAL) {
-  var self = this;
+function calMailToAttendeesController(calEventUtils) {
+  const self = this;
 
-  self.getEmailAddressesFromUsers = getEmailAddressesFromUsers;
-
-  function getEmailAddressesFromUsers(list) {
-    return _.chain(list).reject(removeResources).map('email').uniq().reject(removeCurrentUser).join().value();
-  }
-
-  function removeCurrentUser(email) {
-    return email === session.user.preferredEmail;
-  }
-
-  function removeResources(attendee) {
-    return attendee.cutype && attendee.cutype === CAL_ICAL.cutype.resource;
-  }
+  self.$onInit = function() {
+    self.emailAddressesFromAttendees = calEventUtils.getEmailAddressesFromAttendeesExcludingCurrentUser(self.event.attendees);
+  };
 }
