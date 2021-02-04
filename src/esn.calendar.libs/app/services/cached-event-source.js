@@ -79,6 +79,10 @@ require('./cal-ui-authorization-service.js');
             change.instances = [];
             change.event.expand(start.clone().subtract(1, 'day'), end.clone().add(1, 'day')).forEach(function(subEvent) {
               if (subEvent.status !== 'CANCELLED') {
+                if (change.event.editable === false) {
+                  // if event.editable is undefined it will be consider as true by fullcalendar
+                  subEvent.editable = false;
+                }
                 saveChange(change.action, subEvent);
                 change.instances.push(subEvent);
               }
