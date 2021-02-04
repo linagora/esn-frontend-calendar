@@ -124,6 +124,7 @@
   "Failed to create resource": "Une erreur s'est produite lors de la création de la ressource",
   "Failed to retrieve resources details": "Impossible de récupérer les détails des resources",
   "Failed to submit request": "Échec de l'envoi de la demande",
+  "Fewer options": "Moins d'options",
   "Find public calendar": "Chercher un calendrier public",
   "Free": "Libre",
   "Free/Busy": "Libre/Occupé",
