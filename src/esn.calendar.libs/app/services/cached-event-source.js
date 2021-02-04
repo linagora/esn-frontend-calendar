@@ -174,7 +174,7 @@ require('./cal-ui-authorization-service.js');
             return setEditable(calendar, events);
           })
           .then(function(events) {
-            return callback(_handleDeclinedEvents(applySavedChange(start, end, calendar.getUniqueId(), events)));
+            return callback(_handleDeclinedEvents(calendar, applySavedChange(start, end, calendar.getUniqueId(), events)));
           });
       };
     }
@@ -197,7 +197,9 @@ require('./cal-ui-authorization-service.js');
       });
     }
 
-    function _handleDeclinedEvents(events) {
+    function _handleDeclinedEvents(calendar, events) {
+      const calendarOwner = calendar.isOwner(session.user._id);
+
       if (!calFullUiConfiguration.isDeclinedEventsHidden()) {
         return events;
       }
@@ -205,7 +207,7 @@ require('./cal-ui-authorization-service.js');
       return events.filter(function(event) {
         var userAsAttendee = calEventUtils.getUserAttendee(event);
 
-        if (!userAsAttendee) {
+        if (!userAsAttendee || !calendarOwner) {
           return true;
         }
 
