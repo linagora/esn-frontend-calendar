@@ -126,6 +126,23 @@ body  {
       }
     }
   }
+  
+  @media (max-width: @screen-md-min) {
+    .modal-dialog {
+      .modal-content {
+        .modal-header:not(.overflow-none).event-form-modal-header {
+          padding: 12px 20px;
+        }
+
+        .modal-body:not(.overflow-none).event-form-modal-body {
+          position: unset;
+          top: unset;
+          bottom: unset;
+          max-height: calc(100vh - 109px);
+        }
+      }
+    }
+  }
 
   .form-group {
     margin-bottom: 10px;

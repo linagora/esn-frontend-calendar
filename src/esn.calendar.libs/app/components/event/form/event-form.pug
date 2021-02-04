@@ -4,13 +4,13 @@
 form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'readonly': !canModifyEvent}", ng-submit='submit()')
   .modal-dialog
     .modal-content
-      .modal-header
+      .modal-header.event-form-modal-header
         h4.modal-title(ng-if='canModifyEvent && isNew(editedEvent)') {{ 'Create a new event' | translate }}
         h4.modal-title(ng-if='canModifyEvent && !isNew(editedEvent)') {{ 'Edit event' | translate }}
         h4.modal-title(ng-if='!canModifyEvent') {{ 'Event details' | translate }}
         button.btn.btn-link.btn-icon(type='button', data-dismiss="modal", aria-label="Close", ng-click="cancel()")
           i.mdi.mdi-close(aria-hidden="true")
-      .modal-body
+      .modal-body.event-form-modal-body
         .text-center(
           openpaas-logo-spinner,
           spinner-size='0.5',
