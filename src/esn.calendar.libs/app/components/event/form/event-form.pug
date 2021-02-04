@@ -5,11 +5,11 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
   .modal-dialog
     .modal-content
       .modal-header
-        button.close(type='button', data-dismiss="modal", aria-label="Close", ng-click="cancel()")
-          span(aria-hidden="true") &times;
         h4.modal-title(ng-if='canModifyEvent && isNew(editedEvent)') {{ 'Create a new event' | translate }}
         h4.modal-title(ng-if='canModifyEvent && !isNew(editedEvent)') {{ 'Edit event' | translate }}
         h4.modal-title(ng-if='!canModifyEvent') {{ 'Event details' | translate }}
+        button.btn.btn-link.btn-icon(type='button', data-dismiss="modal", aria-label="Close", ng-click="cancel()")
+          i.mdi.mdi-close(aria-hidden="true")
       .modal-body
         .text-center(
           openpaas-logo-spinner,

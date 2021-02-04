@@ -43,7 +43,25 @@ body  {
     .modal-dialog.ui-draggable {
       position: fixed !important;
     }
-  }  
+  }
+
+  .modal-header {
+    display: flex;
+    padding: 14px 26px;
+
+    .modal-title {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+    }
+
+    .btn {
+      .all-centered;
+      width: 36px;
+      height: 36px;
+      font-size: 20px;
+    }
+  }
 
   .modal-header, .modal-footer {
     cursor: grabbing;
