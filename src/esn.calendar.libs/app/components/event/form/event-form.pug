@@ -44,7 +44,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                 .input-group
                   span.input-group-addon
                     i.mdi.mdi-calendar-multiple
-                  .fg-line.select
+                  .fg-line
                     md-input-container(ng-click="changeBackdropZIndex()")
                       md-select(ng-disabled="!isNew(editedEvent) || !canModifyEvent", ng-model="selectedCalendar.uniqueId", md-container-class="cal-select-dropdown")
                         md-option(ng-value="calendar.getUniqueId()" ng-repeat="calendar in calendars | filter: (isNew(editedEvent) || canModifyEvent) ? { readOnly: false } : {}")
@@ -84,7 +84,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     .flex-vertical-centered.flex-start
                       input.input.location.form-control(type="text", ng-model='editedEvent.location', ng-model-options="{getterSetter: true, debounce: 500}", maxlength="{{::CAL_EVENT_FORM.location.maxlength}}", placeholder="{{ 'Location' | translate }}", ng-readonly="!canModifyEvent")
                       button.btn.btn-link(ng-if="isValidURL(editedEvent.location)", ng-click='openLocationLink(editedEvent.location)', title="{{ 'Open link' | translate }}")
-                       i.mdi.mdi-open-in-new
+                        i.mdi.mdi-open-in-new
             .col-xs-12
               calendar-videoconference-form(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event="canModifyEvent")
             .col-xs-12(dynamic-directive='calendar-map')
@@ -127,7 +127,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                 .input-group
                   span.input-group-addon
                     i.mdi.mdi-lock
-                  .fg-line.select
+                  .fg-line
                     md-input-container(ng-click="changeBackdropZIndex()")
                       md-select(ng-disabled="!canModifyEvent", ng-model='editedEvent.class', md-container-class="cal-select-dropdown")
                         md-option(ng-value='class.value', ng-repeat="class in CAL_EVENT_FORM.class.values") {{class.label | translate}} 
