@@ -384,6 +384,28 @@ describe('The calCachedEventSource service', function() {
         expect(self.originalCallback).to.have.been.calledWithExactly(self.events.concat(correctSubEvent));
       });
 
+      it('should set subEvents as non editable if the parent recurrent event is not editable', function() {
+        const subEvent = {
+          id: 'subevent',
+          uid: self.modifiedEvent.id,
+          start: self.start.clone().add(1, 'hour'),
+          calendarUniqueId: self.calendarUniqueId,
+          end: self.end.clone().subtract(1, 'hour'),
+          isInstance: _.constant(true),
+          isRecurring: _.constant(false)
+        };
+
+        self.modifiedEvent.editable = false;
+        self.modifiedEvent.isRecurring = sinon.stub().returns(true);
+        self.modifiedEvent.expand = sinon.stub().returns([subEvent]);
+
+        self.calCachedEventSource.registerUpdate(self.modifiedEvent);
+        self.calCachedEventSource.wrapEventSource(self.calendar, self.eventSource)(self.start, self.end, self.timezone, self.originalCallback);
+        self.$rootScope.$apply();
+
+        expect(subEvent.editable).to.be.false;
+      });
+
       it('should correctly reexpand an event if it was not expanded in this full period the first time and if it was a modification of a event that was not a recurring before', function() {
         var aDate = self.start.clone().add(3, 'days');
 
