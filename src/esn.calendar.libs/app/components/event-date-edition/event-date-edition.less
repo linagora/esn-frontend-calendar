@@ -6,7 +6,6 @@
   }
 
   .form-group {
-    margin-bottom: 20px;
     font-size: 13px;
     min-width: 85px;
 
@@ -17,8 +16,12 @@
     }
   }
 
+  .end-date-time-container {
+    margin-top: 10px;
+  }
+
   .checkbox.allday {
-    margin-left: 10px;
+    margin: 12px 0 0 0;
   }
 
   button.btn-today {
@@ -31,6 +34,9 @@
 
 @media (min-width: @screen-sm-min) {
   .cal-event-date-edition {
+    .end-date-time-container {
+      margin-top: unset;
+    }
 
     .checkbox label {
       .translate(0, 21px);
@@ -39,10 +45,5 @@
     .checkbox.allday {
       margin-left: 0;
     }
-  }
-}
-
-@media (max-width: @screen-xs-max) {
-  .cal-event-date-edition {
   }
 }

@@ -43,7 +43,25 @@ body  {
     .modal-dialog.ui-draggable {
       position: fixed !important;
     }
-  }  
+  }
+
+  .modal-header {
+    display: flex;
+    padding: 14px 26px;
+
+    .modal-title {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+    }
+
+    .btn {
+      .all-centered;
+      width: 36px;
+      height: 36px;
+      font-size: 20px;
+    }
+  }
 
   .modal-header, .modal-footer {
     cursor: grabbing;
@@ -65,13 +83,13 @@ body  {
 
     .cal-user-autocomplete-input {
       tags-input {
-        z-index: 4;
+        z-index: 3;
       }
     }
 
     .cal-resource-autocomplete-input {
       tags-input {
-        z-index: 3;
+        z-index: 2;
       }
     }
 
@@ -104,6 +122,23 @@ body  {
               margin-left: 5px;
             }
           }
+        }
+      }
+    }
+  }
+  
+  @media (max-width: @screen-md-min) {
+    .modal-dialog {
+      .modal-content {
+        .modal-header:not(.overflow-none).event-form-modal-header {
+          padding: 12px 20px;
+        }
+
+        .modal-body:not(.overflow-none).event-form-modal-body {
+          position: unset;
+          top: unset;
+          bottom: unset;
+          max-height: calc(100vh - 109px);
         }
       }
     }

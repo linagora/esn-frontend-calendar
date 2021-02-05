@@ -4,7 +4,7 @@
       .input-group
         span.input-group-addon
           i.mdi.mdi-alarm
-        .fg-line.select
+        .fg-line
           md-input-container
             md-select(ng-disabled="!ctrl.canModifyEvent", ng-model="ctrl.trigger", ng-change="ctrl.setEventAlarm()", md-container-class="cal-event-edition-select-dropdown")
               md-option(ng-value='item.value', ng-repeat="item in ctrl.CAL_ALARM_TRIGGER") {{item.label | translate}}

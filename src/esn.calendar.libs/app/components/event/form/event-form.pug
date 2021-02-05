@@ -4,13 +4,13 @@
 form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'readonly': !canModifyEvent}", ng-submit='submit()')
   .modal-dialog
     .modal-content
-      .modal-header
-        button.close(type='button', data-dismiss="modal", aria-label="Close", ng-click="cancel()")
-          span(aria-hidden="true") &times;
+      .modal-header.event-form-modal-header
         h4.modal-title(ng-if='canModifyEvent && isNew(editedEvent)') {{ 'Create a new event' | translate }}
         h4.modal-title(ng-if='canModifyEvent && !isNew(editedEvent)') {{ 'Edit event' | translate }}
         h4.modal-title(ng-if='!canModifyEvent') {{ 'Event details' | translate }}
-      .modal-body
+        button.btn.btn-link.btn-icon(type='button', data-dismiss="modal", aria-label="Close", ng-click="cancel()")
+          i.mdi.mdi-close(aria-hidden="true")
+      .modal-body.event-form-modal-body
         .text-center(
           openpaas-logo-spinner,
           spinner-size='0.5',
@@ -44,7 +44,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                 .input-group
                   span.input-group-addon
                     i.mdi.mdi-calendar-multiple
-                  .fg-line.select
+                  .fg-line
                     md-input-container(ng-click="changeBackdropZIndex()")
                       md-select(ng-disabled="!isNew(editedEvent) || !canModifyEvent", ng-model="selectedCalendar.uniqueId", md-container-class="cal-select-dropdown")
                         md-option(ng-value="calendar.getUniqueId()" ng-repeat="calendar in calendars | filter: (isNew(editedEvent) || canModifyEvent) ? { readOnly: false } : {}")
@@ -62,19 +62,6 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
               on-entity-added='onUserAttendeesAdded',
               template='/calendar/app/components/entities-autocomplete-input/entities-autocomplete-input-freebusy-tag.html'
             )
-            cal-entities-autocomplete-input.cal-resource-autocomplete-input(
-              ng-hide='!canModifyEvent',
-              types='[CAL_ATTENDEE_OBJECT_TYPE.resource]',
-              input-type="text"
-              original-entities='attendees.resources',
-              mutable-entities='newResources',
-              place-holder="Resources",
-              show-icon='true',
-              show-resource-icon='true',
-              on-entity-added='onResourceAttendeesAdded',
-              exclude-unknown-users='true',
-              template='/calendar/app/components/entities-autocomplete-input/entities-autocomplete-input-freebusy-tag.html'
-            )
             .col-xs-12
               .form-group(ng-show="canModifyEvent || editedEvent.location")
                 .input-group
@@ -84,10 +71,17 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     .flex-vertical-centered.flex-start
                       input.input.location.form-control(type="text", ng-model='editedEvent.location', ng-model-options="{getterSetter: true, debounce: 500}", maxlength="{{::CAL_EVENT_FORM.location.maxlength}}", placeholder="{{ 'Location' | translate }}", ng-readonly="!canModifyEvent")
                       button.btn.btn-link(ng-if="isValidURL(editedEvent.location)", ng-click='openLocationLink(editedEvent.location)', title="{{ 'Open link' | translate }}")
-                       i.mdi.mdi-open-in-new
+                        i.mdi.mdi-open-in-new
+            .col-xs-12(dynamic-directive='calendar-map')
             .col-xs-12
               calendar-videoconference-form(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event="canModifyEvent")
-            .col-xs-12(dynamic-directive='calendar-map')
+            .col-xs-12
+              .form-group
+                .input-group
+                  span.input-group-addon.textarea-icon
+                    i.mdi.mdi-calendar-text
+                  .fg-line
+                    textarea.form-control(cal-auto-size-and-update, type="text", ng-model='editedEvent.description', placeholder="{{ 'Notes...' | translate }}", ng-readonly="!canModifyEvent")
             .col-xs-12
               cal-attendee-tabs(
                 ng-show="selectedTab && attendees.users.length > 0",
@@ -118,26 +112,33 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     span.name(ng-if="editedEvent.organizer.name || editedEvent.organizer.displayName") {{editedEvent.organizer.name || editedEvent.organizer.displayName}}
                     span.separator -
                     span.email {{::editedEvent.organizer.email}}
-            .col-xs-12
-              event-recurrence-edition(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event-recurrence='canModifyEventRecurrence')
-            .col-xs-12
-              cal-event-alarm-edition(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event= "canModifyEvent")
-            .col-xs-12
-              .form-group
-                .input-group
-                  span.input-group-addon
-                    i.mdi.mdi-lock
-                  .fg-line.select
-                    md-input-container(ng-click="changeBackdropZIndex()")
-                      md-select(ng-disabled="!canModifyEvent", ng-model='editedEvent.class', md-container-class="cal-select-dropdown")
-                        md-option(ng-value='class.value', ng-repeat="class in CAL_EVENT_FORM.class.values") {{class.label | translate}} 
-            .col-xs-12
-              .form-group
-                .input-group
-                  span.input-group-addon.textarea-icon
-                    i.mdi.mdi-calendar-text
-                  .fg-line
-                    textarea.form-control(cal-auto-size-and-update, type="text", ng-model='editedEvent.description', placeholder="{{ 'Notes...' | translate }}", ng-readonly="!canModifyEvent")
+            div(ng-if="shouldShowMoreOptions")
+              cal-entities-autocomplete-input.cal-resource-autocomplete-input(
+                ng-hide='!canModifyEvent',
+                types='[CAL_ATTENDEE_OBJECT_TYPE.resource]',
+                input-type="text"
+                original-entities='attendees.resources',
+                mutable-entities='newResources',
+                place-holder="Resources",
+                show-icon='true',
+                show-resource-icon='true',
+                on-entity-added='onResourceAttendeesAdded',
+                exclude-unknown-users='true',
+                template='/calendar/app/components/entities-autocomplete-input/entities-autocomplete-input-freebusy-tag.html'
+              )
+              .col-xs-12
+                event-recurrence-edition(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event-recurrence='canModifyEventRecurrence')
+              .col-xs-12
+                cal-event-alarm-edition(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event= "canModifyEvent")
+              .col-xs-12
+                .form-group
+                  .input-group
+                    span.input-group-addon
+                      i.mdi.mdi-lock
+                    .fg-line
+                      md-input-container(ng-click="changeBackdropZIndex()")
+                        md-select(ng-disabled="!canModifyEvent", ng-model='editedEvent.class', md-container-class="cal-select-dropdown")
+                          md-option(ng-value='class.value', ng-repeat="class in CAL_EVENT_FORM.class.values") {{class.label | translate}} 
 
       .modal-footer.flex
         .flex-vertical-centered.flex-start
@@ -151,5 +152,9 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
             button.btn.btn-link.btn-icon.color-default(type='button', ng-click="duplicateEvent()", title="{{ 'Duplicate this event' | translate }}")
               i.mdi.mdi-library-plus
         .flex-vertical-centered.flex-end
-          button.btn.btn-link.color-default.close-button(type='button', ng-click="cancel()") {{ 'Close' | translate }}
+          button.btn.btn-link.color-default.close-button(type='button', ng-click="shouldShowMoreOptions = !shouldShowMoreOptions") 
+            i.mdi.mdi-chevron-down(ng-if="!shouldShowMoreOptions")
+            span(ng-if="!shouldShowMoreOptions") {{ 'More options' | translate }}
+            i.mdi.mdi-chevron-up(ng-if="shouldShowMoreOptions")
+            span(ng-if="shouldShowMoreOptions") {{ 'Fewer options' | translate }}
           button.btn.btn-primary.save.save-button(ng-if='canModifyEvent' type='submit', ng-disabled="!canPerformCall()") {{ 'Save' | translate }}
