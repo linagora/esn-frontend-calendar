@@ -8,8 +8,9 @@ describe('The CalCalendarPlanningController', function() {
   var $rootScope, $controller;
   var calFullUiConfiguration;
   var CAL_UI_CONFIG;
-  let calendarVisibilityServiceMock, testHiddenCalendars, $timeout, calFullCalendarPlanningRenderEventServiceMock;
+  let testHiddenCalendars, $timeout, calFullCalendarPlanningRenderEventServiceMock;
   let CAL_EVENTS, calendar;
+  const self = this;
 
   beforeEach(function() {
     testHiddenCalendars = [
@@ -20,19 +21,37 @@ describe('The CalCalendarPlanningController', function() {
     calendar = {
       fullCalendar: sinon.spy()
     };
+    self.calendars = [{
+      href: 'href',
+      uniqueId: 'id',
+      color: 'color',
+      getUniqueId: function() {
+        return 'uniqueId1';
+      }
+    }];
 
     calFullCalendarPlanningRenderEventServiceMock = sinon.stub().returns(function() {});
 
-    calendarVisibilityServiceMock = {
-      getHiddenCalendars: sinon.stub().returns($q.when(testHiddenCalendars))
+    self.calendarVisibilityServiceMock = {
+      getHiddenCalendars: sinon.stub().returns($q.when(testHiddenCalendars)),
+      isHidden: function() {
+        return ($q.when(false));
+      }
+    };
+    self.calendarServiceMock = {
+      listPersonalAndAcceptedDelegationCalendars: function() {
+
+        return ($q.when(self.calendars));
+      }
     };
 
     angular.mock.module('esn.calendar');
-    angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.resource.libs');
+    angular.mock.module('esn.calendar.libs');
 
     angular.mock.module(function($provide) {
-      $provide.value('calendarVisibilityService', calendarVisibilityServiceMock);
+      $provide.value('calendarVisibilityService', self.calendarVisibilityServiceMock);
+      $provide.value('calendarService', self.calendarServiceMock);
       $provide.value('calFullCalendarPlanningRenderEventService', calFullCalendarPlanningRenderEventServiceMock);
     });
 
@@ -41,7 +60,6 @@ describe('The CalCalendarPlanningController', function() {
       _$controller_,
       _$timeout_,
       _calFullUiConfiguration_,
-      _calendarService_,
       _CAL_UI_CONFIG_,
       _CAL_EVENTS_
     ) {
@@ -52,9 +70,6 @@ describe('The CalCalendarPlanningController', function() {
       $timeout = _$timeout_;
       CAL_EVENTS = _CAL_EVENTS_;
 
-      _calendarService_.listPersonalAndAcceptedDelegationCalendars = function() {
-        return $q.when();
-      };
     });
   });
 
@@ -85,6 +100,18 @@ describe('The CalCalendarPlanningController', function() {
       expect(calFullUiConfiguration.configureTimeFormatForCalendar).to.have.been.calledWith(CAL_UI_CONFIG);
     });
 
+    it('should remove calendar\'s event if it is hidden', function() {
+
+      const ctrl = initController();
+
+      ctrl.calendarReady(calendar);
+      $rootScope.$digest();
+      $timeout.flush();
+
+      expect(calendar.fullCalendar.args[0][0]).to.equal('removeEventSource');
+      expect(calendar.fullCalendar.args[1][0]).to.equal('addEventSource');
+    });
+
     it('should fetch the currently hidden calendars', function() {
       const ctrl = initController();
       const expectedHiddenCalendars = {
@@ -94,7 +121,7 @@ describe('The CalCalendarPlanningController', function() {
 
       $timeout.flush();
 
-      expect(calendarVisibilityServiceMock.getHiddenCalendars).to.have.been.called;
+      expect(self.calendarVisibilityServiceMock.getHiddenCalendars).to.have.been.called;
 
       setTimeout(() => { // the test won't wait for the object population without it.
         expect(ctrl.hiddenCalendars).to.eql(expectedHiddenCalendars);

@@ -366,10 +366,13 @@ const _ = require('lodash');
       if ($scope.eventSourcesMap[calId] && calendar.color && calendar.color !== $scope.eventSourcesMap[calId].backgroundColor) {
         $scope.eventSourcesMap[calId].backgroundColor = calendar.color;
       }
-
-      calendarPromise.then(function(cal) {
+      // remove and add the event source to redraw it
+      calendarPromise.then(cal => {
         cal.fullCalendar('removeEventSource', $scope.eventSourcesMap[calId]);
-        cal.fullCalendar('addEventSource', $scope.eventSourcesMap[calId]);
+        // check if the calendar is hidden, if yes skip the redraw
+        calendarVisibilityService.isHidden(calendar).then(isHidden => {
+          if (!isHidden) cal.fullCalendar('addEventSource', $scope.eventSourcesMap[calId]);
+        });
       });
     }
 

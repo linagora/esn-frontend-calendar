@@ -417,6 +417,7 @@ describe('The calendarViewController', function() {
         }
       };
 
+      this.calendarVisibilityServiceMock.isHidden = sinon.stub().returns(this.$q.when(false));
       this.controller('calendarViewController', { $scope: this.scope });
       this.scope.calendarReady(this.calendar);
       this.scope.calendars = this.calendars;
@@ -428,8 +429,8 @@ describe('The calendarViewController', function() {
 
       expect(this.scope.calendars).to.shallowDeepEqual([this.calendars[0], { uniqueId: updatedCalendar.uniqueId, color: updatedCalendar.color }]);
       expect(this.scope.eventSourcesMap[updatedCalendar.getUniqueId()].backgroundColor).to.equal(updatedCalendar.color);
-      expect(fullCalendarSpy).to.have.been.calledWith('removeEventSource', sinon.match.has('uniqueId', updatedCalendar.uniqueId));
-      expect(fullCalendarSpy).to.have.been.calledWith('addEventSource', sinon.match.has('uniqueId', updatedCalendar.uniqueId));
+      expect(fullCalendarSpy.args[0][0]).to.equal('removeEventSource');
+      expect(fullCalendarSpy.args[1][0]).to.equal('addEventSource');
     });
   });
 
