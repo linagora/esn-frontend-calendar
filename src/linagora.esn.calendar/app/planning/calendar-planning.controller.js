@@ -53,7 +53,10 @@ const _ = require('lodash');
 
             eventSourcesMap[calId] = buildEventSourceForCalendar(calendar);
             calendarPromise.then(function(cal) {
-              cal.fullCalendar('addEventSource', eventSourcesMap[calId]);
+              cal.fullCalendar('removeEventSource', eventSourcesMap[calId]);
+              calendarVisibilityService.isHidden(calendar).then(isHidden => {
+                if (!isHidden) cal.fullCalendar('addEventSource', eventSourcesMap[calId]);
+              });
             });
           });
         })
