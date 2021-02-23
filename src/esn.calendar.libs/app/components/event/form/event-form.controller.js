@@ -346,19 +346,26 @@ function CalEventFormController(
     var partstat = $scope.calendarOwnerAsAttendee.partstat;
 
     $scope.restActive = true;
-    calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, [$scope.calendarOwnerAsAttendee.email], partstat).then(function(response) {
-      if (!response) {
-        return;
-      }
 
-      if (!$scope.canModifyEvent) {
-        calPartstatUpdateNotificationService(partstat);
-      }
-    }, function() {
-      _displayNotification(notificationFactory.weakError, 'Event participation modification failed', 'Please refresh your calendar');
-    }).finally(function() {
-      $scope.restActive = false;
-    });
+    return calEventService.changeParticipation((event && event.path) || $scope.editedEvent.path, event || $scope.event, [$scope.calendarOwnerAsAttendee.email], partstat)
+      .then(({ etag }) => {
+        if (!etag) {
+          return Promise.reject();
+        }
+
+        if (!$scope.canModifyEvent) {
+          calPartstatUpdateNotificationService(partstat);
+        }
+
+        $scope.event.etag = etag;
+        $scope.editedEvent.etag = etag;
+
+        return Promise.resolve();
+      }, function() {
+        _displayNotification(notificationFactory.weakError, 'Event participation modification failed', 'Please refresh your calendar');
+      }).finally(function() {
+        $scope.restActive = false;
+      });
   }
 
   function _modifyEvent() {
@@ -651,17 +658,34 @@ function CalEventFormController(
 
     $modal({
       template: require('./modals/delete-instance-or-series-modal.pug'),
-      controller: /* @ngInject */ function($scope) {
+      resolve: {
+        attendee: function() {
+          return $scope.calendarOwnerAsAttendee;
+        },
+        event: function() {
+          return $scope.editedEvent;
+        }
+      },
+      controller: /* @ngInject */ function($scope, attendee, event) {
         $scope.editChoice = 'this';
 
         $scope.submit = function() {
           $scope.$hide();
 
-          ($scope.editChoice === 'this' ? deleteEvent : deleteAllInstances)();
+          ($scope.editChoice === 'this' ? deleteInstance : deleteAllInstances)();
         };
 
         function deleteAllInstances() {
           deleteEvent(true);
+        }
+
+        function deleteInstance() {
+          attendee.partstat = CAL_ICAL.partstat.declined;
+          event.changeParticipation(CAL_ICAL.partstat.declined, [attendee.email]);
+
+          _changeParticipationAsAttendee().then(() => {
+            deleteEvent();
+          });
         }
       },
       placement: 'center'
