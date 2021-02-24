@@ -182,7 +182,7 @@ const _ = require('lodash');
 
       var newEvent = oldEvent.clone();
 
-      if (oldEvent.alarm) {
+      if (oldEvent.alarm && oldEvent.alarm.attendee && oldEvent.alarm.trigger) {
         newEvent.alarm = oldEvent.alarm;
       }
 
