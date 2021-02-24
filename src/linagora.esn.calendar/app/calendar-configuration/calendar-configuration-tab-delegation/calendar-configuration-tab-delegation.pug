@@ -8,7 +8,7 @@ h2.delegation-section-title {{ 'Add delegated users' | translate }}
       md-select(ng-model='$ctrl.selectedShareeRight', md-container-class="cal-delegation-type-dropdown", md-on-open="$ctrl.changeBackdropZIndex()")
         md-option(ng-repeat="delegationType in $ctrl.delegationTypes" ng-value="delegationType.value") {{ delegationType.name | translate }}
     .delegation-actions
-      button.btn.btn-primary(ng-click="$ctrl.addUserGroup()") {{ 'Add' | translate }}
+      button.btn.btn-primary(ng-click="$event.preventDefault();$ctrl.addUserGroup()") {{ 'Add' | translate }}
 
 h2.delegation-section-title(ng-if="$ctrl.delegations.length > 0") {{ 'List of delegated users' | translate }}
 .delegation-line(ng-repeat="delegation in $ctrl.delegations")
