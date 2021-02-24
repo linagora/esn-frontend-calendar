@@ -9,6 +9,9 @@ describe('The calCalendarSubscriptionApiService factory', function() {
     tokenAPIMock = {
       getNewToken: function() {
         return $q.when({ data: { token: '123' } });
+      },
+      getWebToken() {
+        return $q.when({ data: 'jwt' });
       }
     };
 

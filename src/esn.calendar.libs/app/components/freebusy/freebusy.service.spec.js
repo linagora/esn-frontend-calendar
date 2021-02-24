@@ -8,7 +8,7 @@ describe('The calFreebusyService service', function() {
   var vfreebusy, $httpBackend, $rootScope, calFreebusyService, calMoment, CAL_ACCEPT_HEADER, CAL_DAV_DATE_FORMAT, CAL_FREEBUSY;
   var calAttendeeService, calFreebusyAPI;
   let tokenAPIMock, calCalDAVURLServiceMock, fileSaveMock;
-  const REQUEST_HEADERS_BASE = { ESNToken: '123' };
+  const REQUEST_HEADERS_BASE = { ESNToken: '123', Authorization: 'Bearer jwt' };
 
   beforeEach(function() {
     angular.mock.module('esn.resource.libs');
@@ -22,6 +22,9 @@ describe('The calFreebusyService service', function() {
     tokenAPIMock = {
       getNewToken: function() {
         return $q.when({ data: { token: '123' } });
+      },
+      getWebToken() {
+        return $q.when({ data: 'jwt' });
       }
     };
 
