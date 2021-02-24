@@ -384,7 +384,8 @@ function CalEventFormController(
     if ($scope.event.rrule && !$scope.event.rrule.equals($scope.editedEvent.rrule)) {
       $scope.editedEvent.deleteAllException();
     }
-    if ($scope.event.alarm && !$scope.editedEvent.alarm) {
+
+    if ($scope.event.alarm && $scope.event.alarm.attendee && $scope.event.alarm.trigger && !$scope.editedEvent.alarm) {
       $scope.editedEvent.alarm = $scope.event.alarm;
     }
 
