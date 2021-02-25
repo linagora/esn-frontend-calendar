@@ -15,7 +15,7 @@
                 input.import-input(type="file", accept=".ics", ng-file-select='$ctrl.onFileSelect($files)', data-ng-required="true", data-multiple='false')
         p {{ 'Import to' | translate }}
         md-input-container
-          md-select(ng-model="$ctrl.calendar", md-container-class="cal-event-edition-select-dropdown")
+          md-select(ng-model="$ctrl.calendar", md-container-class="cal-event-edition-select-dropdown", aria-label="target calendar")
             md-option(ng-value="calendar" ng-repeat="calendar in $ctrl.calendars | filter: $ctrl.canModifyCalendar")
               cal-select-calendar-item(calendar="calendar")
       .modal-footer
