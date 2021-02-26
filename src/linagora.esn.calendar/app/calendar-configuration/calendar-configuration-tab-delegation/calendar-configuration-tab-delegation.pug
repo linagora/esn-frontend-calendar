@@ -5,7 +5,7 @@ h2.delegation-section-title {{ 'Add delegated users' | translate }}
     .user-autocomplete.fg-line
       users-autocomplete-input(mutable-users='$ctrl.newUsersGroups', ignored-users='$ctrl.ignoredUsers', on-adding-user='$ctrl.onAddingUser')
     .select-delegation
-      md-select(ng-model='$ctrl.selectedShareeRight', md-container-class="cal-delegation-type-dropdown", md-on-open="$ctrl.changeBackdropZIndex()")
+      md-select(ng-model='$ctrl.selectedShareeRight', md-container-class="cal-delegation-type-dropdown", md-on-open="$ctrl.changeBackdropZIndex()", aria-label="delegation type")
         md-option(ng-repeat="delegationType in $ctrl.delegationTypes" ng-value="delegationType.value") {{ delegationType.name | translate }}
     .delegation-actions
       button.btn.btn-primary(ng-click="$event.preventDefault();$ctrl.addUserGroup()") {{ 'Add' | translate }}
@@ -18,7 +18,7 @@ h2.delegation-section-title(ng-if="$ctrl.delegations.length > 0") {{ 'List of de
     .user-name
       a(ng-href="mailto:{{::delegation.user.preferredEmail}}" op-inbox-compose op-inbox-compose-users="[delegation.user]") {{ delegation.user.displayName }}
   .select-delegation
-    md-select(ng-model='delegation.selection', md-container-class="cal-delegation-type-dropdown", md-on-open="$ctrl.changeBackdropZIndex()")
+    md-select(ng-model='delegation.selection', md-container-class="cal-delegation-type-dropdown", md-on-open="$ctrl.changeBackdropZIndex()", aria-label="selected user delegation type")
       md-option(ng-repeat="delegationType in ::$ctrl.delegationTypes" ng-value="delegationType.value") {{ delegationType.name | translate }}
   .delegation-actions
     button.btn.btn-link.btn-icon(ng-click='$ctrl.removeUserGroup(delegation)')

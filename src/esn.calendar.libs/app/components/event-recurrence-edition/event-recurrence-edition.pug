@@ -6,7 +6,7 @@
           i.mdi.mdi-repeat
         .fg-line
           md-input-container
-            md-select(ng-disabled="!vm.canModifyEventRecurrence", ng-model="vm.freq", ng-change="vm.setRRULE()", md-container-class="cal-event-edition-select-dropdown")
+            md-select(ng-disabled="!vm.canModifyEventRecurrence", ng-model="vm.freq", ng-change="vm.setRRULE()", md-container-class="cal-event-edition-select-dropdown", aria-label="frequency")
               md-option(ng-value="item.value", ng-repeat="item in vm.CAL_RECUR_FREQ") {{ item.label | translate }}
     .form-group.event-recurrence-flex-container.event-subelement-flex-container(ng-if="vm.freq")
       .interval

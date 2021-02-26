@@ -6,5 +6,5 @@
           i.mdi.mdi-alarm
         .fg-line
           md-input-container
-            md-select(ng-disabled="!ctrl.canModifyEvent", ng-model="ctrl.trigger", ng-change="ctrl.setEventAlarm()", md-container-class="cal-event-edition-select-dropdown")
+            md-select(ng-disabled="!ctrl.canModifyEvent", ng-model="ctrl.trigger", ng-change="ctrl.setEventAlarm()", md-container-class="cal-event-edition-select-dropdown", aria-label="alarm")
               md-option(ng-value='item.value', ng-repeat="item in ctrl.CAL_ALARM_TRIGGER") {{item.label | translate}}
