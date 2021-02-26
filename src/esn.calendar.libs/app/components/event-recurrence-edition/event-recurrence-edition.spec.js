@@ -302,9 +302,12 @@ describe('The event-recurrence-edition component', function() {
       this.eleScope.vm.eventUntil = 'HELLO';
       // attempt to update the event rrule.until
       this.eleScope.vm.onMobileUntilDateChange();
+      const expectedDate = currentDate;
+
+      expectedDate.setDate(currentDate.getDate() + 1);
       expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
       expect(this.eleScope.vm.event.rrule.until).to.not.be.undefined;
-      expect(this.eleScope.vm.event.rrule.until.getDate()).to.equal(currentDate.getDate() + 1); // the default until date is today +1 day
+      expect(this.eleScope.vm.event.rrule.until.getDate()).to.equal(expectedDate.getDate()); // the default until date is today +1 day
     });
 
     it('should update the event.rrule.until using the date selected in the native mobile input', function() {
@@ -318,9 +321,13 @@ describe('The event-recurrence-edition component', function() {
       this.eleScope.vm.eventUntil.setDate(currentDate.getDate() + 3);
       // attempt to update the event rrule.until
       this.eleScope.vm.onMobileUntilDateChange();
+
+      const expectedDate = currentDate;
+
+      expectedDate.setDate(currentDate.getDate() + 3);
       expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
       expect(this.eleScope.vm.event.rrule.until).to.not.be.undefined;
-      expect(this.eleScope.vm.event.rrule.until.getDate()).to.equal(currentDate.getDate() + 3);
+      expect(this.eleScope.vm.event.rrule.until.getDate()).to.equal(expectedDate.getDate());
     });
   });
 
