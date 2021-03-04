@@ -8,6 +8,6 @@
   button.btn.btn-link.partstat-button.declined(type='button', ng-click='ctrl.changeParticipation("DECLINED")', ng-class='{ "active": ctrl.isCurrentPartstat("DECLINED") }')
     i.mdi.mdi-close
     | {{ 'Decline' | translate }}
-  button.btn.btn-link.partstat-button.suggest(ng-if="ctrl.canSuggestChanges" type='button', ng-click='ctrl.showDateSuggestion()')
+  button.btn.btn-link.partstat-button.suggest(ng-if="!ctrl.shouldHideDateSuggestion && ctrl.canSuggestChanges" type='button', ng-click='ctrl.showDateSuggestion()')
     i.mdi.mdi-clock
     | {{ 'Propose new time' | translate }}

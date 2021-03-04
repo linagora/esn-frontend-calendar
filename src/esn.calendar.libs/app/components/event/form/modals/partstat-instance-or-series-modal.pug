@@ -1,0 +1,15 @@
+.modal.edit-instance-or-series(tabindex="-1", role="dialog")
+  form.suggest-form(name="form", role="form", aria-hidden="true", ng-submit='submit()')
+    .modal-dialog.modal-sm
+      .modal-content
+        .modal-header
+          h4.modal-title {{ 'Update the participation status' | translate }}
+        .modal-body.flex-column
+          md-radio-group.md-primary(ng-model="editChoice")
+            md-radio-button(value="this") {{ 'This event' | translate }}
+            md-radio-button(value="all") {{ 'All the events' | translate }}
+
+        .modal-footer.flex
+          .flex-vertical-centered.flex-end
+            button.btn.btn-link.color-default.close-button(type='button', ng-click="$hide()") {{ 'Cancel' | translate }}
+            button.btn.btn-primary.save.save-button(type='submit') {{ 'OK' | translate }}

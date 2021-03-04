@@ -25,6 +25,7 @@ const _ = require('lodash');
     calendarUtils,
     calEventUtils,
     calFullCalendarRenderEventService,
+    calEventPreviewPopoverService,
     gracePeriodService,
     calOpenEventForm,
     elementScrollService,
@@ -158,8 +159,8 @@ const _ = require('lodash');
       };
     }
 
-    function eventClick(event) {
-      calOpenEventForm($scope.calendarHomeId, event.clone());
+    function eventClick(event, jsEvent) {
+      calEventPreviewPopoverService.open({ targetElement: jsEvent.target, event: event.clone() });
     }
 
     function eventDropAndResize(drop, event, delta, revert) {

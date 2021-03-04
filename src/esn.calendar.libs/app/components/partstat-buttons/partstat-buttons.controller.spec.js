@@ -2,14 +2,18 @@
 
 /* global chai: false, sinon: false, __FIXTURES__: false */
 
-var expect = chai.expect;
+const { expect } = chai;
 
 describe('The CalPartstatButtonsController', function() {
-  var $controller, $q, calEventService, session, shells = {}, CalendarShell, ICAL;
+  let $rootScope, $controller, $q, calEventService, session, CalendarShell, ICAL;
+  const shells = {};
   let fileSaveMock;
+  let scope;
 
   function initCtrl() {
-    return $controller('CalPartstatButtonsController', null, {});
+    scope = $rootScope.$new();
+
+    return $controller('CalPartstatButtonsController', { $rootScope, $scope: scope }, {});
   }
 
   beforeEach(function() {
@@ -33,8 +37,9 @@ describe('The CalPartstatButtonsController', function() {
     });
   });
 
-  beforeEach(inject(function(_$controller_, _$q_, _$rootScope_, _CalendarShell_, _calEventService_, _session_,
+  beforeEach(inject(function(_$rootScope_, _$controller_, _$q_, _CalendarShell_, _calEventService_, _session_,
     _ICAL_) {
+    $rootScope = _$rootScope_;
     $controller = _$controller_;
     $q = _$q_;
     CalendarShell = _CalendarShell_;

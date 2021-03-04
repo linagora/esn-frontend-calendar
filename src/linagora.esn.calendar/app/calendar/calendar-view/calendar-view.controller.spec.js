@@ -9,6 +9,7 @@ describe('The calendarViewController', function() {
   var fullCalendarSpy;
   var createCalendarSpy;
   var self = this;
+  let calEventPreviewPopoverServiceMock;
 
   function getDateOnlyMoment(date) {
     var dateOnlyMoment = self.calMoment(date);
@@ -158,6 +159,10 @@ describe('The calendarViewController', function() {
       updateObjectToBrowserTimeZone: sinon.stub().returnsArg(0)
     };
 
+    calEventPreviewPopoverServiceMock = {
+      open: sinon.stub()
+    };
+
     angular.mock.module('esn.calendar');
     angular.mock.module(function($provide) {
       $provide.decorator('calendarUtils', function($delegate) {
@@ -180,6 +185,7 @@ describe('The calendarViewController', function() {
       $provide.value('calCachedEventCache', self.calCachedEventSourceMock);
       $provide.value('calFullCalendarRenderEventService', self.calFullCalendarRenderEventService);
       $provide.value('esnDatetimeService', self.esnDatetimeServiceMock);
+      $provide.value('calEventPreviewPopoverService', calEventPreviewPopoverServiceMock);
       $provide.factory('calendarEventSource', function() {
         return function() {
           return [{
@@ -1168,20 +1174,21 @@ describe('The calendarViewController', function() {
   });
 
   describe('the eventClick', function() {
-    it('should open form with the current calendarHomeId and clonedEvent', function() {
-      var clonedEvent = {};
-      var event = {
-        clone: sinon.spy(function() {
-          return clonedEvent;
-        })
+    it('should open the event preview popover', function() {
+      const event = {
+        uid: 'event'
       };
+      const clonedEvent = { ...event };
+      const jsEvent = { target: {} };
+
+      event.clone = sinon.stub().returns(clonedEvent);
 
       this.controller('calendarViewController', { $scope: this.scope });
 
-      this.scope.eventClick(event);
+      this.scope.eventClick(event, jsEvent);
 
-      expect(this.calOpenEventFormMock).to.have.been.calledWith(this.scope.calendarHomeId, clonedEvent);
-      expect(event.clone).to.have.been.calledWith();
+      expect(event.clone).to.have.been.called;
+      expect(calEventPreviewPopoverServiceMock.open).to.have.been.calledWith({ targetElement: jsEvent.target, event: clonedEvent });
     });
   });
 
