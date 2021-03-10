@@ -20,7 +20,8 @@
   button.btn.btn-link.btn-icon.waves-notransition.waves-effect.waves-light.waves-circle(ng-click="$ctrl.closeEventPreviewPopover()", title="{{ 'Close' | translate }}", bs-tooltip)
     i.mdi.mdi-close
 .event-preview-popover-body-container
-  h1.event-summary {{ $ctrl.event.summary }}
+  h1.event-summary(ng-if="$ctrl.event.summary") {{ $ctrl.event.summary }}
+  h1.event-summary(ng-if="!$ctrl.event.summary") {{ 'No title' | translate }}
   p.event-date-time {{ [$ctrl.event.start, $ctrl.event.end] | eventDateTimeFormat }}
   .info-row.video-conference-row(ng-if="$ctrl.event.xOpenpaasVideoconference")
     i.mdi.mdi-video
