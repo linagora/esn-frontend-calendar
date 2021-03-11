@@ -50,7 +50,7 @@
     span {{ $ctrl.resources | commaSeparatedResourceList }}
   .info-row(ng-if="$ctrl.event.description")
     i.mdi.mdi-calendar-text
-    span {{ $ctrl.event.description }}
+    span.event-description {{ $ctrl.event.description }}
   .info-row(ng-if="$ctrl.calendar.id")
     i.mdi.mdi-calendar
     i.mdi.mdi-checkbox-blank-circle.calendar-color-icon(ng-style="{ color: $ctrl.calendar.color }")  
