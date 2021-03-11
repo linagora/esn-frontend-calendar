@@ -9,7 +9,7 @@ describe('The calendarViewController', function() {
   var fullCalendarSpy;
   var createCalendarSpy;
   var self = this;
-  let calEventPreviewPopoverServiceMock;
+  let calEventPreviewPopoverServiceMock, detectUtilsMock;
 
   function getDateOnlyMoment(date) {
     var dateOnlyMoment = self.calMoment(date);
@@ -163,6 +163,10 @@ describe('The calendarViewController', function() {
       open: sinon.stub()
     };
 
+    detectUtilsMock = {
+      isMobile: () => false
+    };
+
     angular.mock.module('esn.calendar');
     angular.mock.module(function($provide) {
       $provide.decorator('calendarUtils', function($delegate) {
@@ -186,6 +190,7 @@ describe('The calendarViewController', function() {
       $provide.value('calFullCalendarRenderEventService', self.calFullCalendarRenderEventService);
       $provide.value('esnDatetimeService', self.esnDatetimeServiceMock);
       $provide.value('calEventPreviewPopoverService', calEventPreviewPopoverServiceMock);
+      $provide.value('detectUtils', detectUtilsMock);
       $provide.factory('calendarEventSource', function() {
         return function() {
           return [{
@@ -1174,7 +1179,7 @@ describe('The calendarViewController', function() {
   });
 
   describe('the eventClick', function() {
-    it('should open the event preview popover', function() {
+    it('should open the event preview popover if it is not a mobile device', function() {
       const event = {
         uid: 'event'
       };
@@ -1188,7 +1193,28 @@ describe('The calendarViewController', function() {
       this.scope.eventClick(event, jsEvent);
 
       expect(event.clone).to.have.been.called;
+      expect(this.calOpenEventFormMock).to.have.not.been.called;
       expect(calEventPreviewPopoverServiceMock.open).to.have.been.calledWith({ targetElement: jsEvent.target, event: clonedEvent });
+    });
+
+    it('should open the event dialog if it is a mobile device', function() {
+      const event = {
+        uid: 'event'
+      };
+      const clonedEvent = { ...event };
+      const jsEvent = { target: {} };
+
+      detectUtilsMock.isMobile = () => true;
+
+      event.clone = sinon.stub().returns(clonedEvent);
+
+      this.controller('calendarViewController', { $scope: this.scope });
+
+      this.scope.eventClick(event, jsEvent);
+
+      expect(event.clone).to.have.been.called;
+      expect(this.calOpenEventFormMock).to.have.been.calledWith(this.scope.calendarHomeId, clonedEvent);
+      expect(calEventPreviewPopoverServiceMock.open).to.have.not.been.called;
     });
   });
 

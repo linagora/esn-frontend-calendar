@@ -26,6 +26,7 @@ const _ = require('lodash');
     calEventUtils,
     calFullCalendarRenderEventService,
     calEventPreviewPopoverService,
+    detectUtils,
     gracePeriodService,
     calOpenEventForm,
     elementScrollService,
@@ -160,6 +161,8 @@ const _ = require('lodash');
     }
 
     function eventClick(event, jsEvent) {
+      if (detectUtils.isMobile()) return calOpenEventForm($scope.calendarHomeId, event.clone());
+
       calEventPreviewPopoverService.open({ targetElement: jsEvent.target, event: event.clone() });
     }
 
