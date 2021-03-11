@@ -1,4 +1,5 @@
 require('../../components/modals/calendar-delete-confirmation/calendar-delete-confirmation-modal.service.js');
+const copy = require('copy-to-clipboard');
 
 (function(angular) {
   'use strict';
@@ -9,6 +10,8 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
   function CalendarConfigurationTabMainController(
     $q,
     $state,
+    $scope,
+    $timeout,
     calendarService,
     session,
     userUtils,
@@ -16,16 +19,20 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
     CAL_CALENDAR_PUBLIC_RIGHT,
     CAL_CALENDAR_TYPE,
     calUIAuthorizationService,
-    calCalendarDeleteConfirmationModalService,
     calCalDAVURLService,
-    calCalendarSecretAddressConfirmationModalService
+    calCalendarSecretAddressConfirmationModalService,
+    notificationFactory
   ) {
     var self = this;
 
     self.$onInit = $onInit;
     self.unsubscribe = unsubscribe;
-    self.openGetSecretLinkConfirmationDialog = openGetSecretLinkConfirmationDialog;
+    self.openResetSecretAddressConfirmationDialog = openResetSecretAddressConfirmationDialog;
+    self.getSecretAddress = getSecretAddress;
+    self.toggleSecretAddressVisibility = toggleSecretAddressVisibility;
+    self.copySecretAddress = copySecretAddress;
     self.exportCalendar = exportCalendar;
+    self.isSecretAddressShown = false;
 
     ///////////
     function $onInit() {
@@ -48,7 +55,7 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       self.canModifyPublicSelection = _canModifyPublicSelection();
       self.canExportIcs = canExportIcs();
       self.isResource = self.calendar.type === CAL_CALENDAR_TYPE.RESOURCE;
-      self.canGenerateSecretLink = canGenerateSecretLink();
+      self.canGenerateSecretAddress = canGenerateSecretAddress();
 
       if (!self.newCalendar && self.calendar) {
         // Used in the template to show the calendar DAV URL.
@@ -97,20 +104,64 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
         .catch(angular.noop);
     }
 
-    function openGetSecretLinkConfirmationDialog() {
-      calCalendarSecretAddressConfirmationModalService(self.calendar, createSecretLinkWithToken);
+    function openResetSecretAddressConfirmationDialog() {
+      calCalendarSecretAddressConfirmationModalService(self.calendar, () => {
+        self.getSecretAddress(true)
+          .then(() => {
+            self.isSecretAddressShown = true;
+
+            notificationFactory.weakInfo('', 'Successfully reset secret address');
+          });
+      });
     }
 
-    function createSecretLinkWithToken() {
-      const jwtPayload = {
+    function getSecretAddress(shouldResetLink = false) {
+      const payload = {
         calendarHomeId: self.calendarHomeId,
         calendarId: self.calendar.id,
-        userId: session.user._id
+        shouldResetLink
       };
 
-      calendarService.generateTokenForSecretLink(jwtPayload)
-        .then(token => {
-          self.calendarSecretLink = `${window.location.origin}/calendar/api/calendars/secretLink?jwt=${token}`;
+      let notification;
+
+      const showNotificationTimeout = $timeout(() => {
+        notification = notificationFactory.strongInfo('', 'Getting secret address...');
+      }, 200);
+
+      return calendarService.getSecretAddress(payload)
+        .then(secretAddress => {
+          self.calendarSecretAddress = secretAddress;
+        })
+        .finally(() => {
+          $timeout.cancel(showNotificationTimeout);
+
+          if (notification) notification.close();
+        });
+    }
+
+    function toggleSecretAddressVisibility(shouldShow = true) {
+      if (shouldShow && !self.calendarSecretAddress) {
+        return self.getSecretAddress()
+          .then(() => {
+            self.isSecretAddressShown = true;
+          });
+      }
+
+      self.isSecretAddressShown = shouldShow;
+    }
+
+    function copySecretAddress() {
+      if (self.calendarSecretAddress) {
+        notificationFactory.weakInfo('', 'Secret address copied to clipboard');
+
+        return copy(self.calendarSecretAddress);
+      }
+
+      self.getSecretAddress()
+        .then(() => {
+          copy(self.calendarSecretAddress);
+
+          notificationFactory.weakInfo('', 'Secret address copied to clipboard');
         });
     }
 
@@ -118,7 +169,7 @@ require('../../components/modals/calendar-delete-confirmation/calendar-delete-co
       calendarService.exportCalendar(self.calendarToExport.calendarHomeId, self.calendarToExport.id);
     }
 
-    function canGenerateSecretLink() {
+    function canGenerateSecretAddress() {
       return !self.newCalendar && calUIAuthorizationService.canModifyCalendarProperties(self.calendar, session.user._id);
     }
   }

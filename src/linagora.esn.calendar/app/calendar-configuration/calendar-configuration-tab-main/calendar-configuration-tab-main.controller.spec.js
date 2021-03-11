@@ -23,15 +23,14 @@ describe('The calendar configuration tab delegation controller', function() {
     CAL_CALENDAR_SHARED_RIGHT,
     calendar;
 
-  let calCalDAVURLServiceMock;
+  let calCalDAVURLServiceMock, notificationFactoryMock, notificationStrongInfoMock;
+  const secretAddress = 'http://top.secret';
 
   function initController(bindings) {
     return $controller('CalendarConfigurationTabMainController', { $scope: $scope }, bindings);
   }
 
   beforeEach(function() {
-    const responseToken = 'token';
-
     calendarService = {
       removeCalendar: sinon.spy(function() {
         return $q.when();
@@ -40,9 +39,7 @@ describe('The calendar configuration tab delegation controller', function() {
         return $q.when();
       }),
       exportCalendar: sinon.spy(),
-      generateTokenForSecretLink: sinon.spy(function() {
-        return $q.when(responseToken);
-      })
+      getSecretAddress: sinon.spy(function() { return $q.when(secretAddress); })
     };
 
     calFullUiConfiguration = {
@@ -68,12 +65,22 @@ describe('The calendar configuration tab delegation controller', function() {
       getCalendarURL: sinon.stub()
     };
 
+    notificationStrongInfoMock = {
+      close: sinon.stub()
+    };
+
+    notificationFactoryMock = {
+      weakInfo: sinon.stub(),
+      strongInfo: sinon.stub().returns(notificationStrongInfoMock)
+    };
+
     angular.mock.module('esn.calendar', function($provide) {
       $provide.value('calendarService', calendarService);
       $provide.value('calCalendarDeleteConfirmationModalService', calCalendarDeleteConfirmationModalService);
       $provide.value('calFullUiConfiguration', calFullUiConfiguration);
       $provide.value('calCalendarSecretAddressConfirmationModalService', calCalendarSecretAddressConfirmationModalService);
       $provide.value('calCalDAVURLService', calCalDAVURLServiceMock);
+      $provide.value('notificationFactory', notificationFactoryMock);
     });
 
     angular.mock.inject(function(_$rootScope_, _$controller_, _$state_, _$q_, _session_, _userUtils_, _CalCalendarRightsUtilsService_, _CAL_CALENDAR_PUBLIC_RIGHT_, _CAL_CALENDAR_SHARED_RIGHT_, _calUIAuthorizationService_) {
@@ -94,6 +101,27 @@ describe('The calendar configuration tab delegation controller', function() {
   beforeEach(function() {
     calCalDAVURLServiceMock.getCalendarURL.returns($q.when('/some/url'));
     CalendarConfigurationTabMainController = initController();
+
+    CalendarConfigurationTabMainController.calendar = {
+      isShared: sinon.stub().returns(false),
+      isAdmin: sinon.stub().returns(false),
+      isOwner: sinon.stub().returns(false),
+      isSubscription: sinon.stub().returns(true),
+      isReadable: sinon.stub().returns(true),
+      id: 'id',
+      calendarHomeId: 'homeId',
+      source: {
+        id: 'sourceId',
+        calendarHomeId: 'sourceHomeId'
+      },
+      rights: {
+        getShareeRight: sinon.spy()
+      },
+      getOwner: () => ({
+        preferredEmail: 'preferredEmail'
+      })
+    };
+
     sinon.spy($state, 'go');
   });
 
@@ -240,54 +268,6 @@ describe('The calendar configuration tab delegation controller', function() {
       );
 
       expect($state.go).to.have.been.calledWith('calendar.main');
-    });
-  });
-
-  describe('the openGetSecretLinkConfirmationDialog function ', () => {
-    beforeEach(function() {
-      CalendarConfigurationTabMainController.calendar = {
-        isShared: sinon.stub().returns(false),
-        isAdmin: sinon.stub().returns(false),
-        isOwner: sinon.stub().returns(false),
-        isSubscription: sinon.stub().returns(true),
-        isReadable: sinon.stub().returns(true),
-        id: 'id',
-        calendarHomeId: 'homeId',
-        source: {
-          id: 'sourceId',
-          calendarHomeId: 'sourceHomeId'
-        },
-        rights: {
-          getShareeRight: sinon.spy()
-        },
-        getOwner: () => ({
-          preferredEmail: 'preferredEmail'
-        })
-      };
-    });
-
-    it('should open the confirmation modalto create secret link with token to download ics of the calendar', function(done) {
-      CalendarConfigurationTabMainController.$onInit();
-      CalendarConfigurationTabMainController.openGetSecretLinkConfirmationDialog();
-
-      expect(calCalendarSecretAddressConfirmationModalService).to.have.been.calledOnce;
-      expect(calCalendarSecretAddressConfirmationModalService.getCall(0).args[0]).to.equal(CalendarConfigurationTabMainController.calendar);
-
-      const createSecretLinkWithToken = calCalendarSecretAddressConfirmationModalService.getCall(0).args[1];
-
-      createSecretLinkWithToken();
-
-      $rootScope.$digest();
-
-      const jwtPayload = {
-        calendarHomeId: CalendarConfigurationTabMainController.calendarHomeId,
-        calendarId: CalendarConfigurationTabMainController.calendar.id,
-        userId: session.user._id
-      };
-
-      expect(calendarService.generateTokenForSecretLink).to.have.been.calledWith(jwtPayload);
-      expect(CalendarConfigurationTabMainController.calendarSecretLink).to.equal('http://localhost:9876/calendar/api/calendars/secretLink?jwt=token');
-      done();
     });
   });
 
@@ -534,6 +514,103 @@ describe('The calendar configuration tab delegation controller', function() {
       $rootScope.$digest();
 
       expect(calendarService.exportCalendar).to.have.been.calledWith('sourceHomeId', 'sourceId');
+    });
+  });
+
+  describe('the getSecretAddress function', function() {
+    it('should get the secret address', function(done) {
+      CalendarConfigurationTabMainController.getSecretAddress(false)
+        .then(() => {
+          expect(CalendarConfigurationTabMainController.calendarSecretAddress).to.equal(secretAddress);
+          done();
+        })
+        .catch(err => done(err || new Error('should resolve')));
+
+      const payload = {
+        calendarHomeId: CalendarConfigurationTabMainController.calendarHomeId,
+        calendarId: CalendarConfigurationTabMainController.calendar.id,
+        shouldResetLink: false
+      };
+
+      expect(calendarService.getSecretAddress).to.have.been.calledWith(payload);
+
+      $rootScope.$digest();
+    });
+
+    it('should get the secret address without forcing it to reset by default', function(done) {
+      CalendarConfigurationTabMainController.getSecretAddress()
+        .then(() => {
+          expect(CalendarConfigurationTabMainController.calendarSecretAddress).to.equal(secretAddress);
+          done();
+        })
+        .catch(err => done(err || new Error('should resolve')));
+
+      const payload = {
+        calendarHomeId: CalendarConfigurationTabMainController.calendarHomeId,
+        calendarId: CalendarConfigurationTabMainController.calendar.id,
+        shouldResetLink: false
+      };
+
+      expect(calendarService.getSecretAddress).to.have.been.calledWith(payload);
+
+      $rootScope.$digest();
+    });
+  });
+
+  describe('the toggleSecretAddressVisibility function', function() {
+    it('should display the secret address by default', function() {
+      CalendarConfigurationTabMainController.calendarSecretAddress = secretAddress;
+      CalendarConfigurationTabMainController.toggleSecretAddressVisibility();
+
+      expect(CalendarConfigurationTabMainController.isSecretAddressShown).to.equal(true);
+    });
+
+    it('should toggle the visibility of the secret address', function() {
+      CalendarConfigurationTabMainController.toggleSecretAddressVisibility(false);
+
+      expect(CalendarConfigurationTabMainController.isSecretAddressShown).to.equal(false);
+    });
+
+    it('should display the secret address as requested after getting it', function() {
+      CalendarConfigurationTabMainController.getSecretAddress = sinon.stub().returns($q.when());
+
+      CalendarConfigurationTabMainController.calendarSecretAddress = '';
+      CalendarConfigurationTabMainController.toggleSecretAddressVisibility(true);
+
+      expect(CalendarConfigurationTabMainController.getSecretAddress).to.have.been.called;
+
+      $rootScope.$digest();
+
+      expect(CalendarConfigurationTabMainController.isSecretAddressShown).to.equal(true);
+    });
+  });
+
+  describe('the copySecretAddress function', function() {
+
+  });
+
+  describe('the openResetSecretAddressConfirmationDialog function', function() {
+    beforeEach(function() {
+      CalendarConfigurationTabMainController.getSecretAddress = sinon.stub().returns($q.when());
+    });
+
+    it('should open the confirmation modal to reset the secret address', function(done) {
+      CalendarConfigurationTabMainController.$onInit();
+      CalendarConfigurationTabMainController.openResetSecretAddressConfirmationDialog();
+
+      expect(calCalendarSecretAddressConfirmationModalService).to.have.been.calledOnce;
+      expect(calCalendarSecretAddressConfirmationModalService.getCall(0).args[0]).to.equal(CalendarConfigurationTabMainController.calendar);
+
+      const resetSecretAddress = calCalendarSecretAddressConfirmationModalService.getCall(0).args[1];
+
+      resetSecretAddress();
+
+      $rootScope.$digest();
+
+      expect(CalendarConfigurationTabMainController.getSecretAddress).to.have.been.calledWith(true);
+      expect(CalendarConfigurationTabMainController.isSecretAddressShown).to.equal(true);
+      expect(notificationFactoryMock.weakInfo).to.have.been.calledWith('', 'Successfully reset secret address');
+      done();
     });
   });
 });

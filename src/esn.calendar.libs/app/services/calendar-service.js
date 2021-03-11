@@ -51,7 +51,7 @@ require('./calendar-cache.js');
     this.getOwnerDisplayName = getOwnerDisplayName;
     this.getResourceDescription = getResourceDescription;
     this.exportCalendar = exportCalendar;
-    this.generateTokenForSecretLink = generateTokenForSecretLink;
+    this.getSecretAddress = getSecretAddress;
     ////////////
 
     /**
@@ -385,12 +385,12 @@ require('./calendar-cache.js');
     }
 
     /**
-     * Get the generated token for the secret link
-     * @param {Object} jwtPayload The jwtPayload that contains the information to generate token
-     * @return {String} a generated token with calendarHomeId and calendar id payload
+     * Get a secret link to download the ics file of a calendar
+     * @param {Object} payload The payload that contains the information to get the secret link
+     * @return {String} A secret link to download the ics file of a calendar
      */
-    function generateTokenForSecretLink(jwtPayload) {
-      return calendarAPI.generateToken(jwtPayload).then(({ token }) => token);
+    function getSecretAddress(payload) {
+      return calendarAPI.getSecretAddress(payload).then(({ secretLink }) => secretLink);
     }
   }
 })(angular);

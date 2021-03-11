@@ -52,17 +52,29 @@
       span {{ 'CalDAV URL' | translate }}
     .settings-value
       esn-clipboard-url(url="$ctrl.caldavurl")
-  .calendar-link(ng-if="$ctrl.canGenerateSecretLink")
+  .calendar-link.calendar-secret-address(ng-if="$ctrl.canGenerateSecretAddress")
     hr
     .settings-label
       i.mdi.mdi-link
       span {{ 'Secret address in iCal format' | translate }}
     .settings-value
-      esn-clipboard-url(ng-if="$ctrl.calendarSecretLink", url="$ctrl.calendarSecretLink")
+      .fg-line        
+        input.form-control(ng-if="$ctrl.isSecretAddressShown", type="text", ng-model="$ctrl.calendarSecretAddress", readonly, noanimate)
+        input.form-control(ng-if="!$ctrl.isSecretAddressShown", type="text", value="••••••••••••••••••••••••••••••••••••••••", readonly, noanimate)
+      div(ng-if="!$ctrl.isSecretAddressShown")
+        button.btn.btn-link.btn-icon(type="button", ng-click="$ctrl.toggleSecretAddressVisibility(true)", title="{{ 'Show secret address' | translate }}", bs-tooltip)
+          i.mdi.mdi-eye
+      div(ng-if="$ctrl.isSecretAddressShown")
+        button.btn.btn-link.btn-icon(type="button", ng-click="$ctrl.toggleSecretAddressVisibility(false)", title="{{ 'Hide secret address' | translate }}", bs-tooltip)
+          i.mdi.mdi-eye-off
+      button.btn.btn-link.btn-icon(ng-click="$ctrl.copySecretAddress()", type="button", title="{{ 'Copy to clipboard' | translate }}", bs-tooltip)
+        i.mdi.mdi-content-copy
     .settings-text
-      span {{ 'Use the following button to get the address to access the iCalendar format file (.ics). Warning: It allows anyone with the address to view your calendar and all of its events.' | translate }}
+      p.secret-link-description {{ 'Use this address to access the iCalendar format file (.ics).' | translate }}
+      p.secret-link-description {{ 'Warning: It allows anyone with the address to view your calendar and all of its events.' | translate }}
     .settings-actions
-      a.btn.btn-primary.btn-sm(ng-click="$ctrl.openGetSecretLinkConfirmationDialog()") {{ 'Get secret address' | translate }}    
+      p.secret-link-small-description {{ 'Use the button below to get a new secret address and make the current one invalid.' | translate }}
+      button.btn.btn-primary.btn-sm(ng-click="$ctrl.openResetSecretAddressConfirmationDialog()", type="button") {{ 'Reset secret address' | translate }}    
   .calendar-link(ng-if="$ctrl.canExportIcs")
     hr
     .settings-label

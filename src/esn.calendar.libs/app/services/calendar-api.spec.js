@@ -647,29 +647,38 @@ describe('The calendar module apis', function() {
       });
     });
 
-    describe('the generate token for secret link request', function() {
-      it('should get the calendar export path', function(done) {
-        const expectedResponse = { data: { token: '123' } };
-        const jwtPayload = {
+    describe('the get secret address request', function() {
+      it('should send a request to get the secret address and returns the secret address when the request succeeds', function(done) {
+        const expectedResponse = { data: { secretLink: 'http://top.secret' } };
+        const payload = {
           calendarHomeId: 'calendarHomeId',
-          calendarId: 'calendarId',
-          userId: 'userId'
+          calendarId: 'calendarId'
         };
 
-        this.$httpBackend.expectPOST('/calendar/api/calendars/generateJWTforSecretLink').respond(expectedResponse);
-        this.calendarAPI.generateToken(jwtPayload).then(function(result) {
-          expect(result.data).to.deep.equal(expectedResponse.data);
-          done();
-        });
+        this.$httpBackend.expectGET(`/calendar/api/calendars/${payload.calendarHomeId}/${payload.calendarId}/secret-link?shouldResetLink=${Boolean(payload.shouldResetLink)}`).respond(expectedResponse);
+        this.calendarAPI.getSecretAddress(payload)
+          .then(function(result) {
+            expect(result.data).to.deep.equal(expectedResponse.data);
+            done();
+          })
+          .catch(err => done(err || new Error('should resolve')));
 
         this.$httpBackend.flush();
       });
 
-      it('should return an Error if response.status is not 200', function(done) {
-        this.$httpBackend.expectPOST('/calendar/api/calendars/generateJWTforSecretLink').respond(500, 'Error');
+      it('should return an error if the request to get the secret address fails and display a notification', function(done) {
+        const payload = {
+          calendarHomeId: 'calendarHomeId',
+          calendarId: 'calendarId',
+          shouldResetLink: true
+        };
 
-        this.calendarAPI.generateToken('test')
+        this.$httpBackend.expectGET(`/calendar/api/calendars/${payload.calendarHomeId}/${payload.calendarId}/secret-link?shouldResetLink=${Boolean(payload.shouldResetLink)}`).respond(500, 'Error');
+
+        this.calendarAPI.getSecretAddress(payload)
+          .then(() => done(new Error('should not resolve')))
           .catch(function(err) {
+            expect(notificationFactoryMock.weakError).to.have.been.calledWith('', 'Failed to get secret address');
             expect(err).to.exist;
             done();
           });
