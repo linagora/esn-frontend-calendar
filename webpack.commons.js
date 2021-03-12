@@ -38,6 +38,7 @@ module.exports = {
     new Dotenv({ systemvars: true }),
     new webpack.IgnorePlugin({ resourceRegExp: /codemirror/ }), // for summernote
     new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
+    new webpack.IgnorePlugin({ resourceRegExp: /openpaas\.js$/, contextRegExp: /env$/ }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery',
@@ -66,6 +67,10 @@ module.exports = {
         {
           from: path.resolve(__dirname, 'node_modules', 'oidc-client', 'dist', 'oidc-client.min.js'),
           to: 'auth'
+        },
+        {
+          from: path.resolve(__dirname, 'env', 'openpaas.js'),
+          to: 'env'
         }
       ]
     })
