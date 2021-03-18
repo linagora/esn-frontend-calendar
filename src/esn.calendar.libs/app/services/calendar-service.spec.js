@@ -1178,21 +1178,25 @@ describe('The calendarService service', function() {
     });
   });
 
-  describe('the generateTokenForSecretLink function', function() {
-    it('should call calendarAPI.getToken to generate a token with correct params', function() {
-      const jwtPayload = {
+  describe('the getSecretAddress function', function() {
+    it('should call calendarAPI.getSecretAddress to get the secret address with correct params', function(done) {
+      const payload = {
         calendarHomeId: 'calendarHomeId',
-        calendarId: 'calendarId',
-        userId: 'userId'
+        calendarId: 'calendarId'
       };
-      const token = '123';
+      const secretLink = 'http://top.secret';
 
-      this.calendarAPI.generateToken = sinon.stub().returns($q.when(token));
-      this.calendarService.generateTokenForSecretLink(jwtPayload).then(function(result) {
-        expect(result).to.deep.equal(token);
-      });
+      this.calendarAPI.getSecretAddress = sinon.stub().returns($q.when({ secretLink }));
+      this.calendarService.getSecretAddress(payload)
+        .then(function(result) {
+          expect(result).to.equal(secretLink);
+          done();
+        })
+        .catch(err => done(err || new Error('should resolve')));
 
-      expect(this.calendarAPI.generateToken).to.have.been.calledWith(jwtPayload);
+      this.$rootScope.$digest();
+
+      expect(this.calendarAPI.getSecretAddress).to.have.been.calledWith(payload);
     });
   });
 });

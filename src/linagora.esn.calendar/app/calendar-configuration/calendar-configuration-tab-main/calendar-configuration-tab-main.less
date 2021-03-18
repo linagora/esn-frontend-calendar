@@ -40,6 +40,45 @@ calendar-configuration-tab-main {
     }
   }
 
+  .calendar-secret-address {
+    .settings-value {
+      display: flex;
+      align-items: center;
+
+      input.form-control {
+        transition: none;
+      }
+  
+      button.btn {
+        .all-centered;
+        margin-left: 8px;
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+      }
+  
+      i.mdi {
+        font-size: 20px;
+      }
+    }
+
+    .settings-text {
+      .secret-link-description {
+        margin: 0 0 4px 0;
+      }
+    }
+
+    .settings-actions {
+      margin-top: 8px;
+
+      .secret-link-small-description {
+        margin: 0 0 4px 0;
+        font-size: 13px;
+        color: @secondaryTextColor;
+      }
+    }
+  }
+
   .settings-actions {
     margin-top: 15px;
   }

@@ -43,7 +43,7 @@ require('./http-response-handler.js');
       changeParticipation: changeParticipation,
       modifyPublicRights: modifyPublicRights,
       exportCalendar,
-      generateToken
+      getSecretAddress
     };
 
     ////////////
@@ -318,15 +318,15 @@ require('./http-response-handler.js');
         .then(calHttpResponseHandler(200, _.property('data')));
     }
     /**
-     * POST resuest used to generate token for secret link to download ics calendar
-     * @param {Object} jwtPayload   paylod to generate token
+     * GET request used to get the secret link to download the ics of a calendar
+     * @param {Object} payload The payload required to get the secret link
      */
-    function generateToken(jwtPayload) {
-
-      return calendarRestangular.one('calendars').one('generateJWTforSecretLink').customPOST(jwtPayload)
+    function getSecretAddress(payload) {
+      return calendarRestangular.one('calendars').one(payload.calendarHomeId).one(payload.calendarId).one('secret-link')
+        .customGET('', { shouldResetLink: Boolean(payload.shouldResetLink) })
         .then(calHttpResponseHandler(200, _.property('data')))
         .catch(function(error) {
-          notificationFactory.weakError('Failed to generate token for secret', 'Cannot join the server, please try later');
+          notificationFactory.weakError('', 'Failed to get secret address');
 
           return $q.reject(error);
         });

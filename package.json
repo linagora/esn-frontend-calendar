@@ -15,6 +15,7 @@
   "author": "",
   "license": "AGPLv3",
   "dependencies": {
+    "copy-to-clipboard": "3.3.1",
     "esn-dav-import-client": "github:openpaas-suite/esn-dav-import-client#main",
     "esn-frontend-common-libs": "github:openpaas-suite/esn-frontend-common-libs#main",
     "esn-frontend-group": "github:openpaas-suite/esn-frontend-group#main",
