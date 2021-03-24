@@ -25,9 +25,7 @@ function calEventDateSuggestionController(esnI18nDateFormatService, calMoment, c
     self.timeFormat = esnDatetimeService.getTimeFormat();
     self.isMobile = detectUtils.isMobile();
     self.start = calMoment(self.event.start);
-    // In CalDAV backend, the end date of an all-day event is stored +1 day compared to the end date when a user saves the event.
-    // Therefore, if this is an all-day event, we need to display -1 day for the end date input.
-    self.end = !self.full24HoursDay ? calMoment(self.event.end) : calMoment(self.event.end).subtract(1, 'days');
+    self.end = calMoment(self.event.end);
     // on load, ensure that duration between start and end is stored inside editedEvent
     self.onEndDateChange();
     _initMobileTimeInputs();
