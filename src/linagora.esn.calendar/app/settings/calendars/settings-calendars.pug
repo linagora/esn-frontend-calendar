@@ -12,5 +12,3 @@
       p.no-shared-calendar(ng-if="!(ctrl.sharedCalendars.length + ctrl.publicCalendars.length)") {{ 'You have no shared calendars' | translate }}
       cal-settings-calendars-item(ng-repeat="calendar in ctrl.sharedCalendars", calendar="calendar", on-remove="ctrl.remove", display-owner="true", state-to-go="'calendar.main.external.shared'")
       cal-settings-calendars-item(ng-repeat="calendar in ctrl.publicCalendars", calendar="calendar", on-remove="ctrl.remove", display-owner="true", state-to-go="'calendar.main.external.shared'")
-
-dynamic-fab-dropup(anchor='cal-add-calendar')
