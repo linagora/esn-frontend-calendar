@@ -7,7 +7,7 @@ const { expect } = chai;
 describe('The calEventPreviewPopoverService', function() {
   let $rootScope, calEventPreviewPopoverService;
   let $compileMock, $compileReturnStub, jQueryAppendStub;
-  let scope, eventPreviewPopoverElement, targetElement, event;
+  let scope, eventPreviewPopoverElement, targetElement, event, calendarHomeId;
 
   beforeEach(function() {
     eventPreviewPopoverElement = {
@@ -39,6 +39,7 @@ describe('The calEventPreviewPopoverService', function() {
 
     targetElement = { id: 'some-dom-element' };
     event = { uid: 'some-event-uid' };
+    calendarHomeId = 'calendarHomeId';
   });
 
   beforeEach(function() {
@@ -51,12 +52,12 @@ describe('The calEventPreviewPopoverService', function() {
 
   describe('The open function', function() {
     it('should create a new popover element if it has not been created yet', function() {
-      calEventPreviewPopoverService.open({ targetElement, event });
+      calEventPreviewPopoverService.open({ targetElement, event, calendarHomeId });
 
       expect($rootScope.$new).to.have.been.calledOnce;
       expect(scope.$digest).to.have.been.calledTwice;
-      expect(scope.$ctrl).to.deep.equal({ event });
-      expect($compileMock).to.have.been.calledWith('<event-preview-popover event="$ctrl.event" />');
+      expect(scope.$ctrl).to.deep.equal({ event, calendarHomeId });
+      expect($compileMock).to.have.been.calledWith('<event-preview-popover event="$ctrl.event" calendar-home-id="$ctrl.calendarHomeId" />');
       expect($compileReturnStub).to.have.been.calledWith(scope);
       expect(jQueryAppendStub).to.have.been.calledWith(eventPreviewPopoverElement);
       expect(eventPreviewPopoverElement.show).to.have.been.calledOnce;
@@ -69,14 +70,14 @@ describe('The calEventPreviewPopoverService', function() {
     });
 
     it('should just show the existing popover element when it has been created', function() {
-      calEventPreviewPopoverService.open({ targetElement, event });
-      calEventPreviewPopoverService.open({ targetElement, event });
+      calEventPreviewPopoverService.open({ targetElement, event, calendarHomeId });
+      calEventPreviewPopoverService.open({ targetElement, event, calendarHomeId });
 
       expect($rootScope.$new).to.have.been.calledOnce;
       expect(scope.$digest.callCount).to.equal(3);
-      expect(scope.$ctrl).to.deep.equal({ event });
+      expect(scope.$ctrl).to.deep.equal({ event, calendarHomeId });
       expect($compileMock).to.have.been.calledOnce;
-      expect($compileMock).to.have.been.calledWith('<event-preview-popover event="$ctrl.event" />');
+      expect($compileMock).to.have.been.calledWith('<event-preview-popover event="$ctrl.event" calendar-home-id="$ctrl.calendarHomeId" />');
       expect($compileReturnStub).to.have.been.calledOnce;
       expect($compileReturnStub).to.have.been.calledWith(scope);
       expect(jQueryAppendStub).to.have.been.calledOnce;

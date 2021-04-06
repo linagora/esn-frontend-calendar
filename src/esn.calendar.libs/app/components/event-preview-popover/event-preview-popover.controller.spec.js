@@ -19,7 +19,7 @@ describe('The CalEventPreviewPopoverController', function() {
     calOpenEventFormMock = sinon.stub();
 
     calendarServiceMock = {
-      getCalendar: sinon.stub().returns($q.when({ id: 'calendarId', calendarHomeId: 'calendarHomeId', getOwner: () => $q.when({ id: 'owner' }) }))
+      listPersonalAndAcceptedDelegationCalendars: sinon.stub().returns($q.when([{ id: 'calendarId', calendarHomeId: 'calendarHomeId', getOwner: () => $q.when({ id: 'owner' }) }]))
     };
 
     calEventServiceMock = {
@@ -112,7 +112,8 @@ describe('The CalEventPreviewPopoverController', function() {
         attendees: [{ email: 'attendee1@mail.test' }, { email: 'attendee2@mail.test' }],
         location: 'https://test.com',
         calendarHomeId: 'calendarHomeId',
-        calendarId: 'calendarId'
+        calendarId: 'calendarId',
+        calendarUniqueId: '/calendarHomeId/calendarId.json'
       };
     });
 
@@ -158,13 +159,13 @@ describe('The CalEventPreviewPopoverController', function() {
       const owner = { id: 'owner' };
       const userAttendee = { id: 'calendarHomeId', email: 'attendee1@mail.test' };
       const calendar = {
-        id: 'calendarId', calendarHomeId: 'calendarHomeId', getOwner: () => $q.when(owner), readOnly: false
+        id: 'calendarId', calendarHomeId: event.calendarHomeId, uniqueId: event.calendarUniqueId, getOwner: () => $q.when(owner), readOnly: false
       };
 
-      calendarServiceMock.getCalendar = sinon.stub().returns($q.when(calendar));
+      calendarServiceMock.listPersonalAndAcceptedDelegationCalendars = sinon.stub().returns($q.when([calendar]));
       calAttendeeServiceMock.getAttendeeForUser = sinon.stub().returns(userAttendee);
 
-      controller = initController({ event });
+      controller = initController({ event, calendarHomeId: calendar.calendarHomeId });
 
       expect(scope.$watch).to.have.been.calledTwice;
 
@@ -175,7 +176,53 @@ describe('The CalEventPreviewPopoverController', function() {
 
       listener();
 
-      expect(calendarServiceMock.getCalendar).to.have.been.calledWith(controller.event.calendarHomeId, controller.event.calendarId);
+      expect(calendarServiceMock.listPersonalAndAcceptedDelegationCalendars).to.have.been.calledWith(controller.event.calendarHomeId);
+
+      $rootScope.$digest();
+
+      expect(controller.calendar).to.equal(calendar);
+
+      $rootScope.$digest();
+
+      expect(calAttendeeServiceMock.getAttendeeForUser).to.have.been.calledWith(controller.event.attendees, owner);
+      expect(controller.calendarOwnerAsAttendee).to.equal(userAttendee);
+
+      $rootScope.$digest();
+
+      expect(calUIAuthorizationServiceMock.canModifyEvent).to.have.been.calledWith(controller.calendar, controller.event, sessionUser._id);
+      expect(controller.canModifyEvent).to.be.true;
+      expect(controller.isReadOnly).to.equal(calendar.readOnly);
+    });
+
+    it('should fetch calendar and rights and set the calendar correctly when it is a shared calendar', function() {
+      const owner = { id: 'owner' };
+      const userAttendee = { id: 'calendarHomeId', email: 'attendee1@mail.test' };
+      const calendar = {
+        id: 'calendarId',
+        calendarHomeId: 'anotherCalendarHomeId',
+        uniqueId: 'anotherCalendarHomeId/calendarId.json',
+        getOwner: () => $q.when(owner),
+        readOnly: false,
+        source: {
+          uniqueId: event.calendarUniqueId
+        }
+      };
+
+      calendarServiceMock.listPersonalAndAcceptedDelegationCalendars = sinon.stub().returns($q.when([calendar]));
+      calAttendeeServiceMock.getAttendeeForUser = sinon.stub().returns(userAttendee);
+
+      controller = initController({ event, calendarHomeId: calendar.calendarHomeId });
+
+      expect(scope.$watch).to.have.been.calledTwice;
+
+      const detectChangeFunction = scope.$watch.getCall(0).args[0];
+      const listener = scope.$watch.getCall(0).args[1];
+
+      expect(detectChangeFunction()).to.equal(controller.event);
+
+      listener();
+
+      expect(calendarServiceMock.listPersonalAndAcceptedDelegationCalendars).to.have.been.calledWith(calendar.calendarHomeId);
 
       $rootScope.$digest();
 
@@ -208,7 +255,7 @@ describe('The CalEventPreviewPopoverController', function() {
       expect(calEventUtilsMock.getEmailAddressesFromAttendeesExcludingCurrentUser).to.have.not.been.called;
       expect(urlUtilsMock.isValidURL).to.have.not.been.called;
       expect(urlUtilsMock.isAbsoluteURL).to.have.not.been.called;
-      expect(calendarServiceMock.getCalendar).to.have.not.been.called;
+      expect(calendarServiceMock.listPersonalAndAcceptedDelegationCalendars).to.have.not.been.called;
     });
   });
 

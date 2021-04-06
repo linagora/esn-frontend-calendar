@@ -1194,7 +1194,7 @@ describe('The calendarViewController', function() {
 
       expect(event.clone).to.have.been.called;
       expect(this.calOpenEventFormMock).to.have.not.been.called;
-      expect(calEventPreviewPopoverServiceMock.open).to.have.been.calledWith({ targetElement: jsEvent.target, event: clonedEvent });
+      expect(calEventPreviewPopoverServiceMock.open).to.have.been.calledWith({ targetElement: jsEvent.target, event: clonedEvent, calendarHomeId: this.scope.calendarHomeId });
     });
 
     it('should open the event dialog if it is a mobile device', function() {

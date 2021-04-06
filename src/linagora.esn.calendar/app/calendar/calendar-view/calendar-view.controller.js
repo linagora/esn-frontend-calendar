@@ -163,7 +163,7 @@ const _ = require('lodash');
     function eventClick(event, jsEvent) {
       if (detectUtils.isMobile()) return calOpenEventForm($scope.calendarHomeId, event.clone());
 
-      calEventPreviewPopoverService.open({ targetElement: jsEvent.target, event: event.clone() });
+      calEventPreviewPopoverService.open({ targetElement: jsEvent.target, event: event.clone(), calendarHomeId: $scope.calendarHomeId });
     }
 
     function eventDropAndResize(drop, event, delta, revert) {

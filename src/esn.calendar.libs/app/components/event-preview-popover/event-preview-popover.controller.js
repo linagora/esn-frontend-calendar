@@ -184,7 +184,12 @@ function CalEventPreviewPopoverController(
   }
 
   function _fetchCalendarAndRights() {
-    calendarService.getCalendar(self.event.calendarHomeId, self.event.calendarId)
+    calendarService.listPersonalAndAcceptedDelegationCalendars(self.calendarHomeId)
+      .then(calendars => calendars.find(calendar => {
+        if (!calendar.source) return calendar.uniqueId === self.event.calendarUniqueId;
+
+        return calendar.source.uniqueId === self.event.calendarUniqueId || calendar.uniqueId === self.event.calendarUniqueId;
+      }))
       .then(calendar => {
         self.calendar = calendar;
 
