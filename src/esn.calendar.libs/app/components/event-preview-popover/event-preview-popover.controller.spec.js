@@ -38,7 +38,8 @@ describe('The CalEventPreviewPopoverController', function() {
 
     calAttendeeServiceMock = {
       splitAttendeesFromType: sinon.stub(),
-      getAttendeeForUser: sinon.stub()
+      getAttendeeForUser: sinon.stub(),
+      getUserIdForAttendee: sinon.stub().returns($q.when('userId'))
     };
 
     calEventUtilsMock = {
@@ -212,7 +213,7 @@ describe('The CalEventPreviewPopoverController', function() {
   });
 
   describe('The $scope.$watch for changes in event attendees', function() {
-    it('should set attendees and resources and put the organizer first in the list', function() {
+    it('should set attendees and resources and put the organizer first in the list and set user ids for attendees', function(done) {
       const event = {
         uid: 'event',
         attendees: [{ email: 'attendee1@mail.test' }, { email: 'organizer@mail.test' }, { email: 'attendee2@mail.test' }],
@@ -237,11 +238,19 @@ describe('The CalEventPreviewPopoverController', function() {
 
       expect(detectChangeFunction()).to.be.equal(controller.event.attendees);
 
-      listener();
+      listener()
+        .then(() => {
+          expect(calAttendeeServiceMock.splitAttendeesFromType).to.have.been.calledWith(controller.event.attendees);
+          expect(calAttendeeServiceMock.getUserIdForAttendee.getCall(0).args[0]).to.deep.equal(event.attendees[0]);
+          expect(calAttendeeServiceMock.getUserIdForAttendee.getCall(1).args[0]).to.deep.equal(event.attendees[1]);
+          expect(calAttendeeServiceMock.getUserIdForAttendee.getCall(2).args[0]).to.deep.equal(event.attendees[2]);
+          expect(controller.resources).to.deep.equal(splitAttendeesResult.resources);
+          expect(controller.attendees).to.deep.equal([{ email: 'organizer@mail.test', id: 'userId' }, { email: 'attendee1@mail.test', id: 'userId' }, { email: 'attendee2@mail.test', id: 'userId' }]);
+          done();
+        })
+        .catch(err => done(err || new Error('should resolve')));
 
-      expect(calAttendeeServiceMock.splitAttendeesFromType).to.have.been.calledWith(controller.event.attendees);
-      expect(controller.resources).to.deep.equal(splitAttendeesResult.resources);
-      expect(controller.attendees).to.deep.equal([{ email: 'organizer@mail.test' }, { email: 'attendee1@mail.test' }, { email: 'attendee2@mail.test' }]);
+      $rootScope.$digest();
     });
   });
 
