@@ -163,6 +163,15 @@ function CalEventPreviewPopoverController(
 
     // Ensure the organizer shows first in the list
     self.attendees.unshift(self.attendees.splice(self.attendees.map(attendee => attendee.email).indexOf(self.event.organizer.email), 1)[0]);
+
+    return Promise.all(self.attendees.map(_populateUserId));
+
+    function _populateUserId(attendee) {
+      return calAttendeeService.getUserIdForAttendee(attendee)
+        .then(id => {
+          attendee.id = id;
+        });
+    }
   }
 
   function _setAttendeeEmailAddresses() {
