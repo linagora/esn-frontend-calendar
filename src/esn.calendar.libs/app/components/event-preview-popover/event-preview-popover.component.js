@@ -8,6 +8,7 @@ angular.module('esn.calendar.libs')
     template: require('./event-preview-popover.pug'),
     controller: 'CalEventPreviewPopoverController',
     bindings: {
-      event: '='
+      event: '=',
+      calendarHomeId: '<'
     }
   });

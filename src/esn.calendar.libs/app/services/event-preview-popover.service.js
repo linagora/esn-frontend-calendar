@@ -12,10 +12,10 @@ function calEventPreviewPopoverService($rootScope, $compile) {
     close
   };
 
-  function open({ targetElement, event }) {
+  function open({ targetElement, event, calendarHomeId }) {
     if (!scope) scope = $rootScope.$new();
 
-    scope.$ctrl = { event };
+    scope.$ctrl = { event, calendarHomeId };
 
     scope.$digest();
 
@@ -61,7 +61,7 @@ function calEventPreviewPopoverService($rootScope, $compile) {
   }
 
   function _createEventPreviewPopoverElement() {
-    eventPreviewPopoverElement = $compile('<event-preview-popover event="$ctrl.event" />')(scope);
+    eventPreviewPopoverElement = $compile('<event-preview-popover event="$ctrl.event" calendar-home-id="$ctrl.calendarHomeId" />')(scope);
 
     $(document.body).append(eventPreviewPopoverElement);
 
