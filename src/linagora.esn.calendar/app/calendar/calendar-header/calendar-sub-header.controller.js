@@ -1,17 +1,12 @@
-(function(angular) {
-  'use strict';
+angular.module('esn.calendar')
+  .controller('calendarSubHeaderController', calendarSubHeaderController);
 
-  angular.module('esn.calendar')
-    .controller('calendarSubHeaderController', calendarSubHeaderController);
+function calendarSubHeaderController($scope, calendarCurrentView, calMoment) {
+  $scope.isCurrentViewAroundToday = isCurrentViewAroundToday;
 
-  function calendarSubHeaderController($scope, calendarCurrentView, calMoment) {
-    $scope.isCurrentViewAroundToday = isCurrentViewAroundToday;
+  //////////////////////
 
-    //////////////////////
-
-    function isCurrentViewAroundToday() {
-      return calendarCurrentView.isCurrentViewAroundDay(calMoment());
-    }
+  function isCurrentViewAroundToday() {
+    return calendarCurrentView.isCurrentViewAroundDay(calMoment());
   }
-
-})(angular);
+}
