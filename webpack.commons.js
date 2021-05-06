@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const { VueLoaderPlugin } = require('vue-loader');
 
 // default: we are building an SPA
 const commonLibsPath = path.resolve(__dirname, 'node_modules', 'esn-frontend-common-libs');
@@ -31,8 +32,10 @@ module.exports = {
   resolve: {
     alias: {
       'moment/moment.js': momentPath,
-      moment$: momentPath
-    }
+      moment$: momentPath,
+      vue: '@vue/runtime-dom'
+    },
+    extensions: ['.js', '.ts', '.vue']
   },
   plugins: [
     new Dotenv({ systemvars: true }),
@@ -73,7 +76,8 @@ module.exports = {
           to: 'env'
         }
       ]
-    })
+    }),
+    new VueLoaderPlugin()
   ],
   devServer: {
     contentBase: [path.join(__dirname, 'dist'), path.resolve(__dirname, 'node_modules', 'esn-frontend-login', 'dist')],
@@ -268,6 +272,34 @@ module.exports = {
             loader: 'pug-loader',
             options: pugLoaderOptions
           }
+        ]
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.ts?$/,
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+          transpileOnly: true,
+          configFile: path.join(__dirname, 'tsconfig.json')
+        }
+      },
+      {
+        test: /.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
         ]
       }
     ]
