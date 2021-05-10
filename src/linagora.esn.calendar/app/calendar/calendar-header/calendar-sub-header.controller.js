@@ -1,17 +1,34 @@
-(function(angular) {
-  'use strict';
+import CalNotification from 'calendar-next-gen/src/modules/notification/presentation/components/CalNotification/CalNotification.vue';
+import { createApp } from 'vue';
+import davClient from 'calendar-next-gen/src/modules/core/infrastructure/http/core.http.dav.client.ts';
 
-  angular.module('esn.calendar')
-    .controller('calendarSubHeaderController', calendarSubHeaderController);
+angular.module('esn.calendar')
+  .controller('calendarSubHeaderController', calendarSubHeaderController);
 
-  function calendarSubHeaderController($scope, calendarCurrentView, calMoment) {
-    $scope.isCurrentViewAroundToday = isCurrentViewAroundToday;
+function calendarSubHeaderController($scope, $q, session, tokenAPI, calCalDAVURLService, calendarCurrentView, calMoment) {
+  $scope.isCurrentViewAroundToday = isCurrentViewAroundToday;
 
-    //////////////////////
+  //////////////////////
 
-    function isCurrentViewAroundToday() {
-      return calendarCurrentView.isCurrentViewAroundDay(calMoment());
-    }
+  function isCurrentViewAroundToday() {
+    return calendarCurrentView.isCurrentViewAroundDay(calMoment());
   }
 
-})(angular);
+  // ======================== MOUNT THE NOTIFICATION COMPONENT ========================
+  let davServerURLPromise;
+
+  $q.all([tokenAPI.getWebToken(), _getDAVServerUrl()])
+    .then(([{ data: jwt }, serverBaseUrl]) => {
+      davClient.changeBaseURL(serverBaseUrl);
+      davClient.attachHeaders({ Authorization: `Bearer ${jwt}` });
+
+      createApp(CalNotification, { userId: session.user._id })
+        .mount('#cal-event-notifications');
+    });
+
+  function _getDAVServerUrl() {
+    davServerURLPromise = davServerURLPromise || calCalDAVURLService.getFrontendURL();
+
+    return davServerURLPromise;
+  }
+}
