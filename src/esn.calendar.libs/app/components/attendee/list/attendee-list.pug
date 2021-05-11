@@ -9,6 +9,7 @@
   .cal-attendee-list-body
     cal-attendee-item(
       attendee='attendee',
+      subject='::ctrl.subject'
       can-modify-attendee='::ctrl.canModifyAttendees',
       is-organizer='attendee.organizer',
       remove="ctrl.removeAttendee(attendee)",

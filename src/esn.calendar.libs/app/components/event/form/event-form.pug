@@ -98,6 +98,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                 ng-show="selectedTab === 'attendees'",
                 ng-if="attendees.users.length > 0",
                 attendees="attendees.users",
+                subject="editedEvent.title"
                 can-modify-attendees="::canModifyEvent",
                 organizer="::editedEvent.organizer",
                 on-attendee-removed="onUserAttendeeRemoved(attendee)")
