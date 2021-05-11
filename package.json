@@ -23,7 +23,8 @@
     "esn-frontend-videoconference-calendar": "github:openpaas-suite/esn-frontend-videoconference-calendar#main",
     "fullcalendar": "3.9.0",
     "jquery-ui": "1.12.1",
-    "jwt-decode": "3.1.2"
+    "jwt-decode": "3.1.2",
+    "lodash": "2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
