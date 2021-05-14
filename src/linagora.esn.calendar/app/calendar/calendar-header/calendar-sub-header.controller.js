@@ -22,7 +22,7 @@ function calendarSubHeaderController($scope, $q, session, tokenAPI, calCalDAVURL
       davClient.changeBaseURL(serverBaseUrl);
       davClient.attachHeaders({ Authorization: `Bearer ${jwt}` });
 
-      createApp(CalNotification, { userId: session.user._id })
+      createApp(CalNotification, { user: { id: session.user._id, preferredEmail: session.user.preferredEmail } })
         .mount('#cal-event-notifications');
     });
 

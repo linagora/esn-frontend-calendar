@@ -15,7 +15,7 @@
   "author": "",
   "license": "AGPLv3",
   "dependencies": {
-    "calendar-next-gen": "github:huy-ta/calendar-next-gen#main",
+    "calendar-next-gen": "github:linagora/calendar-next-gen#main",
     "copy-to-clipboard": "3.3.1",
     "esn-dav-import-client": "github:openpaas-suite/esn-dav-import-client#main",
     "esn-frontend-common-libs": "github:openpaas-suite/esn-frontend-common-libs#main",
