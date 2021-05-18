@@ -4,6 +4,7 @@ const { merge } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const commons = require('./webpack.commons.js');
+const BASE_HREF = process.env.BASE_HREF || '/';
 
 module.exports = merge(commons, {
   mode: 'production',
@@ -11,7 +12,7 @@ module.exports = merge(commons, {
   output: {
     filename: '[name].[hash].min.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/calendar/'
+    publicPath: BASE_HREF
   },
   module: {
     rules: [
