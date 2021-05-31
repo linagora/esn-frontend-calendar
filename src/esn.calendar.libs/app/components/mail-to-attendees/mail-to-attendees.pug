@@ -2,7 +2,7 @@
   button.btn.btn-link.btn-icon(
     ng-if="ctrl.emailAddressesFromAttendees",
     ng-href="mailto:{{ctrl.emailAddressesFromAttendees}}",
-    op-inbox-compose
+    op-inbox-compose op-inbox-compose-subject="{{::ctrl.event.title}}"
   )
     md-tooltip(md-direction="bottom", md-z-index="10000")
       span {{ 'Mail to attendees' | translate }}

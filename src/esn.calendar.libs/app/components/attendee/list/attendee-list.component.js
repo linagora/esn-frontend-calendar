@@ -6,6 +6,7 @@ angular.module('esn.calendar.libs')
       attendees: '<',
       canModifyAttendees: '=',
       organizer: '=',
+      subject: '=',
       onAttendeeRemoved: '&'
     },
     controller: 'CalAttendeeListController',
