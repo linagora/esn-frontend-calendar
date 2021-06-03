@@ -5,8 +5,7 @@
 var expect = chai.expect;
 
 describe('The calFullUiConfiguration service', function() {
-  var $q,
-    $httpBackend,
+  var $httpBackend,
     esnI18nService,
     calFullUiConfiguration,
     esnDatetimeServiceMock,
@@ -38,8 +37,15 @@ describe('The calFullUiConfiguration service', function() {
     moduleName = 'linagora.esn.calendar';
     moduleConfiguration = ['workingDays', 'hideDeclinedEvents'];
 
-    esnConfig = sinon.spy(function() {
-      return $q.when(businessHours);
+    esnConfig = sinon.spy(function(key) {
+      switch (key) {
+      case 'core.businessHours':
+        return $q.when(businessHours);
+      case 'core.language':
+        return $q.when('en');
+      }
+
+      return $q.when();
     });
 
     format12 = 'h:mm A';
@@ -57,7 +63,6 @@ describe('The calFullUiConfiguration service', function() {
 
   beforeEach(angular.mock.inject(function(
     _$rootScope_,
-    _$q_,
     _$httpBackend_,
     _esnI18nService_,
     _calFullUiConfiguration_,
@@ -67,7 +72,6 @@ describe('The calFullUiConfiguration service', function() {
   ) {
     calFullUiConfiguration = _calFullUiConfiguration_;
     esnUserConfigurationService = _esnUserConfigurationService_;
-    $q = _$q_;
     $httpBackend = _$httpBackend_;
     esnI18nService = _esnI18nService_;
     CAL_UI_CONFIG = _CAL_UI_CONFIG_;

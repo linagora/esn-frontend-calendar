@@ -28,7 +28,7 @@ describe('The calAttendeesDenormalizerService service', function() {
       getResolver: sinon.stub()
     };
 
-    userAPIMock = {};
+    userAPIMock = { user: angular.noop };
   });
 
   beforeEach(function() {
