@@ -61,6 +61,7 @@
     "karma-mocha": "1.1.1",
     "karma-rawfixtures-preprocessor": "linagora/karma-rawfixtures-preprocessor",
     "karma-sinon-chai": "^2.0.2",
+    "karma-sourcemap-loader": "^0.3.8",
     "karma-spec-reporter": "0.0.26",
     "karma-webpack": "^4.0.2",
     "less-loader": "^6.1.1",
