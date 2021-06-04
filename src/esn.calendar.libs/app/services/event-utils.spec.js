@@ -42,7 +42,6 @@ describe('The calEventUtils service', function() {
       });
 
       const momentMock = {
-        tcOffset: sinon.stub(),
         locale: sinon.stub()
       };
 
