@@ -110,6 +110,7 @@ describe('The calEventService service', function() {
       $provide.value('calendarHomeService', calendarHomeServiceMock);
       $provide.value('calOpenEventForm', calOpenEventFormMock);
       $provide.value('esnI18nService', {
+        getLocale: sinon.stub().returns('en'),
         translate: function(input) { return input; }
       });
       $provide.constant('CAL_GRACE_DELAY_IS_ACTIVE', self.CAL_GRACE_DELAY_IS_ACTIVE_MOCK);

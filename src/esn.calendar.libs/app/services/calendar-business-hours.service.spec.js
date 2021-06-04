@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('The calBusinessHoursService service', function() {
-  var $rootScope, $q, calBusinessHoursService, businessHours, esnConfig, ESN_CONFIG_DEFAULT;
+  var $rootScope, calBusinessHoursService, businessHours, esnConfig, ESN_CONFIG_DEFAULT;
 
   beforeEach(function() {
     angular.mock.module('esn.calendar.libs');
@@ -18,8 +18,15 @@ describe('The calBusinessHoursService service', function() {
       end: '24:00'
     }];
 
-    esnConfig = sinon.spy(function() {
-      return $q.when(businessHours);
+    esnConfig = sinon.spy(function(key) {
+      switch (key) {
+      case 'core.businessHours':
+        return $q.when(businessHours);
+      case 'core.language':
+        return $q.when('en');
+      }
+
+      return $q.when();
     });
 
     angular.mock.module(function($provide) {
@@ -27,8 +34,7 @@ describe('The calBusinessHoursService service', function() {
     });
   });
 
-  beforeEach(angular.mock.inject(function(_$q_, _calBusinessHoursService_, _ESN_CONFIG_DEFAULT_, _$rootScope_) {
-    $q = _$q_;
+  beforeEach(angular.mock.inject(function(_calBusinessHoursService_, _ESN_CONFIG_DEFAULT_, _$rootScope_) {
     calBusinessHoursService = _calBusinessHoursService_;
     ESN_CONFIG_DEFAULT = _ESN_CONFIG_DEFAULT_;
     $rootScope = _$rootScope_;

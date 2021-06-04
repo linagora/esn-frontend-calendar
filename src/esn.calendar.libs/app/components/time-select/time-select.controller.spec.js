@@ -9,9 +9,7 @@ describe('the calTimeSelectController', function() {
   var $controller, calMoment, $scope, testingDate;
 
   beforeEach(function() {
-    angular.mock.module('esn.calendar.libs', function($provide) {
-      $provide.value('esnDatetimeService', () => {});
-    });
+    angular.mock.module('esn.calendar.libs');
 
     angular.mock.inject(function(_$controller_, _calMoment_, _$rootScope_) {
       $controller = _$controller_;
