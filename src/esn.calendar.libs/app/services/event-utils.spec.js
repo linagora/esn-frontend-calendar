@@ -7,7 +7,7 @@ const { fn: momentProto } = require('moment');
 var expect = chai.expect;
 
 describe('The calEventUtils service', function() {
-  var event, userEmail, esnI18nServiceMock, momentUTCOffsetStub;
+  var event, userEmail, esnI18nServiceMock;
 
   beforeEach(function() {
     var emailMap = {};
@@ -16,7 +16,8 @@ describe('The calEventUtils service', function() {
     emailMap[userEmail] = true;
 
     esnI18nServiceMock = {
-      translate: sinon.stub()
+      translate: sinon.stub(),
+      getLocale: sinon.stub().returns('en')
     };
 
     var session = {
@@ -31,8 +32,6 @@ describe('The calEventUtils service', function() {
       }
     };
 
-    momentUTCOffsetStub = sinon.stub();
-
     angular.mock.module('esn.calendar.libs');
     angular.mock.module('esn.ical');
     angular.mock.module(function($provide) {
@@ -42,12 +41,12 @@ describe('The calEventUtils service', function() {
         return session;
       });
 
-      $provide.constant('moment', function() {
-        return {
-          utcOffset: momentUTCOffsetStub
-        };
-      });
+      const momentMock = {
+        tcOffset: sinon.stub(),
+        locale: sinon.stub()
+      };
 
+      $provide.constant('moment', momentMock);
       $provide.constant('esnI18nService', esnI18nServiceMock);
     });
 

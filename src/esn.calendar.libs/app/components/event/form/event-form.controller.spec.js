@@ -145,9 +145,7 @@ describe('The CalEventFormController controller', function() {
 
     const sessionMock = {
       user: user,
-      ready: {
-        then: function() {}
-      }
+      ready: $q.when()
     };
 
     calendarHomeServiceMock = {

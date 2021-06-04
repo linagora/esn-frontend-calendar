@@ -43,7 +43,7 @@ module.exports = function(config) {
     reporters: ['spec'],
 
     preprocessors: {
-      'src/index.test.js': ['webpack'],
+      'src/index.test.js': ['webpack', 'sourcemap'],
       'test/fixtures/**': ['raw2js'],
       'src/linagora.esn.calendar/app/fixtures/**': ['raw2js'],
       'test/unit-frontend/fixtures/**': ['raw2js']
@@ -53,6 +53,7 @@ module.exports = function(config) {
     plugins: [
       'karma-firefox-launcher',
       'karma-mocha',
+      'karma-sourcemap-loader',
       'karma-webpack',
       'karma-spec-reporter',
       'karma-sinon-chai',

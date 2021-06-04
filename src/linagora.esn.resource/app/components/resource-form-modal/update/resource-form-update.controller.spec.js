@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('The ESNResourceFormUpdateController controller', function() {
-  var $q, $state, $controller, $rootScope, resource, resourceUpdated, esnResourceAPIClient, sessionMock, asyncAction, resourceType;
+  var $state, $controller, $rootScope, resource, resourceUpdated, esnResourceAPIClient, sessionMock, asyncAction, resourceType;
 
   beforeEach(function() {
     angular.mock.module('linagora.esn.resource');
@@ -28,13 +28,12 @@ describe('The ESNResourceFormUpdateController controller', function() {
     esnResourceAPIClient = {};
 
     sessionMock = {
-      ready: {
-        then: angular.noop
-      },
       user: {
         _id: 3
       }
     };
+
+    sessionMock.ready = $q.when(sessionMock);
 
     angular.mock.module(function($provide) {
       $provide.value('asyncAction', asyncAction);
@@ -43,11 +42,10 @@ describe('The ESNResourceFormUpdateController controller', function() {
     });
   });
 
-  beforeEach(angular.mock.inject(function(_$state_, _$controller_, _$rootScope_, _$q_, _esnResourceAPIClient_) {
+  beforeEach(angular.mock.inject(function(_$state_, _$controller_, _$rootScope_, _esnResourceAPIClient_) {
     $state = _$state_;
     $controller = _$controller_;
     $rootScope = _$rootScope_;
-    $q = _$q_;
     esnResourceAPIClient = _esnResourceAPIClient_;
   }));
 
