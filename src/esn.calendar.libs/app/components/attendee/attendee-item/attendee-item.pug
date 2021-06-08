@@ -1,7 +1,7 @@
 .attendee-item
   cal-attendee-avatar(attendee='ctrl.attendee')
   .attendee-item-meta
-    .name
+    .name(ng-if="!!ctrl.attendee.id")
       span(
         profile-popover-card='{ source: "ctrl.attendee", property: "id" }'
         profile-popover-card-hide-on-element-scroll='.modal-body'
