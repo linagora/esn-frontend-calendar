@@ -2052,4 +2052,15 @@ describe('The calEventService service', function() {
       self.$rootScope.$digest();
     });
   });
+
+  describe('The getMailtoURL fn ', function() {
+
+    it('should return MAILTO SPA URL ', function() {
+      window.openpaas = {
+        MAILTO_SPA_URL: 'mailto/mailto'
+      };
+
+      expect(self.calEventService.getMailtoURL()).to.deep.equal('mailto/mailto');
+    });
+  });
 });

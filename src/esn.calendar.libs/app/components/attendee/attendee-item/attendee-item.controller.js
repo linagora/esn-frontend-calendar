@@ -5,12 +5,13 @@ require('../../freebusy/freebusy.constants.js');
 angular.module('esn.calendar.libs')
   .controller('CalAttendeeItemController', CalAttendeeItemController);
 
-function CalAttendeeItemController($scope, CAL_FREEBUSY) {
+function CalAttendeeItemController($scope, CAL_FREEBUSY, calEventService) {
   var self = this;
 
   self.removeAttendee = removeAttendee;
   self.$onInit = $onInit;
   self.CAL_FREEBUSY = CAL_FREEBUSY;
+  self.mailtoURL = _mailtoURL();
 
   function removeAttendee() {
     self.remove && self.remove({ attendee: self.attendee });
@@ -25,4 +26,9 @@ function CalAttendeeItemController($scope, CAL_FREEBUSY) {
       }
     });
   }
+
+  function _mailtoURL() {
+    return calEventService.getMailtoURL();
+  }
+
 }

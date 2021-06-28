@@ -59,6 +59,7 @@ function calEventService(
   self.getEventByUID = getEventByUID;
   self.getEventFromICSUrl = getEventFromICSUrl;
   self.onEventCreatedOrUpdated = onEventCreatedOrUpdated;
+  self.getMailtoURL = getMailtoURL;
 
   ////////////
 
@@ -575,4 +576,17 @@ function calEventService(
       return new CalendarShell(ICAL.Component.fromString(response.data));
     });
   }
+
+  /**
+   * Get the correct Mailto SPA url in event form and event preview
+   *
+   */
+  function getMailtoURL() {
+    if (window.openpaas && window.openpaas.MAILTO_SPA_URL) {
+      return window.openpaas.MAILTO_SPA_URL;
+    }
+
+    return '/mailto/';
+  }
+
 }

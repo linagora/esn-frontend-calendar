@@ -23,7 +23,8 @@ describe('The CalEventPreviewPopoverController', function() {
     };
 
     calEventServiceMock = {
-      removeEvent: sinon.stub()
+      removeEvent: sinon.stub(),
+      getMailtoURL: sinon.stub()
     };
 
     calEventDuplicateServiceMock = {

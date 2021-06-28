@@ -10,7 +10,7 @@
       )
         | {{ctrl.attendee.displayName}} 
     .meta
-      a(ng-href="mailto:{{ ::ctrl.attendee.email }}" op-inbox-compose op-inbox-compose-users="[ctrl.attendee]" op-inbox-compose-subject="{{::ctrl.subject}}")
+      a(ng-href="{{$ctrl.mailtoURL}}:{{ ::ctrl.attendee.email }}" op-inbox-compose op-inbox-compose-users="[ctrl.attendee]" op-inbox-compose-subject="{{::ctrl.subject}}")
         span.email {{::ctrl.attendee.email}}
     .details
       span.organizer(ng-if="ctrl.isOrganizer") {{ 'Organizer' | translate }}

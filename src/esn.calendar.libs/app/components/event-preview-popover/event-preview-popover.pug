@@ -14,7 +14,7 @@
           i.mdi.mdi-library-plus
           | {{ 'Duplicate this event' | translate }}
       md-menu-item.event-preview-popover-action-menu-item(ng-if="$ctrl.attendees.length > 1")
-        button.btn.btn-link.waves-light(ng-href="mailto:{{$ctrl.attendeeEmailAddresses}}", op-inbox-compose op-inbox-compose-subject="{{$ctrl.event.summary}}")
+        button.btn.btn-link.waves-light(ng-href="{{$ctrl.mailtoURL}}:{{$ctrl.attendeeEmailAddresses}}", op-inbox-compose op-inbox-compose-subject="{{$ctrl.event.summary}}")
           i.mdi.mdi-email
           | {{ 'Mail to attendees' | translate }}
   button.btn.btn-link.btn-icon.waves-notransition.waves-effect.waves-light.waves-circle(ng-click="$ctrl.closeEventPreviewPopover()", title="{{ 'Close' | translate }}", bs-tooltip)

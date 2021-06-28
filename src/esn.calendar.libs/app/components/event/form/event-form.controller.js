@@ -90,7 +90,7 @@ function CalEventFormController(
   $scope.hideEventForm = true;
   $scope.openLocationLink = openLocationLink;
   $scope.isValidURL = urlUtils.isValidURL;
-
+  $scope.mailtoURL = _mailtoURL;
   // Initialize the scope of the form. It creates a scope.editedEvent which allows us to
   // rollback to scope.event in case of a Cancel.
   $scope.initFormData();
@@ -99,6 +99,10 @@ function CalEventFormController(
     calEventUtils.resetStoredEvents();
     calEventDuplicateService.reset();
     _hideModal();
+  }
+
+  function _mailtoURL() {
+    return calEventService.getMailtoURL();
   }
 
   function displayCalMailToAttendeesButton() {

@@ -1,3 +1,4 @@
+
 angular.module('esn.calendar.libs')
   .controller('CalEventPreviewPopoverController', CalEventPreviewPopoverController);
 
@@ -25,11 +26,16 @@ function CalEventPreviewPopoverController(
   self.duplicateEvent = duplicateEvent;
   self.changeParticipation = changeParticipation;
   self.closeEventPreviewPopover = closeEventPreviewPopover;
+  self.mailtoURL = _mailtoURL();
 
   function openEventForm() {
     closeEventPreviewPopover();
 
     calOpenEventForm(self.event.calendarHomeId, self.event.clone());
+  }
+
+  function _mailtoURL() {
+    return calEventService.getMailtoURL();
   }
 
   function deleteEvent() {

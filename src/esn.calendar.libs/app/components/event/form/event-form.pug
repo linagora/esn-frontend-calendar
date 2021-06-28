@@ -109,7 +109,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     span {{ 'Organizer' | translate }}
                   i.mdi.mdi-account-edit
                 .meta
-                  a(ng-href="mailto:{{::editedEvent.organizer.email}}" op-inbox-compose op-inbox-compose-users="[editedEvent.organizer]")
+                  a(ng-href="{{::mailtoURL}}:{{::editedEvent.organizer.email}}" op-inbox-compose op-inbox-compose-users="[editedEvent.organizer]")
                     span.name(ng-if="editedEvent.organizer.name || editedEvent.organizer.displayName") {{editedEvent.organizer.name || editedEvent.organizer.displayName}}
                     span.separator -
                     span.email {{::editedEvent.organizer.email}}
