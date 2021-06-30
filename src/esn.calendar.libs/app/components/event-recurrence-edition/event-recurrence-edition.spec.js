@@ -272,11 +272,15 @@ describe('The event-recurrence-edition component', function() {
 
     it('should set the value of the mobile input according to the event rrule.until', function() {
       // we can modify the event recurrence
+      const expectedDate = new Date(dateCurrent);
+
+      expectedDate.setDate(dateCurrent.getDate() + 1);
       this.eleScope.vm.canModifyEventRecurrence = true;
       this.eleScope.vm.setDefaultUntilDate('DAILY');
+
       expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
-      expect(this.eleScope.vm.event.rrule.until.getDate()).to.be.equals(dateCurrent.getDate() + 1);
-      expect(this.eleScope.vm.eventUntil.getDate()).to.be.equals(dateCurrent.getDate() + 1);
+      expect(this.eleScope.vm.event.rrule.until.getDate()).to.be.equals(expectedDate.getDate());
+      expect(this.eleScope.vm.eventUntil.getDate()).to.be.equals(expectedDate.getDate());
     });
   });
 
