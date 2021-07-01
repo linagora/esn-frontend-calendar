@@ -13,13 +13,12 @@ function calDavRequest($http, $q, tokenAPI, calCalDAVURLService, CAL_GRACE_DELAY
       delete params.graceperiod;
     }
 
-    return $q.all([tokenAPI.getNewToken(), _getDavServerUrl(), tokenAPI.getWebToken()])
-      .then(([{ data: esnToken }, serverBaseUrl, { data: jwt }]) => {
+    return $q.all([_getDavServerUrl(), tokenAPI.getWebToken()])
+      .then(([serverBaseUrl, { data: jwt }]) => {
         const config = {
           url: `${serverBaseUrl}${path}`,
           headers: {
             ...headers,
-            ESNToken: esnToken.token,
             Authorization: `Bearer ${jwt}`
           },
           method,

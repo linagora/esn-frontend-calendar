@@ -6,7 +6,7 @@ var expect = chai.expect;
 
 describe('The calendar module apis', function() {
   var CAL_GRACE_DELAY_IS_ACTIVE;
-  const REQUEST_HEADERS_BASE = { ESNToken: '123', Authorization: 'Bearer jwt' };
+  const REQUEST_HEADERS_BASE = { Authorization: 'Bearer jwt' };
   let tokenAPIMock, calCalDAVURLServiceMock;
 
   function headerContentTypeJsonChecker(header) {
