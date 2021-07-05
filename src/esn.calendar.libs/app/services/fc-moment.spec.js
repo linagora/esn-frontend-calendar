@@ -20,22 +20,11 @@ describe('calMoment factory', function() {
       }
     };
 
-    this.jstz = {
-      determine: function() {
-        return {
-          name: function() {
-            return 'Europe/Paris';
-          }
-        };
-      }
-    };
-
     var self = this;
 
     angular.mock.module('esn.calendar.libs');
     angular.mock.module(function($provide) {
       $provide.value('$window', self.window);
-      $provide.value('jstz', self.jstz);
       $provide.value('esnDatetimeService', self.esnDatetimeServiceMock);
     });
   });

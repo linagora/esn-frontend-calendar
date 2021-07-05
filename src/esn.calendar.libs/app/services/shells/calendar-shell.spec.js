@@ -47,12 +47,6 @@ describe('CalendarShell factory', function() {
     this.localTimezone = 'Asia/Ho_Chi_Minh';
     this.userTimezone = 'Asia/Ho_Chi_Minh';
 
-    this.jstzMock = {
-      determine: _.constant({
-        name: _.constant(this.localTimezone)
-      })
-    };
-
     var self = this;
 
     esnDatetimeService = {

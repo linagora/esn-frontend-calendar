@@ -6,7 +6,7 @@ const { expect } = chai;
 
 describe('the calEventDuplicateService service', () => {
   let $rootScope, calEventDuplicateService, CalendarShell, calMoment;
-  let VideoConfConfigurationServiceMock, uuid4Mock;
+  let VideoConfConfigurationServiceMock, uuid4Mock, esnDatetimeService;
 
   beforeEach(() => {
     VideoConfConfigurationServiceMock = {
@@ -27,11 +27,15 @@ describe('the calEventDuplicateService service', () => {
       $provide.value('uuid4', uuid4Mock);
     });
 
-    angular.mock.inject(function(_$rootScope_, _calEventDuplicateService_, _CalendarShell_, _calMoment_) {
+    angular.mock.inject(function(_$rootScope_, _calEventDuplicateService_, _CalendarShell_, _calMoment_, _esnDatetimeService_) {
       $rootScope = _$rootScope_;
       calEventDuplicateService = _calEventDuplicateService_;
       CalendarShell = _CalendarShell_;
       calMoment = _calMoment_;
+      esnDatetimeService = _esnDatetimeService_;
+      esnDatetimeService.getTimeZone = function() {
+        return 'Europe/Paris';
+      };
     });
   });
 

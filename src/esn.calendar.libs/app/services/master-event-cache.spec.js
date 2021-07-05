@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('the calMasterEventCache service', function() {
-  var calMasterEventCache, CalendarShell, calMoment, timeoutMock, CAL_MASTER_EVENT_CACHE_TTL, path, shell, timeoutMockReturn;
+  var calMasterEventCache, CalendarShell, calMoment, esnDatetimeService, timeoutMock, CAL_MASTER_EVENT_CACHE_TTL, path, shell, timeoutMockReturn;
 
   beforeEach(function() {
     angular.mock.module('esn.calendar.libs');
@@ -18,11 +18,15 @@ describe('the calMasterEventCache service', function() {
     timeoutMock = sinon.stub().returns(timeoutMockReturn);
     timeoutMock.cancel = sinon.spy();
 
-    angular.mock.inject(function(_calMasterEventCache_, _CalendarShell_, _calMoment_, _CAL_MASTER_EVENT_CACHE_TTL_) {
+    angular.mock.inject(function(_calMasterEventCache_, _CalendarShell_, _calMoment_, _esnDatetimeService_, _CAL_MASTER_EVENT_CACHE_TTL_) {
       calMasterEventCache = _calMasterEventCache_;
       CalendarShell = _CalendarShell_;
       calMoment = _calMoment_;
       CAL_MASTER_EVENT_CACHE_TTL = _CAL_MASTER_EVENT_CACHE_TTL_;
+      esnDatetimeService = _esnDatetimeService_;
+      esnDatetimeService.getTimeZone = function() {
+        return 'Europe/Paris';
+      };
     });
 
     path = 'aPath';

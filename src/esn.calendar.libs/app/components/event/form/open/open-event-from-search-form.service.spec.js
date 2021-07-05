@@ -5,7 +5,7 @@
 var expect = chai.expect;
 
 describe('The calOpenEventFromSearchForm service', function() {
-  var $rootScope, $q, ICAL, calOpenEventFromSearchForm, calEventFormService, calendarAPI;
+  var $rootScope, $q, ICAL, calOpenEventFromSearchForm, calEventFormService, calendarAPI, esnDatetimeService;
   var publicNormalEvent, privateNormalEvent, recurrenceException, relatedEvents;
 
   beforeEach(function() {
@@ -47,11 +47,15 @@ describe('The calOpenEventFromSearchForm service', function() {
       $provide.value('calendarAPI', calendarAPI);
     });
 
-    inject(function(_$rootScope_, _$q_, _ICAL_, _calOpenEventFromSearchForm_) {
+    inject(function(_$rootScope_, _$q_, _ICAL_, _calOpenEventFromSearchForm_, _esnDatetimeService_) {
       ICAL = _ICAL_;
       $rootScope = _$rootScope_;
       $q = _$q_;
       calOpenEventFromSearchForm = _calOpenEventFromSearchForm_;
+      esnDatetimeService = _esnDatetimeService_;
+      esnDatetimeService.getTimeZone = function() {
+        return 'Europe/Paris';
+      };
     });
   });
 
