@@ -163,18 +163,6 @@ module.exports = {
         }
       },
       /*
-      for angular-jstz in esn-frontend-common-libs
-      */
-      {
-        test: require.resolve(commonLibsPath + '/src/frontend/components/jstzdetect/jstz.js'),
-        loader: 'expose-loader',
-        options: {
-          exposes: [
-            'jstz'
-          ]
-        }
-      },
-      /*
         usefull, at least for esn-frontend-common-libs / notification.js:
 
         var notification = $window.$.notify(escapeHtmlFlatObject(options), angular.extend({}, getDefaultSettings(options), settings));
