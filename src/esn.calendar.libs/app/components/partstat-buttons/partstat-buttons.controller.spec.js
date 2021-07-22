@@ -5,7 +5,7 @@
 const { expect } = chai;
 
 describe('The CalPartstatButtonsController', function() {
-  let $rootScope, $controller, $q, calEventService, session, CalendarShell, ICAL;
+  let $rootScope, $controller, $q, calEventService, session, CalendarShell, esnDatetimeService, ICAL;
   const shells = {};
   let fileSaveMock;
   let scope;
@@ -37,8 +37,7 @@ describe('The CalPartstatButtonsController', function() {
     });
   });
 
-  beforeEach(inject(function(_$rootScope_, _$controller_, _$q_, _CalendarShell_, _calEventService_, _session_,
-    _ICAL_) {
+  beforeEach(inject(function(_$rootScope_, _$controller_, _$q_, _CalendarShell_, _calEventService_, _session_, _esnDatetimeService_, _ICAL_) {
     $rootScope = _$rootScope_;
     $controller = _$controller_;
     $q = _$q_;
@@ -46,6 +45,10 @@ describe('The CalPartstatButtonsController', function() {
     calEventService = _calEventService_;
     session = _session_;
     ICAL = _ICAL_;
+    esnDatetimeService = _esnDatetimeService_;
+    esnDatetimeService.getTimeZone = function() {
+      return 'Europe/Paris';
+    };
   }));
 
   beforeEach(function() {

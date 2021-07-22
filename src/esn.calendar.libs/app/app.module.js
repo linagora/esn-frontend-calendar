@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('esn.calendar.libs', [
-  'AngularJstz',
   'angularMoment',
   'esn.aggregator',
   'esn.authentication',
@@ -81,7 +80,6 @@ require('esn-frontend-common-libs/src/frontend/js/modules/localstorage.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/datetime/datetime.module.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/media-query.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/escape-html.js');
-require('esn-frontend-common-libs/src/frontend/components/angular-jstz/angular-jstz.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/websocket.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/touchscreen-detector.js');
 require('esn-frontend-common-libs/src/frontend/js/modules/async-action.js');

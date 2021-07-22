@@ -63,7 +63,7 @@ describe('The calEventUtils service', function() {
     };
   });
 
-  beforeEach(inject(function(calEventUtils, $rootScope, calMoment, CalendarShell, session, CAL_MAX_DURATION_OF_SMALL_EVENT, CAL_EVENT_FORM, CAL_ICAL) {
+  beforeEach(inject(function(calEventUtils, $rootScope, calMoment, CalendarShell, esnDatetimeService, session, CAL_MAX_DURATION_OF_SMALL_EVENT, CAL_EVENT_FORM, CAL_ICAL) {
     this.calEventUtils = calEventUtils;
     this.$rootScope = $rootScope;
     this.calMoment = calMoment;
@@ -72,6 +72,11 @@ describe('The calEventUtils service', function() {
     this.CAL_MAX_DURATION_OF_SMALL_EVENT = CAL_MAX_DURATION_OF_SMALL_EVENT;
     this.CAL_EVENT_FORM = CAL_EVENT_FORM;
     this.CAL_ICAL = CAL_ICAL;
+    this.esnDatetimeService = esnDatetimeService;
+    this.esnDatetimeService.getTimeZone = function() {
+      return 'Europe/Paris';
+    };
+
     event.start = calMoment();
     event.end = event.start.add(this.CAL_MAX_DURATION_OF_SMALL_EVENT.DESKTOP, 'minutes');
   }));

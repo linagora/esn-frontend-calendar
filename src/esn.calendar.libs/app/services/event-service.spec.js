@@ -63,16 +63,6 @@ describe('The calEventService service', function() {
       strongInfo: sinon.stub().returns({ close: self.closeNotificationMock })
     };
 
-    self.jstz = {
-      determine: function() {
-        return {
-          name: function() {
-            return 'Europe/Paris';
-          }
-        };
-      }
-    };
-
     self.calendarEventEmitterMock = {
       activitystream: {
         emitPostedMessage: sinon.spy()
@@ -98,7 +88,6 @@ describe('The calEventService service', function() {
 
     angular.mock.module(function($provide) {
       $provide.value('tokenAPI', self.tokenAPI);
-      $provide.value('jstz', self.jstz);
       $provide.value('uuid4', self.uuid4);
       $provide.value('notificationFactory', self.notificationFactoryMock);
       $provide.value('socket', self.socket);
@@ -144,7 +133,7 @@ describe('The calEventService service', function() {
     self.esnI18nService = esnI18nService;
     self.esnDatetimeService = esnDatetimeService;
     self.esnDatetimeService.getTimeZone = function() {
-      return 'Asia/Ho_Chi_Minh';
+      return 'Europe/Paris';
     };
 
     self.CAL_GRACE_DELAY_IS_ACTIVE_MOCK = true;
@@ -1298,8 +1287,8 @@ describe('The calEventService service', function() {
 
       vevent.addPropertyWithValue('uid', eventUUID);
       vevent.addPropertyWithValue('summary', 'test event');
-      vevent.addPropertyWithValue('dtstart', ICAL.Time.fromJSDate(self.calMoment().toDate())).setParameter('tzid', self.jstz.determine().name());
-      vevent.addPropertyWithValue('dtend', ICAL.Time.fromJSDate(self.calMoment().toDate())).setParameter('tzid', self.jstz.determine().name());
+      vevent.addPropertyWithValue('dtstart', ICAL.Time.fromJSDate(self.calMoment().toDate())).setParameter('tzid', self.esnDatetimeService.getTimeZone());
+      vevent.addPropertyWithValue('dtend', ICAL.Time.fromJSDate(self.calMoment().toDate())).setParameter('tzid', self.esnDatetimeService.getTimeZone());
       vevent.addPropertyWithValue('transp', 'OPAQUE');
       vevent.addPropertyWithValue('location', 'test location');
       vcalendar.addSubcomponent(vevent);

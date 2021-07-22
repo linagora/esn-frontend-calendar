@@ -37,7 +37,6 @@ require('./valarm-shell.js');
   function CalendarShellFactory(
     $q,
     ICAL,
-    jstz,
     uuid4,
     calendarUtils,
     calEventAPI,
@@ -53,7 +52,7 @@ require('./valarm-shell.js');
     CAL_EVENT_CLASS,
     esnDatetimeService
   ) {
-    var localTimezone = jstz.determine().name();
+    var localTimezone;
 
     function CalendarShell(vcomponent, extendedProperties) {
       var vcalendar, vevent;
@@ -90,6 +89,7 @@ require('./valarm-shell.js');
           this.icalEvent.endDate.zone = this.timezones[this.icalEvent.endDate.timezone] || this.icalEvent.endDate.zone;
         }
       }
+      localTimezone = getUserTimeZone();
 
       var localTimezoneFound = _.contains(Object.keys(this.timezones), localTimezone);
 
@@ -935,7 +935,7 @@ require('./valarm-shell.js');
     }
 
     function getUserTimeZone() {
-      return esnDatetimeService.getTimeZone() || localTimezone;
+      return esnDatetimeService.getTimeZone();
     }
 
     function ensureAlarmCoherence() {

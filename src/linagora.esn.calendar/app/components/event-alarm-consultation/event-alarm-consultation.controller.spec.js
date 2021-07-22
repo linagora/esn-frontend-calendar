@@ -5,14 +5,18 @@
 var expect = chai.expect;
 
 describe('The calEventAlarmConsultationController', function() {
-  var $controller, CalendarShell, moment;
+  var $controller, CalendarShell, moment, esnDatetimeService;
 
   beforeEach(function() {
     angular.mock.module('esn.calendar');
-    angular.mock.inject(function(_$controller_, _CalendarShell_, _moment_) {
+    angular.mock.inject(function(_$controller_, _CalendarShell_, _moment_, _esnDatetimeService_) {
       $controller = _$controller_;
       CalendarShell = _CalendarShell_;
       moment = _moment_;
+      esnDatetimeService = _esnDatetimeService_;
+      esnDatetimeService.getTimeZone = function() {
+        return 'Europe/Paris';
+      };
     });
   });
 

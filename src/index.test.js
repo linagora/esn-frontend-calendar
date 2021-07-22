@@ -1,4 +1,3 @@
-window.jstz = require('esn-frontend-common-libs/src/frontend/components/jstzdetect/jstz.js');
 window.jQuery = require('jquery/dist/jquery.js');
 window.$ = window.jQuery;
 require('jquery-ui/ui/widgets/draggable.js');
