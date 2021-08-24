@@ -75,15 +75,7 @@ module.exports = {
           to: 'env'
         },
         {
-          from: path.resolve(__dirname, 'src', 'linagora.esn.calendar', 'images', 'white-logo.svg'),
-          to: 'images'
-        },
-        {
-          from: path.resolve(__dirname, 'src', 'linagora.esn.calendar', 'images', 'throbber-amber.svg'),
-          to: 'images'
-        },
-        {
-          from: path.resolve(__dirname, 'src', 'linagora.esn.calendar', 'images', 'logo-tiny.png'),
+          from: path.resolve(__dirname, 'src', 'linagora.esn.calendar', 'images'),
           to: 'images'
         },
         {
