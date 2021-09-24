@@ -33,6 +33,10 @@ module.exports = function(config) {
         base: 'Firefox',
         flags: ['--headless'],
         prefs: { 'network.proxy.type': 0 }
+      },
+      ChromeHeadless: {
+        base: 'Chrome',
+        flags: ['--headless', '--remote-debugging-port=9222']
       }
     },
 
@@ -52,6 +56,7 @@ module.exports = function(config) {
     webpack: webpackConfig,
     plugins: [
       'karma-firefox-launcher',
+      'karma-chrome-launcher',
       'karma-mocha',
       'karma-sourcemap-loader',
       'karma-webpack',

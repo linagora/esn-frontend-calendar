@@ -75,3 +75,24 @@ Note that there is a 10000ms timeout by default. If you want to change that, sim
 ```sh
 TEST_TIMEOUT=2000 npm run test
 ```
+
+# Debugging tests
+
+You can debug tests on VSCode with Chrome by executing the following command:
+
+```sh
+npm run test:debug
+```
+
+Then you have to add the following configuration to you `launch.json` and then run it (F5):
+
+```json
+{
+  "name": "Attach to Chrome",
+  "port": 9222,
+  "request": "attach",
+  "type": "pwa-chrome",
+}
+```
+
+This will let you use breakpoints on the application. Save a file to make tests run again.

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/karma/bin/karma start test/config/karma.conf.js",
+    "test:debug": "SINGLE_RUN=false ./node_modules/karma/bin/karma start test/config/karma.conf.js --browsers ChromeHeadless",
     "lint": "eslint src test webpack.*.js",
     "serve": "webpack-dev-server --watch --progress",
     "serve:prod": "webpack-dev-server --env=prod",
@@ -58,6 +59,7 @@
     "ignore-loader": "^0.1.2",
     "imports-loader": "^1.1.0",
     "karma": "4.2.0",
+    "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "1.1.0",
     "karma-mocha": "1.1.1",
     "karma-rawfixtures-preprocessor": "linagora/karma-rawfixtures-preprocessor",
