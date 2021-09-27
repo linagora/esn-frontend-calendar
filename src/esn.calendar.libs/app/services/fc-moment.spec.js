@@ -17,6 +17,9 @@ describe('calMoment factory', function() {
       },
       Waves: {
         init: function() {}
+      },
+      localStorage: {
+        setItem: angular.noop
       }
     };
 
