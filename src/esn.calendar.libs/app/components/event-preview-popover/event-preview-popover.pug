@@ -37,14 +37,14 @@
       span {{ $ctrl.attendees.length }} {{ 'attendees' | translate }}
       span.secondary-description-text {{ $ctrl.attendees | attendeePartStatText }}
       .attendee-list
-        .attendee-item(ng-repeat="attendee in $ctrl.attendees | limitTo: 5")
+        .attendee-item(ng-repeat="attendee in $ctrl.attendees | limitTo: $ctrl.limit track by $index")
           cal-attendee-avatar(attendee='attendee')
           .attendee-item-meta
             .name
               span {{ ::attendee.displayName }}
             .details(ng-if="attendee.email === $ctrl.event.organizer.email")
               span.organizer {{ 'Organizer' | translate }}
-      span.secondary-description-text(ng-if="$ctrl.attendees.length > 5") {{ $ctrl.attendees.length - 5 }} {{ 'more attendees...' | translate }}
+      a.clickable(ng-href="", ng-click="$ctrl.showAll(); $ctrl.shouldShowMoreAttendees = !$ctrl.shouldShowMoreAttendees" , ng-if="$ctrl.attendees.length>=$ctrl.limit") {{ $ctrl.shouldShowMoreAttendees ? 'Show more...' : 'Show less...' | translate }}            
   .info-row(ng-if="$ctrl.resources.length > 0") 
     i.mdi.mdi-monitor-multiple
     span {{ $ctrl.resources | commaSeparatedResourceList }}
