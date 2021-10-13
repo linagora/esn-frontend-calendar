@@ -503,6 +503,26 @@
       value: '-P1W',
       label: '1 week'
     }])
+    .constant('CAL_OCCURENCE_DAY', [{
+      value: 1,
+      label: 'First'
+    }, {
+      value: 2,
+      label: 'Second'
+    },
+    {
+      value: 3,
+      label: 'Third'
+    },
+    {
+      value: 4,
+      label: 'Fourth'
+    },
+    {
+      value: 5,
+      label: 'Fifth'
+    }
+    ])
     .constant('CAL_USER_CONFIGURATION', {
       moduleName: 'linagora.esn.calendar',
       keys: ['workingDays', 'hideDeclinedEvents']

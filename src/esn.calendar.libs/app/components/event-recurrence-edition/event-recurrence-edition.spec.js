@@ -79,7 +79,8 @@ describe('The event-recurrence-edition component', function() {
 
       this.$scope.event.rrule = {
         freq: 'DAILY',
-        until: currentDate
+        until: currentDate,
+        byday: undefined
       };
       this.initDirective(this.$scope);
 
@@ -89,7 +90,8 @@ describe('The event-recurrence-edition component', function() {
     it('should ignore initializing the mobile input field if the event rrule.until is not a moment object', function() {
       this.$scope.event.rrule = {
         freq: 'DAILY',
-        until: new Date() // a regular Date object
+        until: new Date(), // a regular Date object
+        byday: undefined
       };
       this.initDirective(this.$scope);
 
@@ -101,7 +103,8 @@ describe('The event-recurrence-edition component', function() {
     it('should splice the weekday and sort the array', function() {
       this.$scope.event.rrule = {
         freq: undefined,
-        interval: null
+        interval: null,
+        byday: undefined
       };
       this.initDirective(this.$scope);
       this.eleScope.vm.event.rrule.byday = ['SU', 'WE', 'TU', 'MO'];
@@ -112,7 +115,8 @@ describe('The event-recurrence-edition component', function() {
     it('should push the weekday and sort the array', function() {
       this.$scope.event.rrule = {
         freq: undefined,
-        interval: null
+        interval: null,
+        byday: undefined
       };
       this.initDirective(this.$scope);
       this.eleScope.vm.event.rrule.byday = ['SU', 'WE', 'TU', 'MO'];
@@ -125,7 +129,8 @@ describe('The event-recurrence-edition component', function() {
     it('should be today', function() {
       this.$scope.event.start = calMoment('2017-09-11 09:30');
       this.$scope.event.rrule = {
-        freq: 'WEEKLY'
+        freq: 'WEEKLY',
+        byday: undefined
       };
       this.initDirective(this.$scope);
       var calMinDateAsString = this.eleScope.vm.getMinDate();
@@ -142,40 +147,6 @@ describe('The event-recurrence-edition component', function() {
       var calMinDateAsString = this.eleScope.vm.getMinDate();
 
       expect(calMinDateAsString).to.be.equal(this.$scope.event.start.format('YYYY-MM-DD'));
-    });
-  });
-
-  describe('scope.selectEndRadioButton', function() {
-    it('should set the correct radio button to checked', function() {
-      this.$scope.event.rrule = {
-        freq: 'WEEKLY'
-      };
-      var element = this.initDirective(this.$scope);
-
-      this.eleScope.selectEndRadioButton(2);
-      var radio = angular.element(element).find('input[name="inlineRadioEndOptions"]')[2];
-
-      expect(radio.checked).to.be.true;
-    });
-
-    it('should set until to undefined if index is 1', function() {
-      this.$scope.event.rrule = {
-        freq: 'WEEKLY',
-        until: 'UNTIL'
-      };
-      this.initDirective(this.$scope);
-      this.eleScope.selectEndRadioButton(1);
-      expect(this.eleScope.vm.event.rrule.until).to.be.undefined;
-    });
-
-    it('should set count to undefined if index is 2', function() {
-      this.$scope.event.rrule = {
-        freq: 'WEEKLY',
-        count: 10
-      };
-      this.initDirective(this.$scope);
-      this.eleScope.selectEndRadioButton(2);
-      expect(this.eleScope.vm.event.rrule.count).to.be.undefined;
     });
   });
 
@@ -206,14 +177,14 @@ describe('The event-recurrence-edition component', function() {
     });
 
     it('should keep previous interval if it was defined and more than 0', function() {
-      this.eleScope.vm.event.rrule = { freq: 'WEEKLY', interval: 42 };
+      this.eleScope.vm.event.rrule = { freq: 'WEEKLY', interval: 42, byday: [] };
       this.eleScope.vm.freq = 'YEARLY';
       this.eleScope.vm.setRRULE();
-      expect(this.eleScope.vm.event.rrule).to.be.deep.equals({ freq: 'YEARLY', interval: 42 });
+      expect(this.eleScope.vm.event.rrule).to.be.deep.equals({ freq: 'YEARLY', interval: 42, byday: [] });
       this.eleScope.vm.event.rrule.interval = 0;
       this.eleScope.vm.freq = 'WEEKLY';
       this.eleScope.vm.setRRULE();
-      expect(this.eleScope.vm.event.rrule).to.be.deep.equals({ freq: 'WEEKLY', interval: 1 });
+      expect(this.eleScope.vm.event.rrule).to.be.deep.equals({ freq: 'WEEKLY', interval: 1, byday: [] });
     });
   });
 
@@ -339,7 +310,8 @@ describe('The event-recurrence-edition component', function() {
     it('should reset mobile input field', function() {
       this.$scope.event.rrule = {
         freq: 'DAILY',
-        until: calMoment()
+        until: calMoment(),
+        byday: undefined
       };
       this.initDirective(this.$scope);
       // should be initialized at first
@@ -352,7 +324,8 @@ describe('The event-recurrence-edition component', function() {
     it('should reset the event rrule.until', function() {
       this.$scope.event.rrule = {
         freq: 'DAILY',
-        until: calMoment()
+        until: calMoment(),
+        byday: undefined
       };
       this.initDirective(this.$scope);
       // should be initialized at first

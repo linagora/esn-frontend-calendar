@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 const moment = require('moment');
 
 require('../../core/date-to-moment.directive.js');
@@ -17,7 +18,6 @@ function eventRecurrenceEdition() {
       _event: '=event',
       canModifyEventRecurrence: '=?'
     },
-    link: link,
     replace: true,
     controller: EventRecurrenceEditionController,
     controllerAs: 'vm',
@@ -26,28 +26,9 @@ function eventRecurrenceEdition() {
 
   return directive;
 
-  ////////////
-
-  function link(scope, element, attrs, vm) { // eslint-disable-line no-unused-vars
-    scope.selectEndRadioButton = selectEndRadioButton;
-
-    function selectEndRadioButton(index) {
-      var radioButtons = element.find('input[name="inlineRadioEndOptions"]');
-
-      radioButtons[index].checked = true;
-      // reset event.rrule.until if we are clicking on After ... occurrences input.
-      if (index === 1) {
-        vm.resetUntil();
-      }
-      // reset event.rrule.until if we are clicking on At ... input.
-      if (index === 2) {
-        vm.resetCount();
-      }
-    }
-  }
 }
 
-function EventRecurrenceEditionController(esnI18nService, calMoment, detectUtils, CAL_RECUR_FREQ, CAL_WEEK_DAYS, CAL_MAX_RRULE_COUNT) {
+function EventRecurrenceEditionController(esnI18nService, calMoment, detectUtils, CAL_RECUR_FREQ, CAL_WEEK_DAYS, CAL_MAX_RRULE_COUNT, CAL_OCCURENCE_DAY) {
   var self = this;
 
   self.event = self._event;
@@ -61,6 +42,10 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, detectUtils
   self.CAL_MAX_RRULE_COUNT = CAL_MAX_RRULE_COUNT;
   self.isMobile = detectUtils.isMobile();
   self.onMobileUntilDateChange = onMobileUntilDateChange;
+  self.CAL_OCCURENCE_DAY = CAL_OCCURENCE_DAY;
+  self.CAL_WEEK_DAYS = CAL_WEEK_DAYS;
+  self.setOccurrenceDay = setOccurrenceDay;
+  self.resetByDay = resetByDay;
   activate();
 
   ////////////
@@ -77,7 +62,11 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, detectUtils
     self._event.getModifiedMaster().then(function(master) {
       self.event = master;
       self.freq = self.event.rrule ? self.event.rrule.freq : undefined;
+      self.byday = self.event.rrule ? self.event.rrule.byday : [];
       self.days = generateDays();
+      self.occurrence = self.byday && self.byday[0] && self.byday[0].split(/([0-9]+)/)[1];
+      self.day = self.byday && self.byday[0] && self.byday[0].split(/([0-9]+)/)[2];
+      self.bymonthday = parseInt(calMoment(self.event.start).format('D'));
 
       if (self.event.rrule && self.event.rrule.until && self.event.rrule.until._isAMomentObject) {
         self.eventUntil = self.event.rrule.until.toDate();
@@ -135,6 +124,12 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, detectUtils
     self.event.rrule.count = undefined;
   }
 
+  function resetByDay() {
+    self.occurrence = undefined;
+    self.day = undefined;
+    self.event.rrule.byday = undefined;
+  }
+
   function setDefaultUntilDate(freq) {
     if (!self.canModifyEventRecurrence || self.event.rrule.until) {
       return;
@@ -171,9 +166,16 @@ function EventRecurrenceEditionController(esnI18nService, calMoment, detectUtils
     } else {
       self.event.rrule = {
         freq: self.freq,
-        interval: self.event.rrule && self.event.rrule.interval || 1
+        interval: self.event.rrule && self.event.rrule.interval || 1,
+        byday: self.byday
       };
     }
+  }
+
+  function setOccurrenceDay(occ, day) {
+    self.byday = [];
+    self.byday.push(occ + day);
+    self.event.rrule.byday = self.byday;
   }
 
   function onMobileUntilDateChange() {
