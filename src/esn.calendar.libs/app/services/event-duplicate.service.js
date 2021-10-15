@@ -46,7 +46,7 @@ function calEventDuplicateService(
 
     // Set the alarm if there was any
     // alarm can't be set with CalendarShell.fromIncompleteShell because the event needs to be created or cloned first.
-    if (event.alarm) {
+    if (event.alarm && event.alarm.trigger && event.alarm.attendee) {
       duplicate.alarm = event.alarm;
     }
 
