@@ -1,3 +1,5 @@
+require('../../app.constants.js');
+
 angular.module('esn.calendar.libs')
   .controller('CalEventPreviewPopoverController', CalEventPreviewPopoverController);
 
@@ -16,7 +18,8 @@ function CalEventPreviewPopoverController(
   calPartstatUpdateNotificationService,
   calUIAuthorizationService,
   urlUtils,
-  notificationFactory
+  notificationFactory,
+  CAL_ATTENDEE_LIST_LIMIT
 ) {
   const self = this;
 
@@ -25,6 +28,13 @@ function CalEventPreviewPopoverController(
   self.duplicateEvent = duplicateEvent;
   self.changeParticipation = changeParticipation;
   self.closeEventPreviewPopover = closeEventPreviewPopover;
+  self.$onInit = $onInit;
+  self.showAll = showAll;
+
+  function $onInit() {
+    self.limit = CAL_ATTENDEE_LIST_LIMIT;
+    self.shouldShowMoreAttendees = true;
+  }
 
   function openEventForm() {
     closeEventPreviewPopover();
@@ -205,4 +215,9 @@ function CalEventPreviewPopoverController(
         self.isReadOnly = self.calendar.readOnly;
       });
   }
+
+  function showAll() {
+    self.limit = (self.shouldShowMoreAttendees ? self.attendees.length : CAL_ATTENDEE_LIST_LIMIT);
+  }
+
 }
