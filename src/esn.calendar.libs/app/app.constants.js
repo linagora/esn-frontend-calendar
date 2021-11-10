@@ -296,6 +296,19 @@
             label: 'Private'
           }
         ]
+      },
+      availability: {
+        default: 'OPAQUE',
+        values: [
+          {
+            value: 'OPAQUE',
+            label: 'Busy'
+          },
+          {
+            value: 'TRANSPARENT',
+            label: 'Free'
+          }
+        ]
       }
     })
 

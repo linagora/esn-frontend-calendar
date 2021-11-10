@@ -131,7 +131,7 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                 event-recurrence-edition(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event-recurrence='canModifyEventRecurrence')
               .col-xs-12
                 cal-event-alarm-edition(ng-click="changeBackdropZIndex()", event="editedEvent", can-modify-event= "canModifyEvent")
-              .col-xs-12
+              div(ng-class="isOrganizer ? 'col-xs-6' : 'col-xs-12'")
                 .form-group
                   .input-group
                     span.input-group-addon
@@ -139,7 +139,16 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     .fg-line
                       md-input-container(ng-click="changeBackdropZIndex()")
                         md-select(ng-disabled="!canModifyEvent", ng-model='editedEvent.class', md-container-class="cal-select-dropdown", aria-label="visibility")
-                          md-option(ng-value='class.value', ng-repeat="class in CAL_EVENT_FORM.class.values") {{class.label | translate}} 
+                          md-option(ng-value='class.value', ng-repeat="class in CAL_EVENT_FORM.class.values") {{class.label | translate}}
+              div(ng-class="isOrganizer ? 'col-xs-6' : 'col-xs-12'", ng-if="isOrganizer")
+                .form-group
+                  .input-group
+                    span.input-group-addon
+                      i.mdi.mdi-eye
+                    .fg-line
+                      md-input-container(ng-click="changeBackdropZIndex()")
+                        md-select(ng-disabled="!canModifyEvent", ng-model='editedEvent.availability', md-container-class="cal-select-dropdown", aria-label="availability")
+                          md-option(ng-value='availability.value', ng-repeat="availability in CAL_EVENT_FORM.availability.values") {{ availability.label | translate }}
 
       .modal-footer.flex
         .flex-vertical-centered.flex-start

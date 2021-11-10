@@ -196,6 +196,10 @@ function CalEventFormController(
             $scope.editedEvent.class = CAL_EVENT_FORM.class.default;
           }
 
+          if (!$scope.editedEvent.availability) {
+            $scope.editedEvent.availability = CAL_EVENT_FORM.availability.default;
+          }
+
           $scope.displayParticipationButton = displayParticipationButton();
           $scope.displayCalMailToAttendeesButton = displayCalMailToAttendeesButton;
           $scope.$watch('selectedCalendar.uniqueId', setExcludeCurrentUser);
