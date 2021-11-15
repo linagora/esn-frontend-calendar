@@ -2234,4 +2234,23 @@ describe('CalendarShell factory', function() {
       expect((new CalendarShell(newVCalendar)).dtstamp).to.be.null;
     });
   });
+
+  describe('the availability setter', () => {
+    it('should set the event availability', () => {
+      const vcalendar = ICAL.Component.fromString(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/event.ics']);
+      const calendarShell = new CalendarShell(vcalendar);
+
+      calendarShell.availability = 'TRANSPARENT';
+      expect(calendarShell.vevent.getFirstPropertyValue('transp')).to.equal('TRANSPARENT');
+    });
+  });
+
+  describe('the availability getter', () => {
+    it('should return the event availability', () => {
+      const vcalendar = ICAL.Component.fromString(__FIXTURES__['src/linagora.esn.calendar/app/fixtures/calendar/event.ics']);
+      const calendarShell = new CalendarShell(vcalendar);
+
+      expect(calendarShell.availability).to.equal('OPAQUE');
+    });
+  });
 });

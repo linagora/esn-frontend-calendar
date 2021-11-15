@@ -456,6 +456,14 @@ require('./valarm-shell.js');
           vevent.updatePropertyWithValue('class', value);
         });
         this.ensureAlarmCoherence();
+      },
+
+      get availability() {
+        return this.vevent.getFirstPropertyValue('transp');
+      },
+
+      set availability(value) {
+        this.vevent.updatePropertyWithValue('transp', value);
       }
     };
 
