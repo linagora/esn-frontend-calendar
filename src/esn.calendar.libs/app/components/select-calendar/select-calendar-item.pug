@@ -3,7 +3,7 @@
     i.mdi.mdi-circle(ng-style="{'color': ctrl.calendar.color}")
   .info
     .name
-      span {{:: ctrl.calendar.name }}
+      span {{:: ctrl.calendar.name | limitTo: 30 }} {{:: ctrl.calendar.name.length < 30 ? '' : '...'}}
     .description(ng-if="ctrl.details")
       span.separator -
       span {{:: ctrl.details}}
