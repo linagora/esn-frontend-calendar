@@ -43,7 +43,8 @@ require('./http-response-handler.js');
       changeParticipation: changeParticipation,
       modifyPublicRights: modifyPublicRights,
       exportCalendar,
-      getSecretAddress
+      getSecretAddress,
+      moveEvent
     };
 
     ////////////
@@ -330,6 +331,22 @@ require('./http-response-handler.js');
 
           return $q.reject(error);
         });
+    }
+
+    /**
+     * Move an event from one calendar to another
+     *
+     * @param {String} eventPath   the path of the event.
+     * @param {String} destinationCalendarId       the calendar id
+     * @returns {Object} the http response.
+     */
+    function moveEvent(originalEventPath, destinationEventPath) {
+      const headers = {
+        Destination: destinationEventPath,
+        Overwrite: 'F'
+      };
+
+      return calDavRequest('move', originalEventPath, headers);
     }
   }
 })(angular);
