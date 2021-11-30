@@ -2041,4 +2041,15 @@ describe('The calEventService service', function() {
       self.$rootScope.$digest();
     });
   });
+
+  describe('the moveEvent function', function() {
+    it('should call the calendarAPI.moveEvent function', function() {
+      const spy = sinon.stub(self.calendarAPI, 'moveEvent').returns($q.when());
+
+      self.calEventService.moveEvent('/path/to/event.ics', '/path/to/new/event.ics')
+        .then(function() {
+          expect(spy).to.have.been.calledWith('/path/to/event.ics', '/path/to/new/event.ics');
+        });
+    });
+  });
 });
