@@ -123,7 +123,8 @@ describe('The CalEventFormController controller', function() {
       sendCounter: sinon.spy(function() {
         return $q.when(true);
       }),
-      removeEvent: sinon.stub().returns($q.when())
+      removeEvent: sinon.stub().returns($q.when()),
+      moveEvent: sinon.stub().returns($q.when(true))
     };
 
     calendarHomeId = 'calendarHomeId';
@@ -1223,9 +1224,6 @@ describe('The CalEventFormController controller', function() {
           scope.event = {
             title: 'oldtitle',
             path: '/path/to/event',
-            rrule: {
-              equals: _.constant(false)
-            },
             etag: '123123',
             clone: _.constant(editedEvent)
           };
@@ -1258,6 +1256,7 @@ describe('The CalEventFormController controller', function() {
           });
 
           calEventServiceMock.modifyEvent = sinon.stub().returns($q.when(true));
+          calEventServiceMock.moveEvent = sinon.stub().returns($q.when(true));
           scope.modifyEvent();
           scope.$digest();
 
@@ -1296,6 +1295,56 @@ describe('The CalEventFormController controller', function() {
           expect(calEventServiceMock.modifyEvent).to.have.been.calledOnce;
           expect(restoreSpy).to.not.have.been.called;
           expect(calOpenEventFormMock).to.have.been.calledWith(sinon.match.any, scope.editedEvent);
+        });
+
+        it('should attempt to move the event to another calendar if the organizer changed it', function() {
+          const fakeEvent = {
+            start: start,
+            end: end,
+            title: 'oldtitle',
+            path: '/calendars/owner/id.json',
+            etag: '123123'
+          };
+
+          scope.event = CalendarShell.fromIncompleteShell(fakeEvent);
+          initController();
+
+          scope.editedEvent = CalendarShell.fromIncompleteShell({ ...fakeEvent, title: 'new title' });
+          scope.selectedCalendar.uniqueId = '/calendars/owner/id2.json';
+          scope.calendarHomeId = 'owner';
+
+          scope.modifyEvent();
+          scope.$digest();
+
+          expect(calEventServiceMock.moveEvent).to.have.been.calledWith(
+            '/calendars/owner/id.json',
+            `/calendars/owner/id2/${scope.editedEvent.uid}.ics`
+          );
+        });
+
+        it('should attempt to move the event to another calendar when the other fields were left intact', function() {
+          const fakeEvent = {
+            start: start,
+            end: end,
+            title: 'oldtitle',
+            path: '/calendars/owner/id.json',
+            etag: '123123'
+          };
+
+          scope.event = CalendarShell.fromIncompleteShell(fakeEvent);
+          initController();
+
+          scope.editedEvent = CalendarShell.fromIncompleteShell(fakeEvent);
+          scope.selectedCalendar.uniqueId = '/calendars/owner/id2.json';
+          scope.calendarHomeId = 'owner';
+
+          scope.modifyEvent();
+          scope.$digest();
+
+          expect(calEventServiceMock.moveEvent).to.have.been.calledWith(
+            '/calendars/owner/id.json',
+            `/calendars/owner/id2/${scope.editedEvent.uid}.ics`
+          );
         });
       });
 

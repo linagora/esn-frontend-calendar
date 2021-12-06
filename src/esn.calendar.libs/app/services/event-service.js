@@ -59,6 +59,7 @@ function calEventService(
   self.getEventByUID = getEventByUID;
   self.getEventFromICSUrl = getEventFromICSUrl;
   self.onEventCreatedOrUpdated = onEventCreatedOrUpdated;
+  self.moveEvent = moveEvent;
 
   ////////////
 
@@ -574,5 +575,9 @@ function calEventService(
     return $http.get(url).then(function(response) {
       return new CalendarShell(ICAL.Component.fromString(response.data));
     });
+  }
+
+  function moveEvent(source, destination) {
+    return calendarAPI.moveEvent(source, destination);
   }
 }
