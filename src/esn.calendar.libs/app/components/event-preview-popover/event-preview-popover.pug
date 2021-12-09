@@ -41,7 +41,7 @@
           cal-attendee-avatar(attendee='attendee')
           .attendee-item-meta
             .name
-              span {{ ::attendee.displayName }}
+              span {{ attendee.displayName }}
             .details(ng-if="attendee.email === $ctrl.event.organizer.email")
               span.organizer {{ 'Organizer' | translate }}
       a.clickable(ng-href="", ng-click="$ctrl.showAll(); $ctrl.shouldShowMoreAttendees = !$ctrl.shouldShowMoreAttendees" , ng-if="$ctrl.attendees.length>=$ctrl.limit") {{ $ctrl.shouldShowMoreAttendees ? 'Show more...' : 'Show less...' | translate }}            
