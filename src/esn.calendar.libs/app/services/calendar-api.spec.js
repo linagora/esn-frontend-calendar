@@ -688,22 +688,4 @@ describe('The calendar module apis', function() {
     });
   });
 
-  describe('The moveEvent request', function() {
-    it('should send a MOVE request with the correct headers', function() {
-      const originalEventPath = '/calendars/user/calendar1/event.json';
-      const destinationEventPath = '/calendars/user/calendar2/event.json';
-      const expectedHeaders = {
-        Destination: destinationEventPath,
-        Overwrite: 'F',
-        Authorization: 'Bearer jwt',
-        Accept: 'application/json, text/plain, */*'
-      };
-
-      this.$httpBackend.expect('MOVE', originalEventPath, null, expectedHeaders)
-        .respond(201, {});
-
-      this.calendarAPI.moveEvent(originalEventPath, destinationEventPath);
-      this.$httpBackend.flush();
-    });
-  });
 });
