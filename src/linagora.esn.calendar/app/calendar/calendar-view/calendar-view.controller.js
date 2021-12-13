@@ -16,6 +16,7 @@ const _ = require('lodash');
     $window,
     usSpinnerService,
     calCachedEventSource,
+    calendarSidebarService,
     calendarCurrentView,
     calendarEventSource,
     calendarService,
@@ -95,6 +96,9 @@ const _ = require('lodash');
     $scope.uiConfig.calendar.select = select;
     $scope.uiConfig.calendar.loading = loading;
     $scope.uiConfig.calendar.nextDayThreshold = '00:00';
+    $scope.uiConfig.calendar.customButtons.refresh_cal.click = refreshCalendar;
+    $scope.uiConfig.calendar.customButtons.planning_cal.click = showPlanning;
+
     $scope.calendarReady = calendarDeffered.resolve.bind(calendarDeffered);
 
     var rootScopeListeners = [
@@ -143,6 +147,28 @@ const _ = require('lodash');
 
       windowJQuery.resize($scope.resizeCalendarHeight);
       $window.addEventListener('beforeunload', gracePeriodService.flushAllTasks);
+      toggleSideMenuEvent();
+    }
+
+    function refreshCalendar() {
+      calCachedEventSource.resetCache();
+      $rootScope.$broadcast(CAL_EVENTS.CALENDAR_REFRESH);
+    }
+
+    function showPlanning() {
+      if ($state.includes('calendar.main.planning')) {
+        $state.go('calendar.main');
+      } else {
+        $state.go('calendar.main.planning');
+      }
+    }
+
+    function toggleSideMenuEvent() {
+      $rootScope.$on('toggleSideMenu', function() {
+        const sidebarVisibility = calendarSidebarService.getSidebarVisibility();
+
+        calendarSidebarService.setSidebarVisibility(!sidebarVisibility);
+      });
     }
 
     function render(event, element, view) {
