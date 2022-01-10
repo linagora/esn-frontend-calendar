@@ -179,6 +179,10 @@ function CalEventFormController(
               _.find(calendars, 'selected');
           }
 
+          // when editing an event exclude delegated calendars from the possible target calendars
+          // that can be used to move events into
+          $scope.calendars = calendars.filter(calendar => calendar.isOwner(session.user._id));
+
           return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
         })
         .then(function(selectedCalendar) {
@@ -372,7 +376,7 @@ function CalEventFormController(
 
     $scope.editedEvent.attendees = getUpdatedAttendees();
 
-    if (!calEventUtils.hasAnyChange($scope.editedEvent, $scope.event)) {
+    if (!calEventUtils.hasAnyChange($scope.editedEvent, $scope.event) && !_calendarHasChanged()) {
       _hideModal();
 
       return;
@@ -397,6 +401,10 @@ function CalEventFormController(
       .then(cacheAttendees)
       .then(denormalizeAttendees)
       .then(function() {
+        if (!calEventUtils.hasAnyChange($scope.editedEvent, $scope.event)) {
+          return $q.when(true);
+        }
+
         return calEventService.modifyEvent(
           $scope.event.path || calPathBuilder.forCalendarPath($scope.calendarHomeId, _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).id),
           $scope.editedEvent,
@@ -406,6 +414,7 @@ function CalEventFormController(
           { graceperiod: true, notifyFullcalendar: $state.is('calendar.main') }
         );
       })
+      .then(canPerformCalendarMove)
       .then(onEventCreateUpdateResponse)
       .finally(function() {
         $scope.restActive = false;
@@ -671,5 +680,39 @@ function CalEventFormController(
       },
       placement: 'center'
     });
+  }
+
+  /**
+   * Checks if an event can be moved into another calendar
+   *
+   * @param {boolean} success - true if the previous response was successful
+   *
+   * @returns {Promise}
+   */
+  function canPerformCalendarMove(success) {
+    if (!success) return $q.when(false);
+
+    return _calendarHasChanged() ? changeCalendar() : $q.when();
+  }
+
+  /**
+   * moves the event to the new calendar
+   *
+   * @returns {Promise} - resolves to true if the event calendar has changed
+   */
+  function changeCalendar() {
+    const destinationPath = calPathBuilder.forEventId($scope.calendarHomeId, _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).id, $scope.editedEvent.uid);
+    const sourcePath = $scope.event.path;
+
+    return calEventService.moveEvent(sourcePath, destinationPath);
+  }
+
+  /**
+   * Checks if the selected calendar differs from the original event calendar
+   *
+   * @returns {Boolean} - true if the event calendar and the selected calendar are different
+   */
+  function _calendarHasChanged() {
+    return _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).id !== $scope.editedEvent.calendarId;
   }
 }
