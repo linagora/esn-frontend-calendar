@@ -132,6 +132,7 @@ require('./components/calendar-today-button/calendar-today-button.controller.js'
 require('./components/calendar/calendar.component.js');
 require('./components/calendar/calendar.controller.js');
 require('./components/calendars-list/calendars-list.component.js');
+require('./components/calendars-list/calendar-list-toggle.directive.js');
 require('./components/calendars-list/calendars-list.controller.js');
 require('./components/calendars-list/external/external-calendars-list.component.js');
 require('./components/calendars-list/items/calendars-list-items.component.js');
@@ -141,6 +142,8 @@ require('./components/calendars-list/items/item/calendars-list-item.controller.j
 require('./components/calendars-list/items/item/configuration/calendars-list-item-configuration.component.js');
 require('./components/calendars-list/items/item/configuration/calendars-list-item-configuration.controller.js');
 require('./components/calendars-list/user/user-calendars-list.component.js');
+require('./components/calendars-list/user/user-calendars-list.controller.js');
+
 require('./components/event-alarm-consultation/event-alarm-consultation.component.js');
 require('./components/event-alarm-consultation/event-alarm-consultation.controller.js');
 require('./components/event-create-button/event-create-button.component.js');

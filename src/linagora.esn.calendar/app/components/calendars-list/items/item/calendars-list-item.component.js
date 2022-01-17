@@ -6,10 +6,12 @@
       template: require('./calendars-list-item.pug'),
       controller: 'CalendarsListItemController',
       bindings: {
+        calendars: '=',
         calendar: '<',
         onShowHideToggle: '&',
         selected: '<',
-        showDetails: '<'
+        showDetails: '<',
+        calendarType: '<'
       }
     });
 })(angular);

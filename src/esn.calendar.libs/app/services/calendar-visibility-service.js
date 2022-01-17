@@ -1,3 +1,4 @@
+/* eslint-disable space-before-blocks */
 require('../app.constants.js');
 
 (function(angular) {
@@ -11,8 +12,10 @@ require('../app.constants.js');
 
     return {
       getHiddenCalendars: getHiddenCalendars,
-      isHidden: isHidden,
-      toggle: toggle
+      isHidden,
+      toggle,
+      showAndHideCalendars,
+      getHiddenCalendarsByType
     };
 
     ////////////
@@ -23,18 +26,62 @@ require('../app.constants.js');
       });
     }
 
-    function toggle(calendar) {
+    function showAndHideCalendars(calendar, status, calendarType) {
       var calId = calendar.getUniqueId();
 
-      storage.getItem(calId).then(function(hiddenBefore) {
-        return storage.setItem(calId, !hiddenBefore);
+      storage.getItem(calendarType + calId).then(function(hiddenBefore) {
+        return storage.setItem(calendarType + calId, hiddenBefore);
       }).then(function(hidden) {
         $rootScope.$broadcast(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {
           calendarUniqueId: calId,
+          calendarType: calendarType,
+          hidden: status ? true : hidden
+        });
+      });
+    }
+
+    function toggle(calendar, calendarType, lengthCalendars) {
+
+      var calId = calendar.getUniqueId();
+
+      storage.getItem(calendarType + calId).then(function(hiddenBefore) {
+
+        return storage.setItem(calendarType + calId, !hiddenBefore);
+      }).then(function(hidden) {
+        $rootScope.$broadcast(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, {
+          calendarUniqueId: calId,
+          calendarType: calendarType,
           hidden: hidden
         });
 
-        return hidden;
+      }).then(function(){
+        return getHiddenCalendarsByType(calendarType);
+      })
+        .then(function(hiddenCal) {
+          let hidden = false;
+
+          if (hiddenCal.length === lengthCalendars) {
+            hidden = true;
+          }
+
+          $rootScope.$broadcast('calendarsAreHidden', {
+            calendarType: calendarType,
+            hidden: hidden
+          });
+
+        });
+    }
+
+    function getHiddenCalendarsByType(calendarType) {
+      var result = [];
+
+      return storage.iterate(function(hidden, id) {
+
+        if (id.startsWith(calendarType) && hidden) {
+          result.push(id);
+        }
+      }).then(function() {
+        return result;
       });
     }
 

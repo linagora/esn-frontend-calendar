@@ -6,10 +6,12 @@
       template: require('./calendars-list-items.pug'),
       controller: 'CalendarsListItemsController',
       bindings: {
-        calendars: '=?',
+        calendars: '=',
         toggleCalendar: '=?',
         hiddenCalendars: '=?',
-        showDetails: '=?'
+        showDetails: '=?',
+        calendarType: '=',
+        lengthUserCalendars: '='
       }
     });
 })(angular);
