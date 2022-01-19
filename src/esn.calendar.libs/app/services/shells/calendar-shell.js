@@ -94,7 +94,11 @@ require('./valarm-shell.js');
       var localTimezoneFound = _.contains(Object.keys(this.timezones), localTimezone);
 
       if (!localTimezoneFound) {
-        this.vcalendar.addSubcomponent(ICAL.TimezoneService.get(localTimezone).component);
+        const timezone = ICAL.TimezoneService.get(localTimezone);
+
+        if (timezone) {
+          this.vcalendar.addSubcomponent(ICAL.TimezoneService.get(localTimezone).component);
+        }
       }
     }
 
