@@ -81,7 +81,8 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                   span.input-group-addon.textarea-icon
                     i.mdi.mdi-calendar-text
                   .fg-line
-                    textarea.form-control(cal-auto-size-and-update, type="text", ng-model='editedEvent.description', placeholder="{{ 'Notes...' | translate }}", ng-readonly="!canModifyEvent")
+                    textarea.form-control(ng-show="isOrganizer" cal-auto-size-and-update, type="text", ng-model='editedEvent.description', placeholder="{{ 'Notes...' | translate }}", ng-readonly="!canModifyEvent")
+                    div(ng-show="!isOrganizer" ng-bind-html="editedEvent.description |autolink")
             .col-xs-12
               cal-attendee-tabs(
                 ng-show="selectedTab && attendees.users.length > 0",
