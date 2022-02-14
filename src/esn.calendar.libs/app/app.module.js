@@ -34,6 +34,7 @@ angular.module('esn.calendar.libs', [
   'ng.deviceDetector',
   'ngPromiseExtras',
   'ngTouch',
+  'ngSanitize',
   'op.dynamicDirective',
   'pascalprecht.translate',
   'restangular',
