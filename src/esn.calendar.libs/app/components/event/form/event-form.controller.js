@@ -179,11 +179,15 @@ function CalEventFormController(
               _.find(calendars, 'selected');
           }
 
-          // when editing an event exclude delegated calendars from the possible target calendars
-          // that can be used to move events into
-          $scope.calendars = calendars.filter(calendar => calendar.isOwner(session.user._id));
+          return calUIAuthorizationService
+            .canModifyEvent(_getCalendarByUniqueId($scope.editedEvent.calendarUniqueId), $scope.editedEvent, session.user._id)
+            .then(editable => {
+              if (editable) {
+                $scope.calendars = calendars.filter(calendar => calendar.isOwner(session.user._id));
+              }
 
-          return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
+              return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
+            });
         })
         .then(function(selectedCalendar) {
           $scope.selectedCalendar = { uniqueId: selectedCalendar.getUniqueId() };
