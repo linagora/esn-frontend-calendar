@@ -687,7 +687,11 @@ function CalEventFormController(
   }
 
   /**
-   * Checks if an event can be moved into another calendar
+   * Move event to another calendar if:
+   *
+   * * previous processes have succeeded
+   * * user can perform move
+   * * Event calendar have been modified
    *
    * @param {boolean} success - true if the previous response was successful
    *
