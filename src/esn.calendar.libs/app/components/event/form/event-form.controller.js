@@ -179,15 +179,12 @@ function CalEventFormController(
               _.find(calendars, 'selected');
           }
 
-          return calUIAuthorizationService
-            .canModifyEvent(_getCalendarByUniqueId($scope.editedEvent.calendarUniqueId), $scope.editedEvent, session.user._id)
-            .then(editable => {
-              if (editable) {
-                $scope.calendars = calendars.filter(calendar => calendar.isOwner(session.user._id));
-              }
+          if (calUIAuthorizationService
+            .canMoveEvent(_getCalendarByUniqueId($scope.editedEvent.calendarUniqueId), session.user._id)) {
+            $scope.calendars = calendars.filter(calendar => calendar.isOwner(session.user._id));
+          }
 
-              return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
-            });
+          return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
         })
         .then(function(selectedCalendar) {
           $scope.selectedCalendar = { uniqueId: selectedCalendar.getUniqueId() };
@@ -214,11 +211,13 @@ function CalEventFormController(
 
           return $q.all([
             _canModifyEvent(),
-            calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id)
+            calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id),
+            calUIAuthorizationService.canMoveEvent(selectedCalendar, session.user._id)
           ]);
-        }).then(function(uiAuthorizations) {
-          $scope.canModifyEvent = uiAuthorizations[0];
-          $scope.canModifyEventRecurrence = uiAuthorizations[1];
+        }).then(function([canModifyEventAuthorization, canModifyEventRecurrenceAuthorization, canMoveEventAuthorization]) {
+          $scope.canModifyEvent = canModifyEventAuthorization;
+          $scope.canModifyEventRecurrence = canModifyEventRecurrenceAuthorization;
+          $scope.canMoveEvent = canMoveEventAuthorization;
           $scope.isAnAttendeeCalendar = calEventUtils.canSuggestChanges($scope.editedEvent, session.user) && !$scope.canModifyEvent;
           setExcludeCurrentUser();
 
@@ -698,7 +697,11 @@ function CalEventFormController(
    * @returns {Promise}
    */
   function canPerformCalendarMove(success) {
-    if (!success) return $q.when(false);
+    if (!success ||
+      !$scope.canMoveEvent ||
+      !_calendarHasChanged()) {
+      return $q.when();
+    }
 
     return _calendarHasChanged() ? changeCalendar() : $q.when();
   }

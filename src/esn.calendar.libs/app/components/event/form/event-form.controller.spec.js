@@ -1297,6 +1297,29 @@ describe('The CalEventFormController controller', function() {
           expect(calOpenEventFormMock).to.have.been.calledWith(sinon.match.any, scope.editedEvent);
         });
 
+        it('should not attempt to move the event to another calendar if user is not allowed to move event', function() {
+          const fakeEvent = {
+            start: start,
+            end: end,
+            title: 'oldtitle',
+            path: '/calendars/owner/id.json',
+            etag: '123123'
+          };
+
+          scope.canMoveEvent = false;
+          scope.event = CalendarShell.fromIncompleteShell(fakeEvent);
+          initController();
+
+          scope.editedEvent = CalendarShell.fromIncompleteShell({ ...fakeEvent, title: 'new title', path: `/calendars/owner/id2/${scope.editedEvent.uid}.ics` });
+          scope.selectedCalendar.uniqueId = '/calendars/owner/id2.json';
+          scope.calendarHomeId = 'owner';
+
+          scope.modifyEvent();
+          scope.$digest();
+
+          expect(calEventServiceMock.moveEvent).to.have.not.been.called;
+        });
+
         it('should attempt to move the event to another calendar if the organizer changed it', function() {
           const fakeEvent = {
             start: start,
@@ -1306,6 +1329,7 @@ describe('The CalEventFormController controller', function() {
             etag: '123123'
           };
 
+          scope.canMoveEvent = true;
           scope.event = CalendarShell.fromIncompleteShell(fakeEvent);
           initController();
 
@@ -1331,6 +1355,7 @@ describe('The CalEventFormController controller', function() {
             etag: '123123'
           };
 
+          scope.canMoveEvent = true;
           scope.event = CalendarShell.fromIncompleteShell(fakeEvent);
           initController();
 
