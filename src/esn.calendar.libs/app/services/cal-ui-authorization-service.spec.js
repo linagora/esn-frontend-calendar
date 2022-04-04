@@ -517,6 +517,30 @@ describe('The calUIAuthorizationService service', function() {
     });
   });
 
+  describe('the canMoveEvent function', function() {
+    var calendar, userId = 'userId';
+
+    it('should return false if user is not the owner of the calendar', function() {
+      calendar = {
+        isOwner: sinon.stub().returns(false)
+      };
+      const result = calUIAuthorizationService.canMoveEvent(calendar, userId);
+
+      expect(calendar.isOwner).to.have.been.calledWith(userId);
+      expect(result).to.be.false;
+    });
+
+    it('should return true if user is the owner of the calendar', function() {
+      calendar = {
+        isOwner: sinon.stub().returns(true)
+      };
+      const result = calUIAuthorizationService.canMoveEvent(calendar, userId);
+
+      expect(calendar.isOwner).to.have.been.calledWith(userId);
+      expect(result).to.be.true;
+    });
+  });
+
   describe('the canShowDelegationTab function', function() {
     var calendar;
 

@@ -22,6 +22,7 @@ function calUIAuthorizationService(
     canModifyEvent,
     canModifyEventRecurrence,
     canModifyPublicSelection,
+    canMoveEvent,
     canShowDelegationTab
   };
 
@@ -68,6 +69,10 @@ function calUIAuthorizationService(
     // the owner of a Subscription is not the same the current user, so we need to check for calendar.isSubscription()
     // to allow the user to unsubscribe from a public calendar
     return !!calendar && (calendar.isOwner(userId) || calendar.isShared(userId) || calendar.isSubscription());
+  }
+
+  function canMoveEvent(calendar, userId) {
+    return calendar.isOwner(userId);
   }
 
   function canShowDelegationTab(calendar, userId) {

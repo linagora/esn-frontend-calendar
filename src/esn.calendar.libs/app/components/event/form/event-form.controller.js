@@ -179,15 +179,12 @@ function CalEventFormController(
               _.find(calendars, 'selected');
           }
 
-          return calUIAuthorizationService
-            .canModifyEvent(_getCalendarByUniqueId($scope.editedEvent.calendarUniqueId), $scope.editedEvent, session.user._id)
-            .then(editable => {
-              if (editable) {
-                $scope.calendars = calendars.filter(calendar => calendar.isOwner(session.user._id));
-              }
+          if (calUIAuthorizationService
+            .canMoveEvent(_getCalendarByUniqueId($scope.editedEvent.calendarUniqueId), session.user._id)) {
+            $scope.calendars = calendars.filter(calendar => calendar.isOwner(session.user._id));
+          }
 
-              return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
-            });
+          return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
         })
         .then(function(selectedCalendar) {
           $scope.selectedCalendar = { uniqueId: selectedCalendar.getUniqueId() };
@@ -214,11 +211,13 @@ function CalEventFormController(
 
           return $q.all([
             _canModifyEvent(),
-            calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id)
+            calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id),
+            calUIAuthorizationService.canMoveEvent(selectedCalendar, session.user._id)
           ]);
-        }).then(function(uiAuthorizations) {
-          $scope.canModifyEvent = uiAuthorizations[0];
-          $scope.canModifyEventRecurrence = uiAuthorizations[1];
+        }).then(function([canModifyEventAuthorization, canModifyEventRecurrenceAuthorization, canMoveEventAuthorization]) {
+          $scope.canModifyEvent = canModifyEventAuthorization;
+          $scope.canModifyEventRecurrence = canModifyEventRecurrenceAuthorization;
+          $scope.canMoveEvent = canMoveEventAuthorization;
           $scope.isAnAttendeeCalendar = calEventUtils.canSuggestChanges($scope.editedEvent, session.user) && !$scope.canModifyEvent;
           setExcludeCurrentUser();
 
@@ -380,7 +379,7 @@ function CalEventFormController(
 
     $scope.editedEvent.attendees = getUpdatedAttendees();
 
-    if (!calEventUtils.hasAnyChange($scope.editedEvent, $scope.event) && !_calendarHasChanged()) {
+    if (!calEventUtils.hasAnyChange($scope.editedEvent, $scope.event) && !_eventCalendarHasChanged()) {
       _hideModal();
 
       return;
@@ -418,7 +417,7 @@ function CalEventFormController(
           { graceperiod: true, notifyFullcalendar: $state.is('calendar.main') }
         );
       })
-      .then(canPerformCalendarMove)
+      .then(moveEventIfPossible)
       .then(onEventCreateUpdateResponse)
       .finally(function() {
         $scope.restActive = false;
@@ -687,16 +686,24 @@ function CalEventFormController(
   }
 
   /**
-   * Checks if an event can be moved into another calendar
+   * Move event to another calendar if:
+   *
+   * * previous processes have succeeded
+   * * user can perform move
+   * * Event calendar have been modified
    *
    * @param {boolean} success - true if the previous response was successful
    *
    * @returns {Promise}
    */
-  function canPerformCalendarMove(success) {
-    if (!success) return $q.when(false);
+  function moveEventIfPossible(success) {
+    if (!success ||
+      !$scope.canMoveEvent ||
+      !_eventCalendarHasChanged()) {
+      return $q.when();
+    }
 
-    return _calendarHasChanged() ? changeCalendar() : $q.when();
+    return moveEvent();
   }
 
   /**
@@ -704,7 +711,7 @@ function CalEventFormController(
    *
    * @returns {Promise} - resolves to true if the event calendar has changed
    */
-  function changeCalendar() {
+  function moveEvent() {
     const destinationPath = calPathBuilder.forEventId($scope.calendarHomeId, _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).id, $scope.editedEvent.uid);
     const sourcePath = $scope.event.path;
 
@@ -716,7 +723,7 @@ function CalEventFormController(
    *
    * @returns {Boolean} - true if the event calendar and the selected calendar are different
    */
-  function _calendarHasChanged() {
+  function _eventCalendarHasChanged() {
     return _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).id !== $scope.editedEvent.calendarId;
   }
 }
