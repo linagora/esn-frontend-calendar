@@ -71,8 +71,8 @@ function calUIAuthorizationService(
     return !!calendar && (calendar.isOwner(userId) || calendar.isShared(userId) || calendar.isSubscription());
   }
 
-  function canMoveEvent(calendar, userId) {
-    return calendar.isOwner(userId);
+  function canMoveEvent(calendar, event, user) {
+    return calendar.isOwner(user._id) && calEventUtils.isOrganizer(event, user);
   }
 
   function canShowDelegationTab(calendar, userId) {

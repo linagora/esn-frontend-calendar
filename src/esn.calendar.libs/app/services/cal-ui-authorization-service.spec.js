@@ -518,15 +518,27 @@ describe('The calUIAuthorizationService service', function() {
   });
 
   describe('the canMoveEvent function', function() {
-    var calendar, userId = 'userId';
+    var calendar, event = 'event', user = { _id: 'userId' };
 
     it('should return false if user is not the owner of the calendar', function() {
       calendar = {
         isOwner: sinon.stub().returns(false)
       };
-      const result = calUIAuthorizationService.canMoveEvent(calendar, userId);
+      const result = calUIAuthorizationService.canMoveEvent(calendar, event, user);
 
-      expect(calendar.isOwner).to.have.been.calledWith(userId);
+      expect(calendar.isOwner).to.have.been.calledWith(user._id);
+      expect(calEventUtils.isOrganizer).to.not.have.been.called;
+      expect(result).to.be.false;
+    });
+
+    it('should return false if user is the owner of the calendar but user is not event organizer', function() {
+      calendar = {
+        isOwner: sinon.stub().returns(true)
+      };
+      const result = calUIAuthorizationService.canMoveEvent(calendar, event, user);
+
+      expect(calendar.isOwner).to.have.been.calledWith(user._id);
+      expect(calEventUtils.isOrganizer).to.have.been.calledWith(event, user);
       expect(result).to.be.false;
     });
 
@@ -534,9 +546,11 @@ describe('The calUIAuthorizationService service', function() {
       calendar = {
         isOwner: sinon.stub().returns(true)
       };
-      const result = calUIAuthorizationService.canMoveEvent(calendar, userId);
+      calEventUtils.isOrganizer = sinon.stub().returns(true);
+      const result = calUIAuthorizationService.canMoveEvent(calendar, event, user);
 
-      expect(calendar.isOwner).to.have.been.calledWith(userId);
+      expect(calendar.isOwner).to.have.been.calledWith(user._id);
+      expect(calEventUtils.isOrganizer).to.have.been.calledWith(event, user);
       expect(result).to.be.true;
     });
   });

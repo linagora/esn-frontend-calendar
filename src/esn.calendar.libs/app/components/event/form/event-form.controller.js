@@ -180,7 +180,7 @@ function CalEventFormController(
           }
 
           if (calUIAuthorizationService
-            .canMoveEvent(_getCalendarByUniqueId($scope.editedEvent.calendarUniqueId), session.user._id)) {
+            .canMoveEvent(_getCalendarByUniqueId($scope.editedEvent.calendarUniqueId), $scope.editedEvent, session.user)) {
             $scope.calendars = calendars.filter(calendar => calendar.isOwner(session.user._id));
           }
 
@@ -212,7 +212,7 @@ function CalEventFormController(
           return $q.all([
             _canModifyEvent(),
             calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id),
-            calUIAuthorizationService.canMoveEvent(selectedCalendar, session.user._id)
+            calUIAuthorizationService.canMoveEvent(selectedCalendar, $scope.editedEvent, session.user)
           ]);
         }).then(function([canModifyEventAuthorization, canModifyEventRecurrenceAuthorization, canMoveEventAuthorization]) {
           $scope.canModifyEvent = canModifyEventAuthorization;
