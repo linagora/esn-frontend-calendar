@@ -179,11 +179,6 @@ function CalEventFormController(
               _.find(calendars, 'selected');
           }
 
-          if (calUIAuthorizationService
-            .canMoveEvent(_getCalendarByUniqueId($scope.editedEvent.calendarUniqueId), $scope.editedEvent, session.user)) {
-            $scope.calendars = calendars.filter(calendar => calendar.isOwner(session.user._id));
-          }
-
           return _getCalendarByUniqueId($scope.editedEvent.calendarUniqueId);
         })
         .then(function(selectedCalendar) {
@@ -212,13 +207,18 @@ function CalEventFormController(
           return $q.all([
             _canModifyEvent(),
             calUIAuthorizationService.canModifyEventRecurrence(selectedCalendar, $scope.editedEvent, session.user._id),
-            calUIAuthorizationService.canMoveEvent(selectedCalendar, $scope.editedEvent, session.user)
+            calUIAuthorizationService.canChangeEventCalendar(selectedCalendar, $scope.editedEvent, session.user)
           ]);
-        }).then(function([canModifyEventAuthorization, canModifyEventRecurrenceAuthorization, canMoveEventAuthorization]) {
+        }).then(function([canModifyEventAuthorization, canModifyEventRecurrenceAuthorization, canChangeEventCalendarAuthorization]) {
           $scope.canModifyEvent = canModifyEventAuthorization;
           $scope.canModifyEventRecurrence = canModifyEventRecurrenceAuthorization;
-          $scope.canMoveEvent = canMoveEventAuthorization;
+          $scope.canChangeEventCalendar = canChangeEventCalendarAuthorization;
           $scope.isAnAttendeeCalendar = calEventUtils.canSuggestChanges($scope.editedEvent, session.user) && !$scope.canModifyEvent;
+
+          if (canChangeEventCalendarAuthorization) {
+            $scope.calendars = $scope.calendars.filter(calendar => calendar.isOwner(session.user._id));
+          }
+
           setExcludeCurrentUser();
 
           return calAttendeeService.splitAttendeesFromTypeWithResourceDetails($scope.editedEvent.attendees);
@@ -417,7 +417,7 @@ function CalEventFormController(
           { graceperiod: true, notifyFullcalendar: $state.is('calendar.main') }
         );
       })
-      .then(moveEventIfPossible)
+      .then(changeEventCalendarIfPossible)
       .then(onEventCreateUpdateResponse)
       .finally(function() {
         $scope.restActive = false;
@@ -696,14 +696,14 @@ function CalEventFormController(
    *
    * @returns {Promise}
    */
-  function moveEventIfPossible(success) {
+  function changeEventCalendarIfPossible(success) {
     if (!success ||
-      !$scope.canMoveEvent ||
+      !$scope.canChangeEventCalendar ||
       !_eventCalendarHasChanged()) {
       return $q.when();
     }
 
-    return moveEvent();
+    return changeEventCalendar();
   }
 
   /**
@@ -711,7 +711,7 @@ function CalEventFormController(
    *
    * @returns {Promise} - resolves to true if the event calendar has changed
    */
-  function moveEvent() {
+  function changeEventCalendar() {
     const destinationPath = calPathBuilder.forEventId($scope.calendarHomeId, _getCalendarByUniqueId($scope.selectedCalendar.uniqueId).id, $scope.editedEvent.uid);
     const sourcePath = $scope.event.path;
 

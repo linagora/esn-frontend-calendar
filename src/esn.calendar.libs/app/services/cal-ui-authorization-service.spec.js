@@ -524,7 +524,7 @@ describe('The calUIAuthorizationService service', function() {
       calendar = {
         isOwner: sinon.stub().returns(false)
       };
-      const result = calUIAuthorizationService.canMoveEvent(calendar, event, user);
+      const result = calUIAuthorizationService.canChangeEventCalendar(calendar, event, user);
 
       expect(calendar.isOwner).to.have.been.calledWith(user._id);
       expect(calEventUtils.isOrganizer).to.not.have.been.called;
@@ -535,7 +535,7 @@ describe('The calUIAuthorizationService service', function() {
       calendar = {
         isOwner: sinon.stub().returns(true)
       };
-      const result = calUIAuthorizationService.canMoveEvent(calendar, event, user);
+      const result = calUIAuthorizationService.canChangeEventCalendar(calendar, event, user);
 
       expect(calendar.isOwner).to.have.been.calledWith(user._id);
       expect(calEventUtils.isOrganizer).to.have.been.calledWith(event, user);
@@ -547,7 +547,7 @@ describe('The calUIAuthorizationService service', function() {
         isOwner: sinon.stub().returns(true)
       };
       calEventUtils.isOrganizer = sinon.stub().returns(true);
-      const result = calUIAuthorizationService.canMoveEvent(calendar, event, user);
+      const result = calUIAuthorizationService.canChangeEventCalendar(calendar, event, user);
 
       expect(calendar.isOwner).to.have.been.calledWith(user._id);
       expect(calEventUtils.isOrganizer).to.have.been.calledWith(event, user);

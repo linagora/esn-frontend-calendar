@@ -22,7 +22,7 @@ function calUIAuthorizationService(
     canModifyEvent,
     canModifyEventRecurrence,
     canModifyPublicSelection,
-    canMoveEvent,
+    canChangeEventCalendar,
     canShowDelegationTab
   };
 
@@ -71,7 +71,7 @@ function calUIAuthorizationService(
     return !!calendar && (calendar.isOwner(userId) || calendar.isShared(userId) || calendar.isSubscription());
   }
 
-  function canMoveEvent(calendar, event, user) {
+  function canChangeEventCalendar(calendar, event, user) {
     return calendar.isOwner(user._id) && calEventUtils.isOrganizer(event, user);
   }
 

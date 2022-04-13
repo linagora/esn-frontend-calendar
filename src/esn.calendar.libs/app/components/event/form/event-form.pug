@@ -46,8 +46,8 @@ form.event-form(role="form", name="form", aria-hidden="true", ng-class="{ 'reado
                     i.mdi.mdi-calendar-multiple
                   .fg-line
                     md-input-container(ng-click="changeBackdropZIndex()")
-                      md-select(ng-disabled="!canMoveEvent", ng-model="selectedCalendar.uniqueId", md-container-class="cal-select-dropdown" aria-label="calendar")
-                        md-option(ng-value="calendar.getUniqueId()" ng-repeat="calendar in calendars | filter: canMoveEvent ? { readOnly: false } : {}")
+                      md-select(ng-disabled="!canChangeEventCalendar", ng-model="selectedCalendar.uniqueId", md-container-class="cal-select-dropdown" aria-label="calendar")
+                        md-option(ng-value="calendar.getUniqueId()" ng-repeat="calendar in calendars | filter: canChangeEventCalendar ? { readOnly: false } : {}")
                           cal-select-calendar-item(calendar="calendar")
             cal-event-date-edition(event="editedEvent", disabled='!canModifyEvent', use-24hour-format='use24hourFormat', on-date-change='onDateChange')
             cal-entities-autocomplete-input.cal-user-autocomplete-input(
