@@ -216,7 +216,13 @@ function CalEventFormController(
           $scope.isAnAttendeeCalendar = calEventUtils.canSuggestChanges($scope.editedEvent, session.user) && !$scope.canModifyEvent;
 
           if (canChangeEventCalendarAuthorization) {
-            $scope.calendars = $scope.calendars.filter(calendar => calendar.isOwner(session.user._id));
+            if (!calEventUtils.isNew($scope.editedEvent)) {
+              $scope.displayedEventCalendars = $scope.calendars.filter(calendar => calendar.isOwner(session.user._id) && !calendar.readOnly);
+            } else {
+              $scope.displayedEventCalendars = $scope.calendars.filter(calendar => !calendar.readOnly);
+            }
+          } else {
+            $scope.displayedEventCalendars = $scope.calendars;
           }
 
           setExcludeCurrentUser();
