@@ -9,12 +9,6 @@ describe('The calendarEventSource factory', function() {
 
   beforeEach(function() {
     tokenAPI = {
-      _token: '123',
-      getNewToken: function() {
-        var token = this._token;
-
-        return $q.when({ data: { token: token } });
-      },
       getWebToken() {
         return $q.when({ data: 'jwt' });
       }

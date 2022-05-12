@@ -11,9 +11,6 @@ describe('The calDavRequest factory', function() {
   describe('with graceperiod activated', function() {
     beforeEach(function() {
       tokenAPIMock = {
-        getNewToken: function() {
-          return $q.when({ data: { token: '123' } });
-        },
         getWebToken() {
           return $q.when({ data: 'jwt' });
         }
@@ -54,9 +51,6 @@ describe('The calDavRequest factory', function() {
   describe('with graceperiod deactivated', function() {
     beforeEach(function() {
       tokenAPIMock = {
-        getNewToken: function() {
-          return $q.when({ data: { token: '123' } });
-        },
         getWebToken() {
           return $q.when({ data: 'jwt' });
         }
