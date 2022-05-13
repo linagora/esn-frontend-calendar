@@ -19,9 +19,6 @@ describe('The calEventService service', function() {
     dtend = '2015-05-25T09:56:29+00:00';
 
     tokenAPIMock = {
-      getNewToken: function() {
-        return $q.when({ data: { token: '123' } });
-      },
       getWebToken() {
         return $q.when({ data: 'jwt' });
       }

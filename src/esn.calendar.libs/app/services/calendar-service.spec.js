@@ -43,9 +43,6 @@ describe('The calendarService service', function() {
     CalendarRightShellMock = sinon.stub().returns(CalendarRightShellResult);
 
     tokenAPIMock = {
-      getNewToken: function() {
-        return $q.when({ data: { token: '123' } });
-      },
       getWebToken() {
         return $q.when({ data: 'jwt' });
       }
