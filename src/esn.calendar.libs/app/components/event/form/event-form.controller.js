@@ -706,7 +706,8 @@ function CalEventFormController(
     if (!success ||
       !$scope.canChangeEventCalendar ||
       !_eventCalendarHasChanged()) {
-      return $q.when();
+
+      return $q.when(success);
     }
 
     return changeEventCalendar();
