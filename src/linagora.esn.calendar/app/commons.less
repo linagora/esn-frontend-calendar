@@ -1,4 +1,4 @@
-@spaceNeededForSubheader: 50px;
+@spaceNeededForSubheader: 0;
 @calendarLeftPaneWidth: 270px;
 @calendarRightPaneWidth: 285px;
 @scrollbarWidth: 15px;
@@ -33,3 +33,12 @@
     background-color: @darkenBgColor;
   }
 }
+
+  #sub-header{
+    display : none !important
+  }
+  @media (max-width: @screen-sm-min) {
+  #sub-header{
+    display : flex !important
+  }
+  }

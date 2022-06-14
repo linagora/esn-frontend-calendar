@@ -1,6 +1,6 @@
 'use strict';
 
-/* global chai */
+/* global chai,sinon */
 
 var expect = chai.expect;
 
@@ -34,7 +34,12 @@ describe('calendarView directive', function() {
     this.$scope = this.$rootScope.$new();
     this.elementScrollService = _elementScrollService_;
     this.$scope.uiConfig = {
-      calendar: {}
+      calendar: {
+        customButtons: {
+          refresh_cal: sinon.spy(),
+          planning_cal: sinon.spy()
+        }
+      }
     };
 
     this.initDirective = function(scope) {

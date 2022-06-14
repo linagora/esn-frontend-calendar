@@ -18,10 +18,18 @@
         weekNumbers: true,
         weekNumberCalculation: 'ISO',
         firstDay: 1,
+        customButtons: {
+          refresh_cal: {
+            text: 'Refresh'
+          },
+          planning_cal: {
+            text: 'Planning'
+          }
+        },
         header: {
           left: 'agendaDay, agendaWeek, month',
           center: 'title',
-          right: 'prev, today, next'
+          right: 'refresh_cal,prev, today, next , planning_cal'
         },
         themeButtonIcons: {
           today: ' mdi mdi-calendar-today',
@@ -29,7 +37,9 @@
           agendaWeek: ' mdi mdi-view-week',
           agendaDay: ' mdi mdi-view-day',
           prev: ' mdi mdi-chevron-left',
-          next: ' mdi mdi-chevron-right'
+          next: ' mdi mdi-chevron-right',
+          refresh_cal: ' mdi mdi-refresh',
+          planning_cal: ' mdi mdi-view-list'
         },
         handleWindowResize: false,
         views: {
