@@ -7,12 +7,19 @@
       text-align: center;
     }
   }
+  .recurrence-interval-input {
+    width: 40px;
+    bottom: 6px;
+    input {
+      text-align: center;
+    }
+  }
 
   .event-recurrence-flex-container {
     display: flex;
     justify-content: space-around;
     flex-direction: column;
-    .interval, .on-days, .end {
+    .interval, .on-days, .end , .specific-day  {
       display: flex;
       margin-top: 10px;
       margin-bottom: 10px;
@@ -26,6 +33,75 @@
       }
       .col-xs-9 > div {
         display: inline-block;
+      }
+    }
+
+    .specific-day > .radios {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 25px;
+    
+      .radio-inline {
+        margin-left: 0;
+      }
+
+      .day-in-month {
+        display: flex;
+      }
+
+      .force-position-text{
+        margin-left: 12px;
+      }
+      
+      .each-day-in-month{
+        display: flex;
+      }
+
+      .display-items{
+        position: absolute;
+        top: 25px;
+        left: 75px;
+      }
+
+    
+      .cal-event-edition-select-dropdown {
+        z-index: 2000;
+      
+        md-option {
+          min-height: 36px;
+          height: 36px;
+          line-height: inherit;
+          font-size: 13px;
+        }
+      }
+      
+      .align-items{
+        display: flex;
+        flex-direction: column;
+      }
+
+      .radio input[type="number"], .radio input[type="text"] {
+        opacity: 1;
+        cursor: text;
+        text-align: center;
+        width:100%
+      }
+
+      label {
+        margin-bottom: 12px;
+        min-height: 20px;
+      }
+
+      label:nth-child(2) {
+        .input-group-addon:first-child {
+          padding-right: 8px;
+        }
+        .fg-line {
+          min-width: 30px;
+        }
+        .input-group-addon:last-child {
+          padding-right: 10px;
+        }
       }
     }
 
