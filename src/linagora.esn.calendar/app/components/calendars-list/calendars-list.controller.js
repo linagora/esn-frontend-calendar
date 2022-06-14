@@ -1,3 +1,4 @@
+/* eslint-disable space-before-blocks */
 const _ = require('lodash');
 
 (function(angular) {
@@ -6,7 +7,7 @@ const _ = require('lodash');
   angular.module('esn.calendar')
     .controller('CalendarsListController', CalendarsListController);
 
-  function CalendarsListController(
+  function CalendarsListController (
     $rootScope,
     $scope,
     $q,
@@ -15,6 +16,7 @@ const _ = require('lodash');
     session,
     userAndExternalCalendars,
     CAL_EVENTS
+
   ) {
     var self = this;
 
@@ -30,6 +32,10 @@ const _ = require('lodash');
       self.sharedCalendars = [];
       self.hiddenCalendars = {};
       self.toggleCalendar = calendarVisibilityService.toggle;
+      self.selectAllCalendars = selectAllCalendars;
+      self.calendarsToggled = false;
+      self.sharedCalendarsLength = 0;
+      self.userCalendarsLength = 0;
 
       self.activate();
     }
@@ -42,14 +48,23 @@ const _ = require('lodash');
           var destroyCalRemoveEvent = $rootScope.$on(CAL_EVENTS.CALENDARS.REMOVE, onCalendarRemoved);
           var destroyCalUpdateEvent = $rootScope.$on(CAL_EVENTS.CALENDARS.UPDATE, onCalendarUpdated);
           var deregister = $rootScope.$on(CAL_EVENTS.CALENDARS.TOGGLE_VIEW, function(event, data) {
-            self.hiddenCalendars[data.calendarUniqueId] = data.hidden;
+            self.hiddenCalendars[data.calendarType + data.calendarUniqueId] = data.hidden;
           });
 
           $scope.$on('$destroy', destroyCalAddEvent);
           $scope.$on('$destroy', destroyCalRemoveEvent);
           $scope.$on('$destroy', destroyCalUpdateEvent);
           $scope.$on('$destroy', deregister);
+
         });
+    }
+
+    function selectAllCalendars(calendarType, status) {
+      const calendars = userAndExternalCalendars(self.calendars);
+
+      calendars[calendarType].forEach(function (calendar) {
+        calendarVisibilityService.showAndHideCalendars(calendar, status, calendarType);
+      });
     }
 
     function listCalendars() {
@@ -100,6 +115,8 @@ const _ = require('lodash');
       self.userCalendars = calendars.userCalendars;
       self.sharedCalendars = calendars.sharedCalendars;
       self.publicCalendars = calendars.publicCalendars;
+      self.sharedCalendarsLength = self.sharedCalendars.length;
+      self.userCalendarsLength = self.userCalendars.length;
     }
   }
 })(angular);

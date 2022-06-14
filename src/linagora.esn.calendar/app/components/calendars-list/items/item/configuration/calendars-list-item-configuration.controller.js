@@ -4,7 +4,10 @@
   angular.module('esn.calendar')
     .controller('CalendarsListItemConfigurationController', CalendarsListItemConfigurationController);
 
-  function CalendarsListItemConfigurationController($state) {
+  function CalendarsListItemConfigurationController(
+    $state,
+    calendarVisibilityService
+  ) {
     var self = this;
 
     self.$onInit = $onInit;

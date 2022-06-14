@@ -8,7 +8,10 @@
         sharedCalendars: '=',
         publicCalendars: '=',
         toggleCalendar: '=',
-        hiddenCalendars: '='
+        hiddenCalendars: '=',
+        selectAllCalendars: '=',
+        calendarType: '=',
+        lengthUserCalendars: '='
       }
     });
 })(angular);

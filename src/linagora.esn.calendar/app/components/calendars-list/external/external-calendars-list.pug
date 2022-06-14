@@ -2,16 +2,16 @@
   .lv-item.calendar-item.calendar-header-title.hidden-md
     .media
       .pull-left
-        i.mdi.mdi-calendar
+        i.mdi.mdi-checkbox-multiple-blank-circle.all-calendars-selected
       .media-body
         .lv-title {{ 'Shared calendars' | translate }}
-  .lv-item.calendar-item.calendar-header-title-desktop.visible-md.clickable.toggle-submenu.waves-classic(esn-toggle)
+  .lv-item.calendar-item.calendar-header-title-desktop.visible-md.clickable.toggle-submenu.waves-classic
     .media
-      .badge-container
+      .badge-container(calendar-list-toggle)
         .caret-submenu
           i.mdi.mdi-menu-down
       .calendar-item-left
-        i.mdi.mdi-calendar
+        i.mdi(ng-class="!$ctrl.calendarsToggled? 'mdi-checkbox-multiple-blank-circle' : 'mdi-checkbox-multiple-blank-circle-outline'",ng-click="$ctrl.selectAllCalendars('sharedCalendars',$ctrl.calendarsToggled=!$ctrl.calendarsToggled)")
       .media-body
         .lv-title {{ 'Shared calendars' | translate }}
 
@@ -21,7 +21,10 @@
       toggle-calendar="$ctrl.toggleCalendar",
       hidden-calendars="$ctrl.hiddenCalendars",
       state-to-go="'calendar.external.shared'",
-      show-details="true"
+      show-details="true",
+      calendar-type="'sharedCalendars'",
+      length-user-calendars="$ctrl.lengthUserCalendars"
+
     )
 
     calendars-list-items(
@@ -29,5 +32,8 @@
       toggle-calendar="$ctrl.toggleCalendar",
       hidden-calendars="$ctrl.hiddenCalendars",
       state-to-go="'calendar.external.shared'",
-      show-details="true"
+      show-details="true",
+      calendar-type="'sharedCalendars'",
+      length-user-calendars="$ctrl.lengthUserCalendars"
+
     )

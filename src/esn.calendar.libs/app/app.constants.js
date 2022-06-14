@@ -157,6 +157,7 @@
     .constant('CAL_ATTENDEE_LIST_LIMIT', 5)
 
     .constant('CAL_AVAILABLE_VIEWS', ['agendaWeek', 'agendaDay', 'month', 'agendaThreeDays', 'basicDay'])
+    .constant('TOGGLE_TRANSITION', 200)
 
     .constant('CAL_CALENDAR_SHARED_RIGHT', {
       NONE: '0',

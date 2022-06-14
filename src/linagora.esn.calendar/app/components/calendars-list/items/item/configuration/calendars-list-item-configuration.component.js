@@ -6,7 +6,8 @@
       template: require('./configuration-list.pug'),
       controller: 'CalendarsListItemConfigurationController',
       bindings: {
-        calendarId: '='
+        calendarId: '=',
+        calendars: '='
       }
     });
 })(angular);

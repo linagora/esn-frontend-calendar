@@ -1,7 +1,10 @@
 .calendar-list-items(ng-repeat="calendar in $ctrl.calendars track by calendar.uniqueId")
   cal-calendars-list-item(
+    calendars="$ctrl.calendars"
     calendar="calendar",
-    on-show-hide-toggle="$ctrl.toggleCalendar(calendar)",
-    selected="!$ctrl.hiddenCalendars[calendar.getUniqueId()]",
+    on-show-hide-toggle="$ctrl.toggleCalendar(calendar , $ctrl.calendarType , $ctrl.lengthUserCalendars)",
+    selected="!$ctrl.hiddenCalendars[$ctrl.calendarType+calendar.getUniqueId()]",
     show-details="$ctrl.showDetails"
+    calendar-type="$ctrl.calendarType",
+
   )

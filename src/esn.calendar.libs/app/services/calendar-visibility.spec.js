@@ -116,6 +116,46 @@ describe('The calendarVisibilityService', function() {
     });
   });
 
+
+
+  describe('the showAndHideCalendars function', function() {
+    it('should broadcast the calendar and it new display status', function() {
+      var cal = this.getCalendar(42);
+
+      this.$rootScope.$broadcast = sinon.spy(this.$rootScope.$broadcast);
+
+      this.calendarVisibilityService.toggle(cal);
+      this.$rootScope.$digest();
+      expect(this.$rootScope.$broadcast).to.have.been.calledWith(
+        this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW,
+        { calendarUniqueId: cal.uniqueId, hidden: true }
+      );
+
+      this.$rootScope.$broadcast.reset();
+
+      this.calendarVisibilityService.toggle(cal);
+      this.$rootScope.$digest();
+      expect(this.$rootScope.$broadcast).to.have.been.calledWith(
+        this.CAL_EVENTS.CALENDARS.TOGGLE_VIEW,
+        { calendarUniqueId: cal.uniqueId, hidden: false }
+      );
+    });
+
+    it('should correctly record hidden calendar in localforage', function() {
+      var id1 = '1';
+      var id2 = '2';
+      var hiddenCalendars = [this.getCalendar(id1), this.getCalendar(id2)];
+      var thenSpy = sinon.spy();
+
+      hiddenCalendars.map(this.calendarVisibilityService.toggle);
+      this.$rootScope.$digest();
+      this.calendarVisibilityService.getHiddenCalendars().then(thenSpy);
+      this.$rootScope.$digest();
+
+      expect(thenSpy).to.have.been.calledWith([id1, id2]);
+    });
+  });
+
   describe('The isHidden function', function() {
     it('should return true if and only if the calendar is hidden', function() {
       var cal = this.getCalendar(42);
